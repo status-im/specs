@@ -11,11 +11,16 @@ TBD
 
 # Terminology
 
-TBD
+* *Client*: a Whisper node implementing the protocol
+* *Whisper node*: an Ethereum node with Whisper V6 enabled (in the case of geth, it's `--shh` option)
+* *MailServer*: an Ethereum node with Whisper V6 enabled and a mail server registered capable of storing and providing offline messages
+* *Message*: decrypted Whisper message
+* *Envelope*: encrypted message with some metadata like topic and TTL echanged between Whisper nodes; a symmetric or assymetric key is needed to decrypt it and read the payload
+* *Offline message*: an expired envelope stored by a Whisper node permanently
 
 # Basic Assumption
 
-This protocol assumes that there is an Ethereum node that is capable of discoverying peers and implements Whisper protocol. It also assumes that the participants of a given Whisper network accept messages with lowered PoW value.
+This protocol assumes that there is an Ethereum node that is capable of discoverying peers and implements Whisper V6 service. It also assumes that the participants of a given Whisper network accept messages with lowered PoW value.
 
 # Protocol Overview
 
@@ -107,6 +112,10 @@ Whisper's Proof Of Work algorithm is used to to deter denial of service and vari
 
 If you want to receive messages from a mobile client, you need to run Whisper node with PoW set to `0.002`. In case of `geth`, this option can be overriden with `-shh.pow=0.002` flag.
 
+## Keys management
+
+TBD
+
 ## Topic
 
 There are two types of Whisper topics the protocol uses:
@@ -144,10 +153,6 @@ Symmetric keys are created using `shh_generateSymKeyFromPassword` Whisper JSON-R
 
 Messages encrypted with asymmetric encryption should be encrypted using recipeint's public key so that only the recipient can decrypt them.
 
-## Offline messages
-
-TBD
-
 # Perfect Forward Secrecy (PFS)
 
 TBD
@@ -160,17 +165,31 @@ TBD
 
 One-to-one messages are also known as private messages.
 
+TODO: describe how to send a 1-1 message starting from adding a key in Whisper etc.
+
 # Public messages
 
-TBD
+TODO: describe how to send a public message starting from adding a key in Whisper etc.TBD
 
 # Group messages
 
-TBD
+TODO: describe how to send a group message starting from adding a key in Whisper etc.
 
 # Offline messages
 
-TBD
+In the case of mobile clients which are often offline, there is a strong need to have an ability to download offline messages. By offline messages, we mean messages sent into the Whisper network and expired before being collected by the client. A message stays in the Whisper network for a duration specified as TTL (time-to-live) property.
+
+Whisper client needs to register a mail server instance which will be used by [geth's Whisper service](https://github.com/ethereum/go-ethereum/blob/v1.8.23/whisper/whisperv6/whisper.go#L209-L213).
+
+`MailServer` is an interface with two methods:
+* `Archive(env *Envelope)`
+* `DeliverMail(whisperPeer *Peer, request *Envelope)`
+
+Archiving happens in the background automatically. If a mail server is registered for a given Whisper client, it will save all incoming messages on a local disk (this is the simplest implementation, it can store the messages wherever it wants).
+
+Saved messages are delivered to a requester (another Whisper peer) asynchronously as a response to `p2pMessageCode` message code. This is not exposed as a JSON-RPC method in `shh` namespace but it's exposed in status-go as `shhext_requestMessages` and blocking `shh_requestMessagesSync`.
+
+In order to receive historic messages from a filter, p2p messages must be allowed when creating the filter. Receiving p2p messages is implemented in [geth's Whisper V6 implementation](https://github.com/ethereum/go-ethereum/blob/v1.8.23/whisper/whisperv6/whisper.go#L739-L751).
 
 # Whisper V6 extensions
 
