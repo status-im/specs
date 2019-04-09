@@ -1,6 +1,30 @@
 Status Secure And Decentralized Messaging Protocol
 ==================================================
 
+- [Status Secure And Decentralized Messaging Protocol](#status-secure-and-decentralized-messaging-protocol)
+- [Abstract](#abstract)
+- [Introduction](#introduction)
+- [Terminology](#terminology)
+- [Basic Assumption](#basic-assumption)
+- [Protocol Overview](#protocol-overview)
+- [Payload](#payload)
+	- [Content types](#content-types)
+	- [Message types](#message-types)
+	- [Message ordering](#message-ordering)
+	- [Quoting](#quoting)
+- [Whisper adapter](#whisper-adapter)
+	- [Whisper node configuration](#whisper-node-configuration)
+	- [Keys management](#keys-management)
+	- [Topic](#topic)
+	- [Encryption](#encryption)
+- [Perfect Forward Secrecy (PFS)](#perfect-forward-secrecy-pfs)
+- [Device syncing](#device-syncing)
+- [One-to-one messages](#one-to-one-messages)
+- [Public messages](#public-messages)
+- [Group messages](#group-messages)
+- [Offline messages](#offline-messages)
+- [Whisper V6 extensions](#whisper-v6-extensions)
+
 # Abstract
 
 Ethereum empowers users and developers to interact with totally new kind of applications called Dapps (Decentralized applications). These application allows to interact with the blockchain on a completely new level which is not only about exchanging values but also executing arbitrary logic. This logic can form very sophisticated programs like DAOs (Decentralized autonomous organizations). The missing part here is how users of Dapps can communicate securely and in a decentralized way with each other. Communication is an essential part of any activity. In this document, we specify a secure and decentralized messaging protocol that is capable of running on the Ethereum network.
