@@ -10,11 +10,12 @@ Status Secure And Decentralized Messaging Protocol
 - [Payload](#payload)
 	- [Content types](#content-types)
 	- [Message types](#message-types)
-	- [Message ordering](#message-ordering)
+	- [Clock vs Timestamp And Message Ordering](#clock-vs-timestamp-and-message-ordering)
 	- [Quoting](#quoting)
 - [Whisper adapter](#whisper-adapter)
 	- [Whisper node configuration](#whisper-node-configuration)
 	- [Keys management](#keys-management)
+	- [Encryption algorithms](#encryption-algorithms)
 	- [Topic](#topic)
 	- [Encryption](#encryption)
 - [Perfect Forward Secrecy (PFS)](#perfect-forward-secrecy-pfs)
@@ -23,7 +24,8 @@ Status Secure And Decentralized Messaging Protocol
 - [Public messages](#public-messages)
 - [Group messages](#group-messages)
 - [Offline messages](#offline-messages)
-- [Whisper V6 extensions](#whisper-v6-extensions)
+	- [Anonymity concerns](#anonymity-concerns)
+- [Whisper V6 extensions (or Status Whisper Node)](#whisper-v6-extensions-or-status-whisper-node)
 
 # Abstract
 
@@ -37,6 +39,7 @@ TBD
 
 * *Client*: a Whisper node implementing the protocol
 * *Whisper node*: an Ethereum node with Whisper V6 enabled (in the case of geth, it's `--shh` option)
+* *Status Whisper node*: an Ethereum node with Whisper V6 enabled and additional Whisper extensions described in [Whisper V6 extensions (or Status Whisper Node)](#whisper-v6-extensions-or-status-whisper-node)
 * *MailServer*: an Ethereum node with Whisper V6 enabled and a mail server registered capable of storing and providing offline messages
 * *Message*: decrypted Whisper message
 * *Envelope*: encrypted message with some metadata like topic and TTL echanged between Whisper nodes; a symmetric or assymetric key is needed to decrypt it and read the payload
@@ -44,7 +47,10 @@ TBD
 
 # Basic Assumption
 
-This protocol assumes that there is an Ethereum node that is capable of discoverying peers and implements Whisper V6 service. It also assumes that the participants of a given Whisper network accept messages with lowered PoW value.
+This protocol assumes the following:
+1. There is an Ethereum node that is capable of discovering peers and implements Whisper V6 service.
+2. Participants of a given Whisper network in order to communicate with each other accept messages with lowered PoW value.
+3. Time is synced between all nodes participaiting in the given network (this is intrinsic Whisper requirement).
 
 # Protocol Overview
 
@@ -52,17 +58,20 @@ Notice: this protocol is documented post factum. The goal of it is to clearly pr
 
 The implementation of this protocol is mainly done in https://github.com/status-im/status-react and https://github.com/status-im/status-go repositories.
 
-The goal of this protocol is to allow people running Ethereum nodes with Whisper service enabled to exchange messages that are encrypted end-to-end in a way that guarantees darkness to some extent (messages are broadcasted through the network rather than send directly or using a known path).
+The goal of this protocol is to allow people running Ethereum nodes with Whisper service enabled to exchange messages that are encrypted end-to-end in a way that guarantees darkness to some extent (messages are broadcasted through the network rather than sent directly or using a known path).
 
 It's important to notice that messages are not limited to be text messages only. They can also have special meaning depending on the client implementation. For example, in the current implementation, there are message which informs about Eth requests or current user's location.
 
-This protocol consist of two components:
+This protocol consist of three components:
 * payload specification
-* Whisper adapter.
+* Whisper adapter
+* Offline messaging.
 
 The payload specification describes how the messages are encoded and decoded and what each fields mean. This is required to properly interpret messages by the client.
 
 Whisper adapter specifies interaction with the Whiper service with regards to keys management, configuration and some metadata (like topic) required to properly process and encrypt/decrypt messages.
+
+Offline messaging describes how the protocol handles delivering messages when one or more participants were offline and the messages expired in the network.
 
 The protocol does not specify things like peers discovery, however, some notes and the current implementation will be described in an appendix.
 
@@ -105,9 +114,13 @@ Here is a list of supported message types:
 
 TODO: how is it useful? What are other supported message types?
 
-## Message ordering
+## Clock vs Timestamp And Message Ordering
 
-TBD
+`timestamp` is Unix time calculated when the message is created (TODO: does it come from Whisper or the system?)
+
+`clock` is calculated using the algorithm of [Lamport timestamps](https://en.wikipedia.org/wiki/Lamport_timestamps). When there are messages available in a chat, `clock`'s value is calculated as `last-message-clock-value + 1`. If there are no messages, `clock` is initialized with `timestamp`'s value.
+
+`clock` value is used for the message ordering. Due to the used algorithm, distributed nature of the system and physics, we achieve casual ordering which might produce counterintuitive results in some edge cases. For example, when one joins a public chat and sends a message before receiving the exist messages, their message `clock` value might be lower and the message will end up in the past when the historical messages are fetched.
 
 ## Quoting
 
@@ -122,8 +135,8 @@ However, Whisper was not designed to handle huge number of messages and real-tim
 This protocol can either work using a Whisper service which requires a protocol implementation to run in the same process as a Whisper node as well as using a Whisper client which might run as a separate Ethereum node and communicate through IPC or WebSocket.
 
 There is some tight coupling between the payload and Whisper:
-* Whisper message topic depends on the actual message type
-* Whisper message uses a different key (asymmetric or symmetric) depending on the actual message type
+* Whisper message topic depends on the actual message type (see [Topic](#topic))
+* Whisper message uses a different key (asymmetric or symmetric) depending on the actual message type (see [Keys management](#keys-management))
 
 ## Whisper node configuration
 
@@ -136,17 +149,25 @@ Whisper's Proof Of Work algorithm is used to to deter denial of service and vari
 
 If you want to receive messages from a mobile client, you need to run Whisper node with PoW set to `0.002`. In case of `geth`, this option can be overriden with `-shh.pow=0.002` flag.
 
+TODO: provide an instruction how to start a Whisper node with proper configuration using geth.
+
 ## Keys management
 
 TBD
 
+## Encryption algorithms
+
+TBD (link to Whisper spec)
+
 ## Topic
 
 There are two types of Whisper topics the protocol uses:
-* static topic for private chats
+* static topic for private chats (also called _contact discovery topic_)
 * dynamic topic based on a chat name for public chats
 
-Static topic is always the same and its hex representation is `0xf8946aac`. It is also called a discovery topic. Having only one topic for all private chats has an advantage as it's very hard to figure out who talks to who. A drawback is that everyone receives everyone's messages but they can decrypt only these they have private keys for.
+The static topic is always the same and its hex representation is `0xf8946aac`. In fact, _the contact discovery topic_ is calculated using a dynamic topic algorithm described below with a constant name `contact-discovery`.
+
+Having only one topic for all private chats has an advantage as it's very hard to figure out who talks to who. A drawback is that everyone receives everyone's messages but they can decrypt only these they have private keys for.
 
 A dynamic topic is derived from a string using the following algorithm:
 
@@ -179,11 +200,13 @@ Messages encrypted with asymmetric encryption should be encrypted using recipein
 
 # Perfect Forward Secrecy (PFS)
 
-TBD
+TODO: link to a separate document (currently in the PR).
+
+[PFS in Status.im docs](https://status.im/research/pfs.html)
 
 # Device syncing
 
-TBD
+TODO: link to a separate document.
 
 # One-to-one messages
 
@@ -209,12 +232,18 @@ Whisper client needs to register a mail server instance which will be used by [g
 * `Archive(env *Envelope)`
 * `DeliverMail(whisperPeer *Peer, request *Envelope)`
 
-Archiving happens in the background automatically. If a mail server is registered for a given Whisper client, it will save all incoming messages on a local disk (this is the simplest implementation, it can store the messages wherever it wants).
+Archiving happens in the background automatically. If a mail server is registered for a given Whisper client, it will save all incoming messages on a local disk (this is the simplest implementation, it can store the messages wherever it wants, also using technologies like swarm and IPFS).
+
+Notice that each node is meant to be independent and keeps a copy of all historic messages. High Availability (HA) can be achieved by having multiple nodes in different locations. Additionally, each node is free to store messages in a way which provides storage HA as well.
 
 Saved messages are delivered to a requester (another Whisper peer) asynchronously as a response to `p2pMessageCode` message code. This is not exposed as a JSON-RPC method in `shh` namespace but it's exposed in status-go as `shhext_requestMessages` and blocking `shh_requestMessagesSync`.
 
 In order to receive historic messages from a filter, p2p messages must be allowed when creating the filter. Receiving p2p messages is implemented in [geth's Whisper V6 implementation](https://github.com/ethereum/go-ethereum/blob/v1.8.23/whisper/whisperv6/whisper.go#L739-L751).
 
-# Whisper V6 extensions
+## Anonymity concerns
+
+In order to use a mail server, a given node needs to connect to it directly, i.e. add the mail server as its peer and mark it as trusted. This means that the mail server is able to send direct p2p messages to the node instead of broadcasing them. Effectively, it knows which topics the node is interested in, when it is online as well as many metadata like IP address.
+
+# Whisper V6 extensions (or Status Whisper Node)
 
 TBD
