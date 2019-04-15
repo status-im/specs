@@ -18,3 +18,8 @@ All specifications are currently in heavy draft mode. The following SIPs are und
 | 1   | [SIP process (placeholder)](https://github.com/status-im/specs/issues/1) | 
 | 2   | [SIP template (placeholder)](https://tools.ietf.org/html/rfc2119) | 
 | 3   | [Initial Protocol Specification (PR)](https://github.com/status-im/specs/pull/3) |
+
+
+## Incubation
+
+Things that are being researched and might show up as SIP in the future. See [Big Brother protocol](https://github.com/status-im/bigbrother-specs/).
