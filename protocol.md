@@ -48,7 +48,7 @@ TBD
 * *Status Whisper node*: an Ethereum node with Whisper V6 enabled and additional Whisper extensions described in [Whisper V6 extensions (or Status Whisper Node)](#whisper-v6-extensions-or-status-whisper-node)
 * *MailServer*: an Ethereum node with Whisper V6 enabled and a mail server registered capable of storing and providing offline messages
 * *Message*: decrypted Whisper message
-* *Envelope*: encrypted message with some metadata like topic and TTL echanged between Whisper nodes; a symmetric or assymetric key is needed to decrypt it and read the payload
+* *Envelope*: encrypted message with some metadata like topic and TTL sent between Whisper nodes; a symmetric or asymmetric key is needed to decrypt it and read the payload
 * *Offline message*: an expired envelope stored by a Whisper node permanently
 
 # Basic Assumption
@@ -56,7 +56,7 @@ TBD
 This protocol assumes the following:
 1. There is an Ethereum node that is capable of discovering peers and implements Whisper V6 service.
 2. Participants of a given Whisper network in order to communicate with each other accept messages with lowered PoW value.
-3. Time is synced between all nodes participaiting in the given network (this is intrinsic Whisper requirement).
+3. Time is synced between all nodes participating in the given network (this is intrinsic Whisper requirement).
 
 # Protocol Overview
 
@@ -75,7 +75,7 @@ This protocol consist of three components:
 
 The payload specification describes how the messages are encoded and decoded and what each fields mean. This is required to properly interpret messages by the client.
 
-Whisper adapter specifies interaction with the Whiper service with regards to keys management, configuration and some metadata (like topic) required to properly process and encrypt/decrypt messages.
+Whisper adapter specifies interaction with the Whisper service with regards to keys management, configuration and some metadata (like topic) required to properly process and encrypt/decrypt messages.
 
 Offline messaging describes how the protocol handles delivering messages when one or more participants were offline and the messages expired in the network.
 
@@ -100,7 +100,7 @@ Example of a valid message:
 ```
 
 As you can see, the message is an array and each index value has its meaning:
-* 0: `c4` is a decoder handler identificator for the current payload format. Identificators allow to register handler for many different types of messages
+* 0: `c4` is a decoder handler identification for the current payload format. Identifications allow to register handler for many different types of messages
 * 1: array which items correspond to the described payload fields above
 
 For more details regarding serialization and deserialization please consult [transit format](https://github.com/cognitect/transit-format) specification.
@@ -134,7 +134,7 @@ TBD
 
 # Whisper adapter
 
-Whisper has been chosen as an messages exchange protocol because it was designed as an off-chain communcation layer for the Ethereum nodes. It supports e2e encryption and uses epidemic spread to route data to all members of the network. It also provides [darkness to some extent](https://github.com/ethereum/go-ethereum/wiki/Achieving-Darkness).
+Whisper has been chosen as an messages exchange protocol because it was designed as an off-chain communication layer for the Ethereum nodes. It supports e2e encryption and uses epidemic spread to route data to all members of the network. It also provides [darkness to some extent](https://github.com/ethereum/go-ethereum/wiki/Achieving-Darkness).
 
 However, Whisper was not designed to handle huge number of messages and real-time communication. These are the tradeoffs that we accepted when implementing this protocol.
 
@@ -153,13 +153,13 @@ Whisper's Proof Of Work algorithm is used to to deter denial of service and vari
 * proof-of-work time equal to `10`
 * time-to-live equal `10`
 
-If you want to receive messages from a mobile client, you need to run Whisper node with PoW set to `0.002`. In case of `geth`, this option can be overriden with `-shh.pow=0.002` flag.
+If you want to receive messages from a mobile client, you need to run Whisper node with PoW set to `0.002`. In case of `geth`, this option can be overridden with `-shh.pow=0.002` flag.
 
 TODO: provide an instruction how to start a Whisper node with proper configuration using geth.
 
 ## Keys management
 
-Protocol requies a key pair for the following actions:
+Protocol requires a key pair for the following actions:
 * signing a message,
 * decrypting received messages which are encrypted with user's public key.
 
@@ -323,7 +323,7 @@ In order to receive historic messages from a filter, p2p messages must be allowe
 
 ## Anonymity concerns
 
-In order to use a mail server, a given node needs to connect to it directly, i.e. add the mail server as its peer and mark it as trusted. This means that the mail server is able to send direct p2p messages to the node instead of broadcasing them. Effectively, it knows which topics the node is interested in, when it is online as well as many metadata like IP address.
+In order to use a mail server, a given node needs to connect to it directly, i.e. add the mail server as its peer and mark it as trusted. This means that the mail server is able to send direct p2p messages to the node instead of broadcasting them. Effectively, it knows which topics the node is interested in, when it is online as well as many metadata like IP address.
 
 # Whisper V6 extensions (or Status Whisper Node)
 
