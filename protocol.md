@@ -17,15 +17,21 @@ Status Secure And Decentralized Messaging Protocol
 	- [Keys management](#keys-management)
 	- [Encryption algorithms](#encryption-algorithms)
 	- [Topic](#topic)
-	- [Encryption](#encryption)
+	- [Message encryption](#message-encryption)
 - [Perfect Forward Secrecy (PFS)](#perfect-forward-secrecy-pfs)
 - [Device syncing](#device-syncing)
 - [One-to-one messages](#one-to-one-messages)
+	- [Sending](#sending)
+		- [Sending using PFS](#sending-using-pfs)
+	- [Receiving](#receiving)
 - [Public messages](#public-messages)
+	- [Sending](#sending-1)
+	- [Receiving](#receiving-1)
 - [Group messages](#group-messages)
 - [Offline messages](#offline-messages)
 	- [Anonymity concerns](#anonymity-concerns)
 - [Whisper V6 extensions (or Status Whisper Node)](#whisper-v6-extensions-or-status-whisper-node)
+	- [New RPC methods](#new-rpc-methods)
 
 # Abstract
 
@@ -153,11 +159,19 @@ TODO: provide an instruction how to start a Whisper node with proper configurati
 
 ## Keys management
 
-TBD
+Protocol requies a key pair for the following actions:
+* signing a message,
+* decrypting received messages which are encrypted with user's public key.
+
+The private key is stored in memory in Whisper service because the communication happens through JSON-RPC and we don't want to send private keys directly every time a new message is sent and what's more important some actions like receiving and decrypting messages happen in the background asynchronously.
+
+Whisper also keeps symmetric keys for public chats for the same reason of receiving and decrypting messages asynchronously in the background.
+
+Keys management for PFS is described in [Perfect forward secrecy section](#perfect-forward-secrecy-pfs).
 
 ## Encryption algorithms
 
-TBD (link to Whisper spec)
+TBD (link to Whisper spec where all algorithms used to encrypting stuff are mentioned)
 
 ## Topic
 
@@ -190,13 +204,13 @@ for i = 0; i < topic_len; i++ {
 }
 ```
 
-## Encryption
+## Message encryption
 
 Protocol distinguishes messages encrypted using asymmetric and symmetric encryptions.
 
 Symmetric keys are created using `shh_generateSymKeyFromPassword` Whisper JSON-RPC method which accepts one param, a string.
 
-Messages encrypted with asymmetric encryption should be encrypted using recipeint's public key so that only the recipient can decrypt them.
+Messages encrypted with asymmetric encryption should be encrypted using recipient's public key so that only the recipient can decrypt them.
 
 # Perfect Forward Secrecy (PFS)
 
@@ -212,11 +226,78 @@ TODO: link to a separate document.
 
 One-to-one messages are also known as private messages.
 
-TODO: describe how to send a 1-1 message starting from adding a key in Whisper etc.
+## Sending
+
+Sending a message is fairly easy and fallbacks on the Whisper JSON-RPC API, however, some preparation is needed:
+
+1. Obtain a public key of the recipient of the message,
+2. Add your private key to Whisper using `shh_addPrivateKey` and save the result as `sigKeyID`,
+3. Call `shh_post` with the following settings:
+   1. `pubKey` being a hex-encoded public key of the message recipient,
+   2. `sig` set to `sigKeyID`,
+   3. `ttl` should be set to at least `10`,
+   4. `topic` should be set accordingly to [Topic](#topic) section and hex-encoded,
+   5. `payload` is a hex-encoded payload,
+   6. `powTime` might be a small value (like `1`) because `powTarget` is lower as well,
+   7. `powTarget` should be set to maximum `0.002`.
+
+Note: these instructions are for JSON-RPC API. If you use Whisper service directly or Go `shhclient`, the parameters might have different types, for example, `payload` can be a byte array instead of hex-encoded string.
+
+Learn more following [Whisper V6 RPC API](https://github.com/ethereum/go-ethereum/wiki/Whisper-v6-RPC-API).
+
+### Sending using PFS
+
+When one decides to use PFS, the flow is the same but the payload should be encrypted following the [PFS specification](#pfs).
+
+## Receiving
+
+Receiving private messages depends on Whisper filters concept. Messages are first matched by a filter using a topic and then trying to be decrypted using a private key.
+
+1. Add your private key to Whisper using `shh_addPrivateKey` and save the result as `sigKeyID`,
+2. Call `shh_subscribe` with criteria:
+   1. `minPow` should be maximum `0.002`,
+   2. `topics` is a list of hex-encoded topics you expect messages to receive from following [Topic](#topic) section,
+   3. `allowP2P` should be set to `true` if mail server will be used.
+
+The messages with tracked topics and encrypted with user's public key should be received asynchronously.
+
+Alternative method is to use `shh_newMessageFilter` which takes the same criteria object and then periodically calling `shh_getFilterMessages` method.
+
+Currently, we use a single topic for private chats so `topic` will be a one-element array.
+
+Learn more following [Whisper V6 RPC API](https://github.com/ethereum/go-ethereum/wiki/Whisper-v6-RPC-API).
 
 # Public messages
 
-TODO: describe how to send a public message starting from adding a key in Whisper etc.TBD
+Public messages are encrypted with a symmetric key which is known and public.
+
+## Sending
+
+1. Calculate a symmetric key using `shh_generateSymKeyFromPassword(string)` passing public chat name as a string and save the result to `symKeyID`,
+2. Call `shh_post` with the following settings:
+   1. `symKeyID` set to `symKeyID` from (1),
+   2. `sig` set to `sigKeyID`,
+   3. `ttl` should be set to at least `10`,
+   4. `topic` should be set accordingly to [Topic](#topic) section and hex-encoded,
+   5. `payload` is a hex-encoded payload,
+   6. `powTime` might be a small value (like `1`) because `powTarget` is lower as well,
+   7. `powTarget` should be set to maximum `0.002`.
+
+Learn more following [Whisper V6 RPC API](https://github.com/ethereum/go-ethereum/wiki/Whisper-v6-RPC-API).
+
+## Receiving
+
+Receiving public messages depends on Whisper filters concept. Messages are first matched by a filter using a topic and then trying to be decrypted using a symmetric key.
+
+1. Calculate a symmetric key using `shh_generateSymKeyFromPassword(string)` passing public chat name as a string and save the result to `symKeyID`,
+2. Call `shh_subscribe` with criteria:
+   1. `minPow` should be maximum `0.002`,
+   2. `topics` contains a topic for a given public chat following [Topic](#topic),
+   3. `allowP2P` should be set to `true` if mail server will be used.
+
+Alternative method is to use `shh_newMessageFilter` which takes the same criteria object and then periodically calling `shh_getFilterMessages` method.
+
+Learn more following [Whisper V6 RPC API](https://github.com/ethereum/go-ethereum/wiki/Whisper-v6-RPC-API).
 
 # Group messages
 
@@ -246,4 +327,12 @@ In order to use a mail server, a given node needs to connect to it directly, i.e
 
 # Whisper V6 extensions (or Status Whisper Node)
 
-TBD
+Protocol's target is to be compliant with [the Whisper V6 Specification](https://github.com/ethereum/go-ethereum/wiki/Whisper). It should not matter which implementation is used as long as the implementation follow the Whisper V6 Specification.
+
+However, we added a few extensions, message codes and RPC methods to the Whisper V6 service in order to provide better user experience or due to efficiency requirements.
+
+All described addons are implemented in [status-im/whisper fork](https://github.com/status-im/whisper).
+
+## New RPC methods
+
+TODO: provide a list of RPC methods
