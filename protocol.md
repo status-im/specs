@@ -190,33 +190,39 @@ Cryptographic algoritms used by PFS are described in [Perfect forward secrecy se
 ## Topic
 
 There are two types of Whisper topics the protocol uses:
-* static topic for `user-message` message type (also called _contact discovery topic_)
-* dynamic topic based on a chat name for `public-group-user-message` message type.
+* topics for private chats (also called _partitioned topics_)
+* dynamic topic based on a chat name for public chats
 
-The static topic is always the same and its hex representation is `0xf8946aac`. In fact, _the contact discovery topic_ is calculated using a dynamic topic algorithm described below with a constant name `contact-discovery`.
+Having partitoned private chat topics reduce darkness, but they allow keeping traffic under control.
 
-Having only one topic for all private chats has an advantage as it's very hard to figure out who talks to who. A drawback is that everyone receives everyone's messages but they can decrypt only these they have private keys for.
+Each user has a unique-ish topic he listens to for 1-1 messages. Number of these topics are capped to N=5000.
+That gives a decent balance between darkness
 
-A dynamic topic is derived from a string using the following algorithm:
+Derivation algorithm for the partitioned topic is based on user's public key (pseudocode):
 
+```go
+const N = 5000
+
+var pubkey []byte // current account's pubkey
+
+topicString := fmt.Sprintf("%d-discovery", pubkey[:16] mod N)
+
+topicHash = keccak256(topicString)
+
+topic = topicHash[:4] // whisper topic is 4 bytes
 ```
-var hash []byte
 
-hash = keccak256(name)
+### Upgrading number of partitions
 
-# Whisper V6 specific
-var topic [4]byte
+Going to a different number of partitions will break compatibility.
 
-topic_len = 4
+To naively future-proof the protocol a bit, each client should listen to many partitioned topics:
+- for N = 5000, 10000, 25000, 50000, 100000, 250000, 500000.
 
-if len(hash) < topic_len {
-    topic_len = len(hash)
-}
+Though, each client version will send a message to only one topic.
 
-for i = 0; i < topic_len; i++ {
-    topic[i] = hash[i]
-}
-```
+When we will need to spread traffic more evenly (with more users), we can always release an update that sends messages to the topic with higher N.
+All the other clients will still be able to receive it, even if user didn't update.
 
 ## Message encryption
 
