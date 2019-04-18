@@ -1,5 +1,5 @@
 ---
-eip: 1
+eip: 3
 title: Status Secure Messaging Protocol
 status: Draft
 type: Standard
