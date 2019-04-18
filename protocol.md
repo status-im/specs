@@ -62,7 +62,7 @@ Ethereum empowers users and developers to interact with totally new kind of appl
 This protocol assumes the following:
 1. There MUST be an Ethereum node that is capable of discovering peers and implements Whisper V6 specification.
 2. Participants of a given Whisper network in order to communicate with each other MUST accept messages with lowered PoW value. More in (Whisper node configuration)(#whisper-node-configuration).
-3. Time MUST be synced between all nodes participating in the given network (this is intrinsic requirement of the Whisper specification as well). A clock drift between two peers larger than 20 seconds MAY result in discarding incoming messages.
+3. A clock drift between two peers larger than 20 seconds MAY result in discarding incoming messages (this is enforced on the Whisper layer); this protocol does not have any synchronisation mechanism built-in but the implementation SHOULD use one like NTP.
 
 # Protocol Overview
 
