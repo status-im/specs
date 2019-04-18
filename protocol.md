@@ -1,3 +1,13 @@
+---
+eip: 1
+title: Status Secure Messaging Protocol
+status: Draft
+type: Standard
+author: Adam Babik <adam@status.im>
+created: 2019-04-18
+updated: 2019-04-18
+---
+
 Status Secure And Decentralized Messaging Protocol
 ==================================================
 
@@ -52,7 +62,7 @@ Ethereum empowers users and developers to interact with totally new kind of appl
 This protocol assumes the following:
 1. There MUST be an Ethereum node that is capable of discovering peers and implements Whisper V6 specification.
 2. Participants of a given Whisper network in order to communicate with each other MUST accept messages with lowered PoW value. More in (Whisper node configuration)(#whisper-node-configuration).
-3. Time MUST be synced between all nodes participating in the given network (this is intrinsic requirement of the Whisper specification).
+3. Time MUST be synced between all nodes participating in the given network (this is intrinsic requirement of the Whisper specification as well). A clock drift between two peers larger than 20 seconds MAY result in discarding incoming messages.
 
 # Protocol Overview
 
@@ -350,4 +360,4 @@ All described addons are implemented in [status-im/whisper fork](https://github.
 
 ## New RPC methods
 
-TODO: provide a list of RPC methods
+TODO: provide a list of RPC methods from `shhext` API which are relevant to this spec.
