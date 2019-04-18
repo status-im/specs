@@ -8,10 +8,10 @@ created: 2019-04-18
 updated: 2019-04-18
 ---
 
-Status Secure And Decentralized Messaging Protocol
+Status Secure Messaging Protocol
 ==================================================
 
-- [Status Secure And Decentralized Messaging Protocol](#status-secure-and-decentralized-messaging-protocol)
+- [Status Secure Messaging Protocol](#status-secure-messaging-protocol)
 - [Abstract](#abstract)
 - [Terminology](#terminology)
 - [Basic Assumption](#basic-assumption)
