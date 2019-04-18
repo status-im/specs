@@ -2,7 +2,7 @@
 eip: 1
 title: Status Secure Messaging Protocol
 status: Draft
-type: Standard
+type: Standard Core
 author: Adam Babik <adam@status.im>
 created: 2019-04-18
 updated: 2019-04-18
