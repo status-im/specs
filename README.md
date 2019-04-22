@@ -33,9 +33,18 @@ Desired:
 - Transport privacy (Whisper, etc)
 - Payload and messages
 
-x4-x8 is Oskar cutting things up into orthogonal pieces.
-
+(x4-x8 is Oskar cutting things up into orthogonal pieces.)
 
 ## Incubation
 
 Things that are being researched and might show up as SIP in the future. See [Big Brother protocol](https://github.com/status-im/bigbrother-specs/).
+
+x9 upcoming: Minimal Viable Data Sync, which will provide reliable data sync between clients, only relying on best-effort delivery. More on requirements here: https://github.com/status-im/specs/
+
+Later:
+- Whisper better bandwidth (topic partition)
+- Specific payloads for SNT use cases
+- MLS
+- PSS
+- Mixnet
+- Etc
