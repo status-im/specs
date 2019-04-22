@@ -18,6 +18,7 @@ All specifications are currently in heavy draft mode. The following SIPs are und
 | 1   | [SIP process (placeholder)](https://github.com/status-im/specs/issues/1) | 
 | 2   | [SIP template (placeholder)](https://tools.ietf.org/html/rfc2119) | 
 | 3   | [Initial Protocol Specification](sip-0003.md) |
+| 4   | [Status Perfect Forward Secrecy Whitepaper](sip-0004.md) |
 
 
 ## Incubation
