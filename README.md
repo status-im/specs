@@ -17,7 +17,7 @@ All specifications are currently in heavy draft mode. The following SIPs are und
 | 0   | [SIP Index (placeholder)](README.md) |
 | 1   | [SIP process (placeholder)](https://github.com/status-im/specs/issues/1) | 
 | 2   | [SIP template (placeholder)](https://tools.ietf.org/html/rfc2119) | 
-| 3   | [Initial Protocol Specification (PR)](https://github.com/status-im/specs/pull/3) |
+| 3   | [Initial Protocol Specification](sip-0003.md) |
 
 
 ## Incubation
