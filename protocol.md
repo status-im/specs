@@ -1,6 +1,6 @@
 ---
-eip: 3
-title: Status Secure Messaging Protocol
+sip: 3
+title: Status Secure Messaging Protocol Stack
 status: Draft
 type: Standard
 author: Adam Babik <adam@status.im>
@@ -8,10 +8,10 @@ created: 2019-04-18
 updated: 2019-04-18
 ---
 
-Status Secure Messaging Protocol
+Status Secure Messaging Protocol Stack
 ==================================================
 
-- [Status Secure Messaging Protocol](#status-secure-messaging-protocol)
+- [Status Secure Messaging Protocol Stack](#status-secure-messaging-protocol-stack)
 - [Abstract](#abstract)
 - [Terminology](#terminology)
 - [Basic Assumption](#basic-assumption)
