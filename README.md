@@ -12,20 +12,29 @@ No accepted SIPs right now.
 
 All specifications are currently in heavy draft mode. The following SIPs are under consideration for standardization.
 
+Prepending draft with x to indicate that they aren't accepted yet.
+
 | Num | Title |
 |-----|----|
-| 0   | [SIP Index (placeholder)](README.md) |
-| 1   | [SIP process (placeholder)](https://github.com/status-im/specs/issues/1) | 
-| 2   | [SIP template (placeholder)](https://tools.ietf.org/html/rfc2119) | 
-| 3   | [Initial Protocol Specification (PR)](https://github.com/status-im/specs/pull/3) |
+| x0   | [SIP Index (placeholder)](README.md) |
+| x1   | [SIP process (placeholder)](https://github.com/status-im/specs/issues/1) |
+| x2   | [SIP template (placeholder)](https://tools.ietf.org/html/rfc2119) |
+| x3   | [Initial Protocol Specification](protocol.md) |
+| x4   | [Initial Protocol Overview](x4.md) |
+| x5   | [Initial Trust Establishment Specification](x5.md) |
+| x6   | [Initial Conversational Security Specification](x6.md) |
+| x7   | [Initial Transport Privacy through Whisper Specification](x7.md) |
+| x8   | [Initial Message Payload Specification Specification](x8.md) |
 
 Desired:
 - Protocol overview, including payloads and specific considerations
 - Trust establishment
 - Conversational security (PFS, etc)
 - Transport privacy (Whisper, etc)
-
 - Payload and messages
+
+x4-x8 is Oskar cutting things up into orthogonal pieces.
+
 
 ## Incubation
 
