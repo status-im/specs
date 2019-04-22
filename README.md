@@ -19,6 +19,13 @@ All specifications are currently in heavy draft mode. The following SIPs are und
 | 2   | [SIP template (placeholder)](https://tools.ietf.org/html/rfc2119) | 
 | 3   | [Initial Protocol Specification (PR)](https://github.com/status-im/specs/pull/3) |
 
+Desired:
+- Protocol overview, including payloads and specific considerations
+- Trust establishment
+- Conversational security (PFS, etc)
+- Transport privacy (Whisper, etc)
+
+- Payload and messages
 
 ## Incubation
 
