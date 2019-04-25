@@ -26,23 +26,16 @@ Prepending draft with x to indicate that they aren't accepted yet.
 | x7   | [Initial Transport Privacy through Whisper Specification](x7.md) |
 | x8   | [Initial Message Payload Specification Specification](x8.md) |
 
-Desired:
-- Protocol overview, including payloads and specific considerations
-- Trust establishment
-- Conversational security (PFS, etc)
-- Transport privacy (Whisper, etc)
-- Payload and messages
-
-(x4-x8 is Oskar cutting things up into orthogonal pieces.)
-
 ## Incubation
 
 Things that are being researched and might show up as SIP in the future. See [Big Brother protocol](https://github.com/status-im/bigbrother-specs/).
 
-x9 upcoming: Minimal Viable Data Sync, which will provide reliable data sync between clients, only relying on best-effort delivery. More on requirements here: https://github.com/status-im/specs/
+### Q2 (knock on wood)
+- x9 upcoming: Minimal Viable Data Sync, which will provide reliable data sync between clients, only relying on best-effort delivery. More on requirements here: https://github.com/status-im/specs/. WIP: https://notes.status.im/O7Xgij1GS3uREKNtzs7Dyw#
 
-Later:
-- Whisper better bandwidth (topic partition)
+- Whisper better bandwidth (topic partition): https://notes.status.im/aZJaio7RRYWzDcsZu_7OiQ?view
+
+### Later
 - Specific payloads for SNT use cases
 - MLS
 - PSS
