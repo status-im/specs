@@ -1,43 +1,40 @@
 # Specifications for Status clients
 
-This repository will contain a list of specifications for implementing Status and its various capabilities. For examples, see http://www.bittorrent.org/beps/bep_0000.html.
+This repository contains a list of specifications for implementing Status and
+its various capabilities.
 
-Status Improvement Proposals (SIPs).
+## Current state
 
-## Accepted
+As of July 2019, we are currently in the process of documenting current
+specifications. We are als implementing an isolated reference library for them.
+These specifications are expected to be frozen at the Status V1 launch and be
+used as a reference point for client implementers and security audits.
+
+## Status Improvement Proposals (SIPs)
+
+### Accepted
 
 No accepted SIPs right now.
 
-## Draft
+### Draft
 
-All specifications are currently in heavy draft mode. The following SIPs are under consideration for standardization.
+The following SIPs are under consideration for standardization.
 
-Prepending draft with x to indicate that they aren't accepted yet.
+Drafts are prepended with x to indicate that they aren't accepted yet.
 
 | Num | Title |
 |-----|----|
-| x0   | [SIP Index (placeholder)](README.md) |
-| x1   | [SIP process (placeholder)](https://github.com/status-im/specs/issues/1) |
-| x2   | [SIP template (placeholder)](https://tools.ietf.org/html/rfc2119) |
-| x3   | [Initial Protocol Specification](protocol.md) |
 | x4   | [Initial Protocol Overview](x4.md) |
 | x5   | [Initial Trust Establishment Specification](x5.md) |
 | x6   | [Initial Conversational Security Specification](x6.md) |
 | x7   | [Initial Transport Privacy through Whisper Specification](x7.md) |
 | x8   | [Initial Message Payload Specification Specification](x8.md) |
 
-## Incubation
+## Protocol Research
 
-Things that are being researched and might show up as SIP in the future. See [Big Brother protocol](https://github.com/status-im/bigbrother-specs/).
+These are protocols that are currently being researched. These are designed to
+be useful outside of Status as well. To the extent that these protocols are used
+within Status clients, they will show up as SIPs in the future.
 
-### Q2 (knock on wood)
-- x9 upcoming: Minimal Viable Data Sync, which will provide reliable data sync between clients, only relying on best-effort delivery. More on requirements here: https://github.com/status-im/specs/. WIP: https://notes.status.im/O7Xgij1GS3uREKNtzs7Dyw#
-
-- Whisper better bandwidth (topic partition): https://notes.status.im/aZJaio7RRYWzDcsZu_7OiQ?view
-
-### Later
-- Specific payloads for SNT use cases
-- MLS
-- PSS
-- Mixnet
-- Etc
+To see more on this, please visit the current home: [Big Brother
+protocol](https://github.com/status-im/bigbrother-specs/).
