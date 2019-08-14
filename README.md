@@ -37,5 +37,5 @@ These are protocols that are currently being researched. These are designed to
 be useful outside of Status as well. To the extent that these protocols are used
 within Status clients, they will show up as SIPs in the future.
 
-To see more on this, please visit the current home: [Big Brother
-protocol](https://github.com/status-im/bigbrother-specs/).
+To see more on this, please visit the current home: [vac
+protocol](https://specs.vac.dev).
