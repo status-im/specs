@@ -73,6 +73,26 @@ For transaction support, Status clients currently have to rely on Infura.
 
 Status clients currently do not offer native support for file storage.
 
+#### Why do you use Whisper?
+
+Whisper is one of the (three parts)[http://gavwood.com/dappsweb3.html] of the
+vision of Ethereum as the world computer, Ethereum and Swarm being the other
+two. Status was started as an encapsulation of and a clear window to this world
+computer.
+
+#### I heard you were moving away from Whisper?
+
+Whisper is not currently under active development, and it has several drawbacks.
+Among others:
+
+- It is very wasteful bandwidth-wise and it doesn't appear to be scalable
+- Proof of work is a poor spam protection mechanism for heterogenerous devices
+- The privacy guarantees provided are not rigorous
+- There's no incentives to run a node
+
+Finding a more suitable transport privacy is an ongoing research effort,
+together with (Vac)[https://vac.dev/vac-overview] and other teams in the space.
+
 ## Footnotes
 
 1. <https://github.com/status-im/status-protocol-go/>
