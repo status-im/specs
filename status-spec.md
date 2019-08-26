@@ -7,7 +7,14 @@
 ## Table of Contents
 
 - [Abstract](#abstract)
+- [P2P Overlay](#p2p-overlay)
+- [Node discovery and roles](#node-discovery-and-roles)
 - [Design Rationale](#design-rationale)
+    - [P2P Overlay](#p2p-overlay-1)
+        - [Why devp2p? Why not use libp2p?](#why-devp2p-why-not-use-libp2p)
+        - [What about other RLPx subprotocols like LES, and Swarm?](#what-about-other-rlpx-subprotocols-like-les-and-swarm)
+        - [Why do you use Whisper?](#why-do-you-use-whisper)
+        - [I heard you were moving away from Whisper?](#i-heard-you-were-moving-away-from-whisper)
 - [Footnotes](#footnotes)
 - [Acknowledgements](#acknowledgements)
 
