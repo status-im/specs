@@ -34,15 +34,15 @@ have to be implemented in order to be a full Status client.
 Status clients run on the public Ethereum network, as specified by the devP2P
 network protocols. devP2P provides a protocol for node discovery which is in
 draft mode
-(here)[https://github.com/ethereum/devp2p/blob/master/discv5/discv5.md]. See
+[here](https://github.com/ethereum/devp2p/blob/master/discv5/discv5.md). See
 more on node discovery and management in the next section.
 
-To communicate between Ethereum nodes, the (RLPx Transport
-Protocol, v5)[https://github.com/ethereum/devp2p/blob/master/rlpx.md] is used, which
+To communicate between Ethereum nodes, the [RLPx Transport
+Protocol, v5](https://github.com/ethereum/devp2p/blob/master/rlpx.md) is used, which
 allows for TCP-based communication between nodes.
 
-On top of this we run the RLPx-based subprotocol (Whisper
-v6)[https://eips.ethereum.org/EIPS/eip-627] for privacy-preserving messaging.
+On top of this we run the RLPx-based subprotocol [Whisper
+v6](https://eips.ethereum.org/EIPS/eip-627) for privacy-preserving messaging.
 
 ## Node discovery and roles
 
@@ -105,10 +105,10 @@ Status is primarily optimized for resource restricted devices, and at present
 time light client support for these protocols are suboptimal. This is a work in
 progress.
 
-For better Ethereum light client support, see (Re-enable LES as
-option)[https://github.com/status-im/status-go/issues/1025]. For better Swarm
-support, see (Swarm adaptive
-nodes)[https://github.com/ethersphere/SWIPs/pull/12].
+For better Ethereum light client support, see [Re-enable LES as
+option](https://github.com/status-im/status-go/issues/1025). For better Swarm
+support, see [Swarm adaptive
+nodes](https://github.com/ethersphere/SWIPs/pull/12).
 
 For transaction support, Status clients currently have to rely on Infura.
 
@@ -116,7 +116,7 @@ Status clients currently do not offer native support for file storage.
 
 #### Why do you use Whisper?
 
-Whisper is one of the (three parts)[http://gavwood.com/dappsweb3.html] of the
+Whisper is one of the [three parts](http://gavwood.com/dappsweb3.html) of the
 vision of Ethereum as the world computer, Ethereum and Swarm being the other
 two. Status was started as an encapsulation of and a clear window to this world
 computer.
@@ -132,7 +132,7 @@ Among others:
 - There's no incentives to run a node
 
 Finding a more suitable transport privacy is an ongoing research effort,
-together with (Vac)[https://vac.dev/vac-overview] and other teams in the space.
+together with [Vac](https://vac.dev/vac-overview) and other teams in the space.
 
 #### Why is PoW for Whisper set so low?
 
