@@ -34,6 +34,9 @@ To communicate between Ethereum nodes, the (RLPx Transport
 Protocol, v5)[https://github.com/ethereum/devp2p/blob/master/rlpx.md] is used, which
 allows for TCP-based communication between nodes.
 
+On top of this we run the RLPx-based subprotocol (Whisper
+v6)[https://eips.ethereum.org/EIPS/eip-627] for privacy-preserving messaging.
+
 ## Node discovery and roles
 
 - Bootstrap nodes
