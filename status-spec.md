@@ -134,6 +134,14 @@ Among others:
 Finding a more suitable transport privacy is an ongoing research effort,
 together with (Vac)[https://vac.dev/vac-overview] and other teams in the space.
 
+#### Why is PoW for Whisper set so low?
+
+A higher PoW would be desirable, but this kills the battery on mobilephones,
+which is a prime target for Status clients.
+
+This means the network is currently vulnerable to DDoS attacks. Alternative
+methods of spam protection are currently being researched.
+
 ## Footnotes
 
 1. <https://github.com/status-im/status-protocol-go/>
