@@ -55,6 +55,21 @@ etc.
 For very experimental bridge support, see the bridge between libp2p and devp2p
 in [Murmur](https://github.com/status-im/murmur).
 
+#### What about other RLPx subprotocols like LES, and Swarm?
+
+Status is primarily optimized for resource restricted devices, and at present
+time light client support for these protocols are suboptimal. This is a work in
+progress.
+
+For better Ethereum light client support, see (Re-enable LES as
+option)[https://github.com/status-im/status-go/issues/1025]. For better Swarm
+support, see (Swarm adaptive
+nodes)[https://github.com/ethersphere/SWIPs/pull/12].
+
+For transaction support, Status clients currently have to rely on Infura.
+
+Status clients currently do not offer native support for file storage.
+
 ## Footnotes
 
 1. <https://github.com/status-im/status-protocol-go/>
