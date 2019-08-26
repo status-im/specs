@@ -46,10 +46,44 @@ v6)[https://eips.ethereum.org/EIPS/eip-627] for privacy-preserving messaging.
 
 ## Node discovery and roles
 
-- Bootstrap nodes
-- Whisper relayers
-- Mailservers
-- Mobile nodes (Status Clients)
+There are four types of node roles:
+1. Bootstrap nodes
+2. Whisper relayers
+3. Mailservers (servers and clients)
+4. Mobile nodes (Status Clients)
+
+To implement a standard Status client you MUST implement the last node type. The
+other node types are optional, but we RECOMMEND you implement a mailserver
+client mode, otherwise the user experience is likely to be poor.
+
+### Bootstrapping
+
+To connect to other Status nodes you need to connect to a bootstrap node. These
+nodes allow you to discover other nodes of the network.
+
+Currently the main bootstrap nodes are provided by Status Gmbh, but anyone can
+run these provided they are connected to the rest of the Whisper network.
+
+<!-- TODO: Add a link to bootstrap nodes -->
+
+### Discovery
+
+<!-- TODO: Add a link to Discovery v5 / Rendezvous spec -->
+
+### Mailservers
+
+Whisper Mailservers are special nodes that helps with offline inboxing. This
+means you can receive Whisper envelopes after they have expired, which is useful
+if they are sent while a node is offline. They operate on a store-and-forward
+model.
+
+<!-- TODO: Add a link to mailserver spec spec -->
+
+### Mobile nodes
+
+This is a Whisper node which connects to part of the Whisper network. It MAY
+relay messages, and it MUST set a PoW requirement of at least `0.01` to be
+accepted by other Status nodes.
 
 ## Design Rationale
 
