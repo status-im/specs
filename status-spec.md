@@ -43,6 +43,18 @@ allows for TCP-based communication between nodes.
 
 ## Design Rationale
 
+### P2P Overlay
+
+#### Why devp2p? Why not use libp2p?
+
+At the time the main Status clients were being developed, devp2p was the most
+mature. However, it is likely we'll move over to libp2p in the future, as it'll
+provide us with multiple transports, better protocol negotiation, NAT traversal,
+etc.
+
+For very experimental bridge support, see the bridge between libp2p and devp2p
+in [Murmur](https://github.com/status-im/murmur).
+
 ## Footnotes
 
 1. <https://github.com/status-im/status-protocol-go/>
