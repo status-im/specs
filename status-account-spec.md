@@ -1,4 +1,8 @@
-# Status Account
+# Status Account Specification
+
+> Version: 0.1 (Draft)
+>
+> Authors: Corey Petty <corey@status.im> (alphabetical order)
 
 ## Summary
 

@@ -29,7 +29,7 @@ Drafts are prepended with x to indicate that they aren't accepted yet.
 | x6   | [Initial Conversational Security Specification](x6.md) |
 | x7   | [Initial Transport Privacy through Whisper Specification](x7.md) |
 | x8   | [Initial Message Payload Specification Specification](status-payloads-spec.md) |
-| x9   | [Status Account Creation and Maintenance Specification](x9.md)                    |
+| x9   | [Status Account Specification](status-account-spec.md)   |
 
 ## Protocol Research
 
