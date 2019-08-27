@@ -21,7 +21,7 @@ No accepted SIPs right now.
 The following SIPs are under consideration for standardization.
 
 - [Status Client Specification](status-spec.md)
-- [Initial Conversational Security Specification](x6.md)
+- [Initial Conversational Security Specification](status-secure-transport-spec.md)
 - [Initial Message Payload Specification Specification](status-payloads-spec.md)
 - [Status Account Specification](status-account-spec.md)
 

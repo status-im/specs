@@ -8,6 +8,8 @@ created: 2018-12-05
 updated: 2019-04-22
 ---
 
+<!-- TODO: Update formatting -->
+
 **TODO: Specify conversational security and guarantees**
 
 *NOTE: Starting point: PFS whitepaper.*
