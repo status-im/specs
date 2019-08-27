@@ -219,7 +219,10 @@ Transport Spec](status-secure-tansport-spec.md) for more.
 
 ## Payloads and clients
 
-<!-- TODO: Provide outlink for payloads -->
+On top of secure transport, we have various types of data sync clients and
+payload formats for things like 1:1 chat, group chat and public chat. These have
+various degrees of standardization. Please refer to [Initial Message Payload
+Specification](x8.md) for more details.
 
 ## Design Rationale
 
