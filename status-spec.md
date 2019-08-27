@@ -54,6 +54,18 @@ Implementing a Status clients means implementing the following layers. Additiona
 | Transport privacy | Routing, Metadata protection    | Whisper                      |
 | P2P Overlay       | Overlay routing, NAT traversal  | devp2p                       |
 
+
+## Terminology
+
+* *Client*: a Whisper node implementing the protocol
+* *Whisper node*: an Ethereum node with Whisper V6 enabled (in the case of geth, it's `--shh` option)
+* *Status Whisper node*: an Ethereum node with Whisper V6 enabled and additional Whisper extensions described below
+* *Whisper network*: a group of Whisper nodes connected together through the internet connection and forming a graph
+* *MailServer*: an Ethereum node with Whisper V6 enabled and a mail server registered capable of storing and providing offline messages
+* *Message*: decrypted Whisper message
+* *Envelope*: encrypted message with some metadata like topic and TTL sent between Whisper nodes; a symmetric or asymmetric key is needed to decrypt it and read the payload
+* *Offline message*: an expired envelope stored by a Whisper node permanently
+
 ## P2P Overlay
 
 Status clients run on the public Ethereum network, as specified by the devP2P
