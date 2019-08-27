@@ -68,7 +68,18 @@ run these provided they are connected to the rest of the Whisper network.
 
 ### Discovery
 
-<!-- TODO: Add a link to Discovery v5 / Rendezvous spec -->
+To implement a Status client you need to discover peers to connect to. We use a
+light discovery mechanism based on a combination of [Discovery
+v5](https://github.com/ethereum/devp2p/blob/master/discv5/discv5.md) and
+[Rendezvous Protocol](https://github.com/libp2p/specs/tree/master/rendezvous),
+(with some
+[modifications](https://github.com/status-im/rendezvous#differences-with-original-rendezvous)).
+Additionally, some static nodes MAY also be used.
+
+This part of the system is currently underspecified and requires further detail.
+
+<!-- TODO: This section is way too vague, amend with concrete spec for how to do discovery of Status nodes. -->
+<!-- TODO: Add info on peer list, Discover v5 timespan, static nodes etc - should be enough to discover nodes from a different stack -->
 
 ### Mailservers
 
@@ -141,6 +152,16 @@ which is a prime target for Status clients.
 
 This means the network is currently vulnerable to DDoS attacks. Alternative
 methods of spam protection are currently being researched.
+
+#### Why do you not use Discovery v5 for node discovery?
+
+At the time we implemented dynamic node discovery, Discovery v5 wasn't completed
+yet. Additionally, running a DHT on a mobile leads to slow node discovery, bad
+battery and poor bandwidth usage. Instead, each client can choose to turn on
+Discovery v5 for a short period of time until their peer list is populated.
+
+For some further investigation, see
+[here](https://github.com/status-im/swarms/blob/master/ideas/092-disc-v5-research.md).
 
 ## Footnotes
 
