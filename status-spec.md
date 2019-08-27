@@ -215,7 +215,9 @@ Transport Spec](status-secure-tansport-spec.md) for more.
 
 ## Data Sync
 
-<!-- TODO: Provide outlink for MVDS and describe usage -->
+[MVDS](https://specs.vac.dev/mvds.html) is used for 1:1 and group chats, however it is currently not in use for public chats.
+
+<!-- TODO: Provide more detail on how this integrates with the other layers -->
 
 ## Payloads and clients
 
