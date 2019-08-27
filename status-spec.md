@@ -113,6 +113,76 @@ node settings:
 * proof-of-work not larger than `0.002`
 * time-to-live not lower than `10` (in seconds)
 
+<!--
+TODO: Decide whether to include this or not
+
+There is some tight coupling between the payload and Whisper:
+* Whisper message topic depends on the actual message type (see [Topic](#topic))
+* Whisper message uses a different key (asymmetric or symmetric) depending on the actual message type (see [Keys management](#keys-management))
+-->
+
+### Keys management and encryption
+
+The protocol requires a key (symmetric or asymmetric) for the following actions:
+* signing a message (a private key)
+* decrypting received messages (a private key or symmetric key).
+
+As private keys and symmetric keys are required to process incoming messages,
+they must be available all the time and are stored in memory.
+
+All encryption algorithms used by Whisper are described in the [Whisper V6
+specification](http://eips.ethereum.org/EIPS/eip-627).
+
+Symmetric keys are created using
+[`shh_generateSymKeyFromPassword`](https://github.com/ethereum/go-ethereum/wiki/Whisper-v6-RPC-API#shh_generatesymkeyfrompassword)
+Whisper V6 RPC API method which accepts one param, a string.
+
+Messages encrypted with asymmetric encryption should be encrypted using
+recipient's public key so that only the recipient can decrypt them.
+
+Key management and encryption for conversational security is described in [Conversational
+Security](#conversational-security), which provides properties such as forward secrecy.
+
+<!-- TODO: Outlink to conversational security spec -->
+
+### Topics
+
+There are two types of Whisper topics the protocol uses:
+* static topic for `user-message` message type (also called _contact discovery topic_)
+* dynamic topic based on a chat name for `public-group-user-message` message type.
+
+The static topic is always the same and its hex representation is `0xf8946aac`.
+In fact, _the contact discovery topic_ is calculated using a dynamic topic
+algorithm described below with a constant name `contact-discovery`.
+
+<!-- TODO: Update this, this looks different with partitioned topic -->
+Having only one topic for all private chats has an advantage as it's very hard
+to figure out who talks to who. A drawback is that everyone receives everyone's
+messages but they can decrypt only these they have private keys for.
+
+A dynamic topic is derived from a string using the following algorithm:
+
+```
+var hash []byte
+
+hash = keccak256(name)
+
+# Whisper V6 specific
+var topic [4]byte
+
+topic_len = 4
+
+if len(hash) < topic_len {
+    topic_len = len(hash)
+}
+
+for i = 0; i < topic_len; i++ {
+    topic[i] = hash[i]
+}
+```
+
+## Secure conversation
+
 ## Design Rationale
 
 ### P2P Overlay
