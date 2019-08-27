@@ -211,7 +211,7 @@ for i = 0; i < topic_len; i++ {
 In order to provide confidentiality, integrity, authentication and forward
 secrecy of messages we implement a secure transport on top of Whisper. This is
 used in 1:1 chats and group chats, but not for public chats. See [Status Secure
-Transport Spec](status-secure-tansport-spec.md) for more.
+Transport Spec](status-secure-transport-spec.md) for more.
 
 ## Data Sync
 
