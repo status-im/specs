@@ -54,18 +54,6 @@ Implementing a Status clients means implementing the following layers. Additiona
 | Transport privacy | Routing, Metadata protection    | Whisper                      |
 | P2P Overlay       | Overlay routing, NAT traversal  | devp2p                       |
 
-
-## Terminology
-
-* *Client*: a Whisper node implementing the protocol
-* *Whisper node*: an Ethereum node with Whisper V6 enabled (in the case of geth, it's `--shh` option)
-* *Status Whisper node*: an Ethereum node with Whisper V6 enabled and additional Whisper extensions described below
-* *Whisper network*: a group of Whisper nodes connected together through the internet connection and forming a graph
-* *MailServer*: an Ethereum node with Whisper V6 enabled and a mail server registered capable of storing and providing offline messages
-* *Message*: decrypted Whisper message
-* *Envelope*: encrypted message with some metadata like topic and TTL sent between Whisper nodes; a symmetric or asymmetric key is needed to decrypt it and read the payload
-* *Offline message*: an expired envelope stored by a Whisper node permanently
-
 ## P2P Overlay
 
 Status clients run on the public Ethereum network, as specified by the devP2P
@@ -121,48 +109,6 @@ This part of the system is currently underspecified and requires further detail.
 <!-- TODO: This section is way too vague, amend with concrete spec for how to do discovery of Status nodes. -->
 <!-- TODO: Add info on peer list, Discover v5 timespan, static nodes etc - should be enough to discover nodes from a different stack -->
 
-### Mailservers
-
-Whisper Mailservers are special nodes that helps with offline inboxing. This
-means you can receive Whisper envelopes after their `TTL` have expired, which is
-useful if they are sent while a node is offline. They operate on a store-and-forward
-model.
-
-As a Status node, you are most likely to want to implement a mailserver client.
-This is currently underspecified, but it amounts to marking a node as trusted
-using the Whisper API and then fetching envelopes that have expired.
-
-<!-- TODO: Document mailserver usage better -->
-<!-- TODO: Add a link to mailserver spec -->
-
-To implement a mailserver as a server (i.e. one that stores expired envelopes),
-you need to implement the following `MailServer` interface with two methods:
-* `Archive(env *Envelope)`
-* `DeliverMail(whisperPeer *Peer, request *Envelope)`
-
-If a mail server is registered for a given Whisper client, it will save all
-incoming messages on a local disk (this is the simplest implementation, it can
-store the messages wherever it wants, also using technologies like swarm and
-IPFS) in the background.
-
-Each node is meant to be independent and SHOULD keep a copy of all
-historic messages. High Availability (HA) can be achieved by having multiple
-nodes in different locations. Additionally, each node is free to store messages
-in a way which provides storage HA as well.
-
-Saved messages are delivered to a requester (another Whisper peer)
-asynchronously as a response to `p2pMessageCode` message code. This is not
-exposed as a JSON-RPC method in `shh` namespace but it's exposed in status-go as
-`shhext_requestMessages` and blocking `shh_requestMessagesSync`. Read more about
-[Whisper V6 extensions](#whisper-v6-extensions-or-status-whisper-node).
-
-In order to receive historic messages from a filter, p2p messages MUST be
-allowed when creating the filter. Receiving p2p messages is implemented in
-[geth's Whisper V6
-implementation](https://github.com/ethereum/go-ethereum/blob/v1.8.23/whisper/whisperv6/whisper.go#L739-L751).
-
-<!-- TODO: Remove implementation specific stuff -->
-
 ### Mobile nodes
 
 This is a Whisper node which connects to part of the Whisper network. It MAY
@@ -174,95 +120,7 @@ communicate with other Status nodes.
 Once a Whisper node is up and running there are some specific settings required
 to commmunicate with other Status nodes.
 
-Worth noting is that in Whisper time MUST be synced between all nodes
-participating in the given network. A clock drift between two peers larger than
-20 seconds MAY result in discarding incoming messages.
-
-### Node configuration
-
-Whisper's Proof Of Work algorithm is used to deter denial of service and various
-spam/flood attacks against the Whisper network. The sender of a message must
-perform some work which in this case means processing time. Because Status' main
-client is a mobile client, this easily leads to battery draining and poor
-erformance of the app itself. Hence, all clients MUST use the following Whisper
-node settings:
-
-* proof-of-work not larger than `0.002`
-* time-to-live not lower than `10` (in seconds) <!-- @TODO: is there a higher bound -->
-
-<!--
-TODO: Decide whether to include this or not
-
-There is some tight coupling between the payload and Whisper:
-* Whisper message topic depends on the actual message type (see [Topic](#topic))
-* Whisper message uses a different key (asymmetric or symmetric) depending on the actual message type (see [Keys management](#keys-management))
--->
-
-### Keys management and encryption
-
-The protocol requires a key (symmetric or asymmetric) for the following actions:
-* signing a message (a private key)
-* decrypting received messages (a private key or symmetric key).
-
-As private keys and symmetric keys are required to process incoming messages,
-they must be available all the time and are stored in memory.
-
-All encryption algorithms used by Whisper are described in the [Whisper V6
-specification](http://eips.ethereum.org/EIPS/eip-627).
-
-Symmetric keys are created using
-[`shh_generateSymKeyFromPassword`](https://github.com/ethereum/go-ethereum/wiki/Whisper-v6-RPC-API#shh_generatesymkeyfrompassword)
-Whisper V6 RPC API method which accepts one param, a string.
-
-Messages encrypted with asymmetric encryption should be encrypted using
-recipient's public key so that only the recipient can decrypt them.
-
-Key management and encryption for conversational security is described in [Conversational
-Security](#conversational-security), which provides properties such as forward secrecy.
-
-<!-- TODO: Outlink to conversational security spec -->
-
-### Topics
-
-There are two types of Whisper topics the protocol uses:
-* static topic for `user-message` message type (also called _contact discovery topic_)
-* dynamic topic based on a chat name for `public-group-user-message` message type.
-
-The static topic is always the same and its hex representation is `0xf8946aac`.
-In fact, _the contact discovery topic_ is calculated using a dynamic topic
-algorithm described below with a constant name `contact-discovery`.
-
-<!-- TODO: Update this, this looks different with partitioned topic -->
-Having only one topic for all private chats has an advantage as it's very hard
-to figure out who talks to who. A drawback is that everyone receives everyone's
-messages but they can decrypt only these they have private keys for.
-
-A dynamic topic is derived from a string using the following algorithm:
-
-```golang
-var hash []byte
-
-hash = keccak256(name)
-
-// Whisper V6 specific
-var topic [4]byte
-
-topic_len = 4
-
-if len(hash) < topic_len {
-    topic_len = len(hash)
-}
-
-for i = 0; i < topic_len; i++ {
-    topic[i] = hash[i]
-}
-```
-
-### Whisper v6 extensions
-
-Outside of Whisper v6, there are some extensions, message codes and RPC methods that MAY be useful for client implementers. An implementation of this can be found in a fork of Whisper [here](https://github.com/status-im/whisper).
-
-<!--TODO: provide a list of RPC methods from `shhext` API which are relevant to this spec, as well as motivation (rationale section) -->
+See [Status Whisper Usage Spec](status-whisper-usage-spec.md) for more details.
 
 ## Secure Transport
 

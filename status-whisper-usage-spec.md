@@ -173,7 +173,9 @@ Whisper's Proof Of Work algorithm is used to deter denial of service and various
 * proof-of-work not larger than `0.002`
 * time-to-live not lower than `10` (in seconds)
 
-TODO: provide an instruction how to start a Whisper node with proper configuration using geth.
+<!-- TODO: provide an instruction how to start a Whisper node with proper configuration using geth.-->
+
+<!-- @TODO: is there a higher bound -->
 
 ## Keys management
 
@@ -191,24 +193,29 @@ All encryption algorithms used by Whisper should be described in the [Whisper V6
 
 Cryptographic algoritms used by PFS are described in [Perfect forward secrecy section](#perfect-forward-secrecy-pfs).
 
-## Topic
+### Topics
 
 There are two types of Whisper topics the protocol uses:
 * static topic for `user-message` message type (also called _contact discovery topic_)
 * dynamic topic based on a chat name for `public-group-user-message` message type.
 
-The static topic is always the same and its hex representation is `0xf8946aac`. In fact, _the contact discovery topic_ is calculated using a dynamic topic algorithm described below with a constant name `contact-discovery`.
+The static topic is always the same and its hex representation is `0xf8946aac`.
+In fact, _the contact discovery topic_ is calculated using a dynamic topic
+algorithm described below with a constant name `contact-discovery`.
 
-Having only one topic for all private chats has an advantage as it's very hard to figure out who talks to who. A drawback is that everyone receives everyone's messages but they can decrypt only these they have private keys for.
+<!-- TODO: Update this, this looks different with partitioned topic -->
+Having only one topic for all private chats has an advantage as it's very hard
+to figure out who talks to who. A drawback is that everyone receives everyone's
+messages but they can decrypt only these they have private keys for.
 
 A dynamic topic is derived from a string using the following algorithm:
 
-```
+```golang
 var hash []byte
 
 hash = keccak256(name)
 
-# Whisper V6 specific
+// Whisper V6 specific
 var topic [4]byte
 
 topic_len = 4
@@ -275,6 +282,7 @@ Sending a message is fairly easy and relies on the Whisper RPC API, however, som
 Note: these instructions are for the Whisper V6 RPC API. If you use Whisper service directly or Go `shhclient`, the parameters might have different types.
 
 Learn more following [Whisper V6 RPC API](https://github.com/ethereum/go-ethereum/wiki/Whisper-v6-RPC-API).
+
 
 ### Sending using PFS
 
@@ -356,14 +364,8 @@ In order to receive historic messages from a filter, p2p messages MUST be allowe
 
 In order to use a mail server, a given node needs to connect to it directly, i.e. add the mail server as its peer and mark it as trusted. This means that the mail server is able to send direct p2p messages to the node instead of broadcasting them. Effectively, it knows which topics the node is interested in, when it is online as well as many metadata like IP address.
 
-# Whisper V6 extensions (or Status Whisper Node)
+## Whisper V6 extensions (or Status Whisper Node)
 
-Protocol's target is to be compliant with [the Whisper V6 Specification](https://github.com/ethereum/go-ethereum/wiki/Whisper). It should not matter which implementation is used as long as the implementation follow the Whisper V6 Specification.
+Outside of Whisper v6, there are some extensions, message codes and RPC methods that MAY be useful for client implementers. An implementation of this can be found in a fork of Whisper [here](https://github.com/status-im/whisper).
 
-However, we added a few extensions, message codes and RPC methods to the Whisper V6 service in order to provide better user experience or due to efficiency requirements.
-
-All described addons are implemented in [status-im/whisper fork](https://github.com/status-im/whisper).
-
-## New RPC methods
-
-TODO: provide a list of RPC methods from `shhext` API which are relevant to this spec.
+<!--TODO: provide a list of RPC methods from `shhext` API which are relevant to this spec, as well as motivation (rationale section) -->

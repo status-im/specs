@@ -22,13 +22,13 @@ The following SIPs are under consideration for standardization.
 
 - [Status Client Specification](status-spec.md)
 - [Initial Conversational Security Specification](status-secure-transport-spec.md)
-- [Initial Message Payload Specification Specification](status-payloads-spec.md)
+- [Initial Message Payload Specification](status-payloads-spec.md)
 - [Status Account Specification](status-account-spec.md)
+- [Status Whisper Usage Specification](status-whisper-usage-spec.md)
 
 Badly scoped:
 
 - [Initial Trust Establishment Specification](x5.md)
-- [Initial Transport Privacy through Whisper Specification](x7.md)
 
 ## Protocol Research
 
