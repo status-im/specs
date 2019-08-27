@@ -124,7 +124,7 @@ erformance of the app itself. Hence, all clients MUST use the following Whisper
 node settings:
 
 * proof-of-work not larger than `0.002`
-* time-to-live not lower than `10` (in seconds)
+* time-to-live not lower than `10` (in seconds) <!-- @TODO: is there a higher bound -->
 
 <!--
 TODO: Decide whether to include this or not
@@ -175,12 +175,12 @@ messages but they can decrypt only these they have private keys for.
 
 A dynamic topic is derived from a string using the following algorithm:
 
-```
+```golang
 var hash []byte
 
 hash = keccak256(name)
 
-# Whisper V6 specific
+// Whisper V6 specific
 var topic [4]byte
 
 topic_len = 4
