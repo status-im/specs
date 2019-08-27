@@ -40,7 +40,7 @@ We present a reference implementation of the protocol <sup>1</sup> that is used
 in a command line client <sup>2</sup> and a mobile app <sup>3</sup>.
 
 This document consists of two parts. The first outlines the specifications that
-have to be implemented in order to be a full Status client.
+have to be implemented in order to be a full Status client. The second gives a design rationale and answers some common questions.
 
 ## P2P Overlay
 
