@@ -8,11 +8,11 @@ created: 2019-04-22
 updated:
 ---
 
-- [Wrapper](#Wrapper)
-- [Encoding](#Encoding)
-- [Upgradability](#Upgradability)
+- [Wrapper](#wrapper)
+- [Encoding](#encoding)
+- [Upgradability](#upgradability)
 
-This specification describes how the payload of each message in the Status Protocol looks like. It does not care how the payload is encrypted or exchanged later.
+This specification describes how the payload of each message in the Status Protocol looks.
 
 The payload must be flexible enough to support messaging but also cases described in [Status Whitepaper](https://status.im/whitepaper.pdf) as well as various clients created using vastly different technologies.
 
@@ -21,21 +21,20 @@ The payload must be flexible enough to support messaging but also cases describe
 Payloads are wrapped in a [protobuf record](https://developers.google.com/protocol-buffers/)
 record:
 
-```
-    message StatusProtocolMessage {
-      bytes signature = 1;
-      bytes payload = 2;
-    }
+```protobuf
+message StatusProtocolMessage {
+  bytes signature = 1;
+  bytes payload = 2;
+}
 ```
 
-Where `signature` is the bytes of the signed `SHA3-256` of the payload, signed with
-the key of the author of the message.
+`signature` is the bytes of the signed `SHA3-256` of the payload, signed with the key of the author of the message.
 The signature is needed to validate authorship of the message, so that the message can be relayed to third parties.
 If a signature is not present but an author is provided by a layer below, the message is to be relayed to third parties and its considered plausibly deniable.
 
 # Encoding
 
-The payload is encoded using [Transit format](https://github.com/cognitect/transit-format). It is a text-based format so even encoded version is easily readable by humans. Transit was chosen over JSON in order to reduce the bandwidth.
+The payload is encoded using [Transit format](https://github.com/cognitect/transit-format). Transit was chosen over JSON in order to reduce the bandwidth.
 
 Example of a valid encoded payload:
 
@@ -51,28 +50,32 @@ For more details regarding serialization and deserialization please consult [tra
 
 # Message types
 
-- [Message](##Message)
+- [Message](#message)
 
 ## Message
 
 The type `Message` represents a text message exchanged between clients.
 
-- [Payload](###Payload)
-- [Content types](###Content-types)
-- [Message types](###Message-types)
-- [Clock vs Timestamp and message ordering](###Clock-vs-Timestamp-and-message-ordering)
-- [Replies](###Replies)
+- [Payload](#payload)
+- [Content types](#content-types)
+- [Message types](#message-types)
+- [Clock vs Timestamp and message ordering](#clock-vs-timestamp-and-message-ordering)
+- [Replies](#replies)
 
 ### Payload
 
 Payload is a struct (a compound data type) with the following fields (order is important):
-1. text `string`
-2. content type `enum` (more in [Content types](#content-types))
-3. message type `enum` (more in [Message types](#message-types))
-4. clock `int64`
-5. timestamp `int64`
-6. content `struct { chat-id string, text string }`
 
+<!-- TODO: Be more precise in struct description, a la RFC, e.g. TLS style https://tools.ietf.org/html/rfc8446 -->
+
+| Field | Name | Type |
+| ----- | ---- | ---- |
+| 1 | text | `string` |
+| 2 | content type | `enum` (more in [Content types](#content-types)) |
+| 3 | message type | `enum` (more in [Message types](#message-types)) |
+| 4 | clock | `int64` |
+| 5 | timestamp | `int64` |
+| 6 | content | `struct { chat-id string, text string }` |
 
 ### Content types
 
