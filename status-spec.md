@@ -69,6 +69,9 @@ allows for TCP-based communication between nodes.
 On top of this we run the RLPx-based subprotocol [Whisper
 v6](https://eips.ethereum.org/EIPS/eip-627) for privacy-preserving messaging.
 
+There MUST be an Ethereum node that is capable of discovering peers and
+implements Whisper V6 specification.
+
 ## Node discovery and roles
 
 There are four types of node roles:
@@ -158,6 +161,10 @@ communicate with other Status nodes.
 
 Once a Whisper node is up and running there are some specific settings required
 to commmunicate with other Status nodes.
+
+Worth noting is that in Whisper time MUST be synced between all nodes
+participating in the given network. A clock drift between two peers larger than
+20 seconds MAY result in discarding incoming messages.
 
 ### Node configuration
 
