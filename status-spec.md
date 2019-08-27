@@ -181,7 +181,17 @@ for i = 0; i < topic_len; i++ {
 }
 ```
 
-## Secure conversation
+## Secure Transport
+
+<!-- TODO: Provide outlink for current PFS spec -->
+
+## Data Sync
+
+<!-- TODO: Provide outlink for MVDS and describe usage -->
+
+## Payloads and clients
+
+<!-- TODO: Provide outlink for payloads -->
 
 ## Design Rationale
 
