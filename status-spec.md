@@ -133,7 +133,7 @@ Transport Spec](status-secure-transport-spec.md) for more.
 
 [MVDS](https://specs.vac.dev/mvds.html) is used for 1:1 and group chats, however it is currently not in use for public chats.
 
-<!-- TODO: Provide more detail on how this integrates with the other layers -->
+[Status payloads](#payloads-and-clients) are serialized and then wrapped inside a MVDS message which is added to an [MVDS payload](https://specs.vac.dev/mvds.html#payloads), this payload is then encrypted (if necessary for 1-to-1 / group-chats) and sent using whisper which also encrypts it.
 
 ## Payloads and clients
 
