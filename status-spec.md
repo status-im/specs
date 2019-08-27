@@ -299,6 +299,12 @@ Discovery v5 for a short period of time until their peer list is populated.
 For some further investigation, see
 [here](https://github.com/status-im/swarms/blob/master/ideas/092-disc-v5-research.md).
 
+#### I heard something about mailservers being trusted somehow?
+
+In order to use a mail server, a given node needs to connect to it directly, i.e. add the mailserver as its peer and mark it as trusted. This means that the mail server is able to send direct p2p messages to the node instead of broadcasting them. Effectively, it knows which topics the node is interested in, when it is online as well as many metadata like IP address.
+
+
+
 ## Footnotes
 
 1. <https://github.com/status-im/status-protocol-go/>
