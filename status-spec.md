@@ -109,11 +109,44 @@ This part of the system is currently underspecified and requires further detail.
 ### Mailservers
 
 Whisper Mailservers are special nodes that helps with offline inboxing. This
-means you can receive Whisper envelopes after they have expired, which is useful
-if they are sent while a node is offline. They operate on a store-and-forward
+means you can receive Whisper envelopes after their `TTL` have expired, which is
+useful if they are sent while a node is offline. They operate on a store-and-forward
 model.
 
-<!-- TODO: Add a link to mailserver spec spec -->
+As a Status node, you are most likely to want to implement a mailserver client.
+This is currently underspecified, but it amounts to marking a node as trusted
+using the Whisper API and then fetching envelopes that have expired.
+
+<!-- TODO: Document mailserver usage better -->
+<!-- TODO: Add a link to mailserver spec -->
+
+To implement a mailserver as a server (i.e. one that stores expired envelopes),
+you need to implement the following `MailServer` interface with two methods:
+* `Archive(env *Envelope)`
+* `DeliverMail(whisperPeer *Peer, request *Envelope)`
+
+If a mail server is registered for a given Whisper client, it will save all
+incoming messages on a local disk (this is the simplest implementation, it can
+store the messages wherever it wants, also using technologies like swarm and
+IPFS) in the background.
+
+Each node is meant to be independent and SHOULD keep a copy of all
+historic messages. High Availability (HA) can be achieved by having multiple
+nodes in different locations. Additionally, each node is free to store messages
+in a way which provides storage HA as well.
+
+Saved messages are delivered to a requester (another Whisper peer)
+asynchronously as a response to `p2pMessageCode` message code. This is not
+exposed as a JSON-RPC method in `shh` namespace but it's exposed in status-go as
+`shhext_requestMessages` and blocking `shh_requestMessagesSync`. Read more about
+[Whisper V6 extensions](#whisper-v6-extensions-or-status-whisper-node).
+
+In order to receive historic messages from a filter, p2p messages MUST be
+allowed when creating the filter. Receiving p2p messages is implemented in
+[geth's Whisper V6
+implementation](https://github.com/ethereum/go-ethereum/blob/v1.8.23/whisper/whisperv6/whisper.go#L739-L751).
+
+<!-- TODO: Remove implementation specific stuff -->
 
 ### Mobile nodes
 
