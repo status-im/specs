@@ -27,7 +27,6 @@ The following SIPs are under consideration for standardization.
 
 Badly scoped:
 
-- [Initial Protocol Overview](x4.md)
 - [Initial Trust Establishment Specification](x5.md)
 - [Initial Transport Privacy through Whisper Specification](x7.md)
 
