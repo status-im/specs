@@ -226,7 +226,7 @@ Transport Spec](status-secure-transport-spec.md) for more.
 <!-- TODO: Provide more detail on how this integrates with the other layers -->
 TODO: CLEANUP
 
-[Status payloads](#payloads-and-clients) are serialized and then wrapped inside an [MVDS payloads](https://specs.vac.dev/mvds.html#payloads), this payload is then encrypted and sent using whisper.
+[Status payloads](#payloads-and-clients) are serialized and then wrapped inside a MVDS message which is added to an [MVDS payload](https://specs.vac.dev/mvds.html#payloads), this payload is then encrypted and sent using whisper.
 
 
 ## Payloads and clients
