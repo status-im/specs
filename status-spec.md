@@ -93,8 +93,25 @@ model.
 ### Mobile nodes
 
 This is a Whisper node which connects to part of the Whisper network. It MAY
-relay messages, and it MUST set a PoW requirement of at least `0.01` to be
-accepted by other Status nodes.
+relay messages. See next section for more details on how to use Whisper to
+communicate with other Status nodes.
+
+## Whisper adapter
+
+Once a Whisper node is up and running there are some specific settings required
+to commmunicate with other Status nodes.
+
+### Node configuration
+
+Whisper's Proof Of Work algorithm is used to deter denial of service and various
+spam/flood attacks against the Whisper network. The sender of a message must
+perform some work which in this case means processing time. Because Status' main
+client is a mobile client, this easily leads to battery draining and poor
+erformance of the app itself. Hence, all clients MUST use the following Whisper
+node settings:
+
+* proof-of-work not larger than `0.002`
+* time-to-live not lower than `10` (in seconds)
 
 ## Design Rationale
 
