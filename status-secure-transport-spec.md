@@ -1,71 +1,19 @@
----
-sip: x6
-title: Initial Conversational Security Specification
-status: Draft
-type: Standard
-author: Andrea Piana <andreap@status.im>, Pedro Pombeiro <pedro@status.im>, Corey Petty <corey@status.im>, Oskar Thorén <oskar@status.im>
-created: 2018-12-05
-updated: 2019-04-22
----
+# Status Secure Transport Specification
 
-<!-- TODO: Update formatting -->
+> Version: 0.1 (Draft)
+>
+> Author: Andrea Piana <andreap@status.im>, Pedro Pombeiro <pedro@status.im>, Corey Petty <corey@status.im>, Oskar Thorén <oskar@status.im>
 
-**TODO: Specify conversational security and guarantees**
-
-*NOTE: Starting point: PFS whitepaper.*
-## Introduction
-
-## Requirements
-
-TODO: Elaborate on Whisper as a requirement in more detail, to such an extent that another transport layer could also fit it.
-
-## Design goals
-
-TODO: Fill in design goals. This is somewhat filled in below, but there are other requirements such as a selecton of the following:
-
-Security and Privacy
-
-Confidentiality
-Integrity
-Authentication
-Participant Consistency
-Destination Validation
-Forward Secrecy
-Backward Secrecy
-Anonymity Preserving
-Speaker Consistency
-Causality Preserving
-Global Transcript
-Message Unlinkability
-Message Repudiation
-Particip. Repudiation
-Adoption
-
-Out-of-Order Resilient
-Dropped Message Resilient
-Asynchronicity
-Multi-Device Support
-No Additional Service
-Group chat
-
-Computational Equality
-Trust Equality
-Subgroup Messaging
-Contractable
-Expandable
-
-That should be expanded on. See end of document for more
-
-# Below is import form previous best documentation
-
-Status Perfect Forward Secrecy Whitepaper
-====
-
-[TOC]
 
 ## 1. Introduction
 
-This whitepaper describes the protocols used by Status to achieve Perfect Forward Secrecy for 1:1 chat participants. It builds on the [X3DH](https://signal.org/docs/specifications/x3dh/) and [Double Ratchet](https://signal.org/docs/specifications/doubleratchet/) specifications from Open Whisper Systems, with some adaptations to operate in a decentralized environment.
+This whitepaper describes the protocols used by Status to achieve Perfect
+Forward Secrecy and other conversational security properties for 1:1 chat
+participants. It builds on the
+[X3DH](https://signal.org/docs/specifications/x3dh/) and [Double
+Ratchet](https://signal.org/docs/specifications/doubleratchet/) specifications
+from Open Whisper Systems, with some adaptations to operate in a decentralized
+environment.
 
 ### 1.1. Definitions
 
@@ -398,11 +346,7 @@ Expired session should not be used for new messages and should be deleted after 
 When a bundle is received from $IK$ a timer is initiated on any `installation-id` belonging to $IK$ not included in the bundle. If after 7 days no bundles are received from these devices they are marked as `stale` and no message will be sent to them.
 
 
-## Raw SoK evaluation import
-
-TODO: Write this in a more active voice
-
-## Conversational Security
+<!--
 TODO: description here
 
 ### --- Security  and Privacy Features
@@ -587,3 +531,5 @@ TODO: this requires more detail
 - The protocol requires whisper relay servers and mailservers currently. 
 - The larger the number of whisper relay servers, the better the transport security but there might be potential scaling problems.
 - Mailservers act to provide asynchronicity so users can retrieve messages after coming back from an offline period. 
+
+-->
