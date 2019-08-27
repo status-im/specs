@@ -5,7 +5,7 @@ its various capabilities.
 
 ## Current state
 
-As of July 2019, we are currently in the process of documenting current
+As of August 2019, we are currently in the process of documenting current
 specifications. We are als implementing an isolated reference library for them.
 These specifications are expected to be frozen at the Status V1 launch and be
 used as a reference point for client implementers and security audits.
@@ -20,16 +20,16 @@ No accepted SIPs right now.
 
 The following SIPs are under consideration for standardization.
 
-Drafts are prepended with x to indicate that they aren't accepted yet.
+- [Status Client Specification](status-spec.md)
+- [Initial Conversational Security Specification](x6.md)
+- [Initial Message Payload Specification Specification](status-payloads-spec.md)
+- [Status Account Specification](status-account-spec.md)
 
-| Num | Title |
-|-----|----|
-| x4   | [Initial Protocol Overview](x4.md) |
-| x5   | [Initial Trust Establishment Specification](x5.md) |
-| x6   | [Initial Conversational Security Specification](x6.md) |
-| x7   | [Initial Transport Privacy through Whisper Specification](x7.md) |
-| x8   | [Initial Message Payload Specification Specification](status-payloads-spec.md) |
-| x9   | [Status Account Specification](status-account-spec.md)   |
+Badly scoped:
+
+- [Initial Protocol Overview](x4.md)
+- [Initial Trust Establishment Specification](x5.md)
+- [Initial Transport Privacy through Whisper Specification](x7.md)
 
 ## Protocol Research
 
