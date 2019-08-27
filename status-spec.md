@@ -42,6 +42,18 @@ in a command line client <sup>2</sup> and a mobile app <sup>3</sup>.
 This document consists of two parts. The first outlines the specifications that
 have to be implemented in order to be a full Status client. The second gives a design rationale and answers some common questions.
 
+## Protocol layers
+
+Implementing a Status clients means implementing the following layers. Additionally, there are separate specifications for things like key management and account lifecycle.
+
+| Layer             | Purpose                         | Technology                   |
+|-------------------|---------------------------------|------------------------------|
+| Data and payloads | End user functionality          | 1:1, group chat, public chat |
+| Data sync         | Data consistency                | MVDS Ratchet                 |
+| Secure transport  | Confidentiality, PFS, etc       | Double Ratchet               |
+| Transport privacy | Routing, Metadata protection    | Whisper                      |
+| P2P Overlay       | Overlay routing, NAT traversal  | devp2p                       |
+
 ## P2P Overlay
 
 Status clients run on the public Ethereum network, as specified by the devP2P
