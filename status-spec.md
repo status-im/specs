@@ -206,6 +206,12 @@ for i = 0; i < topic_len; i++ {
 }
 ```
 
+### Whisper v6 extensions
+
+Outside of Whisper v6, there are some extensions, message codes and RPC methods that MAY be useful for client implementers. An implementation of this can be found in a fork of Whisper [here](https://github.com/status-im/whisper).
+
+<!--TODO: provide a list of RPC methods from `shhext` API which are relevant to this spec, as well as motivation (rationale section) -->
+
 ## Secure Transport
 
 In order to provide confidentiality, integrity, authentication and forward
