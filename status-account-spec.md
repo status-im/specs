@@ -135,9 +135,10 @@ Status generates a deterministic 3-word random pseudonym from the whisper chat p
 #### ENS name
 Status offers the ability to register a mapping of a human readable subdomain of `stateofus.eth` to their whisper chat public key.  This registration is purchased (currently by staking 10 SNT) and stored on the Ethereum mainnet blockchain for public lookup.
 
-## Security Implications
+<!-- TODO: Elaborate on security implications -->
 
-## General Comments
+<!-- TODO: Incorporate or cut below into proper spec
+
 
 ### Possible Connection Breakdown
 
@@ -178,3 +179,5 @@ All messages sent are encrypted with the public key of the destination and signe
     - considered pairwise private chats 
 - public group chat
     - the message is encrypted with a symmetric key derived from the chat name
+
+-->
