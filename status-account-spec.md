@@ -28,6 +28,8 @@ Everything else associated with the contact is either verified or derived from t
         - following [BIP44](https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki)
         - NOTE: this (`i=0`) is also the current (and only) path for Whisper key before Multiaccount integration
 
+<!-- TODO: Remove time dependency, only write what is the case now - i.e. remove "post Multiaccount integration" -->
+
 ### 1.2 X3DH Prekey bundle creation
 - Status follows the X3DH prekey bundle scheme that Open Whisper Systems outlines [in their documentation](https://signal.org/docs/specifications/x3dh/#the-x3dh-protocol) with the following exceptions:
     - Because there are no central servers, we do not publish one-time keys `OPK` or perform DH including them. 
@@ -39,7 +41,12 @@ Everything else associated with the contact is either verified or derived from t
 - These bundles are made available in a variety of ways, as defined in section 2.1.
 
 ### 1.3 Register at push notification system
-- TODO: Add this.
+
+If you want to receive and send push notifications, you MUST register a push
+notification server. This part is currently underspecified. You MAY choose to
+not do this.
+
+<!-- TODO: Add details on this this. -->
 
 ## 2 Account Broadcasting
 - A user is responsible for broadcasting certain information publicly so that others may contact them.
