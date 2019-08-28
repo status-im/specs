@@ -2,7 +2,7 @@
 
 > Version: 0.1 (Draft)
 >
-> Authors: Corey Petty <corey@status.im> (alphabetical order)
+> Authors: Corey Petty <corey@status.im>, Oskar Thorén <oskar@status.im> (alphabetical order)
 
 ## Summary
 
