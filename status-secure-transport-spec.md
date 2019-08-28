@@ -310,13 +310,7 @@ In this case an empty message containing bundle information is sent back, which 
 
 The same considerations apply as in [section 4 of the X3DH spec](https://signal.org/docs/specifications/x3dh/#security-considerations) and [section 6 of the Double Ratchet spec](https://signal.org/docs/specifications/doubleratchet/#security-considerations), with some additions detailed below.
 
-**_TODO: Add any additional context here not covered in the X3DH and DR specs, e.g.:_**
-
-TODO: E.g. what?
-
-### To be implemented
-
-TODO: Not clear what exactly is proposed as enhancement and what extra guarantees that would provide
+<!-- TODO: Add any additional context here not covered in the X3DH and DR specs -->
 
 ## 1. Introduction
 
