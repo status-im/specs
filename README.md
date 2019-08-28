@@ -26,10 +26,6 @@ The following SIPs are under consideration for standardization.
 - [Status Account Specification](status-account-spec.md)
 - [Status Whisper Usage Specification](status-whisper-usage-spec.md)
 
-Badly scoped:
-
-- [Initial Trust Establishment Specification](x5.md)
-
 ## Protocol Research
 
 These are protocols that are currently being researched. These are designed to
