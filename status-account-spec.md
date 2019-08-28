@@ -6,7 +6,7 @@
 
 ## Summary
 
-The core concept of an account in Status is a set of cryptographic keypairs.  Namely, the combination of the following:
+The core concept of an account in Status is a set of cryptographic keypairs. Namely, the combination of the following:
 1. a whisper chat identity keypair
 1. a set of cryptocurrency wallet keypairs
 
@@ -67,10 +67,5 @@ not do this.
 ### 3.3 User Profile Picture
 - An account MAY edit the `IK` generated identicon with a chosen picture.  This picture will become part of the publicly broadcasted profile of the account.
 
-### 3.4 Tribute to Talk
-- TODO - Couched until later
-
-### 3.5 Wallet Accounts
-- TODO (based in multiaccount)
-
-## Security Implications
+<!-- TODO: Elaborate on wallet account and multiaccount -->
+<!-- TODO: Elaborate on security implications -->
