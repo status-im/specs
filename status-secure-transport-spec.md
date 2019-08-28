@@ -46,7 +46,7 @@ Types used in this specification are defined using [Protobuf](https://developers
 ### 1.5. User flow for 1-to-1 communications
 
 #### 1.5.1. Account generation
-See [Account specification](./x9.md)
+See [Account specification](./status-account-spec.md)
 
 #### 1.5.2. Account recovery
 
@@ -86,7 +86,7 @@ Every client initially generates some key material which is stored locally:
 - A signed prekey based on secp256k1 - `SPK`
 - A prekey signature - `Sig(IK, Encode(SPK))`
 
-More details can be found in section 1.2 of [Account specification](./x9.md)
+More details can be found in section 1.2 of [Account specification](./status-account-spec.md)
 
 A `contact-code` is a protobuf `Bundle` message, encoded in `JSON` and converted to their `base64` string representation.
 
@@ -95,7 +95,7 @@ Prekey bundles are can be extracted from any user's messages, or found via searc
 TODO: See below on bundle retrieval, this seems like enhancement and parameter for recommendation
 
 ### 2.3. Bundle retrieval
-TODO: Potentially move this completely over to [Trust Establishment](./x5.md)
+<!-- TODO: Potentially move this completely over to [Trust Establishment](./status-account-spec.md) -->
 
 X3DH works by having client apps create and make available a bundle of prekeys (the X3DH bundle) that can later be requested by other interlocutors when they wish to start a conversation with a given user.
 
