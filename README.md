@@ -20,11 +20,11 @@ No accepted SIPs right now.
 
 The following SIPs are under consideration for standardization.
 
-- [Status Client Specification](status-spec.md)
-- [Initial Conversational Security Specification](status-secure-transport-spec.md)
-- [Initial Message Payload Specification](status-payloads-spec.md)
-- [Status Account Specification](status-account-spec.md)
-- [Status Whisper Usage Specification](status-whisper-usage-spec.md)
+- [Status Client Specification](status-spec.md). The main specification for writing a Status client.
+- [Status Secure Transport Specification](status-secure-transport-spec.md). How Status provide a secure transport with conversational security prperties.
+- [Status Payload Specification](status-payloads-spec.md). What the message payloads look like.
+- [Status Account Specification](status-account-spec.md). What a Status account is and how trust is established.
+- [Status Whisper Usage Specification](status-whisper-usage-spec.md). How we use Whisper to do routing, metadata protection and provide 1:1/group/public chat.
 
 ## Protocol Research
 
