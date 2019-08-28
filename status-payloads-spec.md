@@ -48,11 +48,14 @@ As you can see, the message is an array and each index value has its meaning:
 
 For more details regarding serialization and deserialization please consult [transit format](https://github.com/cognitect/transit-format) specification.
 
+<!--
 # Message types
 
 - [Message](#message)
 
-## Message
+-->
+
+# Message
 
 The type `Message` represents a text message exchanged between clients.
 
@@ -62,7 +65,7 @@ The type `Message` represents a text message exchanged between clients.
 - [Clock vs Timestamp and message ordering](#clock-vs-timestamp-and-message-ordering)
 - [Replies](#replies)
 
-### Payload
+## Payload
 
 Payload is a struct (a compound data type) with the following fields (order is important):
 
@@ -77,7 +80,7 @@ Payload is a struct (a compound data type) with the following fields (order is i
 | 5 | timestamp | `int64` |
 | 6 | content | `struct { chat-id string, text string }` |
 
-### Content types
+## Content types
 
 Content types are required for a proper interpretation of incoming messages. Not each message is a plain text but may carry a different information.
 
@@ -100,7 +103,7 @@ The following messages types MUST be supported:
 * `user-message` is a private message
 * `group-user-message` is a message to the private group.
 
-### Clock vs Timestamp and message ordering
+## Clock vs Timestamp and message ordering
 
 `timestamp` MUST be Unix time calculated when the message is created. Because the peers in the Whisper network should have synchronized time, `timestamp` values should be fairly accurate among all Whisper network participants.
 
@@ -108,7 +111,7 @@ The following messages types MUST be supported:
 
 `clock` value is used for the message ordering. Due to the used algorithm and distributed nature of the system, we achieve casual ordering which might produce counterintuitive results in some edge cases. For example, when one joins a public chat and sends a message before receiving the exist messages, their message `clock` value might be lower and the message will end up in the past when the historical messages are fetched.
 
-### Replies
+## Replies
 
 TODO
 
