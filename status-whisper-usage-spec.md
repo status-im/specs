@@ -313,10 +313,6 @@ Saved messages are delivered to a requester (another Whisper peer) asynchronousl
 
 In order to receive historic messages from a filter, p2p messages MUST be allowed when creating the filter. Receiving p2p messages is implemented in [geth's Whisper V6 implementation](https://github.com/ethereum/go-ethereum/blob/v1.8.23/whisper/whisperv6/whisper.go#L739-L751).
 
-## Anonymity concerns
-
-In order to use a mail server, a given node needs to connect to it directly, i.e. add the mail server as its peer and mark it as trusted. This means that the mail server is able to send direct p2p messages to the node instead of broadcasting them. Effectively, it knows which topics the node is interested in, when it is online as well as many metadata like IP address.
-
 ## Whisper V6 extensions (or Status Whisper Node)
 
 Outside of Whisper v6, there are some extensions, message codes and RPC methods that MAY be useful for client implementers. An implementation of this can be found in a fork of Whisper [here](https://github.com/status-im/whisper).
@@ -326,3 +322,7 @@ Outside of Whisper v6, there are some extensions, message codes and RPC methods 
 ## Security concerns
 
 TBD.
+
+### Privacy concerns
+
+In order to use a mail server, a given node needs to connect to it directly, i.e. add the mail server as its peer and mark it as trusted. This means that the mail server is able to send direct p2p messages to the node instead of broadcasting them. Effectively, it knows which topics the node is interested in, when it is online as well as many metadata like IP address.
