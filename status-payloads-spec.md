@@ -33,11 +33,9 @@ as various clients created using different technologies.
 
 In this document we describe the payload format and some special considerations.
 
-The payload must be flexible enough to support messaging but also cases described in [Status Whitepaper](https://status.im/whitepaper.pdf) as well as various clients created using vastly different technologies.
+## Payload wrapper
 
-## Wrapper
-
-Payloads are wrapped in a [protobuf record](https://developers.google.com/protocol-buffers/)
+All payloads are wrapped in a [protobuf record](https://developers.google.com/protocol-buffers/)
 record:
 
 ```protobuf
@@ -139,3 +137,9 @@ The current protocol format is hardly upgradable without breaking backward compa
 ## Security Considerations
 
 TBD.
+
+## Design rationale
+
+### Why are you using Transit and Protobuf?
+
+Transit was initially chose for encoding, and Protobuf was added afterwards. This is partly due to the history of the protocol living inside of `status-react`, which is written in Clojurescript. In future versions of payload and data sync client specifications it is likely we'll move towards Protobuf only. See e.g. [Dasy](https://github.com/vacp2p/dasy) for a research proof of concept.
