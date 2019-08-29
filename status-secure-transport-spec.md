@@ -145,7 +145,7 @@ There are two phases in the initial negotiation of a 1:1 chat:
 1. **Identity verification** (e.g., face-to-face contact exchange through QR code, Identicon matching). A QR code serves two purposes simultaneously - identity verification and initial bundle retrieval;
 1. **Asynchronous initial key exchange**, using X3DH.
 
-TODO: I'd consider calling the first Trust Establishment and link to that document
+For more information on account generation and trust establishment, see [Status Account Specification](status-account-spec.md)
 
 #### Initial key exchange flow (X3DH)
 
