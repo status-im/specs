@@ -2,7 +2,7 @@
 
 > Version: 0.1 (Draft)
 >
-> Authors: Andrea Piana <andreap@status.im>, Pedro Pombeiro <pedro@status.im>, Corey Petty <corey@status.im>, Oskar Thorén <oskar@status.im>, Dean Eigenmann <dean@status.im>
+> Authors: Dean Eigenmann <dean@status.im>, Andrea Piana <andreap@status.im>, Pedro Pombeiro <pedro@status.im>, Corey Petty <corey@status.im>, Oskar Thorén <oskar@status.im>
 
 ## Abstract
 
