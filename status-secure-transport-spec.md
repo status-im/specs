@@ -312,6 +312,9 @@ This mean that every time a new device is paired, the bundle needs to be updated
 
 The method is loosely based on https://signal.org/docs/specifications/sesame/ .
 
+<!-- TODO: This multi device section isn't clear enough -->
+<!-- TODO: Additionally, it seems tightly coupled with secure transport, which makes things like multi device public chats harder to reason about (IMO). E.g. as a client impl I might want multi device support but not want to impl double ratchet etc, so what does this mean? -->
+
 ### Pairing
 
 When a user adds a new account in the `Status` application, a new `installation-id` will be generated. The device should be paired as soon as possible if other devices are present. Once paired the contacts will be notified of the new device and it will be included in further communications.
