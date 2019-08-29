@@ -12,37 +12,37 @@ TBD.
 
 - [Abstract](#abstract)
 - [Table of Contents](#table-of-contents)
-- [1. Introduction](#1-introduction)
-    - [1.1. Definitions](#11-definitions)
-    - [1.2. Design Requirements](#12-design-requirements)
-    - [1.3. Conventions](#13-conventions)
-    - [1.4. Transport Layer](#14-transport-layer)
-    - [1.5. User flow for 1-to-1 communications](#15-user-flow-for-1-to-1-communications)
-        - [1.5.1. Account generation](#151-account-generation)
-        - [1.5.2. Account recovery](#152-account-recovery)
-- [2. Messaging](#2-messaging)
-    - [2.1. End-to-end encryption](#21-end-to-end-encryption)
-    - [2.2. Prekeys](#22-prekeys)
-    - [2.3. Bundle retrieval](#23-bundle-retrieval)
-    - [2.4. 1:1 chat contact request](#24-11-chat-contact-request)
-        - [2.4.1. Initial key exchange flow (X3DH)](#241-initial-key-exchange-flow-x3dh)
-        - [2.4.2. Double Ratchet](#242-double-ratchet)
-- [3. Session Management](#3-session-management)
-- [3.1 Initialization](#31-initialization)
-- [3.2 Concurrent sessions](#32-concurrent-sessions)
-- [3.3 Re-keying](#33-re-keying)
-- [4. Multi-device support](#4-multi-device-support)
-- [4.1 Pairing](#41-pairing)
-- [4.2 Sending messages to a paired group](#42-sending-messages-to-a-paired-group)
-- [4.3 Account recovery](#43-account-recovery)
-- [4.4 Partitioned devices](#44-partitioned-devices)
+- [Introduction](#introduction)
+    - [Definitions](#definitions)
+    - [Design Requirements](#design-requirements)
+    - [Conventions](#conventions)
+    - [Transport Layer](#transport-layer)
+    - [User flow for 1-to-1 communications](#user-flow-for-1-to-1-communications)
+        - [Account generation](#account-generation)
+        - [Account recovery](#account-recovery)
+- [Messaging](#messaging)
+    - [End-to-end encryption](#end-to-end-encryption)
+    - [Prekeys](#prekeys)
+    - [Bundle retrieval](#bundle-retrieval)
+    - [1:1 chat contact request](#11-chat-contact-request)
+        - [Initial key exchange flow (X3DH)](#initial-key-exchange-flow-x3dh)
+        - [Double Ratchet](#double-ratchet)
+- [Session Management](#session-management)
+- [Initialization](#initialization)
+- [Concurrent sessions](#concurrent-sessions)
+- [Re-keying](#re-keying)
+- [Multi-device support](#4-multi-device-support)
+    - [Pairing](#pairing)
+    - [Sending messages to a paired group](#sending-messages-to-a-paired-group)
+    - [Account recovery](#account-recovery)
+    - [Partitioned devices](#partitioned-devices)
 - [Trust establishment](#trust-establishment)
     - [-](#-)
-- [3.4 Expired session](#34-expired-session)
-- [4.3 Stale devices](#43-stale-devices)
-- [5. Security Considerations](#5-security-considerations)
+- [Expired session](#expired-session)
+- [Stale devices](#stale-devices)
+- [Security Considerations](#security-considerations)
 
-## 1. Introduction
+## Introduction
 
 This whitepaper describes the protocols used by Status to achieve Perfect
 Forward Secrecy and other conversational security properties for 1:1 chat
@@ -52,13 +52,13 @@ Ratchet](https://signal.org/docs/specifications/doubleratchet/) specifications
 from Open Whisper Systems, with some adaptations to operate in a decentralized
 environment.
 
-### 1.1. Definitions
+### Definitions
 
 - **Perfect Forward Secrecy** is a feature of specific key-agreement protocols which provide assurances that your session keys will not be compromised even if the private keys of the participants are compromised. Specifically, past messages cannot be decrypted by a third-party who manages to get a hold of a private key.
 
 - **Secret channel** describes a communication channel where Double Ratchet algorithm is in use.
 
-### 1.2. Design Requirements
+### Design Requirements
 
 - **Confidentiality**
 
@@ -72,30 +72,30 @@ environment.
 
   The adversary should not be able to learn what data was exchanged between two Status clients if, at some later time, the adversary compromises one or both of the endpoint devices.
 
-### 1.3. Conventions
+### Conventions
 
 Types used in this specification are defined using [Protobuf](https://developers.google.com/protocol-buffers/). Protocol buffers are a language-neutral, platform-neutral, extensible mechanism for serializing structured data.
 
-### 1.4. Transport Layer
+### Transport Layer
 
 [Whisper](./index.html) serves as the transport layer for the Status chat protocol. Whisper is a hybrid P2P/DHT communication protocol which delivers messages probabilistically. It is designed to provide configurable levels of darkness and plausible deniability at the expense of high-latency and relatively high bandwidth.
 
-### 1.5. User flow for 1-to-1 communications
+### User flow for 1-to-1 communications
 
-#### 1.5.1. Account generation
+#### Account generation
 See [Account specification](./status-account-spec.md)
 
-#### 1.5.2. Account recovery
+#### Account recovery
 
 If Alice later recovers her account, the Double Ratchet state information will not be available, so she is no longer able to decrypt any messages received from existing contacts.
 
 If an incoming message (on the same Whisper topic) fails to decrypt, a message is replied with the current bundle, so that the other end is notified of the new device. Subsequent communications will use this new bundle.
 
-## 2. Messaging
+## Messaging
 
 All messaging in Status is subject to end-to-end encryption to provide users with a strong degree of privacy and security.
 
-### 2.1. End-to-end encryption
+### End-to-end encryption
 
 End-to-end encryption (E2EE) takes place between two clients. The main cryptographic protocol is a [Status implementation](https://github.com/status-im/doubleratchet/) of the Double Ratchet protocol, which is in turn derived from the [Off-the-Record protocol](https://otr.cypherpunks.ca/Protocol-v3-4.1.1.html), using a different ratchet. The message payload is subsequently encrypted by the transport protocol - Whisper (see section [1.4](#14-Transport-Layer)) -, using symmetric key encryption. 
 Furthermore, Status uses the concept of prekeys (through the use of [X3DH](https://signal.org/docs/specifications/x3dh/)) to allow the protocol to operate in an asynchronous environment. It is not necessary for two parties to be online at the same time to initiate an encrypted conversation.
@@ -116,7 +116,7 @@ Status uses the following cryptographic primitives:
 
     Key derivation is done using HKDF.
 
-### 2.2. Prekeys
+### Prekeys
 
 Every client initially generates some key material which is stored locally:
 - Identity keypair based on secp256k1 - `IK`
@@ -131,7 +131,7 @@ Prekey bundles are can be extracted from any user's messages, or found via searc
 
 TODO: See below on bundle retrieval, this seems like enhancement and parameter for recommendation
 
-### 2.3. Bundle retrieval
+### Bundle retrieval
 <!-- TODO: Potentially move this completely over to [Trust Establishment](./status-account-spec.md) -->
 
 X3DH works by having client apps create and make available a bundle of prekeys (the X3DH bundle) that can later be requested by other interlocutors when they wish to start a conversation with a given user.
@@ -148,7 +148,7 @@ TODO: Comment, it isn't clear what we actually _do_. It seems as if this is expl
 
 Since bundles stored in QR codes or ENS records cannot be updated to delete already used keys, the approach taken is to rotate more frequently the bundle (once every 24 hours), which will be propagated by the app through the channel available.
 
-### 2.4. 1:1 chat contact request
+### 1:1 chat contact request
 
 There are two phases in the initial negotiation of a 1:1 chat:
 1. **Identity verification** (e.g., face-to-face contact exchange through QR code, Identicon matching). A QR code serves two purposes simultaneously - identity verification and initial bundle retrieval;
@@ -156,7 +156,7 @@ There are two phases in the initial negotiation of a 1:1 chat:
 
 TODO: I'd consider calling the first Trust Establishment and link to that document
 
-#### 2.4.1. Initial key exchange flow (X3DH)
+#### Initial key exchange flow (X3DH)
 
 The initial key exchange flow is described in [section 3 of the X3DH protocol](https://signal.org/docs/specifications/x3dh/#sending-the-initial-message), with some additional context:
 - The users' identity keys $IK_A$ and $IK_B$ correspond to their respective Status chat public keys;
@@ -198,7 +198,7 @@ The `signature` is generated by sorting `installation-id` in lexicographical ord
 
 `installation-id-1signed-pre-key1version1installation-id2signed-pre-key2-version-2`
 
-#### 2.4.2. Double Ratchet
+#### Double Ratchet
 
 Having established the initial shared secret `SK` through X3DH, we can use it to seed a Double Ratchet exchange between Alice and Bob.
 
@@ -282,7 +282,7 @@ message DirectMessageProtocol {
     - otherwise, payload encrypted with output key of DH exchange (no Perfect Forward Secrecy).
     -
 
-# 3. Session Management
+# Session Management
 
 This section describe how sessions are handled.
 
@@ -291,20 +291,20 @@ A peer is identified by two pieces of data:
 1) An `installation-id` which is generated upon creating a new account in the `Status` application
 2) Their identity whisper key
 
-## 3.1 Initialization
+## Initialization
 
 A new session is initialized once a successful X3DH exchange has taken place.
 Subsequent messages will use the established session until re-keying is necessary.
 
-## 3.2 Concurrent sessions
+## Concurrent sessions
 
 If two sessions are created concurrently between two peers the one with the symmetric key first in byte order should be used, marking the other has expired.
 
-## 3.3 Re-keying
+## Re-keying
 
 On receiving a bundle from a given peer with a higher version, the old bundle should be marked as expired and a new session should be established on the next message sent.
 
-## 4. Multi-device support
+## Multi-device support
 
 Multi-device support is quite challenging as we don't have a central place where information on which and how many devices (identified by their respective `installation-id`) belongs to a whisper-identity.
 
@@ -316,7 +316,7 @@ This mean that every time a new device is paired, the bundle needs to be updated
 
 The method is loosely based on https://signal.org/docs/specifications/sesame/ .
 
-## 4.1 Pairing
+## Pairing
 
 When a user adds a new account in the `Status` application, a new `installation-id` will be generated. The device should be paired as soon as possible if other devices are present. Once paired the contacts will be notified of the new device and it will be included in further communications.
 
@@ -328,24 +328,24 @@ The bundle will be propagated to contacts through the usual channels.
 
 Removal of paired devices is a manual step that needs to be applied on each device, and consist simply in disabling the device, at which point pairing information will not be propagated anymore.
 
-## 4.2 Sending messages to a paired group
+## Sending messages to a paired group
 
 When sending a message, the peer will send a message to any `installation-id` that they have seen, using pairwise encryption, including their own devices.
 
 The number of devices is capped to 3, ordered by last activity.
 
-## 4.3 Account recovery
+## Account recovery
 
 Account recovery is no different from adding a new device, and it is handled in exactly the same way.
 
-## 4.4 Partitioned devices
+## Partitioned devices
 
 In some cases (i.e. account recovery when no other pairing device is available, device not paired), it is possible that a device will receive a message that is not targeted to its own `installation-id`.
 In this case an empty message containing bundle information is sent back, which will notify the receiving end of including this device in any further communication.
 
 ## Trust establishment
 
-#### 1.5.x. Contact request
+#### Contact request
 
 Once two accounts have been generated (Alice and Bob), Alice can send a contact request with an introductory message to Bob.
 
@@ -362,15 +362,15 @@ If Bob accepts the contact request, a secure channel is created (if it wasn't al
 If Bob denies the request, Alice is not able to send messages and the only action available is resending the contact request.
 
 
-## 3.4 Expired session
+## Expired session
 
 Expired session should not be used for new messages and should be deleted after 14 days from the expiration date, in order to be able to decrypt out-of-order and mailserver messages.
 
-## 4.3 Stale devices
+## Stale devices
 
 When a bundle is received from $IK$ a timer is initiated on any `installation-id` belonging to $IK$ not included in the bundle. If after 7 days no bundles are received from these devices they are marked as `stale` and no message will be sent to them.
 
-# 5. Security Considerations
+# Security Considerations
 
 The same considerations apply as in [section 4 of the X3DH spec](https://signal.org/docs/specifications/x3dh/#security-considerations) and [section 6 of the Double Ratchet spec](https://signal.org/docs/specifications/doubleratchet/#security-considerations), with some additions detailed below.
 
