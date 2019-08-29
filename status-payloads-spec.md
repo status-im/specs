@@ -1,4 +1,4 @@
-# Status Payloads spec
+# Status Message Payloads Specification
 
 > Version: 0.1 (Draft)
 >
