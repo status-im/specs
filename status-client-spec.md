@@ -156,6 +156,17 @@ TBD.
 
 <!-- TODO: Fill this out. -->
 
+### Censorship-resistance
+
+With default settings Whisper over DevP2P runs on odd ports in 30k range, which
+are easy to block. One workaround for this is to run ports on 443. This doesn't
+take care of all cases though, and this quickly leads into efforts such as
+obfuscated transports a la Tor.
+
+See https://github.com/status-im/status-react/issues/6351 for some discussion.
+
+<!-- TODO: More detail on interop of ports and what we do precisely -->
+
 ## Design Rationale
 
 ### P2P Overlay
