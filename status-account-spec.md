@@ -146,7 +146,7 @@ This can be done in a the following ways:
 #### Contact Request
 
 #### Bundles
-- An X3DH prekey bundle is defined as ([code(https://github.com/status-im/status-go/messaging/chat/protobuf/encryption.pb.go)]):
+- An X3DH prekey bundle is defined as ([code](https://github.com/status-im/status-go/messaging/chat/protobuf/encryption.pb.go)):
   ```
   Identity                // Identity key
   SignedPreKeys           // a map of installation id to array of signed prekeys by that installation id
