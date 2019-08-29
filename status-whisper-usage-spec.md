@@ -6,7 +6,19 @@
 
 ## Abstract
 
-TBD.
+Status uses [Whisper](https://eips.ethereum.org/EIPS/eip-627) to provide
+privacy-preserving routing and messaging on top of DevP2P. Whisper uses topics
+to partition its messages, and these are leveraged for all chat capabilities. In
+the case of public chats, the channel name maps directly to its Whisper topic.
+This allows allows anyone to listen on a single channel.
+
+Additionally, since anyone can receive Whisper envelopes, it relies on the
+ability to decrypt messages to decide who is the correct recipient. We do
+however not rely on this property, but instead implement another secure
+transport layer on top of Whisper.
+
+Finally, we use an extension of Whisper to provide the ability to do offline
+messaging.
 
 ## Table of Contents
 
@@ -35,16 +47,15 @@ TBD.
 - [Whisper V6 extensions (or Status Whisper Node)](#whisper-v6-extensions-or-status-whisper-node)
   - [New RPC methods](#new-rpc-methods)
 
-
 ## Introduction
 
-TBD.
+In this document we detail how we use Whisper to provide for the various chat
+use cases, as well how offline inboxing works.
 
 ## Requirements
 
-TBD.
-
-<!-- TODO: Elaborate on requirement such as devp2p and possibly Whisper, and geth/parity/nimbus gotchas. -->
+An Ethereum node that is connected to peers and implements the Whisper v6
+specifications.
 
 ## Design goals
 
