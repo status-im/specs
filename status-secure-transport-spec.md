@@ -115,7 +115,7 @@ Every client initially generates some key material which is stored locally:
 - A signed prekey based on secp256k1 - `SPK`
 - A prekey signature - `Sig(IK, Encode(SPK))`
 
-More details can be found in the `X3DH Prekey bundle creation` section of [Account specification](./status-account-spec.md#x3dh-prekey-bundle-creation)
+More details can be found in the `X3DH Prekey bundle creation` section of [Account specification](./status-account-spec.md#x3dh-prekey-bundle-creation).
 
 A `contact-code` is a protobuf `Bundle` message, encoded in `JSON` and converted to their `base64` string representation.
 
