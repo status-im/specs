@@ -1,22 +1,36 @@
----
-sip: 3
-title: Initial Message Payload Specification
-status: Draft
-type: Standard
-author: Adam Babik <adam@status.im>, Oskar Thorén <oskar@status.im>
-created: 2019-04-22
-updated:
----
+# Status Payloads spec
 
+> Version: 0.1 (Draft)
+>
+> Authors: Adam Babik <adam@status.im>, Oskar Thorén <oskar@status.im> (alphabetical order)
+
+## Abstract
+
+TBD.
+
+## Table of Contents
+
+- [Abstract](#abstract)
+- [Table of Contents](#table-of-contents)
+- [Introduction](#introduction)
 - [Wrapper](#wrapper)
 - [Encoding](#encoding)
+- [Message types](#message-types)
+- [Message](#message)
+    - [Payload](#payload)
+    - [Content types](#content-types)
+    - [Message types](#message-types-1)
+    - [Clock vs Timestamp and message ordering](#clock-vs-timestamp-and-message-ordering)
 - [Upgradability](#upgradability)
+- [Security Considerations](#security-considerations)
+
+## Introduction
 
 This specification describes how the payload of each message in the Status Protocol looks.
 
 The payload must be flexible enough to support messaging but also cases described in [Status Whitepaper](https://status.im/whitepaper.pdf) as well as various clients created using vastly different technologies.
 
-# Wrapper
+## Wrapper
 
 Payloads are wrapped in a [protobuf record](https://developers.google.com/protocol-buffers/)
 record:
@@ -32,7 +46,7 @@ message StatusProtocolMessage {
 The signature is needed to validate authorship of the message, so that the message can be relayed to third parties.
 If a signature is not present but an author is provided by a layer below, the message is to be relayed to third parties and its considered plausibly deniable.
 
-# Encoding
+## Encoding
 
 The payload is encoded using [Transit format](https://github.com/cognitect/transit-format). Transit was chosen over JSON in order to reduce the bandwidth.
 
@@ -55,7 +69,7 @@ For more details regarding serialization and deserialization please consult [tra
 
 -->
 
-# Message
+## Message
 
 The type `Message` represents a text message exchanged between clients.
 
@@ -65,7 +79,7 @@ The type `Message` represents a text message exchanged between clients.
 - [Clock vs Timestamp and message ordering](#clock-vs-timestamp-and-message-ordering)
 - [Replies](#replies)
 
-## Payload
+### Payload
 
 Payload is a struct (a compound data type) with the following fields (order is important):
 
@@ -80,7 +94,7 @@ Payload is a struct (a compound data type) with the following fields (order is i
 | 5 | timestamp | `int64` |
 | 6 | content | `struct { chat-id string, text string }` |
 
-## Content types
+### Content types
 
 Content types are required for a proper interpretation of incoming messages. Not each message is a plain text but may carry a different information.
 
@@ -103,7 +117,7 @@ The following messages types MUST be supported:
 * `user-message` is a private message
 * `group-user-message` is a message to the private group.
 
-## Clock vs Timestamp and message ordering
+### Clock vs Timestamp and message ordering
 
 `timestamp` MUST be Unix time calculated when the message is created. Because the peers in the Whisper network should have synchronized time, `timestamp` values should be fairly accurate among all Whisper network participants.
 
@@ -111,10 +125,12 @@ The following messages types MUST be supported:
 
 `clock` value is used for the message ordering. Due to the used algorithm and distributed nature of the system, we achieve casual ordering which might produce counterintuitive results in some edge cases. For example, when one joins a public chat and sends a message before receiving the exist messages, their message `clock` value might be lower and the message will end up in the past when the historical messages are fetched.
 
-## Replies
+<!-- TODO: Replies -->
 
-TODO
-
-# Upgradability
+## Upgradability
 
 The current protocol format is hardly upgradable without breaking backward compatibility. Because Transit is used in this particular way described above, the only reliable option is to append a new field to the Transit record definition. It will be simply ignored by the old clients.
+
+## Security Considerations
+
+TBD.
