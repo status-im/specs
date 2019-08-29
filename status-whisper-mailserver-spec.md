@@ -17,9 +17,13 @@ TBD.
 
 In the case of mobile clients which are often offline, there is a strong need to have an ability to download offline messages. By offline messages, we mean messages sent into the Whisper network and expired before being collected by the recipient. A message stays in the Whisper network for a duration specified as `TTL` (time-to-live) property.
 
+See [EIP-627](https://eips.ethereum.org/EIPS/eip-627) for more detail on *Whisper Mail Server* and *Whisper Mail Client*.
+
 ## Mailserver
 
 A mailserver can either be running as a server or as a client.
+
+Since Whisper is a form of DHT, a mailserver only requires a specific relationship with the receiver of a message, not with the sender of a message.
 
 ### Server
 
@@ -62,5 +66,7 @@ TBD.
 In order to use a mail server, a given node needs to connect to it directly, i.e. add the mail server as its peer and mark it as trusted. This means that the mail server is able to send direct p2p messages to the node instead of broadcasting them. Effectively, it knows which topics the node is interested in, when it is online as well as many metadata like IP address.
 
 ### Denial-of-service
+
+Since a mailserver is delivering expired envelopes.
 
 TBD.
