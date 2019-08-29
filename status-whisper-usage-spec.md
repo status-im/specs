@@ -4,6 +4,10 @@
 >
 > Authors: Adam Babik <adam@status.im>, Corey Petty <corey@status.im>, Oskar Thorén <oskar@status.im> (alphabetical order)
 
+## Abstract
+
+TBD.
+
 ## Table of Contents
 
 - [Abstract](#abstract)
@@ -32,7 +36,13 @@
   - [New RPC methods](#new-rpc-methods)
 
 
+## Introduction
+
+TBD.
+
 ## Requirements
+
+TBD.
 
 <!-- TODO: Elaborate on requirement such as devp2p and possibly Whisper, and geth/parity/nimbus gotchas. -->
 
@@ -41,11 +51,7 @@
 Provide routing, metadata protection, topic-based multicasting and basic
 encryption properties to support asynchronous chat.
 
-# Abstract
-
-Ethereum empowers users and developers to interact with totally new kind of applications called Dapps (Decentralized applications). These application allows to interact with the blockchain on a completely new level which is not only about exchanging values but also executing arbitrary logic. This logic can form very sophisticated programs like DAOs (Decentralized autonomous organizations). The missing part here is how users of Dapps can communicate securely and in a decentralized way with each other. Communication is an essential part of any activity. In this document, we specify a secure and decentralized messaging protocol that is capable of running on the Ethereum network.
-
-# Terminology
+## Terminology
 
 * *Client*: a Whisper node implementing the protocol
 * *Whisper node*: an Ethereum node with Whisper V6 enabled (in the case of geth, it's `--shh` option)
@@ -56,14 +62,14 @@ Ethereum empowers users and developers to interact with totally new kind of appl
 * *Envelope*: encrypted message with some metadata like topic and TTL sent between Whisper nodes; a symmetric or asymmetric key is needed to decrypt it and read the payload
 * *Offline message*: an expired envelope stored by a Whisper node permanently
 
-# Basic Assumption
+## Basic Assumption
 
 This protocol assumes the following:
 1. There MUST be an Ethereum node that is capable of discovering peers and implements Whisper V6 specification.
 2. Participants of a given Whisper network in order to communicate with each other MUST accept messages with lowered PoW value. More in (Whisper node configuration)(#whisper-node-configuration).
 3. Time MUST be synced between all nodes participating in the given network (this is intrinsic requirement of the Whisper specification as well). A clock drift between two peers larger than 20 seconds MAY result in discarding incoming messages.
 
-# Protocol Overview
+## Protocol Overview
 
 Notice: this protocol is documented post factum. The goal of it is to clearly present the current design and prepare the ground for its second version.
 
@@ -86,7 +92,7 @@ Offline messaging describes how the protocol handles delivering messages when on
 
 The protocol does not specify additional things like peers discovery, running Whisper nodes, underlying p2p protocols etc.
 
-# Whisper adapter
+## Whisper adapter
 
 Whisper in version 6 has been chosen as an messages exchange protocol because it was designed as an off-chain communication layer for the Ethereum nodes. It supports e2e encryption and uses epidemic spread to route data to all members of the network. It also provides [darkness to some extent](https://github.com/ethereum/go-ethereum/wiki/Achieving-Darkness).
 
@@ -305,3 +311,7 @@ In order to use a mail server, a given node needs to connect to it directly, i.e
 Outside of Whisper v6, there are some extensions, message codes and RPC methods that MAY be useful for client implementers. An implementation of this can be found in a fork of Whisper [here](https://github.com/status-im/whisper).
 
 <!--TODO: provide a list of RPC methods from `shhext` API which are relevant to this spec, as well as motivation (rationale section) -->
+
+## Security concerns
+
+TBD.
