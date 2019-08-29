@@ -13,31 +13,29 @@ TBD.
 - [Abstract](#abstract)
 - [Table of Contents](#table-of-contents)
 - [Introduction](#introduction)
-- [1 Initial Key Generation](#1-initial-key-generation)
-    - [1.1 Public/Private Keypairs](#11-publicprivate-keypairs)
-    - [1.2 X3DH Prekey bundle creation](#12-x3dh-prekey-bundle-creation)
-    - [1.3 Register at push notification system](#13-register-at-push-notification-system)
-- [2 Account Broadcasting](#2-account-broadcasting)
-    - [2.1 X3DH Prekey bundles](#21-x3dh-prekey-bundles)
-- [3 Optional Account additions](#3-optional-account-additions)
-    - [3.1 ENS Username](#31-ens-username)
-    - [3.2 User Chosen Name](#32-user-chosen-name)
-    - [3.3 User Profile Picture](#33-user-profile-picture)
-- [4 Trust establishment](#4-trust-establishment)
+- [Initial Key Generation](#initial-key-generation)
+    - [Public/Private Keypairs](#publicprivate-keypairs)
+    - [X3DH Prekey bundle creation](#x3dh-prekey-bundle-creation)
+    - [Register at push notification system](#register-at-push-notification-system)
+- [Account Broadcasting](#account-broadcasting)
+    - [X3DH Prekey bundles](#x3dh-prekey-bundles)
+- [Optional Account additions](#optional-account-additions)
+    - [ENS Username](#ens-username)
+    - [User Chosen Name](#user-chosen-name)
+    - [User Profile Picture](#user-profile-picture)
+- [Trust establishment](#trust-establishment)
     - [Terms Glossary](#terms-glossary)
-    - [1. Contact Discovery](#1-contact-discovery)
-        - [1.1 Public channels](#11-public-channels)
-        - [1.2 Private 1:1 messages](#12-private-11-messages)
-    - [2. Initial Key Exchange](#2-initial-key-exchange)
+    - [Contact Discovery](#contact-discovery)
+        - [Public channels](#public-channels)
+        - [Private 1:1 messages](#private-11-messages)
+    - [Initial Key Exchange](#initial-key-exchange)
         - [Contact Request](#contact-request)
         - [Bundles](#bundles)
         - [QR code](#qr-code)
-    - [4. Contact Verification](#4-contact-verification)
+    - [Contact Verification](#contact-verification)
         - [Identicon](#identicon)
         - [3 word pseudonym / whisper key fingerprint](#3-word-pseudonym--whisper-key-fingerprint)
         - [ENS name](#ens-name)
-    - [Possible Connection Breakdown](#possible-connection-breakdown)
-    - [Notes](#notes)
 - [Security Considerations](#security-considerations)
 
 <!-- markdown-toc end -->
@@ -54,8 +52,8 @@ Everything else associated with the contact is either verified or derived from t
 - identicon
 - message signatures
 
-## 1 Initial Key Generation
-### 1.1 Public/Private Keypairs 
+## Initial Key Generation
+### Public/Private Keypairs 
 - An ECDSA (secp256k1 curve) public/private keypair MUST be generated via a [BIP43](https://github.com/bitcoin/bips/blob/master/bip-0043.mediawiki) derived path from a [BIP39](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki) mnemonic seed phrase.
 - The default paths are defined as such:
     - Whisper Chat Key (`IK`): `m/43'/60'/1581'/0'/0`  (post Multiaccount integration)
@@ -68,7 +66,7 @@ Everything else associated with the contact is either verified or derived from t
 
 <!-- TODO: Remove time dependency, only write what is the case now - i.e. remove "post Multiaccount integration" -->
 
-### 1.2 X3DH Prekey bundle creation
+### X3DH Prekey bundle creation
 - Status follows the X3DH prekey bundle scheme that Open Whisper Systems outlines [in their documentation](https://signal.org/docs/specifications/x3dh/#the-x3dh-protocol) with the following exceptions:
     - Because there are no central servers, we do not publish one-time keys `OPK` or perform DH including them. 
 - A client MUST create X3DH prekey bundles, each defined by the following items:
@@ -78,7 +76,7 @@ Everything else associated with the contact is either verified or derived from t
     - Timestamp
 - These bundles are made available in a variety of ways, as defined in section 2.1.
 
-### 1.3 Register at push notification system
+### Register at push notification system
 
 If you want to receive and send push notifications, you MUST register a push
 notification server. This part is currently underspecified. You MAY choose to
@@ -86,29 +84,29 @@ not do this.
 
 <!-- TODO: Add details on this this. -->
 
-## 2 Account Broadcasting
+## Account Broadcasting
 - A user is responsible for broadcasting certain information publicly so that others may contact them.
 
-### 2.1 X3DH Prekey bundles
+### X3DH Prekey bundles
 - A client SHOULD regenerate a new X3DH prekey bundle every 24 hours.  This MAY be done in a lazy way, such that a client that does not come online past this time period does not regenerate or broadcast bundles.
 - The current bundle MUST be broadcast on a whisper topic specific to his Identity Key, `{IK}-contact-code`, intermittently.  This MAY be done every 6 hours.
 - A bundle MUST accompany every message sent.
 - TODO: retreival of long-time offline users bundle via `{IK}-contact-code` 
 
-## 3 Optional Account additions
-### 3.1 ENS Username
+## Optional Account additions
+### ENS Username
 - A user MAY register a public username on the Ethereum Name System (ENS).  This username is a user-chosen subdomain of the `stateofus.eth` ENS registration that maps to their whisper identity key (`IK`). 
 
-### 3.2 User Chosen Name
+### User Chosen Name
 - An account MAY create a display name to replace the `IK` generated 3-word pseudonym in chat screens.  This chosen display name will become part of the publicly broadcasted profile of the account.
 
-### 3.3 User Profile Picture
+### User Profile Picture
 - An account MAY edit the `IK` generated identicon with a chosen picture.  This picture will become part of the publicly broadcasted profile of the account.
 
 <!-- TODO: Elaborate on wallet account and multiaccount -->
 <!-- TODO: Elaborate on security implications -->
 
-## 4 Trust establishment
+## Trust establishment
 
 **Trust establishment deals with users verifying they are communicating with who they think they are.**
 
@@ -120,8 +118,8 @@ not do this.
 | whisper key | pubkey for chat with HD derivation path m/44'/60'/0'/0/0 |
 
 
-### 1. Contact Discovery
-#### 1.1 Public channels
+### Contact Discovery
+#### Public channels
 - Public group channels in Status are a broadcast/subscription system.  All public messages are encrypted with a symmetric key drived from the channel name, `K_{pub,sym}`, which is publicly known.
 - A public group channel's symmetric key MUST creation must follow the [web3 API](https://web3js.readthedocs.io/en/1.0/web3-shh.html#generatesymkeyfrompassword)'s `web3.ssh.generateSymKeyFromPassword` function
 - In order to post to a public group channel, a client MUST have a valid account created (as per section [Account Creation Specification](./status-account-spec)).
@@ -132,7 +130,7 @@ not do this.
     - matches `[a-z0-9\-]`
     - is not a public key
 
-#### 1.2 Private 1:1 messages
+#### Private 1:1 messages
 This can be done in a the following ways:
 1. scanning a user generated QR code
 1. discovery through the Status app
@@ -143,7 +141,7 @@ This can be done in a the following ways:
 2. decentralized storage (not implemented)
 3. whisper
 
-### 2. Initial Key Exchange
+### Initial Key Exchange
 
 #### Contact Request
 
@@ -163,7 +161,7 @@ This can be done in a the following ways:
 #### QR code
 - A generated QR code should include a X3DH bundle set along with the contact code but I can't find the code to do so.
 
-### 4. Contact Verification
+### Contact Verification
 Once you have the information of a contact, the following can be used to verify that the key material is as it should be.
 #### Identicon
 A low-poly identicon is deterministically generated from the whisper chat public key.  This can then be compared out of band to ensure the reciever's public key is the one you have locally.
