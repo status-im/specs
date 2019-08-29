@@ -23,29 +23,31 @@ messaging.
 ## Table of Contents
 
 - [Abstract](#abstract)
+- [Table of Contents](#table-of-contents)
+- [Introduction](#introduction)
+- [Requirements](#requirements)
+- [Design goals](#design-goals)
 - [Terminology](#terminology)
 - [Basic Assumption](#basic-assumption)
 - [Protocol Overview](#protocol-overview)
 - [Whisper adapter](#whisper-adapter)
-  - [Whisper node configuration](#whisper-node-configuration)
-  - [Keys management](#keys-management)
-  - [Encryption algorithms](#encryption-algorithms)
-  - [Topic](#topic)
-  - [Message encryption](#message-encryption)
+- [Whisper node configuration](#whisper-node-configuration)
+- [Keys management](#keys-management)
+- [Encryption algorithms](#encryption-algorithms)
+    - [Topics](#topics)
+- [Message encryption](#message-encryption)
 - [Perfect Forward Secrecy (PFS)](#perfect-forward-secrecy-pfs)
 - [Device syncing](#device-syncing)
 - [One-to-one messages](#one-to-one-messages)
-  - [Sending](#sending)
+- [Sending](#sending)
     - [Sending using PFS](#sending-using-pfs)
-  - [Receiving](#receiving)
+- [Receiving](#receiving)
 - [Public messages](#public-messages)
-  - [Sending](#sending-1)
-  - [Receiving](#receiving-1)
-- [Group messages](#group-messages)
+- [Sending](#sending-1)
+- [Receiving](#receiving-1)
 - [Offline messages](#offline-messages)
-  - [Anonymity concerns](#anonymity-concerns)
 - [Whisper V6 extensions (or Status Whisper Node)](#whisper-v6-extensions-or-status-whisper-node)
-  - [New RPC methods](#new-rpc-methods)
+- [Security concerns](#security-concerns)
 
 ## Introduction
 
@@ -289,13 +291,11 @@ Alternative method is to use [`shh_newMessageFilter`](https://github.com/ethereu
 
 Learn more following [Whisper V6 RPC API](https://github.com/ethereum/go-ethereum/wiki/Whisper-v6-RPC-API).
 
-# Group messages
-
-<!-- TODO: describe how to send a group message starting from adding a key in Whisper etc. -->
+<!-- TODO: section to describe how to send a group message starting from adding a key in Whisper etc. -->
 
 # Offline messages
 
-A client SHOULD implement mailserver client mode. See [Status Whispre Mailserver Spec](status-whisper-mailserver-spec.md). A Status node MAY implement the server mode as well.
+A client SHOULD implement mailserver client mode. See [Status Whisper Mailserver Spec](status-whisper-mailserver-spec.md). A Status node MAY implement the server mode as well.
 
 ## Whisper V6 extensions (or Status Whisper Node)
 
@@ -306,7 +306,3 @@ Outside of Whisper v6, there are some extensions, message codes and RPC methods 
 ## Security concerns
 
 TBD.
-
-### Privacy concerns
-
-In order to use a mail server, a given node needs to connect to it directly, i.e. add the mail server as its peer and mark it as trusted. This means that the mail server is able to send direct p2p messages to the node instead of broadcasting them. Effectively, it knows which topics the node is interested in, when it is online as well as many metadata like IP address.
