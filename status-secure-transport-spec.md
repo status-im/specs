@@ -151,8 +151,8 @@ TODO: I'd consider calling the first Trust Establishment and link to that docume
 #### Initial key exchange flow (X3DH)
 
 The initial key exchange flow is described in [section 3 of the X3DH protocol](https://signal.org/docs/specifications/x3dh/#sending-the-initial-message), with some additional context:
-- The users' identity keys $IK_A$ and $IK_B$ correspond to their respective Status chat public keys;
-- Since it is not possible to guarantee that a prekey will be used only once in a decentralized world, the one-time prekey $OPK_B$ is not used in this scenario;
+- The users' identity keys `IK_A` and `IK_B` correspond to their respective Status chat public keys;
+- Since it is not possible to guarantee that a prekey will be used only once in a decentralized world, the one-time prekey `OPK_B` is not used in this scenario;
 - Bundles are not sent to a centralized server, but instead served in a decentralized way as described in [bundle retrieval](#bundle-retrieval).
 
 Bob's prekey bundle is retrieved by Alice, however it is not specific to Alice. It contains:
@@ -172,9 +172,9 @@ message Bundle {
   int64 timestamp = 5;
 }
 ```
-- `identity`: Identity key $IK_B$
-- `signed_pre_keys`: Signed prekey $SPK_B$ for each device, indexed by `installation-id`
-- `signature`: Prekey signature <i>Sig($IK_B$, Encode($SPK_B$))</i>
+- `identity`: Identity key `IK_B`
+- `signed_pre_keys`: Signed prekey `SPK_B` for each device, indexed by `installation-id`
+- `signature`: Prekey signature <i>Sig(`IK_B`, Encode(`SPK_B`))</i>
 - `timestamp`: When the bundle was created locally
 
 ([protobuf](https://github.com/status-im/status-go/blob/a904d9325e76f18f54d59efc099b63293d3dcad3/services/shhext/chat/encryption.proto#L5))
@@ -241,10 +241,10 @@ message DirectMessageProtocol {
     }
     ```
 
-    - `key`: Alice's ephemeral key $EK_A$;
+    - `key`: Alice's ephemeral key `EK_A`;
     - `id`: Identifier stating which of Bob's prekeys Alice used, in this case Bob's bundle signed prekey.
 
-    Alice's identity key $IK_A$ is sent at the transport layer level (Whisper);
+    Alice's identity key `IK_A` is sent at the transport layer level (Whisper);
 
 - `DR_header`: Double ratchet header ([protobuf](https://github.com/status-im/status-go/blob/a904d9325e76f18f54d59efc099b63293d3dcad3/services/shhext/chat/encryption.proto#L31)). Used when Bob's public bundle is available:
     ``` protobuf
@@ -312,7 +312,7 @@ The method is loosely based on https://signal.org/docs/specifications/sesame/ .
 
 When a user adds a new account in the `Status` application, a new `installation-id` will be generated. The device should be paired as soon as possible if other devices are present. Once paired the contacts will be notified of the new device and it will be included in further communications.
 
-Any time a bundle from your $IK$ but different `installation-id` is received, the device will be shown to the user and will have to be manually approved, to a maximum of 3. Once that is done any message sent by one device will also be sent to any other enabled device.
+Any time a bundle from your `IK` but different `installation-id` is received, the device will be shown to the user and will have to be manually approved, to a maximum of 3. Once that is done any message sent by one device will also be sent to any other enabled device.
 
 Once a new device is enabled, a new contact-code/bundle will be generated which will include pairing information.
 
@@ -360,7 +360,7 @@ Expired session should not be used for new messages and should be deleted after 
 
 ## Stale devices
 
-When a bundle is received from $IK$ a timer is initiated on any `installation-id` belonging to $IK$ not included in the bundle. If after 7 days no bundles are received from these devices they are marked as `stale` and no message will be sent to them.
+When a bundle is received from `IK` a timer is initiated on any `installation-id` belonging to `IK` not included in the bundle. If after 7 days no bundles are received from these devices they are marked as `stale` and no message will be sent to them.
 
 # Security Considerations
 
