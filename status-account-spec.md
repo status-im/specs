@@ -100,7 +100,7 @@ not do this.
 - A user MAY register a public username on the Ethereum Name System (ENS).  This username is a user-chosen subdomain of the `stateofus.eth` ENS registration that maps to their whisper identity key (`IK`). 
 
 ### 3.2 User Chosen Name
-- An account MAY create a display name to replace the $IK$ generated 3-word pseudonym in chat screens.  This chosen display name will become part of the publicly broadcasted profile of the account.
+- An account MAY create a display name to replace the `IK` generated 3-word pseudonym in chat screens.  This chosen display name will become part of the publicly broadcasted profile of the account.
 
 ### 3.3 User Profile Picture
 - An account MAY edit the `IK` generated identicon with a chosen picture.  This picture will become part of the publicly broadcasted profile of the account.
