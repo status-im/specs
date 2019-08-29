@@ -126,7 +126,7 @@ The following messages types MUST be supported:
 
 `clock` value is used for the message ordering. Due to the used algorithm and distributed nature of the system, we achieve casual ordering which might produce counterintuitive results in some edge cases. For example, when one joins a public chat and sends a message before receiving the exist messages, their message `clock` value might be lower and the message will end up in the past when the historical messages are fetched.
 
-<!-- TODO: Replies -->
+<!-- TODO: Document section on replies -->
 
 ## Upgradability
 
