@@ -6,7 +6,12 @@
 
 ## Abstract
 
-TBD.
+This specifications decribes how the payload of each message in Status looks
+like. It is primarly centered around chat and chat-related use cases.
+
+The payloads aims be flexible enough to support messaging but also cases
+described in the [Status Whitepaper](https://status.im/whitepaper.pdf) as well
+as various clients created using different technologies.
 
 ## Table of Contents
 
@@ -26,7 +31,7 @@ TBD.
 
 ## Introduction
 
-This specification describes how the payload of each message in the Status Protocol looks.
+In this document we describe the payload format and some special considerations.
 
 The payload must be flexible enough to support messaging but also cases described in [Status Whitepaper](https://status.im/whitepaper.pdf) as well as various clients created using vastly different technologies.
 
