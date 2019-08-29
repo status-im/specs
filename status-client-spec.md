@@ -1,3 +1,4 @@
+
 # Status Client Specification
 
 > Version: 0.1 (Draft)
