@@ -6,7 +6,9 @@
 
 ## Abstract
 
-TBD.
+This document describes how we provide a secure channel between two peers, and thus provide confidentiality, integrity, authenticity and forward secrecy. It is transport-agnostic and works over asynchronous networks.
+
+It builds on the [X3DH](https://signal.org/docs/specifications/x3dh/) and [Double Ratchet](https://signal.org/docs/specifications/doubleratchet/) specifications, with some adaptations to operate in a decentralized environment.
 
 ## Table of Contents
 
