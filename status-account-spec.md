@@ -56,24 +56,28 @@ Everything else associated with the contact is either verified or derived from t
 ### Public/Private Keypairs 
 - An ECDSA (secp256k1 curve) public/private keypair MUST be generated via a [BIP43](https://github.com/bitcoin/bips/blob/master/bip-0043.mediawiki) derived path from a [BIP39](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki) mnemonic seed phrase.
 - The default paths are defined as such:
-    - Whisper Chat Key (`IK`): `m/43'/60'/1581'/0'/0`  (post Multiaccount integration)
+    - Whisper Chat Key (`IK`): `m/43'/60'/1581'/0'/0`  
+        <!-- (post Multiaccount integration) -->
         - following [EIP1581](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1581.md)
-    - DB encryption Key (`DBK`): `m/43'/60'/1581'/1'/0` (post Multiaccount integration)
+    - DB encryption Key (`DBK`): `m/43'/60'/1581'/1'/0`     
+        <!-- (post Multiaccount integration) -->
         - following [EIP1581](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1581.md)
     - Status Wallet paths: `m/44'/60'/0'/0'/i` starting at `i=0`
         - following [BIP44](https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki)
-        - NOTE: this (`i=0`) is also the current (and only) path for Whisper key before Multiaccount integration
+        <!-- NOTE: this (`i=0`) is also the current (and only) path for Whisper key before Multiaccount integration -->
 
 <!-- TODO: Remove time dependency, only write what is the case now - i.e. remove "post Multiaccount integration" -->
 
 ### X3DH Prekey bundle creation
 - Status follows the X3DH prekey bundle scheme that Open Whisper Systems outlines [in their documentation](https://signal.org/docs/specifications/x3dh/#the-x3dh-protocol) with the following exceptions:
     - Because there are no central servers, we do not publish one-time keys `OPK` or perform DH including them. 
+- a new bundle SHOULD be created at least every 12 hours
 - A client MUST create X3DH prekey bundles, each defined by the following items:
-    - Identity Key: `IK`
+    - Identity Key: `IK` 
     - Signed prekey: `SPK`
     - Prekey signature: `Sig(IK, Encode(SPK))`
     - Timestamp
+- Implementation can be found [here](https://github.com/status-im/status-go/messaging/chat/protobuf/encryption.pb.go).
 - These bundles are made available in a variety of ways, as defined in section 2.1.
 
 ### Register at push notification system
@@ -91,7 +95,7 @@ not do this.
 - A client SHOULD regenerate a new X3DH prekey bundle every 24 hours.  This MAY be done in a lazy way, such that a client that does not come online past this time period does not regenerate or broadcast bundles.
 - The current bundle MUST be broadcast on a whisper topic specific to his Identity Key, `{IK}-contact-code`, intermittently.  This MAY be done every 6 hours.
 - A bundle MUST accompany every message sent.
-- TODO: retreival of long-time offline users bundle via `{IK}-contact-code` 
+<!-- - TODO: retreival of long-time offline users bundle via `{IK}-contact-code`  -->
 
 ## Optional Account additions
 ### ENS Username
@@ -99,6 +103,7 @@ not do this.
 
 ### User Chosen Name
 - An account MAY create a display name to replace the `IK` generated 3-word pseudonym in chat screens.  This chosen display name will become part of the publicly broadcasted profile of the account.
+<!-- ??? This is going away for V1, shouldn't we just drop it now? -->
 
 ### User Profile Picture
 - An account MAY edit the `IK` generated identicon with a chosen picture.  This picture will become part of the publicly broadcasted profile of the account.
@@ -122,7 +127,7 @@ not do this.
 #### Public channels
 - Public group channels in Status are a broadcast/subscription system.  All public messages are encrypted with a symmetric key drived from the channel name, `K_{pub,sym}`, which is publicly known.
 - A public group channel's symmetric key MUST creation must follow the [web3 API](https://web3js.readthedocs.io/en/1.0/web3-shh.html#generatesymkeyfrompassword)'s `web3.ssh.generateSymKeyFromPassword` function
-- In order to post to a public group channel, a client MUST have a valid account created (as per section [Account Creation Specification](./status-account-spec)).
+- In order to post to a public group channel, a client MUST have a valid account created.
 - In order to listen to a public group channel, a client must subscribe to the channel name.  The sender of a message is derived from the message's signature.
 - Discovery of channel names is not currently part of the protocol, and is typically done out of band.  If a channel name is used that has not been used, it will be created.
 - A client MUST sign the message otherwise it will be discarded by the recipients.
@@ -138,7 +143,7 @@ This can be done in a the following ways:
 1. public key via public channel listening
     - `status-react/src/status_im/contact_code/core.cljs`
 1. contact codes
-2. decentralized storage (not implemented)
+<!-- 2. decentralized storage (not implemented) -->
 3. whisper
 
 ### Initial Key Exchange
@@ -146,28 +151,23 @@ This can be done in a the following ways:
 #### Contact Request
 
 #### Bundles
-- An X3DH prekey bundle is defined as ([code](https://github.com/status-im/status-go/messaging/chat/protobuf/encryption.pb.go)):
-  ```
-  Identity                // Identity key
-  SignedPreKeys           // a map of installation id to array of signed prekeys by that installation id
-  Signature               // Prekey signature
-  Timestamp               // When the bundle was lasted created locally
-  ```
-  - include BundleContainer???
-- a new bundle SHOULD be created at least every 12 hours
-- a bundle is only generated when it is used
-- a bundle MUST be distributed on the contact code channel (NOTE: define this where?)
+
+- a bundle MUST be distributed on the contact code channel 
+<!-- (NOTE: define this where?) -->
 
 #### QR code
 - A generated QR code should include a X3DH bundle set along with the contact code but I can't find the code to do so.
 
 ### Contact Verification
 Once you have the information of a contact, the following can be used to verify that the key material is as it should be.
+
 #### Identicon
 A low-poly identicon is deterministically generated from the whisper chat public key.  This can then be compared out of band to ensure the reciever's public key is the one you have locally.
+
 #### 3 word pseudonym / whisper key fingerprint
 Status generates a deterministic 3-word random pseudonym from the whisper chat public key.  This pseudonym acts as a human readable fingerprint to the whisper chat public key.  This name also shows when viewing a contact's public profile and in the chat UI.
 - implementation: [gfycat](https://github.com/status-im/status-react/tree/develop/src/status_im/utils/gfycat)
+
 #### ENS name
 Status offers the ability to register a mapping of a human readable subdomain of `stateofus.eth` to their whisper chat public key.  This registration is purchased (currently by staking 10 SNT) and stored on the Ethereum mainnet blockchain for public lookup.
 
