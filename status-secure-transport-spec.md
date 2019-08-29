@@ -37,7 +37,6 @@ TBD.
     - [Account recovery](#account-recovery)
     - [Partitioned devices](#partitioned-devices)
 - [Trust establishment](#trust-establishment)
-    - [-](#-)
 - [Expired session](#expired-session)
 - [Stale devices](#stale-devices)
 - [Security Considerations](#security-considerations)
