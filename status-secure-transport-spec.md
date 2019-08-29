@@ -2,7 +2,7 @@
 
 > Version: 0.1 (Draft)
 >
-> Author: Andrea Piana <andreap@status.im>, Pedro Pombeiro <pedro@status.im>, Corey Petty <corey@status.im>, Oskar Thorén <oskar@status.im>
+> Author: Andrea Piana <andreap@status.im>, Pedro Pombeiro <pedro@status.im>, Corey Petty <corey@status.im>, Oskar Thorén <oskar@status.im>, Dean Eigenmann <dean@status.im
 
 ## Abstract
 
@@ -289,12 +289,11 @@ A peer is identified by two pieces of data:
 
 ### Initialization
 
-A new session is initialized once a successful X3DH exchange has taken place.
-Subsequent messages will use the established session until re-keying is necessary.
+A new session is initialized once a successful X3DH exchange has taken place. Subsequent messages will use the established session until re-keying is necessary.
 
 ### Concurrent sessions
 
-If two sessions are created concurrently between two peers the one with the symmetric key first in byte order should be used, marking the other has expired.
+If two sessions are created concurrently between two peers the one with the symmetric key, first in byte order should be used this marks that the other has expired.
 
 ### Re-keying
 
@@ -372,7 +371,7 @@ Expired session should not be used for new messages and should be deleted after 
 
 When a bundle is received from `IK` a timer is initiated on any `installation-id` belonging to `IK` not included in the bundle. If after 7 days no bundles are received from these devices they are marked as `stale` and no message will be sent to them.
 
-# Security Considerations
+## Security Considerations
 
 The same considerations apply as in [section 4 of the X3DH spec](https://signal.org/docs/specifications/x3dh/#security-considerations) and [section 6 of the Double Ratchet spec](https://signal.org/docs/specifications/doubleratchet/#security-considerations), with some additions detailed below.
 
