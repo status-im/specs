@@ -273,7 +273,8 @@ message DirectMessageProtocol {
 - `payload`:
     - if a bundle is available, contains payload encrypted with the Double Ratchet algorithm;
     - otherwise, payload encrypted with output key of DH exchange (no Perfect Forward Secrecy).
-    -
+
+<!-- TODO: A lot of links to status-go, seems likely these should be updated to status-protocol-go -->
 
 # Session Management
 
