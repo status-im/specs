@@ -44,7 +44,7 @@ TBD.
 
 ## Introduction
 
-This whitepaper describes the protocols used by Status to achieve Perfect
+This specification describes the protocols used by Status to achieve Perfect
 Forward Secrecy and other conversational security properties for 1:1 chat
 participants. It builds on the
 [X3DH](https://signal.org/docs/specifications/x3dh/) and [Double
@@ -60,29 +60,22 @@ environment.
 
 ### Design Requirements
 
-- **Confidentiality**
-
-  The adversary should not be able to learn what data is being exchanged between two Status clients.
-
-- **Authenticity**
-
-  The adversary should not be able to cause either endpoint of a Status 1:1 chat to accept data from any third party as though it came from the other endpoint.
-
-- **Forward Secrecy**
-
-  The adversary should not be able to learn what data was exchanged between two Status clients if, at some later time, the adversary compromises one or both of the endpoint devices.
+- **Confidentiality**: The adversary should not be able to learn what data is being exchanged between two Status clients.
+- **Authenticity**: The adversary should not be able to cause either endpoint of a Status 1:1 chat to accept data from any third party as though it came from the other endpoint.
+- **Forward Secrecy**: The adversary should not be able to learn what data was exchanged between two Status clients if, at some later time, the adversary compromises one or both of the endpoint devices.
 
 ### Conventions
 
-Types used in this specification are defined using [Protobuf](https://developers.google.com/protocol-buffers/). Protocol buffers are a language-neutral, platform-neutral, extensible mechanism for serializing structured data.
+Types used in this specification are defined using [Protobuf](https://developers.google.com/protocol-buffers/).
 
 ### Transport Layer
 
-[Whisper](./index.html) serves as the transport layer for the Status chat protocol. Whisper is a hybrid P2P/DHT communication protocol which delivers messages probabilistically. It is designed to provide configurable levels of darkness and plausible deniability at the expense of high-latency and relatively high bandwidth.
+[Whisper](./status-whisper-usage-spec.md) serves as the transport layer for the Status chat protocol.
 
 ### User flow for 1-to-1 communications
 
 #### Account generation
+
 See [Account specification](./status-account-spec.md)
 
 #### Account recovery
@@ -97,7 +90,7 @@ All messaging in Status is subject to end-to-end encryption to provide users wit
 
 ### End-to-end encryption
 
-End-to-end encryption (E2EE) takes place between two clients. The main cryptographic protocol is a [Status implementation](https://github.com/status-im/doubleratchet/) of the Double Ratchet protocol, which is in turn derived from the [Off-the-Record protocol](https://otr.cypherpunks.ca/Protocol-v3-4.1.1.html), using a different ratchet. The message payload is subsequently encrypted by the transport protocol - Whisper (see section [1.4](#14-Transport-Layer)) -, using symmetric key encryption. 
+End-to-end encryption (E2EE) takes place between two clients. The main cryptographic protocol is a [Status implementation](https://github.com/status-im/doubleratchet/) of the Double Ratchet protocol, which is in turn derived from the [Off-the-Record protocol](https://otr.cypherpunks.ca/Protocol-v3-4.1.1.html), using a different ratchet. The message payload is subsequently encrypted by the transport protocol - Whisper (see section [Transport Layer](#transport-layer)) -, using symmetric key encryption. 
 Furthermore, Status uses the concept of prekeys (through the use of [X3DH](https://signal.org/docs/specifications/x3dh/)) to allow the protocol to operate in an asynchronous environment. It is not necessary for two parties to be online at the same time to initiate an encrypted conversation.
 
 Status uses the following cryptographic primitives:
@@ -123,7 +116,7 @@ Every client initially generates some key material which is stored locally:
 - A signed prekey based on secp256k1 - `SPK`
 - A prekey signature - `Sig(IK, Encode(SPK))`
 
-More details can be found in section 1.2 of [Account specification](./status-account-spec.md)
+More details can be found in the `X3DH Prekey bundle creation` section of [Account specification](./status-account-spec.md#x3dh-prekey-bundle-creation)
 
 A `contact-code` is a protobuf `Bundle` message, encoded in `JSON` and converted to their `base64` string representation.
 
@@ -161,7 +154,7 @@ TODO: I'd consider calling the first Trust Establishment and link to that docume
 The initial key exchange flow is described in [section 3 of the X3DH protocol](https://signal.org/docs/specifications/x3dh/#sending-the-initial-message), with some additional context:
 - The users' identity keys $IK_A$ and $IK_B$ correspond to their respective Status chat public keys;
 - Since it is not possible to guarantee that a prekey will be used only once in a decentralized world, the one-time prekey $OPK_B$ is not used in this scenario;
-- Bundles are not sent to a centralized server, but instead served in a decentralized way as described in [section 2.3](#23-Bundle-retrieval).
+- Bundles are not sent to a centralized server, but instead served in a decentralized way as described in [bundle retrieval](#bundle-retrieval).
 
 Bob's prekey bundle is retrieved by Alice, however it is not specific to Alice. It contains:
 
@@ -351,14 +344,14 @@ Once two accounts have been generated (Alice and Bob), Alice can send a contact 
 
 There are two possible scenarios, which dictate the presence or absence of a prekey bundle:
 1. If Alice is using Bob's public chat key or ENS name, no prekey bundle is present;
-1. If Alice found Bob through the app or scanned Bob's QR code, a prekey bundle is embedded and can be used to set up a secure channel as described in section [2.4.1](#241-Initial-key-exchange-flow-X3DH).
+1. If Alice found Bob through the app or scanned Bob's QR code, a prekey bundle is embedded and can be used to set up a secure channel as described in the [Initial key exchange flow X3DH](#initial-key-exchange-flow-X3DH) section.
 
 Bob receives a contact request, informing him of:
 - Alice's introductory message.
 
 If Bob's prekey bundle was not available to Alice, Perfect Forward Secrecy hasn't yet been established. In any case, there are no implicit guarantees that Alice is whom she claims to be, and Bob should perform some form of external verification (e.g., using an Identicon).
 
-If Bob accepts the contact request, a secure channel is created (if it wasn't already), and a visual indicator is displayed to signify that PFS has been established. Bob and Alice can then start exchanging messages, making use of the Double Ratchet algorithm as explained in more detail in section [2.4.2](#242-Double-Ratchet).
+If Bob accepts the contact request, a secure channel is created (if it wasn't already), and a visual indicator is displayed to signify that PFS has been established. Bob and Alice can then start exchanging messages, making use of the Double Ratchet algorithm as explained in more detail in [Double Ratchet](#double-ratchet) section.
 If Bob denies the request, Alice is not able to send messages and the only action available is resending the contact request.
 
 
