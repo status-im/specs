@@ -1,4 +1,3 @@
-
 # Status Client Specification
 
 > Version: 0.1 (Draft)
@@ -41,33 +40,6 @@ have to be implemented in order to be a full Status client. The second gives a d
         - [Why is PoW for Whisper set so low?](#why-is-pow-for-whisper-set-so-low)
         - [Why do you not use Discovery v5 for node discovery?](#why-do-you-not-use-discovery-v5-for-node-discovery)
         - [I heard something about mailservers being trusted somehow?](#i-heard-something-about-mailservers-being-trusted-somehow)
-- [Footnotes](#footnotes)
-- [Acknowledgements](#acknowledgements)
-
-
-
-- [Abstract](#abstract)
-- [P2P Overlay](#p2p-overlay)
-- [Node discovery and roles](#node-discovery-and-roles)
-    - [Bootstrapping](#bootstrapping)
-    - [Discovery](#discovery)
-    - [Mailservers](#mailservers)
-    - [Mobile nodes](#mobile-nodes)
-- [Whisper adapter](#whisper-adapter)
-    - [Node configuration](#node-configuration)
-    - [Keys management and encryption](#keys-management-and-encryption)
-    - [Topics](#topics)
-- [Secure Transport](#secure-transport)
-- [Data Sync](#data-sync)
-- [Payloads and clients](#payloads-and-clients)
-- [Design Rationale](#design-rationale)
-    - [P2P Overlay](#p2p-overlay-1)
-        - [Why devp2p? Why not use libp2p?](#why-devp2p-why-not-use-libp2p)
-        - [What about other RLPx subprotocols like LES, and Swarm?](#what-about-other-rlpx-subprotocols-like-les-and-swarm)
-        - [Why do you use Whisper?](#why-do-you-use-whisper)
-        - [I heard you were moving away from Whisper?](#i-heard-you-were-moving-away-from-whisper)
-        - [Why is PoW for Whisper set so low?](#why-is-pow-for-whisper-set-so-low)
-        - [Why do you not use Discovery v5 for node discovery?](#why-do-you-not-use-discovery-v5-for-node-discovery)
 - [Footnotes](#footnotes)
 - [Acknowledgements](#acknowledgements)
 
