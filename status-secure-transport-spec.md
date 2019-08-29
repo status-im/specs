@@ -45,13 +45,7 @@ It builds on the [X3DH](https://signal.org/docs/specifications/x3dh/) and [Doubl
 
 ## Introduction
 
-This specification describes the protocols used by Status to achieve Perfect
-Forward Secrecy and other conversational security properties for 1:1 chat
-participants. It builds on the
-[X3DH](https://signal.org/docs/specifications/x3dh/) and [Double
-Ratchet](https://signal.org/docs/specifications/doubleratchet/) specifications
-from Open Whisper Systems, with some adaptations to operate in a decentralized
-environment.
+In this document we describe how a secure channel is established, and how various conversational security properties are achieved.
 
 ### Definitions
 
