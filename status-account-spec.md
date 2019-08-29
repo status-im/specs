@@ -4,7 +4,45 @@
 >
 > Authors: Corey Petty <corey@status.im>, Oskar Thorén <oskar@status.im> (alphabetical order)
 
-## Summary
+## Abstract
+
+TBD.
+
+## Table of Contents
+
+- [Abstract](#abstract)
+- [Table of Contents](#table-of-contents)
+- [Introduction](#introduction)
+- [1 Initial Key Generation](#1-initial-key-generation)
+    - [1.1 Public/Private Keypairs](#11-publicprivate-keypairs)
+    - [1.2 X3DH Prekey bundle creation](#12-x3dh-prekey-bundle-creation)
+    - [1.3 Register at push notification system](#13-register-at-push-notification-system)
+- [2 Account Broadcasting](#2-account-broadcasting)
+    - [2.1 X3DH Prekey bundles](#21-x3dh-prekey-bundles)
+- [3 Optional Account additions](#3-optional-account-additions)
+    - [3.1 ENS Username](#31-ens-username)
+    - [3.2 User Chosen Name](#32-user-chosen-name)
+    - [3.3 User Profile Picture](#33-user-profile-picture)
+- [4 Trust establishment](#4-trust-establishment)
+    - [Terms Glossary](#terms-glossary)
+    - [1. Contact Discovery](#1-contact-discovery)
+        - [1.1 Public channels](#11-public-channels)
+        - [1.2 Private 1:1 messages](#12-private-11-messages)
+    - [2. Initial Key Exchange](#2-initial-key-exchange)
+        - [Contact Request](#contact-request)
+        - [Bundles](#bundles)
+        - [QR code](#qr-code)
+    - [4. Contact Verification](#4-contact-verification)
+        - [Identicon](#identicon)
+        - [3 word pseudonym / whisper key fingerprint](#3-word-pseudonym--whisper-key-fingerprint)
+        - [ENS name](#ens-name)
+    - [Possible Connection Breakdown](#possible-connection-breakdown)
+    - [Notes](#notes)
+- [Security Considerations](#security-considerations)
+
+<!-- markdown-toc end -->
+
+## Introduction
 
 The core concept of an account in Status is a set of cryptographic keypairs. Namely, the combination of the following:
 1. a whisper chat identity keypair
@@ -181,3 +219,7 @@ All messages sent are encrypted with the public key of the destination and signe
     - the message is encrypted with a symmetric key derived from the chat name
 
 -->
+
+## Security Considerations
+
+TBD.
