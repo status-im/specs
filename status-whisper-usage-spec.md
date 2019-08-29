@@ -295,7 +295,7 @@ Learn more following [Whisper V6 RPC API](https://github.com/ethereum/go-ethereu
 
 # Offline messages
 
-A client SHOULD implement mailserver client mode. See [Status Whispre Mailserver Spec](status-whisper-mailserver-spec.md)
+A client SHOULD implement mailserver client mode. See [Status Whispre Mailserver Spec](status-whisper-mailserver-spec.md). A Status node MAY implement the server mode as well.
 
 ## Whisper V6 extensions (or Status Whisper Node)
 
