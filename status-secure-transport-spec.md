@@ -4,6 +4,43 @@
 >
 > Author: Andrea Piana <andreap@status.im>, Pedro Pombeiro <pedro@status.im>, Corey Petty <corey@status.im>, Oskar Thorén <oskar@status.im>
 
+## Abstract
+
+TBD.
+
+## Table of Contents
+
+- [Abstract](#abstract)
+- [Table of Contents](#table-of-contents)
+- [1. Introduction](#1-introduction)
+    - [1.1. Definitions](#11-definitions)
+    - [1.2. Design Requirements](#12-design-requirements)
+    - [1.3. Conventions](#13-conventions)
+    - [1.4. Transport Layer](#14-transport-layer)
+    - [1.5. User flow for 1-to-1 communications](#15-user-flow-for-1-to-1-communications)
+        - [1.5.1. Account generation](#151-account-generation)
+        - [1.5.2. Account recovery](#152-account-recovery)
+- [2. Messaging](#2-messaging)
+    - [2.1. End-to-end encryption](#21-end-to-end-encryption)
+    - [2.2. Prekeys](#22-prekeys)
+    - [2.3. Bundle retrieval](#23-bundle-retrieval)
+    - [2.4. 1:1 chat contact request](#24-11-chat-contact-request)
+        - [2.4.1. Initial key exchange flow (X3DH)](#241-initial-key-exchange-flow-x3dh)
+        - [2.4.2. Double Ratchet](#242-double-ratchet)
+- [3. Session Management](#3-session-management)
+- [3.1 Initialization](#31-initialization)
+- [3.2 Concurrent sessions](#32-concurrent-sessions)
+- [3.3 Re-keying](#33-re-keying)
+- [4. Multi-device support](#4-multi-device-support)
+- [4.1 Pairing](#41-pairing)
+- [4.2 Sending messages to a paired group](#42-sending-messages-to-a-paired-group)
+- [4.3 Account recovery](#43-account-recovery)
+- [4.4 Partitioned devices](#44-partitioned-devices)
+- [Trust establishment](#trust-establishment)
+    - [-](#-)
+- [3.4 Expired session](#34-expired-session)
+- [4.3 Stale devices](#43-stale-devices)
+- [5. Security Considerations](#5-security-considerations)
 
 ## 1. Introduction
 
@@ -306,13 +343,7 @@ Account recovery is no different from adding a new device, and it is handled in 
 In some cases (i.e. account recovery when no other pairing device is available, device not paired), it is possible that a device will receive a message that is not targeted to its own `installation-id`.
 In this case an empty message containing bundle information is sent back, which will notify the receiving end of including this device in any further communication.
 
-# 5. Security Considerations
-
-The same considerations apply as in [section 4 of the X3DH spec](https://signal.org/docs/specifications/x3dh/#security-considerations) and [section 6 of the Double Ratchet spec](https://signal.org/docs/specifications/doubleratchet/#security-considerations), with some additions detailed below.
-
-<!-- TODO: Add any additional context here not covered in the X3DH and DR specs -->
-
-## 1. Introduction
+## Trust establishment
 
 #### 1.5.x. Contact request
 
@@ -339,6 +370,11 @@ Expired session should not be used for new messages and should be deleted after 
 
 When a bundle is received from $IK$ a timer is initiated on any `installation-id` belonging to $IK$ not included in the bundle. If after 7 days no bundles are received from these devices they are marked as `stale` and no message will be sent to them.
 
+# 5. Security Considerations
+
+The same considerations apply as in [section 4 of the X3DH spec](https://signal.org/docs/specifications/x3dh/#security-considerations) and [section 6 of the Double Ratchet spec](https://signal.org/docs/specifications/doubleratchet/#security-considerations), with some additions detailed below.
+
+<!-- TODO: Add any additional context here not covered in the X3DH and DR specs -->
 
 <!--
 TODO: description here
