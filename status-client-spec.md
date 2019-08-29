@@ -224,6 +224,19 @@ For some further investigation, see
 
 In order to use a mail server, a given node needs to connect to it directly, i.e. add the mailserver as its peer and mark it as trusted. This means that the mail server is able to send direct p2p messages to the node instead of broadcasting them. Effectively, it knows which topics the node is interested in, when it is online as well as many metadata like IP address.
 
+### Data sync
+
+#### Why is MVDS not used for public chats?
+
+Currently public chats are broadcast-based, and there's no direct way of finding
+out who is receiving messages. Hence there's no clear group sync state context
+whereby participants can sync. Additionally, MVDS is currently not optimized for
+large group contexts, which means bandwidth usage will be a lot higher than
+reasonable. See [P2P Data Sync for
+Mobile](https://vac.dev/p2p-data-sync-for-mobile) for more. This is an active
+area of research. The bandwidth issue is further exacerbated by Whisper being
+very bandwidth heavy.
+
 ## Footnotes
 
 1. <https://github.com/status-im/status-protocol-go/>
