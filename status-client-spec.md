@@ -127,6 +127,9 @@ to commmunicate with other Status nodes.
 
 See [Status Whisper Usage Spec](status-whisper-usage-spec.md) for more details.
 
+For providing offline inboxing, see the complementary [Whisper Mailserver
+Spec](status-whisper-mailserver-spec.md).
+
 ### Secure Transport
 
 In order to provide confidentiality, integrity, authentication and forward
