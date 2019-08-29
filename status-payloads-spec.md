@@ -59,28 +59,19 @@ Example of a valid encoded payload:
 ["~#c4",["abc123","text/plain","~:public-group-user-message",154593077368201,1545930773682,["^ ","~:chat-id","testing-adamb","~:text","abc123"]]]
 ```
 
-As you can see, the message is an array and each index value has its meaning:
+The message is an array and each index value has its meaning:
 * 0: `c4` is a decoder handler identification for the current payload format. Identifications allow to register handlers for many different types of payload
 * 1: array which items correspond to the described payload fields above
 
 For more details regarding serialization and deserialization please consult [transit format](https://github.com/cognitect/transit-format) specification.
 
-<!--
-# Message types
-
-- [Message](#message)
-
--->
+<!-- TODO: This requires a lot more detail since c4 is only one of several types, and also possibly links to implementation -->
 
 ## Message
 
 The type `Message` represents a text message exchanged between clients.
 
-- [Payload](#payload)
-- [Content types](#content-types)
-- [Message types](#message-types)
-- [Clock vs Timestamp and message ordering](#clock-vs-timestamp-and-message-ordering)
-- [Replies](#replies)
+<!-- TODO: It is not clear how this relates to StatusProtocolMessage above -->
 
 ### Payload
 
@@ -105,15 +96,22 @@ The following content types MUST be supported:
 * `text/plain` identifies a message which content is a plain text.
 
 There are also other content types that MAY be implemented by the client:
-* `sticker` TODO
-* `status` TODO
-* `command` TODO
-* `command-request` TODO
-* `emoji` TODO
+* `sticker`
+* `status`
+* `command`
+* `command-request`
+* `emoji`
+
+These are currently underspecified. We refer to real-world implementations for clients who wish to interoperate.
+
+<!-- TODO: Ideally specify this, but barring that, link to implementation. -->
 
 ### Message types
 
-Message types are required to decide how a particular message is encrypted (more in [Whisper > Message encryption](#message-encryption)) and what metadata needs to be attached (more in [Whisper > Topic](#topic)) when passing a message to the transport layer.
+Message types are required to decide how a particular message is encrypted and what metadata needs to be attached when passing a message to the transport layer. For more on this, see [Status Whisper Usage Specification](./status-whisper-usage-spec.md).
+
+<!-- TODO: This reference is a bit odd, considering the layer payloads should interact with is Secure Transport, and not Whisper. This requires more detail -->
+
 
 The following messages types MUST be supported:
 * `public-group-user-message` is a message to the public group
