@@ -276,29 +276,31 @@ message DirectMessageProtocol {
 
 <!-- TODO: A lot of links to status-go, seems likely these should be updated to status-protocol-go -->
 
-# Session Management
+## Session Management
 
 This section describe how sessions are handled.
+
+<!-- TODO: Clarify what we mean by a session -->
 
 A peer is identified by two pieces of data:
 
 1) An `installation-id` which is generated upon creating a new account in the `Status` application
 2) Their identity whisper key
 
-## Initialization
+### Initialization
 
 A new session is initialized once a successful X3DH exchange has taken place.
 Subsequent messages will use the established session until re-keying is necessary.
 
-## Concurrent sessions
+### Concurrent sessions
 
 If two sessions are created concurrently between two peers the one with the symmetric key first in byte order should be used, marking the other has expired.
 
-## Re-keying
+### Re-keying
 
 On receiving a bundle from a given peer with a higher version, the old bundle should be marked as expired and a new session should be established on the next message sent.
 
-## Multi-device support
+### Multi-device support
 
 Multi-device support is quite challenging as we don't have a central place where information on which and how many devices (identified by their respective `installation-id`) belongs to a whisper-identity.
 
@@ -310,7 +312,7 @@ This mean that every time a new device is paired, the bundle needs to be updated
 
 The method is loosely based on https://signal.org/docs/specifications/sesame/ .
 
-## Pairing
+### Pairing
 
 When a user adds a new account in the `Status` application, a new `installation-id` will be generated. The device should be paired as soon as possible if other devices are present. Once paired the contacts will be notified of the new device and it will be included in further communications.
 
@@ -322,22 +324,22 @@ The bundle will be propagated to contacts through the usual channels.
 
 Removal of paired devices is a manual step that needs to be applied on each device, and consist simply in disabling the device, at which point pairing information will not be propagated anymore.
 
-## Sending messages to a paired group
+### Sending messages to a paired group
 
 When sending a message, the peer will send a message to any `installation-id` that they have seen, using pairwise encryption, including their own devices.
 
 The number of devices is capped to 3, ordered by last activity.
 
-## Account recovery
+### Account recovery
 
 Account recovery is no different from adding a new device, and it is handled in exactly the same way.
 
-## Partitioned devices
+### Partitioned devices
 
 In some cases (i.e. account recovery when no other pairing device is available, device not paired), it is possible that a device will receive a message that is not targeted to its own `installation-id`.
 In this case an empty message containing bundle information is sent back, which will notify the receiving end of including this device in any further communication.
 
-## Trust establishment
+### Trust establishment
 
 #### Contact request
 
@@ -355,12 +357,11 @@ If Bob's prekey bundle was not available to Alice, Perfect Forward Secrecy hasn'
 If Bob accepts the contact request, a secure channel is created (if it wasn't already), and a visual indicator is displayed to signify that PFS has been established. Bob and Alice can then start exchanging messages, making use of the Double Ratchet algorithm as explained in more detail in [Double Ratchet](#double-ratchet) section.
 If Bob denies the request, Alice is not able to send messages and the only action available is resending the contact request.
 
-
-## Expired session
+### Expired session
 
 Expired session should not be used for new messages and should be deleted after 14 days from the expiration date, in order to be able to decrypt out-of-order and mailserver messages.
 
-## Stale devices
+### Stale devices
 
 When a bundle is received from `IK` a timer is initiated on any `installation-id` belonging to `IK` not included in the bundle. If after 7 days no bundles are received from these devices they are marked as `stale` and no message will be sent to them.
 
