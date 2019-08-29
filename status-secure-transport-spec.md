@@ -84,7 +84,9 @@ If an incoming message (on the same Whisper topic) fails to decrypt, a message i
 
 ## Messaging
 
-All messaging in Status is subject to end-to-end encryption to provide users with a strong degree of privacy and security.
+All 1:1 and group chat messaging in Status is subject to end-to-end encryption to provide users with a strong degree of privacy and security. Public chat messages are publicly readable by anyone since there's no permission model for who is participating in a public chat.
+
+The rest of this document is purely about 1:1 and private group chat. Private group chat largely reduces to 1:1 chat, since there's a secure channel between each pair-wise participant.
 
 ### End-to-end encryption
 
