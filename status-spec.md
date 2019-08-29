@@ -4,6 +4,17 @@
 >
 > Authors: Adam Babik <adam@status.im>, Dean Eigenmann <dean@status.im>, Oskar Thorén <oskar@status.im> (alphabetical order)
 
+## Abstract
+
+In this specification, we describe how to write a Status client for
+communicating with other Status clients.
+
+We present a reference implementation of the protocol <sup>1</sup> that is used
+in a command line client <sup>2</sup> and a mobile app <sup>3</sup>.
+
+This document consists of two parts. The first outlines the specifications that
+have to be implemented in order to be a full Status client. The second gives a design rationale and answers some common questions.
+
 ## Table of Contents
 
 - [Abstract](#abstract)
@@ -31,18 +42,9 @@
 - [Footnotes](#footnotes)
 - [Acknowledgements](#acknowledgements)
 
-## Abstract
+## Introduction
 
-In this specification, we describe how to write a Status client for
-communicating with other Status clients.
-
-We present a reference implementation of the protocol <sup>1</sup> that is used
-in a command line client <sup>2</sup> and a mobile app <sup>3</sup>.
-
-This document consists of two parts. The first outlines the specifications that
-have to be implemented in order to be a full Status client. The second gives a design rationale and answers some common questions.
-
-## Protocol layers
+### Protocol layers
 
 Implementing a Status clients means implementing the following layers. Additionally, there are separate specifications for things like key management and account lifecycle.
 
@@ -54,7 +56,9 @@ Implementing a Status clients means implementing the following layers. Additiona
 | Transport privacy | Routing, Metadata protection    | Whisper                      |
 | P2P Overlay       | Overlay routing, NAT traversal  | devp2p                       |
 
-## P2P Overlay
+## Components
+
+### P2P Overlay
 
 Status clients run on the public Ethereum network, as specified by the devP2P
 network protocols. devP2P provides a protocol for node discovery which is in
@@ -72,7 +76,7 @@ v6](https://eips.ethereum.org/EIPS/eip-627) for privacy-preserving messaging.
 There MUST be an Ethereum node that is capable of discovering peers and
 implements Whisper V6 specification.
 
-## Node discovery and roles
+#### Node discovery and roles
 
 There are four types of node roles:
 1. Bootstrap nodes
@@ -84,7 +88,7 @@ To implement a standard Status client you MUST implement the last node type. The
 other node types are optional, but we RECOMMEND you implement a mailserver
 client mode, otherwise the user experience is likely to be poor.
 
-### Bootstrapping
+#### Bootstrapping
 
 To connect to other Status nodes you need to connect to a bootstrap node. These
 nodes allow you to discover other nodes of the network.
@@ -94,7 +98,7 @@ run these provided they are connected to the rest of the Whisper network.
 
 <!-- TODO: Add a link to bootstrap nodes -->
 
-### Discovery
+#### Discovery
 
 To implement a Status client you need to discover peers to connect to. We use a
 light discovery mechanism based on a combination of [Discovery
@@ -109,38 +113,44 @@ This part of the system is currently underspecified and requires further detail.
 <!-- TODO: This section is way too vague, amend with concrete spec for how to do discovery of Status nodes. -->
 <!-- TODO: Add info on peer list, Discover v5 timespan, static nodes etc - should be enough to discover nodes from a different stack -->
 
-### Mobile nodes
+#### Mobile nodes
 
 This is a Whisper node which connects to part of the Whisper network. It MAY
 relay messages. See next section for more details on how to use Whisper to
 communicate with other Status nodes.
 
-## Whisper adapter
+### Transport privacy and Whisper usage
 
 Once a Whisper node is up and running there are some specific settings required
 to commmunicate with other Status nodes.
 
 See [Status Whisper Usage Spec](status-whisper-usage-spec.md) for more details.
 
-## Secure Transport
+### Secure Transport
 
 In order to provide confidentiality, integrity, authentication and forward
 secrecy of messages we implement a secure transport on top of Whisper. This is
 used in 1:1 chats and group chats, but not for public chats. See [Status Secure
 Transport Spec](status-secure-transport-spec.md) for more.
 
-## Data Sync
+### Data Sync
 
 [MVDS](https://specs.vac.dev/mvds.html) is used for 1:1 and group chats, however it is currently not in use for public chats.
 
 [Status payloads](#payloads-and-clients) are serialized and then wrapped inside a MVDS message which is added to an [MVDS payload](https://specs.vac.dev/mvds.html#payloads), this payload is then encrypted (if necessary for 1-to-1 / group-chats) and sent using whisper which also encrypts it.
 
-## Payloads and clients
+### Payloads and clients
 
 On top of secure transport, we have various types of data sync clients and
 payload formats for things like 1:1 chat, group chat and public chat. These have
 various degrees of standardization. Please refer to [Initial Message Payload
 Specification](x8.md) for more details.
+
+## Security Considerations
+
+TBD.
+
+<!-- TODO: Fill this out. -->
 
 ## Design Rationale
 
@@ -212,8 +222,6 @@ For some further investigation, see
 #### I heard something about mailservers being trusted somehow?
 
 In order to use a mail server, a given node needs to connect to it directly, i.e. add the mailserver as its peer and mark it as trusted. This means that the mail server is able to send direct p2p messages to the node instead of broadcasting them. Effectively, it knows which topics the node is interested in, when it is online as well as many metadata like IP address.
-
-
 
 ## Footnotes
 
