@@ -344,6 +344,10 @@ In this case an empty message containing bundle information is sent back, which 
 
 ### Trust establishment
 
+Trust establishment deals with users verifying they are communicating with who they think they are.
+
+<!-- TODO: Deduplicate this and status accounts trust establishment -->
+
 #### Contact request
 
 Once two accounts have been generated (Alice and Bob), Alice can send a contact request with an introductory message to Bob.
