@@ -59,14 +59,24 @@ In practice, it is best to treat individual nodes as a form of a cache, and ensu
 
 ### Altruistic and centralized operator risk
 
-TBD.
+In order to be useful, a mailserver has to be online most of time. That means
+you either have to be a bit tech-savvy to run your own node, or rely on someone
+else to run it for you.
+
+Currently Status Gmbh provides mailservers in an altruistic manner, but this is
+suboptimal from a decentralization, continuance and risk point of view. Coming
+up with a better system for this is ongoing research.
+
+A Status client SHOULD allow the mailserver selection to be customizable.
 
 ### Privacy concerns
 
-In order to use a mail server, a given node needs to connect to it directly, i.e. add the mail server as its peer and mark it as trusted. This means that the mail server is able to send direct p2p messages to the node instead of broadcasting them. Effectively, it knows which topics the node is interested in, when it is online as well as many metadata like IP address.
+In order to use a mail server, a given node needs to connect to it directly,
+i.e. add the mail server as its peer and mark it as trusted. This means that the
+mail server is able to send direct p2p messages to the node instead of
+broadcasting them. Effectively, it knows which topics the node is interested in,
+when it is online as well as many metadata like IP address.
 
 ### Denial-of-service
 
-Since a mailserver is delivering expired envelopes.
-
-TBD.
+Since a mailserver is delivering expired envelopes and has a direct TCP connection with the recipient, the recipient is vulnerable to DoS attacks from a malicious mailserver node.
