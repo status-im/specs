@@ -135,7 +135,7 @@ In the X3DH specification, a shared server is typically used to store bundles an
 - Decentralized permanent storage (e.g. Swarm, IPFS).
 - Whisper
 
-TODO: Comment, it isn't clear what we actually _do_. It seems as if this is exploring the problem space. From a protocol point of view, it might make sense to describe the interface, and then have a recommendation section later on that specifies what we do. See e.g. Signal's specs where they specify specifics later on. 
+<!-- TODO: Comment, it isn't clear what we actually _do_. It seems as if this is exploring the problem space. From a protocol point of view, it might make sense to describe the interface, and then have a recommendation section later on that specifies what we do. See e.g. Signal's specs where they specify specifics later on.  -->
 
 Since bundles stored in QR codes or ENS records cannot be updated to delete already used keys, the approach taken is to rotate more frequently the bundle (once every 24 hours), which will be propagated by the app through the channel available.
 
