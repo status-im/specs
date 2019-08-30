@@ -16,32 +16,36 @@ This document consists of two parts. The first outlines the specifications that
 have to be implemented in order to be a full Status client. The second gives a design rationale and answers some common questions.
 
 ## Table of Contents
-- [Abstract](#abstract)
-- [Table of Contents](#table-of-contents)
-- [Introduction](#introduction)
+- [Status Client Specification](#status-client-specification)
+  - [Abstract](#abstract)
+  - [Table of Contents](#table-of-contents)
+  - [Introduction](#introduction)
     - [Protocol layers](#protocol-layers)
-- [Components](#components)
+  - [Components](#components)
     - [P2P Overlay](#p2p-overlay)
-        - [Node discovery and roles](#node-discovery-and-roles)
-        - [Bootstrapping](#bootstrapping)
-        - [Discovery](#discovery)
-        - [Mobile nodes](#mobile-nodes)
+      - [Node discovery and roles](#node-discovery-and-roles)
+      - [Bootstrapping](#bootstrapping)
+      - [Discovery](#discovery)
+      - [Mobile nodes](#mobile-nodes)
     - [Transport privacy and Whisper usage](#transport-privacy-and-whisper-usage)
     - [Secure Transport](#secure-transport)
     - [Data Sync](#data-sync)
     - [Payloads and clients](#payloads-and-clients)
-- [Security Considerations](#security-considerations)
-- [Design Rationale](#design-rationale)
+  - [Security Considerations](#security-considerations)
+    - [Censorship-resistance](#censorship-resistance)
+  - [Design Rationale](#design-rationale)
     - [P2P Overlay](#p2p-overlay-1)
-        - [Why devp2p? Why not use libp2p?](#why-devp2p-why-not-use-libp2p)
-        - [What about other RLPx subprotocols like LES, and Swarm?](#what-about-other-rlpx-subprotocols-like-les-and-swarm)
-        - [Why do you use Whisper?](#why-do-you-use-whisper)
-        - [I heard you were moving away from Whisper?](#i-heard-you-were-moving-away-from-whisper)
-        - [Why is PoW for Whisper set so low?](#why-is-pow-for-whisper-set-so-low)
-        - [Why do you not use Discovery v5 for node discovery?](#why-do-you-not-use-discovery-v5-for-node-discovery)
-        - [I heard something about mailservers being trusted somehow?](#i-heard-something-about-mailservers-being-trusted-somehow)
-- [Footnotes](#footnotes)
-- [Acknowledgements](#acknowledgements)
+      - [Why devp2p? Why not use libp2p?](#why-devp2p-why-not-use-libp2p)
+      - [What about other RLPx subprotocols like LES, and Swarm?](#what-about-other-rlpx-subprotocols-like-les-and-swarm)
+      - [Why do you use Whisper?](#why-do-you-use-whisper)
+      - [I heard you were moving away from Whisper?](#i-heard-you-were-moving-away-from-whisper)
+      - [Why is PoW for Whisper set so low?](#why-is-pow-for-whisper-set-so-low)
+      - [Why do you not use Discovery v5 for node discovery?](#why-do-you-not-use-discovery-v5-for-node-discovery)
+      - [I heard something about mailservers being trusted somehow?](#i-heard-something-about-mailservers-being-trusted-somehow)
+    - [Data sync](#data-sync)
+      - [Why is MVDS not used for public chats?](#why-is-mvds-not-used-for-public-chats)
+  - [Footnotes](#footnotes)
+  - [Acknowledgements](#acknowledgements)
 
 ## Introduction
 
@@ -97,7 +101,19 @@ nodes allow you to discover other nodes of the network.
 Currently the main bootstrap nodes are provided by Status Gmbh, but anyone can
 run these provided they are connected to the rest of the Whisper network.
 
-<!-- TODO: Add a link to bootstrap nodes -->
+Status maintains a list of boootstrap nodes in the following locations:
+- Asia:
+  - `enode://e8a7c03b58911e98bbd66accb2a55d57683f35b23bf9dfca89e5e244eb5cc3f25018b4112db507faca34fb69ffb44b362f79eda97a669a8df29c72e654416784@47.91.224.35:443`
+  - `enode://43947863cfa5aad1178f482ac35a8ebb9116cded1c23f7f9af1a47badfc1ee7f0dd9ec0543417cc347225a6e47e46c6873f647559e43434596c54e17a4d3a1e4@47.52.74.140:443`
+- Europe:
+  - `enode://436cc6f674928fdc9a9f7990f2944002b685d1c37f025c1be425185b5b1f0900feaf1ccc2a6130268f9901be4a7d252f37302c8335a2c1a62736e9232691cc3a@174.138.105.243:443`
+  - `enode://5395aab7833f1ecb671b59bf0521cf20224fe8162fc3d2675de4ee4d5636a75ec32d13268fc184df8d1ddfa803943906882da62a4df42d4fccf6d17808156a87@206.189.243.57:443`
+- North America:
+  - `enode://7427dfe38bd4cf7c58bb96417806fab25782ec3e6046a8053370022cbaa281536e8d64ecd1b02e1f8f72768e295d06258ba43d88304db068e6f2417ae8bcb9a6@104.154.88.123:443`
+  - `enode://ebefab39b69bbbe64d8cd86be765b3be356d8c4b24660f65d493143a0c44f38c85a257300178f7845592a1b0332811542e9a58281c835babdd7535babb64efc1@35.202.99.224:443`
+
+These bootstrap nodes do not change, however, we can't guarantee that it will stay this way forever
+and at some point we might be forced to change them.
 
 #### Discovery
 
@@ -109,10 +125,43 @@ v5](https://github.com/ethereum/devp2p/blob/master/discv5/discv5.md) and
 [modifications](https://github.com/status-im/rendezvous#differences-with-original-rendezvous)).
 Additionally, some static nodes MAY also be used.
 
-This part of the system is currently underspecified and requires further detail.
+A Status client MUST use at least one discovery method or use static nodes
+to communicate with other clients.
 
-<!-- TODO: This section is way too vague, amend with concrete spec for how to do discovery of Status nodes. -->
-<!-- TODO: Add info on peer list, Discover v5 timespan, static nodes etc - should be enough to discover nodes from a different stack -->
+Discovery V5 uses bootstrap nodes to discover other peers. Bootstrap nodes MUST support
+Discovery V5 protocol as well in order to provide peers. It is kademlia-based discovery mechanism
+and it might consume significant (at least on mobile) amount of network traffic to operate.
+
+In order to take advantage from simpler and more mobile-friendly peers discovery mechanism,
+i.e. Rendezvous protocol, one MUST provide a list of Rendezvous nodes which speak
+Rendezvous protocol. Rendezvous protocol is request-response discovery mechanism.
+It uses Ethereum Node Records (ENR) to report discovered peers.
+
+Both peers discovery mechanisms use topics to provide peers with certain capabilities.
+There is no point in returning peers that do not support a particular protocol.
+Status nodes that want to be discovered MUST register to Discovery V5 and/or Rendezvous
+with the `whisper` topic. Status nodes that are mail servers and want to
+be discoverable MUST additionally register with the `whispermail` topic.
+
+The recommended strategy is to use both mechanisms but at the same time implement a structure
+called `PeerPool`. `PeerPool` is responsible for maintaining an optimal number of peers.
+For mobile nodes, there is no significant advantage to have more than 2-3 peers and one mail server.
+`PeerPool` can notify peers discovery protocol implementations that they should suspend
+their execution because the optimal number of peers is found. They should resume
+if the number of connected peers drops or a mail server disconnects.
+
+It is worth noticing that an efficient caching strategy can be of great use, especially,
+on mobile devices. Discovered peers can be cached as they rarely change and used
+when the client starts again. In such a case, there might be no need to even start
+peers discovery protocols because cached peers will satisfy the optimal number of peers.
+
+Alternatively, a client MAY rely exclusively on a list of static peers. This is the most efficient
+way because there is no peers discovery algorithm overhead introduced. The disadvantage
+is that these peers might be gone and without peers discovery mechanism, it won't be possible to find
+new ones.
+
+The current list of static peers is published on https://fleets.status.im/. `eth.beta` is the current
+group of peers the official Status client uses. The others are test networks.
 
 #### Mobile nodes
 
@@ -254,7 +303,7 @@ very bandwidth heavy.
 ## Footnotes
 
 1. <https://github.com/status-im/status-protocol-go/>
-1. <https://github.com/status-im/status-console-client/>
-1. <https://github.com/status-im/status-react/>
+2. <https://github.com/status-im/status-console-client/>
+3. <https://github.com/status-im/status-react/>
 
 ## Acknowledgements
