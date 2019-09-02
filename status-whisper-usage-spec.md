@@ -241,7 +241,7 @@ Learn more following [Whisper V6 RPC API](https://github.com/ethereum/go-ethereu
 
 ### Sending using PFS
 
-When one decides to use PFS, the flow is the same but the payload MUST be additionally encrypted following the [PFS specification](#pfs) before being hex-endoded and passed to `shh_post`.
+When one decides to use PFS, the flow is the same but the payload MUST be additionally encrypted following the [PFS specification](#pfs) before being hex-encoded and passed to `shh_post`.
 
 ## Receiving
 
