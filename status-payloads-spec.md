@@ -43,14 +43,14 @@ record:
 
 ```protobuf
 message StatusProtocolMessage {
-  bytes signature = 1;
-  bytes payload = 2;
+  bytes signature = 4001;
+  bytes payload = 4002;
 }
 ```
 
 `signature` is the bytes of the signed `SHA3-256` of the payload, signed with the key of the author of the message.
 The signature is needed to validate authorship of the message, so that the message can be relayed to third parties.
-If a signature is not present but an author is provided by a layer below, the message is to be relayed to third parties and its considered plausibly deniable.
+If a signature is not present but an author is provided by a layer below, the message is not to be relayed to third parties and its considered plausibly deniable.
 
 ## Encoding
 
@@ -68,7 +68,8 @@ The message is an array and each index value has its meaning:
 
 For more details regarding serialization and deserialization please consult [transit format](https://github.com/cognitect/transit-format) specification.
 
-<!-- TODO: This requires a lot more detail since c4 is only one of several types, and also possibly links to implementation -->
+<!-- TODO: This requires a lot more detail since c4 is only one of several types, and also possibly links to implementation
+ANDREA: Not sure this section is really needed (other then a brief mention of the fact that we use transit), explaining how transit is encoded is outside of the scope of this document, as well because that's not the only way transit can be encoded. -->
 
 ## Message
 
@@ -125,13 +126,15 @@ The following messages types MUST be supported:
 
 `timestamp` MUST be Unix time calculated when the message is created. Because the peers in the Whisper network should have synchronized time, `timestamp` values should be fairly accurate among all Whisper network participants.
 
-`clock` SHOULD be calculated using the algorithm of [Lamport timestamps](https://en.wikipedia.org/wiki/Lamport_timestamps). When there are messages available in a chat, `clock`'s value is calculated based on the last received message in a particular chat: `last-message-clock-value + 1`. If there are no messages, `clock` is initialized with `timestamp`'s value.
+`clock` SHOULD be calculated using the algorithm of [Lamport timestamps](https://en.wikipedia.org/wiki/Lamport_timestamps). When there are messages available in a chat, `clock`'s value is calculated based on the last received message in a particular chat: `last-message-clock-value + 1`. If there are no messages, `clock` is initialized with `timestamp * 100`'s value.
 
 `clock` value is used for the message ordering. Due to the used algorithm and distributed nature of the system, we achieve casual ordering which might produce counterintuitive results in some edge cases. For example, when one joins a public chat and sends a message before receiving the exist messages, their message `clock` value might be lower and the message will end up in the past when the historical messages are fetched.
 
-<!-- TODO: Document section on replies -->
+<!-- TODO: Document section on replies 
+     TODO: Document timestamp, is it in seconds/ms ? -->
 
 ## Chats
+<!-- This section should probably fall under Message, as it's only valid for Message-type messages -->
 
 Chat is a structure that helps organize messages. It's usually desired to display messages only from a single recipient or a group of recipients at a time and chats help to achieve that.
 
@@ -149,6 +152,7 @@ All incoming messages can be matched against a chat. Below you can find a table 
 ## Upgradability
 
 The current protocol format is hardly upgradable without breaking backward compatibility. Because Transit is used in this particular way described above, the only reliable option is to append a new field to the Transit record definition. It will be simply ignored by the old clients.
+<!-- Not sure I agree with this statement, seems very arbitrary, appending to an array is just as upgradable as adding an entry in a map, just less convenient, I would remove the qualitative statement, and just describe how to upgrade -->
 
 ## Security Considerations
 
@@ -159,3 +163,4 @@ TBD.
 ### Why are you using Transit and Protobuf?
 
 Transit was initially chose for encoding, and Protobuf was added afterwards. This is partly due to the history of the protocol living inside of `status-react`, which is written in Clojurescript. In future versions of payload and data sync client specifications it is likely we'll move towards Protobuf only. See e.g. [Dasy](https://github.com/vacp2p/dasy) for a research proof of concept.
+<!-- I would remove the link to dasy, I find it a bit confusing, and the repo just implements something totally different and a fraction of the functionalities -->
