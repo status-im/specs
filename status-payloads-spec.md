@@ -15,19 +15,22 @@ as various clients created using different technologies.
 
 ## Table of Contents
 
-- [Abstract](#abstract)
-- [Table of Contents](#table-of-contents)
-- [Introduction](#introduction)
-- [Wrapper](#wrapper)
-- [Encoding](#encoding)
-- [Message types](#message-types)
-- [Message](#message)
+- [Status Message Payloads Specification](#status-message-payloads-specification)
+  - [Abstract](#abstract)
+  - [Table of Contents](#table-of-contents)
+  - [Introduction](#introduction)
+  - [Payload wrapper](#payload-wrapper)
+  - [Encoding](#encoding)
+  - [Message](#message)
     - [Payload](#payload)
     - [Content types](#content-types)
-    - [Message types](#message-types-1)
+    - [Message types](#message-types)
     - [Clock vs Timestamp and message ordering](#clock-vs-timestamp-and-message-ordering)
-- [Upgradability](#upgradability)
-- [Security Considerations](#security-considerations)
+  - [Chats](#chats)
+  - [Upgradability](#upgradability)
+  - [Security Considerations](#security-considerations)
+  - [Design rationale](#design-rationale)
+    - [Why are you using Transit and Protobuf?](#why-are-you-using-transit-and-protobuf)
 
 ## Introduction
 
@@ -127,6 +130,21 @@ The following messages types MUST be supported:
 `clock` value is used for the message ordering. Due to the used algorithm and distributed nature of the system, we achieve casual ordering which might produce counterintuitive results in some edge cases. For example, when one joins a public chat and sends a message before receiving the exist messages, their message `clock` value might be lower and the message will end up in the past when the historical messages are fetched.
 
 <!-- TODO: Document section on replies -->
+
+## Chats
+
+Chat is a structure that helps organize messages. It's usually desired to display messages only from a single recipient or a group of recipients at a time and chats help to achieve that.
+
+All incoming messages can be matched against a chat. Below you can find a table that describes how to calculate a chat ID for each message type.
+
+|Message Type|Chat ID Calculation|Direction|Comment|
+|------------|-------------------|---------|-------|
+|public-group-user-message|chat ID is equal to a public channel name; it should equal `chat-id` from message's `content` field|Incoming/Outgoing||
+|user-message|let `P` be a public key of the recipient; `hex-encode(P)` is a chat ID; use it as `chat-id` value in message's `content` field|Outgoing||
+|user-message|let `P` be a public key of message's signature; `hex-encode(P)` is a chat ID; discard `chat-id` from message's `content` field|Incoming|if there is no matched chat, it might be the first message from public key `P`; you can discard it or create a new chat; Status official clients create a new chat|
+|group-user-message|use `chat-id` from message's `content` field|Incoming/Outgoing|find an existing chat by `chat-id`; if none is found discard the message (TODO: incomplete)|
+
+<!-- TODO: "group-user-message" is not complete. Does it require to explicitly join the group chat? Is there a way to invite someone? Also, if I start a new group chat (or join an existing one), I need to somehow calculate this chatID by myself. How to do it? -->
 
 ## Upgradability
 
