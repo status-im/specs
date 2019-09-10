@@ -90,7 +90,7 @@ Payload is a struct (a compound data type) with the following fields (order is i
 
 #### Content types
 
-Content types are required for a proper interpretation of incoming messages. Not each message is a plain text but may carry a different information.
+Content types are required for a proper interpretation of incoming messages. Not each message is plain text but may carry a different information.
 
 The following content types MUST be supported:
 * `text/plain` identifies a message which content is a plain text.
@@ -143,18 +143,16 @@ All incoming messages can be matched against a chat. Below you can find a table 
 
 ### Contact Requests
 
-These messages are used to notify the receiving end that it has been added to the sender's contact. They are identified by the transit tags `c2`, `c3`, `c4` respectively, but they are all interchangeable, meaning a client SHOULD handle them in exactly the same way. 
+Contact requests consists in 3 kind of messages: `ContactRequest`, `ContactRequestConfirmed` and `ContactUpdate`.
+These messages are used to notify the receiving end that it has been added to the sender's contact. They are identified by the transit tags `c2`, `c3`, `c4` respectively, but they are all interchangeable, meaning a client SHOULD handle them in exactly the same way.  The payload of the 3 messages is identical.
 
 #### Payload
-
-Payload is a struct (a compound data type) with the following fields (order is important):
-
 
 | Field | Name | Type | Description |
 | ----- | ---- | ---- | ---- |
 | 1 | name | `string` | The self-assigned name of the user (DEPRECATED) |
 | 2 | profile image | `string` | The base64 encoded profile picture of the user |
-| 3 | address | `string` | The ethereum address of the user <!-- Why do we need this? can it be computed from the pk? --> |
+| 3 | address | `string` | The ethereum address of the user |
 | 4 | fcm-token | `string` | The FCM Token used by mobile devices for push notifications (DEPRECATED) |
 | 5 | device-info | `[struct { id string, fcm-token string }]` | A list of pair `installation-id`, `fcm-token` for each device that is currently paired |
 
@@ -166,7 +164,7 @@ A client SHOULD send a `ContactUpdate` to all the contacts each time:
 - The profile image is edited
 - A new device has been paired
 
-A client SHOULD also periodically send a `ContactUpdate` to all the contacts, the interval is up to the client.
+A client SHOULD also periodically send a `ContactUpdate` to all the contacts, the interval is up to the client, the Status official client sends these updates every 48 hours.
 
 
 #### Handling contact messages
@@ -179,9 +177,6 @@ A client SHOULD handle any `Contact*` message in the same way. Any `Contact*` me
 
 #### Payload
 
-Payload is a struct (a compound data type) with the following fields (order is important):
-
-
 | Field | Name | Type | Description |
 | ----- | ---- | ---- | ---- |
 | 1| contacts | `[struct { name string last-updated int device-info struct {id string fcm-token string } pending? bool}` | An array of contacts |
@@ -193,9 +188,6 @@ Payload is a struct (a compound data type) with the following fields (order is i
 `PairInstallation` messages are used to propagate informations about a device to its paired devices. It is identified by a transit tag of `p2` 
 
 #### Payload
-
-Payload is a struct (a compound data type) with the following fields (order is important):
-
 
 | Field | Name | Type | Description |
 | ----- | ---- | ---- | ---- |
@@ -211,9 +203,6 @@ The details are in the  [Group chats specs](status-group-chats-spec.md)
 
 #### Payload
 
-Payload is a struct (a compound data type) with the following fields (order is important):
-
-
 | Field | Name | Type | Description |
 | ----- | ---- | ---- | ---- |
 | 1| chat-id | `string` | The chat id of the chat where the change is to take place |
@@ -224,7 +213,7 @@ Payload is a struct (a compound data type) with the following fields (order is i
 
 There are two ways to upgrade the protocol without breaking compatibility:
 
-- Map fields can be enriched with a new key, which will be ignored by old clients.
+- Struct fields can be enriched with a new key, which will be ignored by old clients.
 - An element can be appended to the `Transit` array, which will also be ignored by old clients.
 
 ## Security Considerations
