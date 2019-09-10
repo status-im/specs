@@ -3,63 +3,54 @@
 >
 > Authors: Adam Babik <adam@status.im>, Oskar Thorén <oskar@status.im> (alphabetical order)
 
+- [Status Whisper Mailserver Specification](#status-whisper-mailserver-specification)
+  - [Abstract](#abstract)
+  - [Mailserver](#mailserver)
+    - [Archiving messages](#archiving-messages)
+    - [Delivering messages](#delivering-messages)
+  - [Security considerations](#security-considerations)
+    - [Confidentiality](#confidentiality)
+    - [Altruistic and centralized operator risk](#altruistic-and-centralized-operator-risk)
+    - [Privacy concerns](#privacy-concerns)
+    - [Denial-of-service](#denial-of-service)
+
 ## Abstract
 
-Status clients are often offline. In order to allow clients to talk to each other while one is offline, we provide offline inboxing.
+Being mostly offline is an intrinsic property of mobile clients. They need to save network transfer and battery consumption to avoid spending too much money or constant charging. Whisper protocol, on the other hand, is an online protocol. Messages are available in the Whisper network only for short period of time calculate in seconds.
 
-This current specification is an extension of Whisper v6 and operates under a store-and-forward model.
-
-## Table of Contents
-
-TBD.
-
-## Introduction
-
-In the case of mobile clients which are often offline, there is a strong need to have an ability to download offline messages. By offline messages, we mean messages sent into the Whisper network and expired before being collected by the recipient. A message stays in the Whisper network for a duration specified as `TTL` (time-to-live) property.
-
-See [EIP-627](https://eips.ethereum.org/EIPS/eip-627) for more detail on *Whisper Mail Server* and *Whisper Mail Client*.
+Whisper Mailserver is a Whisper extension that allows to store messages permamently and deliver them to the clients even though they are already not available in the network and expired.
 
 ## Mailserver
 
-A mailserver can either be running as a server or as a client.
+From the network perspective, Mailserver is just like any other Whisper node. The only different is that it has a capability of archiving messages and delivering them to its peers on-demand.
 
-Since Whisper is a form of DHT, a mailserver only requires a specific relationship with the receiver of a message, not with the sender of a message.
+It is important to notice that Mailserver will only handle requests from its direct peers and exchanged packets between Mailserver and a peer are p2p messages.
 
-### Server
+### Archiving messages
 
-<!-- TODO: This doesn't actually describe how to implement a mailserver -->
+In order to store messages, one MUST implement the interface below and MUST register it within a Whisper service. The only known Whisper implementation that allows that is [geth](https://github.com/ethereum/go-ethereum).
 
-`MailServer` is an interface with two methods:
+`MailServer` interface consist of:
 * `Archive(env *Envelope)`
 * `DeliverMail(whisperPeer *Peer, request *Envelope)`
 
-### Client
+### Delivering messages
 
-A Whisper client needs to register a mail server instance which will be used by [geth's Whisper service](https://github.com/ethereum/go-ethereum/blob/v1.8.23/whisper/whisperv6/whisper.go#L209-L213).
+Mailserver delivers archieved messages to a peer after receiving a Whisper packet with code `p2pRequestCode`. Messages are delivered asynchronously, i.e. a requester sends a Whisper packet with code `p2pRequestCode` and at some point later, it will start receiving Whisper packets with code `p2pMessageCode`.
 
-If a mail server is registered for a given Whisper client, it will save all incoming messages on a local disk (this is the simplest implementation, it can store the messages wherever it wants, also using technologies like swarm and IPFS) in the background.
+How a peer can initialize the request to a Mailserver is up to the implementator. Status peers acting as Mailserver expose two additional JSON-RPC methods: `shhext_requestMessages` and `shh_requestMessagesSync`.
 
-Notice that each node is meant to be independent and SHOULD keep a copy of all historic messages. High Availability (HA) can be achieved by having multiple nodes in different locations. Additionally, each node is free to store messages in a way which provides storage HA as well.
-
-Saved messages are delivered to a requester (another Whisper peer) asynchronously as a response to `p2pMessageCode` message code. This is not exposed as a JSON-RPC method in `shh` namespace but it's exposed in status-go as `shhext_requestMessages` and blocking `shh_requestMessagesSync`. Read more about [Whisper V6 extensions](#whisper-v6-extensions-or-status-whisper-node).
-
-In order to receive historic messages from a filter, p2p messages MUST be allowed when creating the filter. Receiving p2p messages is implemented in [geth's Whisper V6 implementation](https://github.com/ethereum/go-ethereum/blob/v1.8.23/whisper/whisperv6/whisper.go#L739-L751).
+Because all packets exchanged between a Mailserver and a peer are p2p packets, all filters created by a peer from which it expectes to receive archived messages MUST allow processing of direct peer-to-peer messages.
 
 ## Security considerations
 
 ### Confidentiality
 
-All Whisper envelopes are encrypted, and a mailserver node can't inspect their contents.
-
-### High-availability
-
-Since mailservers rely on being online to receive messages on behalf of other clients, this puts a high-availability requirement on individual nodes.
-
-In practice, it is best to treat individual nodes as a form of a cache, and ensure consistency of messages at a different layer. See data sync layer.
+All Whisper envelopes are encrypted. Mailserver node can not inspect their contents.
 
 ### Altruistic and centralized operator risk
 
-In order to be useful, a mailserver has to be online most of time. That means
+In order to be useful, a mailserver SHOULD be online most of time. That means
 you either have to be a bit tech-savvy to run your own node, or rely on someone
 else to run it for you.
 
@@ -71,9 +62,9 @@ A Status client SHOULD allow the mailserver selection to be customizable.
 
 ### Privacy concerns
 
-In order to use a mail server, a given node needs to connect to it directly,
-i.e. add the mail server as its peer and mark it as trusted. This means that the
-mail server is able to send direct p2p messages to the node instead of
+In order to use a Mailserver, a given node needs to connect to it directly,
+i.e. add the Mailserver as its peer and mark it as trusted. This means that the
+Mailserver is able to send direct p2p messages to the node instead of
 broadcasting them. Effectively, it knows which topics the node is interested in,
 when it is online as well as many metadata like IP address.
 
