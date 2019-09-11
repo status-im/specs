@@ -155,11 +155,11 @@ Each Status Client SHOULD listen to this topic in order to receive ???
 
 Generic discovery topic is a legacy topic used to handle all one-to-one chats. The newer implementation should rely on [Partitioned Topic](#partitioned-topic) and [Personal discovery topic](#personal-discovery-topic).
 
-Generic discovery topic MUST be created following [Public chats](#public-chats) topic creation where `name` is equal to `contact-discovery`.
+Generic discovery topic MUST be created following [Public chats](#public-chats) topic algorithm using string `contact-discovery` as a name.
 
 ### One-to-one topic
 
-In order to listen to one-to-one messages incoming from a public key `P`, the Status Client MUST listen to a [Contact Code Topic](#contact-code-topic) created for the publickey `P`.
+In order to receive one-to-one messages incoming from a public key `P`, the Status Client MUST listen to a [Contact Code Topic](#contact-code-topic) created for that public key.
 
 ### Group chat topic
 
@@ -175,6 +175,6 @@ One-to-one messages are encrypted using asymmetric encryption.
 
 ## Whisper V6 extensions (or Status Whisper Node)
 
-Outside of Whisper v6, there are some extensions, message codes and RPC methods that MAY be useful for client implementers. An implementation of this can be found in a fork of Whisper [here](https://github.com/status-im/whisper).
+TOODO
 
-<!--TODO: provide a list of RPC methods from `shhext` API which are relevant to this spec, as well as motivation (rationale section) -->
+<!--TODO: provide a list of required JSON-RPC methods, if any -->
