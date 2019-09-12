@@ -46,7 +46,7 @@ In this document we describe how a secure channel is established, and how variou
 - **Confidentiality**: The adversary should not be able to learn what data is being exchanged between two Status clients.
 - **Authenticity**: The adversary should not be able to cause either endpoint of a Status 1:1 chat to accept data from any third party as though it came from the other endpoint.
 - **Forward Secrecy**: The adversary should not be able to learn what data was exchanged between two Status clients if, at some later time, the adversary compromises one or both of the endpoint devices.
-- **Integrity**: The adversary should not be able to cause either endpoint of a Status 1:1 chat to accept data to accept data that has been tampered with.
+- **Integrity**: The adversary should not be able to cause either endpoint of a Status 1:1 chat to accept data that has been tampered with.
 
 <!-- TODO: It is not clearly stated in this spec how we achieve confidentiality, authenticity and integrity. State this clearly. -->
 
