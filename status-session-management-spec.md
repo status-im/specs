@@ -39,11 +39,11 @@ A new session is initialized once a successful X3DH exchange has taken place. Su
 
 ## Concurrent sessions
 
-If two sessions are created concurrently between two peers the one with the symmetric key, first in byte order should be used this marks that the other has expired.
+If two sessions are created concurrently between two peers the one with the symmetric key first in byte order SHOULD be used, this marks that the other has expired.
 
 ## Re-keying
 
-On receiving a bundle from a given peer with a higher version, the old bundle should be marked as expired and a new session should be established on the next message sent.
+On receiving a bundle from a given peer with a higher version, the old bundle SHOULD be marked as expired and a new session SHOULD be established on the next message sent.
 
 ## Multi-device support
 
@@ -51,7 +51,7 @@ Multi-device support is quite challenging as we don't have a central place where
 
 Furthermore we always need to take account recovery in consideration, where the whole device is wiped clean and all the information about any previous sessions is lost.
 
-Taking these considerations into account, the way multi-device information is propagated through the network is through bundles/contact codes, which will contain information about paired devices as well as information about the sending device.
+Taking these considerations into account, the way multi-device information is propagated through the network is through x3dh bundles, which will contain information about paired devices as well as information about the sending device.
 
 This mean that every time a new device is paired, the bundle needs to be updated and propagated with the new information, and the burden is put on the user to make sure the pairing is successful.
 
@@ -59,6 +59,7 @@ The method is loosely based on https://signal.org/docs/specifications/sesame/ .
 
 <!-- TODO: This multi device section isn't clear enough -->
 <!-- TODO: Additionally, it seems tightly coupled with secure transport, which makes things like multi device public chats harder to reason about (IMO). E.g. as a client impl I might want multi device support but not want to impl double ratchet etc, so what does this mean? -->
+<!-- It is coupled to the secure transport because otherwise there's no need of multidevice. Without a secure transport multi-device is trivial (nothing to implement, such in public chats, nothing to reason about), the type of secure transport we use dictates the type of multi-device support we want, same as signal's "Sesame was designed for use with Double Ratchet sessions created via X3DH key agreement.". Please read the specs of sesame, it clearly shows that it's tightly coupled to the encryption layer and its purpose is to allow encrypting messages for multiple devices, such in our case. Let's take some time understanding and reading things before commenting. -->
 
 ## Pairing
 
@@ -66,7 +67,7 @@ When a user adds a new account in the `Status` application, a new `installation-
 
 Any time a bundle from your `IK` but different `installation-id` is received, the device will be shown to the user and will have to be manually approved, to a maximum of 3. Once that is done any message sent by one device will also be sent to any other enabled device.
 
-Once a new device is enabled, a new contact-code/bundle will be generated which will include pairing information.
+Once a new device is enabled, a new bundle will be generated which will include pairing information.
 
 The bundle will be propagated to contacts through the usual channels.
 
@@ -90,29 +91,3 @@ In this case an empty message containing bundle information is sent back, which 
 ## Trust establishment
 
 Trust establishment deals with users verifying they are communicating with who they think they are.
-
-<!-- TODO: Deduplicate this and status accounts trust establishment -->
-
-### Contact request
-
-Once two accounts have been generated (Alice and Bob), Alice can send a contact request with an introductory message to Bob.
-
-There are two possible scenarios, which dictate the presence or absence of a prekey bundle:
-1. If Alice is using Bob's public chat key or ENS name, no prekey bundle is present;
-1. If Alice found Bob through the app or scanned Bob's QR code, a prekey bundle is embedded and can be used to set up a secure channel as described in the [Initial key exchange flow X3DH](#initial-key-exchange-flow-X3DH) section.
-
-Bob receives a contact request, informing him of:
-- Alice's introductory message.
-
-If Bob's prekey bundle was not available to Alice, Perfect Forward Secrecy hasn't yet been established. In any case, there are no implicit guarantees that Alice is whom she claims to be, and Bob should perform some form of external verification (e.g., using an Identicon).
-
-If Bob accepts the contact request, a secure channel is created (if it wasn't already), and a visual indicator is displayed to signify that PFS has been established. Bob and Alice can then start exchanging messages, making use of the Double Ratchet algorithm as explained in more detail in [Double Ratchet](#double-ratchet) section.
-If Bob denies the request, Alice is not able to send messages and the only action available is resending the contact request.
-
-## Expired session
-
-Expired session should not be used for new messages and should be deleted after 14 days from the expiration date, in order to be able to decrypt out-of-order and mailserver messages.
-
-## Stale devices
-
-When a bundle is received from `IK` a timer is initiated on any `installation-id` belonging to `IK` not included in the bundle. If after 7 days no bundles are received from these devices they are marked as `stale` and no message will be sent to them.
