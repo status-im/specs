@@ -48,7 +48,7 @@ In this document we describe how a secure channel is established, and how variou
 - **Forward Secrecy**: The adversary should not be able to learn what data was exchanged between two Status clients if, at some later time, the adversary compromises one or both of the endpoint devices.
 - **Integrity**: The adversary should not be able to cause either endpoint of a Status 1:1 chat to accept data that has been tampered with.
 
-<!-- TODO: It is not clearly stated in this spec how we achieve confidentiality, authenticity and integrity. State this clearly. -->
+All of these properties are ensured by the use of [Signal's Double Ratchet](https://signal.org/docs/specifications/doubleratchet/)
 
 ### Conventions
 
@@ -106,9 +106,7 @@ Every client initially generates some key material which is stored locally:
 
 More details can be found in the `X3DH Prekey bundle creation` section of [Account specification](./status-account-spec.md#x3dh-prekey-bundle-creation).
 
-A `contact-code` is a protobuf `Bundle` message, encoded in `JSON` and converted to their `base64` string representation.
-
-Prekey bundles are can be extracted from any user's messages, or found via searching for their specific contact code topic, `{IK}-contact-code`.
+Prekey bundles can be extracted from any user's messages, or found via searching for their specific topic, `{IK}-contact-code`.
 
 TODO: See below on bundle retrieval, this seems like enhancement and parameter for recommendation
 
@@ -126,6 +124,8 @@ In the X3DH specification, a shared server is typically used to store bundles an
 - Whisper
 
 <!-- TODO: Comment, it isn't clear what we actually _do_. It seems as if this is exploring the problem space. From a protocol point of view, it might make sense to describe the interface, and then have a recommendation section later on that specifies what we do. See e.g. Signal's specs where they specify specifics later on.  -->
+
+Currently only public and one-to-one message exchanges and Whisper is used to exchange bundles.
 
 Since bundles stored in QR codes or ENS records cannot be updated to delete already used keys, the approach taken is to rotate more frequently the bundle (once every 24 hours), which will be propagated by the app through the channel available.
 
@@ -190,8 +190,6 @@ The initial message sent by Alice to Bob is sent as a top-level `ProtocolMessage
 ``` protobuf
 message ProtocolMessage {
 
-  Bundle bundle = 1;
-
   string installation_id = 2;
 
   repeated Bundle bundles = 3;
@@ -205,7 +203,6 @@ message ProtocolMessage {
 }
 ```
 
-- `bundle`: optional bundle is exchanged with each message, deprecated;
 - `bundles`: a sequence of bundles
 - `installation_id`: the installation id of the sender
 - `direct_message` is a map of `DirectMessageProtocol` indexed by `installation-id`

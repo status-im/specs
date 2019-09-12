@@ -89,8 +89,8 @@ not do this.
 
 ### X3DH Prekey bundles
 - A client SHOULD regenerate a new X3DH prekey bundle every 24 hours.  This MAY be done in a lazy way, such that a client that does not come online past this time period does not regenerate or broadcast bundles.
-- The current bundle MUST be broadcast on a whisper topic specific to his Identity Key, `{IK}-contact-code`, intermittently.  This MAY be done every 6 hours.
-- A bundle MUST accompany every message sent.
+- The current bundle SHOULD be broadcast on a whisper topic specific to his Identity Key, `{IK}-contact-code`, intermittently.  This MAY be done every 6 hours.
+- A bundle SHOULD accompany every message sent.
 - TODO: retreival of long-time offline users bundle via `{IK}-contact-code` 
 
 ## Optional Account additions
@@ -131,7 +131,7 @@ not do this.
     - is not a public key
 
 #### Private 1:1 messages
-This can be done in a the following ways:
+This can be done in the following ways:
 1. scanning a user generated QR code
 1. discovery through the Status app
 1. asyncronous X3DH key exchange
@@ -156,10 +156,7 @@ This can be done in a the following ways:
   - include BundleContainer???
 - a new bundle SHOULD be created at least every 12 hours
 - a bundle is only generated when it is used
-- a bundle MUST be distributed on the contact code channel (NOTE: define this where?)
-
-#### QR code
-- A generated QR code should include a X3DH bundle set along with the contact code but I can't find the code to do so.
+- a bundle SHOULD be distributed on the contact code channel. This is the whisper topic `{IK}-contact-code`, where `IK` is the hex encoded public key of the user, prefixed with `0x`. The channel is encrypted in the same way public chats are encrypted.
 
 ### Contact Verification
 Once you have the information of a contact, the following can be used to verify that the key material is as it should be.
