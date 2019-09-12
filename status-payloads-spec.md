@@ -21,12 +21,23 @@ as various clients created using different technologies.
   - [Introduction](#introduction)
   - [Payload wrapper](#payload-wrapper)
   - [Encoding](#encoding)
-  - [Message](#message)
-    - [Payload](#payload)
-    - [Content types](#content-types)
-    - [Message types](#message-types)
-    - [Clock vs Timestamp and message ordering](#clock-vs-timestamp-and-message-ordering)
-  - [Chats](#chats)
+  - [Types of Messages] (#types-of-messages)
+    - [Message](#message)
+      - [Payload](#payload)
+      - [Content types](#content-types)
+      - [Message types](#message-types)
+      - [Clock vs Timestamp and message ordering](#clock-vs-timestamp-and-message-ordering)
+      - [Chats](#chats)
+    - [Contact requests](#contact-requests)
+      - [Payload] (#payload)
+      - [Contact update] (#contact-update)
+      - [Handling contact messages] (#handling-contact-messages)
+    - [SyncInstallation](#sync-installation)
+      - [Payload](#payload)
+    - [PairInstallation](#pair-installation)
+      - [Payload](#payload)
+    - [GroupMembershipUpdate](#group-membership-update)
+      - [Payload](#payload)
   - [Upgradability](#upgradability)
   - [Security Considerations](#security-considerations)
   - [Design rationale](#design-rationale)
@@ -56,45 +67,30 @@ If a signature is not present but an author is provided by a layer below, the me
 
 The payload is encoded using [Transit format](https://github.com/cognitect/transit-format). Transit was chosen over JSON in order to reduce the bandwidth.
 
-Example of a valid encoded payload:
+## Types of messages
 
-```
-["~#c4",["abc123","text/plain","~:public-group-user-message",154593077368201,1545930773682,["^ ","~:chat-id","testing-adamb","~:text","abc123"]]]
-```
+### Message
 
-The message is an array and each index value has its meaning:
-* 0: `c4` is a decoder handler identification for the current payload format. Identifications allow to register handlers for many different types of payload
-* 1: array which items correspond to the described payload fields above
+The type `Message` represents a text message exchanged between clients and is identified by the transit tag `c4`.
 
-For more details regarding serialization and deserialization please consult [transit format](https://github.com/cognitect/transit-format) specification.
-
-<!-- TODO: This requires a lot more detail since c4 is only one of several types, and also possibly links to implementation
-ANDREA: Not sure this section is really needed (other then a brief mention of the fact that we use transit), explaining how transit is encoded is outside of the scope of this document, as well because that's not the only way transit can be encoded. -->
-
-## Message
-
-The type `Message` represents a text message exchanged between clients.
-
-<!-- TODO: It is not clear how this relates to StatusProtocolMessage above -->
-
-### Payload
+#### Payload
 
 Payload is a struct (a compound data type) with the following fields (order is important):
 
 <!-- TODO: Be more precise in struct description, a la RFC, e.g. TLS style https://tools.ietf.org/html/rfc8446 -->
 
-| Field | Name | Type |
-| ----- | ---- | ---- |
-| 1 | text | `string` |
-| 2 | content type | `enum` (more in [Content types](#content-types)) |
-| 3 | message type | `enum` (more in [Message types](#message-types)) |
-| 4 | clock | `int64` |
-| 5 | timestamp | `int64` |
-| 6 | content | `struct { chat-id string, text string }` |
+| Field | Name | Type | Description |
+| ----- | ---- | ---- | ---- |
+| 1 | text | `string` | The text version of the message content |
+| 2 | content type | `enum` (more in [Content types](#content-types)) | See details |
+| 3 | message type | `enum` (more in [Message types](#message-types)) | See details |
+| 4 | clock | `int64` | See details |
+| 5 | timestamp | `int64` | See details |
+| 6 | content | `struct { chat-id string, text string, response-to string }` | The chat-id of the chat this message is destined to, the text of the content and optionally the id of the message it is responding to|
 
-### Content types
+#### Content types
 
-Content types are required for a proper interpretation of incoming messages. Not each message is a plain text but may carry a different information.
+Content types are required for a proper interpretation of incoming messages. Not each message is plain text but may carry a different information.
 
 The following content types MUST be supported:
 * `text/plain` identifies a message which content is a plain text.
@@ -110,7 +106,7 @@ These are currently underspecified. We refer to real-world implementations for c
 
 <!-- TODO: Ideally specify this, but barring that, link to implementation. -->
 
-### Message types
+#### Message types
 
 Message types are required to decide how a particular message is encrypted and what metadata needs to be attached when passing a message to the transport layer. For more on this, see [Status Whisper Usage Specification](./status-whisper-usage-spec.md).
 
@@ -122,19 +118,15 @@ The following messages types MUST be supported:
 * `user-message` is a private message
 * `group-user-message` is a message to the private group.
 
-### Clock vs Timestamp and message ordering
+#### Clock vs Timestamp and message ordering
 
-`timestamp` MUST be Unix time calculated when the message is created. Because the peers in the Whisper network should have synchronized time, `timestamp` values should be fairly accurate among all Whisper network participants.
+`timestamp` MUST be Unix time calculated when the message is created in milliseconds. This field SHOULD not be relied upon for message ordering.
 
 `clock` SHOULD be calculated using the algorithm of [Lamport timestamps](https://en.wikipedia.org/wiki/Lamport_timestamps). When there are messages available in a chat, `clock`'s value is calculated based on the last received message in a particular chat: `last-message-clock-value + 1`. If there are no messages, `clock` is initialized with `timestamp * 100`'s value.
 
 `clock` value is used for the message ordering. Due to the used algorithm and distributed nature of the system, we achieve casual ordering which might produce counterintuitive results in some edge cases. For example, when one joins a public chat and sends a message before receiving the exist messages, their message `clock` value might be lower and the message will end up in the past when the historical messages are fetched.
 
-<!-- TODO: Document section on replies 
-     TODO: Document timestamp, is it in seconds/ms ? -->
-
-## Chats
-<!-- This section should probably fall under Message, as it's only valid for Message-type messages -->
+#### Chats
 
 Chat is a structure that helps organize messages. It's usually desired to display messages only from a single recipient or a group of recipients at a time and chats help to achieve that.
 
@@ -149,10 +141,80 @@ All incoming messages can be matched against a chat. Below you can find a table 
 
 <!-- TODO: "group-user-message" is not complete. Does it require to explicitly join the group chat? Is there a way to invite someone? Also, if I start a new group chat (or join an existing one), I need to somehow calculate this chatID by myself. How to do it? -->
 
+### Contact Requests
+
+Contact requests consists in 3 kind of messages: `ContactRequest`, `ContactRequestConfirmed` and `ContactUpdate`.
+These messages are used to notify the receiving end that it has been added to the sender's contact. They are identified by the transit tags `c2`, `c3`, `c4` respectively, but they are all interchangeable, meaning a client SHOULD handle them in exactly the same way.  The payload of the 3 messages is identical.
+
+#### Payload
+
+| Field | Name | Type | Description |
+| ----- | ---- | ---- | ---- |
+| 1 | name | `string` | The self-assigned name of the user (DEPRECATED) |
+| 2 | profile image | `string` | The base64 encoded profile picture of the user |
+| 3 | address | `string` | The ethereum address of the user |
+| 4 | fcm-token | `string` | The FCM Token used by mobile devices for push notifications (DEPRECATED) |
+| 5 | device-info | `[struct { id string, fcm-token string }]` | A list of pair `installation-id`, `fcm-token` for each device that is currently paired |
+
+#### Contact update
+
+A client SHOULD send a `ContactUpdate` to all the contacts each time:
+
+- The name is edited
+- The profile image is edited
+- A new device has been paired
+
+A client SHOULD also periodically send a `ContactUpdate` to all the contacts, the interval is up to the client, the Status official client sends these updates every 48 hours.
+
+
+#### Handling contact messages
+
+A client SHOULD handle any `Contact*` message in the same way. Any `Contact*` message with a whisper timestamp lower than the last one processed MUST be discarded.
+
+### SyncInstallation
+
+`SyncInstallation` messages are used to synchronize in a best-effort way all the paired installations. It is identified by a transit tag of `p1` 
+
+#### Payload
+
+| Field | Name | Type | Description |
+| ----- | ---- | ---- | ---- |
+| 1| contacts | `[struct { name string last-updated int device-info struct {id string fcm-token string } pending? bool}` | An array of contacts |
+| 2 | account | `struct {name string photo-path string last-updated int}` | Information about your own account |
+| 3 | chat | `struct {:public? bool :chat-id string}` | A description of a public chat opened by the client |
+
+### PairInstallation
+
+`PairInstallation` messages are used to propagate informations about a device to its paired devices. It is identified by a transit tag of `p2` 
+
+#### Payload
+
+| Field | Name | Type | Description |
+| ----- | ---- | ---- | ---- |
+| 1| installation-id | `string` | A randomly generated id that identifies this device |
+| 2 | device-type | `string` | The OS of the device `ios`,`android` or `desktop` |
+| 3 | name | `string` | The self-assigned name of the device |
+| 4 | fcm-token | `string` | The FCM Token used by mobile devices for push notifications |
+
+### GroupMembershipUpdate
+
+`GroupMembershipUpdate` is a message used to propagate information about group membership changes in a group chat.. It is identified by a transit tag of `g5`.
+The details are in the  [Group chats specs](status-group-chats-spec.md)
+
+#### Payload
+
+| Field | Name | Type | Description |
+| ----- | ---- | ---- | ---- |
+| 1| chat-id | `string` | The chat id of the chat where the change is to take place |
+| 2 | membership-updates | See details | A list of events that describe the membership changes |
+| 3 | message | `Transit message` | An optional message, described in [Message](#message) |
+
 ## Upgradability
 
-The current protocol format is hardly upgradable without breaking backward compatibility. Because Transit is used in this particular way described above, the only reliable option is to append a new field to the Transit record definition. It will be simply ignored by the old clients.
-<!-- Not sure I agree with this statement, seems very arbitrary, appending to an array is just as upgradable as adding an entry in a map, just less convenient, I would remove the qualitative statement, and just describe how to upgrade -->
+There are two ways to upgrade the protocol without breaking compatibility:
+
+- Struct fields can be enriched with a new key, which will be ignored by old clients.
+- An element can be appended to the `Transit` array, which will also be ignored by old clients.
 
 ## Security Considerations
 
@@ -162,5 +224,4 @@ TBD.
 
 ### Why are you using Transit and Protobuf?
 
-Transit was initially chose for encoding, and Protobuf was added afterwards. This is partly due to the history of the protocol living inside of `status-react`, which is written in Clojurescript. In future versions of payload and data sync client specifications it is likely we'll move towards Protobuf only. See e.g. [Dasy](https://github.com/vacp2p/dasy) for a research proof of concept.
-<!-- I would remove the link to dasy, I find it a bit confusing, and the repo just implements something totally different and a fraction of the functionalities -->
+Transit was initially chose for encoding, and Protobuf was added afterwards. This is partly due to the history of the protocol living inside of `status-react`, which is written in Clojurescript.
