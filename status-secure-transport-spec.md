@@ -46,7 +46,7 @@ In this document we describe how a secure channel is established, and how variou
 - **Confidentiality**: The adversary should not be able to learn what data is being exchanged between two Status clients.
 - **Authenticity**: The adversary should not be able to cause either endpoint of a Status 1:1 chat to accept data from any third party as though it came from the other endpoint.
 - **Forward Secrecy**: The adversary should not be able to learn what data was exchanged between two Status clients if, at some later time, the adversary compromises one or both of the endpoint devices.
-- **Integrity**: The adversary should not be able to modify the data.
+- **Integrity**: The adversary should not be able to cause either endpoint of a Status 1:1 chat to accept data that has been tampered with.
 
 All of these properties are ensured by the use of [Signal's Double Ratchet](https://signal.org/docs/specifications/doubleratchet/)
 
@@ -282,7 +282,7 @@ TODO: description here
 > No honest party will accept a message that has been modified in transit.
 
 - Yes.
-- Assuming a user validates (TODO: Check this assumption) every message they are able to decrypt and validates its signature from the sender, then it is not able to be altered in transit.
+- Assuming a user validates (TODO: Check this assumption) every message they are able to decrypt and validate its signature from the sender, then it is not able to be altered in transit.
     * [igorm] i'm really not sure about it, Whisper provides a signature, but I'm not sure we check it anywhere (simple grepping didn't give anything)
     * [andrea] Whisper checks the signature and a public key is derived from it, we check the public key is a meaningful public key. The pk itself is not in the content of the message for public chats/1-to-1 so potentially you could send a message from a random account without having access to the private key, but that would not be much of a deal, as you might just as easily create a random account)
 
@@ -353,7 +353,7 @@ TODO: Verify if this can be done already by looking at Lamport clock difference
 #### Message Unlinkability (NO)
 > If a judge is convinced that a participant authored one message in the conversation, this does not provide evidence that they authored other messages
 
-- Currently, the Status software signs every messages sent with the user's public key, thus making it no able to give unlinkability.  
+- Currently, the Status software signs every messages sent with the user's public key, thus making it unable to provide unlinkability.  
 - This is not necessary though, and could be built in to have an option to not sign. 
 - Side note: moot account allows for this but is a function of the anonymity set that uses it.  The more people that use this account the stronger the unlinkability.
 
@@ -387,7 +387,7 @@ TODO: Verify if this can be done already by looking at Lamport clock difference
         - Accept invitation to group
         - Leave group
     - Non-Members:
-        - Invited by admins show up as "invited" in group; this leaks contacat information
+        - Invited by admins show up as "invited" in group; this leaks contact information
         - Invited people don't opt-in to being invited
 
 TODO: Group chat dynamics should have a documented state diagram
