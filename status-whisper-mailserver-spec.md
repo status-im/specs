@@ -18,7 +18,7 @@
 
 Being mostly offline is an intrinsic property of mobile clients. They need to save network transfer and battery consumption to avoid spending too much money or constant charging. Whisper protocol, on the other hand, is an online protocol. Messages are available in the Whisper network only for short period of time calculate in seconds.
 
-Whisper Mailserver is a Whisper extension that allows to store messages permamently and deliver them to the clients even though they are already not available in the network and expired.
+Whisper Mailserver is a Whisper extension that allows to store messages permanently and deliver them to the clients even though they are already not available in the network and expired.
 
 ## Mailserver
 
