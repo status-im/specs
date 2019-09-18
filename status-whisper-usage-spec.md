@@ -122,10 +122,10 @@ There is some tight coupling between the payload and Whisper:
 
 ## Whisper node configuration
 
-If you want to run a Whisper node and receive messages from Status clients, it must be properly cnofigured.
+If you want to run a Whisper node and receive messages from Status clients, it must be properly configured.
 
 Whisper's Proof Of Work algorithm is used to deter denial of service and various spam/flood attacks against the Whisper network. The sender of a message must perform some work which in this case means processing time. Because Status' main client is a mobile client, this easily leads to battery draining and poor performance of the app itself. Hence, all clients MUST use the following Whisper node settings:
-* proof-of-work not larger than `0.002`
+* proof-of-work requirement not larger than `0.002`
 * time-to-live not lower than `10` (in seconds)
 
 <!-- TODO: provide an instruction how to start a Whisper node with proper configuration using geth.-->
@@ -135,10 +135,11 @@ Whisper's Proof Of Work algorithm is used to deter denial of service and various
 ## Keys management
 
 The protocol requires a key (symmetric or asymmetric) for the following actions:
-* signing a message (a private key)
-* decrypting received messages (a private key or symmetric key).
+* signing & verifying messages (asymmetric key)
+* encrypting & decrypting messages (asymmetric or symmetric key).
 
-As private keys and symmetric keys are required to process incoming messages, they must be available all the time and are stored in memory.
+As asymmetric keys and symmetric keys are required to process incoming messages,
+they must be available all the time and are stored in memory.
 
 Keys management for PFS is described in [Perfect forward secrecy section](#perfect-forward-secrecy-pfs).
 
@@ -205,7 +206,7 @@ As not all messages are encrypted with PFS, a following strategy MAY be used:
 2. Try to decrypt the message payload using PFS algorithm
 2.1. If successful, pass the decrypted value to (3)
 2.2. If failed, pass the unchanged payload to (3)
-3. Decode the payload as described in [Paylooad](#payload) section
+3. Decode the payload as described in [Payloads](https://github.com/status-im/specs/blob/master/status-payloads-spec.md) specification
 
 TODO: link to a separate document (currently in the PR).
 
@@ -232,7 +233,7 @@ Sending a message is fairly easy and relies on the Whisper RPC API, however, som
    4. `topic` MUST be set accordingly to [Topic](#topic) section and hex-encoded
    5. `payload` MUST be a hex-encoded string
    6. `powTime` MAY be arbitrary but should be enough to perform proof-of-work
-   7. `powTarget` MUST be equal or lower than `0.002`.
+   7. `powTarget` MUST be equal or higher than `0.002`.
 
 Note: these instructions are for the Whisper V6 RPC API. If you use Whisper service directly or Go `shhclient`, the parameters might have different types.
 
@@ -249,7 +250,7 @@ Receiving private messages depends on Whisper filters idea. Upon receiving, mess
 
 1. Add your private key to Whisper using [`shh_addPrivateKey`](https://github.com/ethereum/go-ethereum/wiki/Whisper-v6-RPC-API#shh_addprivatekey) and save the result as `sigKeyID`
 2. Call [`shh_subscribe`](https://github.com/ethereum/go-ethereum/wiki/Whisper-v6-RPC-API#shh_subscribe) with criteria:
-   1. `minPow` MUST be at least `0.002`
+   1. `minPow` MAY be at least `0.002`
    2. `topics` MUST be list of hex-encoded topics you expect messages to receive from (follow [Topic](#topic) section)
    3. `allowP2P` MUST be set to `true` if offline messages are supported, otherwise can be `false`.
 
@@ -261,7 +262,7 @@ Learn more following [Whisper V6 RPC API](https://github.com/ethereum/go-ethereu
 
 Public messages are encrypted with a symmetric key which is publicly known so anyone can participate in the conversation.
 
-The fact that anyone can participate makes the public chats voulnerable to spam attacks. Also, there are no moderators of these chats.
+The fact that anyone can participate makes the public chats vulnerable to spam attacks. Also, there are no moderators of these chats.
 
 ## Sending
 
@@ -273,7 +274,7 @@ The fact that anyone can participate makes the public chats voulnerable to spam 
    4. `topic` MUST be set accordingly to [Topic](#topic) section and hex-encoded,
    5. `payload` MUST be a hex-encoded string,
    6. `powTime` MAY be arbitrary but should be enough to perform proof-of-work
-   7. `powTarget` MUST be equal or lower than `0.002`.
+   7. `powTarget` MUST be equal or higher than `0.002`.
 
 Learn more following [Whisper V6 RPC API](https://github.com/ethereum/go-ethereum/wiki/Whisper-v6-RPC-API).
 
@@ -283,7 +284,7 @@ Receiving public messages depends on Whisper filters idea. Upon receiving, messa
 
 1. Calculate a symmetric key using [`shh_generateSymKeyFromPassword`](https://github.com/ethereum/go-ethereum/wiki/Whisper-v6-RPC-API#shh_generatesymkeyfrompassword) passing public chat name as a string and save the result to `symKeyID`
 2. Call [`shh_subscribe`](https://github.com/ethereum/go-ethereum/wiki/Whisper-v6-RPC-API#shh_subscribe) with criteria:
-   1. `minPow` MUST be at least `0.002`
+   1. `minPow` MUST be `0.002` at most
    2. `topics` MUST be list of hex-encoded topics you expect messages to receive from (follow [Topic](#topic) section)
    3. `allowP2P` MUST be set to `true` if offline messages are supported, otherwise can be `false`.
 

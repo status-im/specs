@@ -84,6 +84,8 @@ Furthermore, Status uses the concept of prekeys (through the use of [X3DH](https
 Status uses the following cryptographic primitives:
 - Whisper
     - AES-256-GCM
+    - ECIES
+    - ECDSA
     - KECCAK-256
 - X3DH
     - Elliptic curve Diffie-Hellman key exchange (secp256k1)
