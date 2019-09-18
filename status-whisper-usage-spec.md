@@ -284,7 +284,7 @@ Receiving public messages depends on Whisper filters idea. Upon receiving, messa
 
 1. Calculate a symmetric key using [`shh_generateSymKeyFromPassword`](https://github.com/ethereum/go-ethereum/wiki/Whisper-v6-RPC-API#shh_generatesymkeyfrompassword) passing public chat name as a string and save the result to `symKeyID`
 2. Call [`shh_subscribe`](https://github.com/ethereum/go-ethereum/wiki/Whisper-v6-RPC-API#shh_subscribe) with criteria:
-   1. `minPow` MAY be at least `0.002`
+   1. `minPow` MUST be `0.002` at most
    2. `topics` MUST be list of hex-encoded topics you expect messages to receive from (follow [Topic](#topic) section)
    3. `allowP2P` MUST be set to `true` if offline messages are supported, otherwise can be `false`.
 
