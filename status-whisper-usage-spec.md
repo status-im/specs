@@ -20,6 +20,14 @@
   - [Message encryption](#message-encryption)
   - [Whisper V6 extensions](#whisper-v6-extensions)
     - [Request historic messages](#request-historic-messages)
+      - [shhext_requestMessages](#shhext_requestmessages)
+    <!-- - [Personal discovery topic](#personal-discovery-topic) C.P. Oct 8, 2019 --> 
+    <!-- - [Generic discovery topic](#generic-discovery-topic) C.P. Oc8, 2019 -->
+    - [One-to-one topic](#one-to-one-topic)
+    - [Group chat topic](#group-chat-topic)
+  - [Message encryption](#message-encryption)
+  - [Whisper V6 extensions](#whisper-v6-extensions)
+    - [Request historic messages](#request-historic-messages)
       - [shhext_requestMessages](#shhextrequestmessages)
 
 ## Abstract
@@ -145,9 +153,10 @@ for i = 0; i < topicLen; i++ {
 }
 ```
 
+<!-- NOTE: commented out as it is currently not used.  In code for potential future use. - C.P. Oct 8, 2019 
 ### Personal discovery topic
 
-Personal discovery topic is used to ???
+ Personal discovery topic is used to ???
 
 A client MUST implement it following the algorithm below:
 ```golang
@@ -166,13 +175,14 @@ for i = 0; i < topicLen; i++ {
 }
 ```
 
-Each Status Client SHOULD listen to this topic in order to receive ???
+Each Status Client SHOULD listen to this topic in order to receive ??? -->
 
+<!-- NOTE: commented out as it is no longer valid as of V1. - C.P. Oct 8, 2019 
 ### Generic discovery topic
 
 Generic discovery topic is a legacy topic used to handle all one-to-one chats. The newer implementation should rely on [Partitioned Topic](#partitioned-topic) and [Personal discovery topic](#personal-discovery-topic).
 
-Generic discovery topic MUST be created following [Public chats](#public-chats) topic algorithm using string `contact-discovery` as a name.
+Generic discovery topic MUST be created following [Public chats](#public-chats) topic algorithm using string `contact-discovery` as a name. -->
 
 ### One-to-one topic
 
