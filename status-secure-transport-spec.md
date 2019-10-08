@@ -46,9 +46,9 @@ In this document we describe how a secure channel is established, and how variou
 - **Confidentiality**: The adversary should not be able to learn what data is being exchanged between two Status clients.
 - **Authenticity**: The adversary should not be able to cause either endpoint of a Status 1:1 chat to accept data from any third party as though it came from the other endpoint.
 - **Forward Secrecy**: The adversary should not be able to learn what data was exchanged between two Status clients if, at some later time, the adversary compromises one or both of the endpoint devices.
+- **Integrity**: The adversary should not be able to cause either endpoint of a Status 1:1 chat to accept data that has been tampered with.
 
-<!-- TODO: Integrity should be here -->
-<!-- TODO: It is not clearly stated in this spec how we achieve confidentiality, authenticity and integrity. State this clearly. -->
+All of these properties are ensured by the use of [Signal's Double Ratchet](https://signal.org/docs/specifications/doubleratchet/)
 
 ### Conventions
 
@@ -84,6 +84,8 @@ Furthermore, Status uses the concept of prekeys (through the use of [X3DH](https
 Status uses the following cryptographic primitives:
 - Whisper
     - AES-256-GCM
+    - ECIES
+    - ECDSA
     - KECCAK-256
 - X3DH
     - Elliptic curve Diffie-Hellman key exchange (secp256k1)
@@ -106,9 +108,7 @@ Every client initially generates some key material which is stored locally:
 
 More details can be found in the `X3DH Prekey bundle creation` section of [Account specification](./status-account-spec.md#x3dh-prekey-bundle-creation).
 
-A `contact-code` is a protobuf `Bundle` message, encoded in `JSON` and converted to their `base64` string representation.
-
-Prekey bundles are can be extracted from any user's messages, or found via searching for their specific contact code topic, `{IK}-contact-code`.
+Prekey bundles can be extracted from any user's messages, or found via searching for their specific topic, `{IK}-contact-code`.
 
 TODO: See below on bundle retrieval, this seems like enhancement and parameter for recommendation
 
@@ -126,6 +126,8 @@ In the X3DH specification, a shared server is typically used to store bundles an
 - Whisper
 
 <!-- TODO: Comment, it isn't clear what we actually _do_. It seems as if this is exploring the problem space. From a protocol point of view, it might make sense to describe the interface, and then have a recommendation section later on that specifies what we do. See e.g. Signal's specs where they specify specifics later on.  -->
+
+Currently only public and one-to-one message exchanges and Whisper is used to exchange bundles.
 
 Since bundles stored in QR codes or ENS records cannot be updated to delete already used keys, the approach taken is to rotate more frequently the bundle (once every 24 hours), which will be propagated by the app through the channel available.
 
@@ -190,8 +192,6 @@ The initial message sent by Alice to Bob is sent as a top-level `ProtocolMessage
 ``` protobuf
 message ProtocolMessage {
 
-  Bundle bundle = 1;
-
   string installation_id = 2;
 
   repeated Bundle bundles = 3;
@@ -205,7 +205,6 @@ message ProtocolMessage {
 }
 ```
 
-- `bundle`: optional bundle is exchanged with each message, deprecated;
 - `bundles`: a sequence of bundles
 - `installation_id`: the installation id of the sender
 - `direct_message` is a map of `DirectMessageProtocol` indexed by `installation-id`
@@ -285,7 +284,7 @@ TODO: description here
 > No honest party will accept a message that has been modified in transit.
 
 - Yes.
-- Assuming a user validates (TODO: Check this assumption) every message they are able to decrypt and validates its signature from the sender, then it is not able to be altered in transit.
+- Assuming a user validates (TODO: Check this assumption) every message they are able to decrypt and validate its signature from the sender, then it is not able to be altered in transit.
     * [igorm] i'm really not sure about it, Whisper provides a signature, but I'm not sure we check it anywhere (simple grepping didn't give anything)
     * [andrea] Whisper checks the signature and a public key is derived from it, we check the public key is a meaningful public key. The pk itself is not in the content of the message for public chats/1-to-1 so potentially you could send a message from a random account without having access to the private key, but that would not be much of a deal, as you might just as easily create a random account)
 
@@ -356,7 +355,7 @@ TODO: Verify if this can be done already by looking at Lamport clock difference
 #### Message Unlinkability (NO)
 > If a judge is convinced that a participant authored one message in the conversation, this does not provide evidence that they authored other messages
 
-- Currently, the Status software signs every messages sent with the user's public key, thus making it no able to give unlinkability.  
+- Currently, the Status software signs every messages sent with the user's public key, thus making it unable to provide unlinkability.  
 - This is not necessary though, and could be built in to have an option to not sign. 
 - Side note: moot account allows for this but is a function of the anonymity set that uses it.  The more people that use this account the stronger the unlinkability.
 
@@ -390,7 +389,7 @@ TODO: Verify if this can be done already by looking at Lamport clock difference
         - Accept invitation to group
         - Leave group
     - Non-Members:
-        - Invited by admins show up as "invited" in group; this leaks contacat information
+        - Invited by admins show up as "invited" in group; this leaks contact information
         - Invited people don't opt-in to being invited
 
 TODO: Group chat dynamics should have a documented state diagram

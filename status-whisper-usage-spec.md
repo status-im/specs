@@ -9,7 +9,7 @@
   - [Reason](#reason)
   - [Terminology](#terminology)
   - [Whisper node configuration](#whisper-node-configuration)
-  - [Topics](#topics)
+  - [Keys management](#keys-management)
     - [Contact code topic](#contact-code-topic)
     - [Partitioned topic](#partitioned-topic)
     - [Public chats](#public-chats)
@@ -53,11 +53,26 @@ encryption properties to support asynchronous chat.
 
 ## Whisper node configuration
 
-Whisper's Proof Of Work algorithm is used to deter denial of service and various spam/flood attacks against the Whisper network. The sender of a message MUST perform some work which in this case means processing time. Because Status' main client is a mobile client, this easily leads to battery draining and poor performance of the app itself. Hence, all clients MUST use the following Whisper node settings:
-* proof-of-work not larger than `0.002`
+If you want to run a Whisper node and receive messages from Status clients, it must be properly configured.
+
+Whisper's Proof Of Work algorithm is used to deter denial of service and various spam/flood attacks against the Whisper network. The sender of a message must perform some work which in this case means processing time. Because Status' main client is a mobile client, this easily leads to battery draining and poor performance of the app itself. Hence, all clients MUST use the following Whisper node settings:
+* proof-of-work requirement not larger than `0.002`
 * time-to-live not lower than `10` (in seconds)
 
-## Topics
+<!-- TODO: provide an instruction how to start a Whisper node with proper configuration using geth.-->
+
+<!-- @TODO: is there a higher bound -->
+
+## Keys management
+
+The protocol requires a key (symmetric or asymmetric) for the following actions:
+* signing & verifying messages (asymmetric key)
+* encrypting & decrypting messages (asymmetric or symmetric key).
+
+As asymmetric keys and symmetric keys are required to process incoming messages,
+they must be available all the time and are stored in memory.
+
+Keys management for PFS is described in [Perfect forward secrecy section](#perfect-forward-secrecy-pfs).
 
 The Status protocols uses a few particular Whisper topics to achieve its goals.
 
@@ -165,7 +180,7 @@ In order to receive one-to-one messages incoming from a public key `P`, the Stat
 
 ### Group chat topic
 
-TODO
+Group chats does not have a dedicated topic. All group chat messages (including membership updates) are sent as one-to-one messages to multiple recipients.
 
 ## Message encryption
 
