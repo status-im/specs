@@ -21,14 +21,6 @@
   - [Whisper V6 extensions](#whisper-v6-extensions)
     - [Request historic messages](#request-historic-messages)
       - [shhext_requestMessages](#shhext_requestmessages)
-    <!-- - [Personal discovery topic](#personal-discovery-topic) C.P. Oct 8, 2019 --> 
-    <!-- - [Generic discovery topic](#generic-discovery-topic) C.P. Oc8, 2019 -->
-    - [One-to-one topic](#one-to-one-topic)
-    - [Group chat topic](#group-chat-topic)
-  - [Message encryption](#message-encryption)
-  - [Whisper V6 extensions](#whisper-v6-extensions)
-    - [Request historic messages](#request-historic-messages)
-      - [shhext_requestMessages](#shhextrequestmessages)
 
 ## Abstract
 
@@ -204,9 +196,9 @@ One-to-one messages are encrypted using asymmetric encryption.
 
 ### Request historic messages
 
-Sends a request for historic messages to a Mailserver. The Mailserver node MUST be a direct peer and MUST be marked a trusted (using `shh_markTrustedPeer`).
+Sends a request for historic messages to a Mailserver. The Mailserver node MUST be a direct peer and MUST be marked as trusted (using `shh_markTrustedPeer`).
 
-The request does not wait for the response. It marely sends a peer-to-peer message to the Mailserver and it's up to Mailserver to process it and start sending historic messages.
+The request does not wait for the response. It merely sends a peer-to-peer message to the Mailserver and it's up to Mailserver to process it and start sending historic messages.
 
 The drawback of this approach is that it is impossible to tell which historic messages are the result of which request.
 
@@ -216,13 +208,13 @@ It's recommended to return messages from newest to oldest. To move further back 
 
 **Parameters**:
 1. Object - The message request object:
-* `mailServerPeer` - `String`: Mailserver's enode address.
-* `from` - `Number` (optional): Lower bound of time range as unix timestamp, default is 24 hours back from now.
-* `to` - `Number` (optional): Upper bound of time range as unix timestamp, default is now.
-* `limit` - `Number` (optional): Limit the number of messages sent back, default is no limit.
-* `cursor` - `String` (optional): Used for paginated requests.
-* `topics` - `Array`: hex-encoded message topics.
-* `symKeyID` - `String`: an ID of a symmetric key to authenticate to Mailserver, derived from Mailserver password.
+   * `mailServerPeer` - `String`: Mailserver's enode address.
+   * `from` - `Number` (optional): Lower bound of time range as unix timestamp, default is 24 hours back from now.
+   * `to` - `Number` (optional): Upper bound of time range as unix timestamp, default is now.
+   * `limit` - `Number` (optional): Limit the number of messages sent back, default is no limit.
+   * `cursor` - `String` (optional): Used for paginated requests.
+   * `topics` - `Array`: hex-encoded message topics.
+   * `symKeyID` - `String`: an ID of a symmetric key to authenticate to Mailserver, derived from Mailserver password.
 
 **Returns**:
 `Boolean` - returns `true` if the request was sent.
