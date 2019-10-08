@@ -63,11 +63,11 @@ The Status protocols uses a few particular Whisper topics to achieve its goals.
 
 ### Contact code topic
 
-Contact code topic is used for ???
+Contact code topic is used to facilitate the discovery of X3DH bundles so that the first message can be PFS-encrypted.
 
-<!-- TODO: describe who should listen to it -->
+Each user publishes periodically to this topic. If user A wants to contact user B, she SHOULD look for their bundle on this contact code topic.
 
-It MUST be created following the algorithm below:
+Contact code topic MUST be created following the algorithm below:
 ```golang
 contactCode := "0x" + hexEncode(activePublicKey) + "-contact-code"
 
