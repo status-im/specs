@@ -42,3 +42,5 @@ To avoid duplicate envelopes, only connect to one Waku node. Benign duplicate en
 2. Topic specific recommendations
 
 TBD.
+
+<!-- TODO: Accounting for resources bonus, I guess that's the wacky part? -->
