@@ -23,12 +23,9 @@ A client is said to implement waku mode if it connects to a Waku node and acts a
 
 ## Amendments to Whisper
 
-Waku mode is compatible with [EIP-627](https://eips.ethereum.org/EIPS/eip-627)
-and simplify extends its capabilities. It does this through a new packet code,
-as well as some client specific recommendations. Two specific protocol changes
-are done:
+Waku mode is compatible with [EIP-627](https://eips.ethereum.org/EIPS/eip-627) and simply extends its capabilities. It does this through a new packet code, as well as some client specific recommendations. Two specific protocol changes are done:
 
-1. Modify EIP627 by adding a new packet code, e..g `Topic List [101, bytes]` where bytes is a list of N topics.
+1. Modify EIP627 by adding a new packet code, e.g. `Topic List [101, bytes]` where bytes is a list of N topics.
 
 Format TBD.
 
@@ -40,9 +37,7 @@ Method TBD.
 
 1. Avoid duplicate envelopes
 
-To avoid duplicate envelopes, only connect to one Waku node. Benign duplicate
-envelopes is an intrinsic property of Whisper which often leads to a N factor
-increase in traffic, where N is the number of peers you are connected to.
+To avoid duplicate envelopes, only connect to one Waku node. Benign duplicate envelopes is an intrinsic property of Whisper which often leads to a N factor increase in traffic, where N is the number of peers you are connected to.
 
 2. Topic specific recommendations
 
