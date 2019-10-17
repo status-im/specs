@@ -218,3 +218,7 @@ It's recommended to return messages from newest to oldest. To move further back 
 
 **Returns**:
 `Boolean` - returns `true` if the request was sent.
+
+The above `topics` is then converted into a bloom filter and then and sent to the Mailserver.
+
+<!-- TODO: Clarify actual request with bloom filter to mailserver -->
