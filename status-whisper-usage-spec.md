@@ -9,6 +9,7 @@
   - [Reason](#reason)
   - [Terminology](#terminology)
   - [Whisper node configuration](#whisper-node-configuration)
+  - [Rate limiting](#rate-limiting)
   - [Keys management](#keys-management)
     - [Contact code topic](#contact-code-topic)
     - [Partitioned topic](#partitioned-topic)
@@ -20,7 +21,7 @@
   - [Message encryption](#message-encryption)
   - [Whisper V6 extensions](#whisper-v6-extensions)
     - [Request historic messages](#request-historic-messages)
-      - [shhext_requestMessages](#shhext_requestmessages)
+      - [shhext_requestMessages](#shhextrequestmessages)
 
 ## Abstract
 
@@ -58,6 +59,14 @@ If you want to run a Whisper node and receive messages from Status clients, it m
 Whisper's Proof Of Work algorithm is used to deter denial of service and various spam/flood attacks against the Whisper network. The sender of a message must perform some work which in this case means processing time. Because Status' main client is a mobile client, this easily leads to battery draining and poor performance of the app itself. Hence, all clients MUST use the following Whisper node settings:
 * proof-of-work requirement not larger than `0.002`
 * time-to-live not lower than `10` (in seconds)
+
+## Rate limiting
+
+In order to provide a very basic Denial-of-Service attack protection, there SHOULD be a rate limiting applied to leaf Whisper nodes, i.e. nodes not being controler within a cluster.
+
+Currently, the rate limiting is applied on peer IDs and IPs from which the packets come from. It is still in progress to decide on specific numbers. The Whisper nodes within a cluster SHOULD be whitelisted to avoid dropping connection when broadcasting messages between each other. When a limit is hit, the packet or the connection MUST be dropped (TBD).
+
+The rate limiting SHOULD be also applied on a topic level in order to prevent a peer to spam a particular channel. The specific limit per peer per topic is to be decided.
 
 <!-- TODO: provide an instruction how to start a Whisper node with proper configuration using geth.-->
 
@@ -145,7 +154,7 @@ for i = 0; i < topicLen; i++ {
 }
 ```
 
-<!-- NOTE: commented out as it is currently not used.  In code for potential future use. - C.P. Oct 8, 2019 
+<!-- NOTE: commented out as it is currently not used.  In code for potential future use. - C.P. Oct 8, 2019
 ### Personal discovery topic
 
  Personal discovery topic is used to ???
@@ -169,7 +178,7 @@ for i = 0; i < topicLen; i++ {
 
 Each Status Client SHOULD listen to this topic in order to receive ??? -->
 
-<!-- NOTE: commented out as it is no longer valid as of V1. - C.P. Oct 8, 2019 
+<!-- NOTE: commented out as it is no longer valid as of V1. - C.P. Oct 8, 2019
 ### Generic discovery topic
 
 Generic discovery topic is a legacy topic used to handle all one-to-one chats. The newer implementation should rely on [Partitioned Topic](#partitioned-topic) and [Personal discovery topic](#personal-discovery-topic).
