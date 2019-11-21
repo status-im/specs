@@ -29,13 +29,13 @@ It is important to notice that Mailserver will only handle requests from its dir
 
 ### Archiving messages
 
-A node which wants to provide a mailserver capability MUST store envelopes incoming in messages packets identify by a code `0x01`. The envelopes can be stored in an arbitrary format, however, they MUST be serialized and deserialized to Whisper envelope format.
+A node which wants to provide mailserver functionality MUST store envelopes from incoming messages packets (Whisper packet-code `0x01`). The envelopes can be stored in an arbitrary format, however, they MUST be serialized and deserialized to Whisper envelope format.
 
-A mailserver SHOULD store envelopes for all topics to be useful by any peer, however, when for personal use case it MAY store only subset of topics.
+A mailserver SHOULD store envelopes for all topics to be generally useful for any peer, however, for specific use cases it MAY store envelopes for a subset of topics.
 
 ### Requesting messages
 
-In order to request historic messages, a node MUST send a packet P2P Request (`0x7e`) to its peer providing mailserver capability. This packet requires one argument which MUST be a Whisper envelope.
+In order to request historic messages, a node MUST send a packet P2P Request (`0x7e`) to its peer providing mailserver functionality. This packet requires one argument which MUST be a Whisper envelope.
 
 In the Whisper envelope's payload section, there MUST be RLP-encoded information about the details of the request:
 
