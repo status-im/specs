@@ -35,7 +35,7 @@ A mailserver SHOULD store envelopes for all topics to be generally useful for an
 
 ### Requesting messages
 
-In order to request historic messages, a node MUST send a packet P2P Request (`0x7e`) to its peer providing mailserver functionality. This packet requires one argument which MUST be a Whisper envelope.
+In order to request historic messages, a node MUST send a packet P2P Request (`0x7e`) to a peer providing mailserver functionality. This packet requires one argument which MUST be a Whisper envelope.
 
 In the Whisper envelope's payload section, there MUST be RLP-encoded information about the details of the request:
 
@@ -49,13 +49,15 @@ In the Whisper envelope's payload section, there MUST be RLP-encoded information
 `Limit`: 4-byte wide unsigned integer limiting the number of returned envelopes
 `Cursor`: 32-byte wide array of a cursor returned from the previous request (optional)
 
+The `Cursor` field SHOULD be filled in if a number of envelopes between `Lower` and `Upper` is greater than `Limit` so that the requester can send another request using the obtained `Cursor` value. What exactly is in the `Cursor` is up to the implementation. The requester SHOULD NOT use a `Cursor` obtained from one mailserver in a request to another mailserver because the format or the result MAY be different.
+
 The envelope MUST be signed with a symmetric key agreed between the requester and Mailserver.
 
 ### Receiving historic messages
 
-Historic messages MUST be sent to a peer with as packet with a P2P Message code (`0x7f`) followed by a single Whisper envelope OR an array of Whisper envelopes. A peer receiving historic message MUST handle both cases.
+Historic messages MUST be sent to a peer as a packet with a P2P Message code (`0x7f`) followed by an array of Whisper envelopes. It is incompatible with the original Whisper spec (EIP-627) because it allows only a single envelope, however, an array of envelopes is much more performant. In order to stay compatible with EIP-627, a peer receiving historic message MUST handle both cases.
 
-In order to accept a P2P Message packet, a node MUST trust a selected Mailserver.
+In order to receive historic messages from a mailserver, a node MUST trust the selected mailserver, that is allow to receive packets with the P2P Message code. By default, such packets are discarded.
 
 Received envelopes MUST be passed through the Whisper envelopes pipelines so that they are picked up by registered filters and passed to subscribers.
 
