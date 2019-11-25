@@ -78,7 +78,7 @@ Each node SHOULD broadcast its rate limits to its peers using rate limits packet
 `PeerID limits`: 4-byte wide unsigned integer
 `Topic limits`: 4-byte wide unsigned integer
 
-The rate limits MAY be also sent as an optional parameter in the handshake.
+The rate limits MAY also be sent as an optional parameter in the handshake.
 
 Each node SHOULD record rate limits advertised by its peers and adjust the number of sent packets in order not to exceed peer's rate limits. If the limit gets exceeded, the connection MAY be dropped.
 
