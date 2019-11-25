@@ -7,7 +7,8 @@
   - [Abstract](#abstract)
   - [Mailserver](#mailserver)
     - [Archiving messages](#archiving-messages)
-    - [Delivering messages](#delivering-messages)
+    - [Requesting messages](#requesting-messages)
+    - [Receiving historic messages](#receiving-historic-messages)
   - [Security considerations](#security-considerations)
     - [Confidentiality](#confidentiality)
     - [Altruistic and centralized operator risk](#altruistic-and-centralized-operator-risk)
@@ -28,19 +29,49 @@ It is important to notice that Mailserver will only handle requests from its dir
 
 ### Archiving messages
 
-In order to store messages, one MUST implement the interface below and MUST register it within a Whisper service. The only known Whisper implementation that allows that is [geth](https://github.com/ethereum/go-ethereum).
+A node which wants to provide mailserver functionality MUST store envelopes from incoming message packets (Whisper packet-code `0x01`). The envelopes can be stored in any format, however they MUST be serialized and deserialized to the Whisper envelope format.
 
-`MailServer` interface consist of:
-* `Archive(env *Envelope)`
-* `DeliverMail(whisperPeer *Peer, request *Envelope)`
+A mailserver SHOULD store envelopes for all topics to be generally useful for any peer, however for specific use cases it MAY store envelopes for a subset of topics.
 
-### Delivering messages
+### Requesting messages
 
-Mailserver delivers archieved messages to a peer after receiving a Whisper packet with code `p2pRequestCode`. Messages are delivered asynchronously, i.e. a requester sends a Whisper packet with code `p2pRequestCode` and at some point later, it will start receiving Whisper packets with code `p2pMessageCode`.
+In order to request historic messages, a node MUST send a packet P2P Request (`0x7e`) to a peer providing mailserver functionality. This packet requires one argument which MUST be a Whisper envelope.
 
-How a peer can initialize the request to a Mailserver is up to the implementator. Status peers acting as Mailserver expose two additional JSON-RPC methods: `shhext_requestMessages` and `shh_requestMessagesSync`.
+In the Whisper envelope's payload section, there MUST be RLP-encoded information about the details of the request:
 
-Because all packets exchanged between a Mailserver and a peer are p2p packets, all filters created by a peer from which it expectes to receive archived messages MUST allow processing of direct peer-to-peer messages.
+```
+[ Lower, Upper, Bloom, Limit, Cursor ]
+```
+
+`Lower`: 4-byte wide unsigned integer (UNIX time in seconds; oldest requested envelope's creation time)
+`Upper`: 4-byte wide unsigned integer (UNIX time in seconds; newest requested envelope's creation time)
+`Bloom`: 64-byte wide array of Whisper topics encoded in a bloom filter to filter envelopes
+`Limit`: 4-byte wide unsigned integer limiting the number of returned envelopes
+`Cursor`: an array of a cursor returned from the previous request (optional)
+
+The `Cursor` field SHOULD be filled in if a number of envelopes between `Lower` and `Upper` is greater than `Limit` so that the requester can send another request using the obtained `Cursor` value. What exactly is in the `Cursor` is up to the implementation. The requester SHOULD NOT use a `Cursor` obtained from one mailserver in a request to another mailserver because the format or the result MAY be different.
+
+The envelope MUST be signed with a symmetric key agreed between the requester and Mailserver.
+
+### Receiving historic messages
+
+Historic messages MUST be sent to a peer as a packet with a P2P Message code (`0x7f`) followed by an array of Whisper envelopes. It is incompatible with the original Whisper spec (EIP-627) because it allows only a single envelope, however, an array of envelopes is much more performant. In order to stay compatible with EIP-627, a peer receiving historic message MUST handle both cases.
+
+In order to receive historic messages from a mailserver, a node MUST trust the selected mailserver, that is allow to receive packets with the P2P Message code. By default, such packets are discarded.
+
+Received envelopes MUST be passed through the Whisper envelopes pipelines so that they are picked up by registered filters and passed to subscribers.
+
+For a requester, to know that all messages have been sent by mailserver, it SHOULD handle P2P Request Complete code (`0x7d`). This code is followed by a a byte array with:
+
+```
+[ RequestID, LastEnvelopeHash, Cursor ]
+```
+
+`RequestID`: 32-byte wide array with a hash of the envelope containing request details
+`LastEnvelopeHash`: 32-byte wide array with a has of the last set envelope for the request
+`Cursor`: an array of a cursor returned from the previous request (optional)
+
+If `Cursor` is not empty, it means that not all messages were sent due to the set `Limit` in the request. One or more consecutive requests MAY be sent with `Cursor` field filled in in order to receive the rest of messages.
 
 ## Security considerations
 
