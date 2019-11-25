@@ -62,11 +62,25 @@ Whisper's Proof Of Work algorithm is used to deter denial of service and various
 
 ## Rate limiting
 
-In order to provide a very basic Denial-of-Service attack protection, there SHOULD be a rate limiting applied to leaf Whisper nodes, i.e. nodes not being controler within a cluster.
+In order to provide an optional very basic Denial-of-Service attack protection, each node SHOULD define its own rate limits. The rate limits SHOULD be applied on IPs, peer IDs, and envelope topics.
 
-Currently, the rate limiting is applied on peer IDs and IPs from which the packets come from. It is still in progress to decide on specific numbers. The Whisper nodes within a cluster SHOULD be whitelisted to avoid dropping connection when broadcasting messages between each other. When a limit is hit, the packet or the connection MUST be dropped (TBD).
+Each node MAY decide to whitelist, i.e. do not rate limit, selected IPs or peer IDs.
 
-The rate limiting SHOULD be also applied on a topic level in order to prevent a peer to spam a particular channel. The specific limit per peer per topic is to be decided.
+If a peer exceeds node's rate limits, the connection between them MAY be dropped.
+
+Each node SHOULD broadcast its rate limits to its peers using rate limits packet code (`0x14`). The rate limits is RLP-encoded information:
+
+```
+[ IP limits, PeerID limits, Topic limits ]
+```
+
+`IP limits`: 4-byte wide unsigned integer
+`PeerID limits`: 4-byte wide unsigned integer
+`Topic limits`: 4-byte wide unsigned integer
+
+The rate limits MAY be also sent as an optional parameter in the handshake.
+
+Each node SHOULD record rate limits advertised by its peers and adjust the number of sent packets in order not to exceed peer's rate limits. If the limit gets exceeded, the connection MAY be dropped.
 
 <!-- TODO: provide an instruction how to start a Whisper node with proper configuration using geth.-->
 
