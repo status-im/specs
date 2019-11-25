@@ -22,7 +22,7 @@ Whisper Mailserver is a Whisper extension that allows to store messages permanen
 
 ## Mailserver
 
-From the network perspective, Mailserver is just like any other Whisper node. The only different is that it has a capability of archiving messages and delivering them to its peers on-demand.
+From the network perspective, Mailserver is just like any other Whisper node. The only difference is that it has a capability of archiving messages and delivering them to its peers on-demand.
 
 It is important to notice that Mailserver will only handle requests from its direct peers and exchanged packets between Mailserver and a peer are p2p messages.
 
