@@ -38,28 +38,28 @@ Status should follow all standards as possible. Whenever a feature is needed, it
 Support: Dependency
 Reference: https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki
 Description: Enable wallets to derive multiple private keys from the same seed.
-Used for:  Dependency of BIP39 and BIP43
+Used for: Dependency of BIP39 and BIP43
 
 ### BIP39 - Mnemonic code for generating deterministic keys
 
 Support: Dependency
 Reference: https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki
 Description: Enable wallet to create private key based on a safe seed phrase.
-Used for:  Important for security and user experience.
+Used for: Security and user experience.
 
 ### BIP43 - Purpose Field for Deterministic Wallets
 
 Support: Dependency
 Reference: https://github.com/bitcoin/bips/blob/master/bip-0043.mediawiki
 Description: Enable wallet to create private keys branched for a specific purpose.
-Used for:  Dependency of BIP44, uses "ethereum" coin.
+Used for: Dependency of BIP44, uses "ethereum" coin.
 
 ### BIP44 - Multi-Account Hierarchy for Deterministic Wallets
 
 Support: Dependency
 Reference: https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki
 Description: Enable wallet to derive multiple accounts in top of BIP39
-Used for:  Important as a privacy feature.
+Used for: Privacy
 Sourcecode: https://github.com/status-im/status-react/blob/develop/src/status_im/constants.cljs#L240
 Observation: BIP44 don't solve privacy issues regarding the transparency of transactions, therefore directly connected addresses through a transactions can be identifiable by a "network reconnaissance attack" over transaction history, this attack together with leakage of information from centralized services, such as exchanges, would be fatal against the whole privacy of users, regardless of BIP44.
 
@@ -68,7 +68,7 @@ Observation: BIP44 don't solve privacy issues regarding the transparency of tran
 Support: Full
 Reference: https://eips.ethereum.org/EIPS/eip-20
 Description: Enable wallets to use tokens based on smart contracts compilant with this standard. 
-Used for:  Important as wallet feature.
+Used for: Wallet feature.
 Sourcecode: https://github.com/status-im/status-react/blob/develop/src/status_im/ethereum/tokens.cljs
 
 ### EIP55 - Mixed-case checksum address encoding
@@ -76,7 +76,7 @@ Sourcecode: https://github.com/status-im/status-react/blob/develop/src/status_im
 Support: Full
 Reference: https://eips.ethereum.org/EIPS/eip-55
 Description: Checksum standard that uses lowercase and uppercase inside address hex value.
-Used for:  Important for sanity check of forms using ethereum address.
+Used for: Sanity check of forms using ethereum address.
 Related: https://github.com/status-im/status-react/issues/4959 https://github.com/status-im/status-react/issues/8707
 Sourcecode: https://github.com/status-im/status-react/blob/develop/src/status_im/ethereum/eip55.cljs
 
@@ -85,7 +85,7 @@ Sourcecode: https://github.com/status-im/status-react/blob/develop/src/status_im
 Support: Partial
 Reference: https://github.com/ethereum/EIPs/issues/67
 Description: A standard way of creating Ethereum URIs for various use-cases.
-Used for:  web3 feature
+Used for: Legacy support
 https://github.com/status-im/status-react/issues/875
 
 ### EIP137 - Ethereum Domain Name Service - Specification 
@@ -93,7 +93,7 @@ https://github.com/status-im/status-react/issues/875
 Support: Partial
 Reference: https://eips.ethereum.org/EIPS/eip-137
 Description: Enable wallets to lookup ENS names.
-Used for:  important for user experience, as a wallet and identity feature.
+Used for: User experience, as a wallet and identity feature, usernames.
 Sourcecode: https://github.com/status-im/status-react/blob/develop/src/status_im/ethereum/ens.cljs#L86
 
 ### EIP155 - Simple replay attack protection
@@ -101,7 +101,7 @@ Sourcecode: https://github.com/status-im/status-react/blob/develop/src/status_im
 Support: Full
 Reference: https://eips.ethereum.org/EIPS/eip-155
 Description: Defined chainId parameter in the singed ethereum transaction payload.
-Used for: signing transactions, crucial to safety of users against replay attacks.
+Used for: Signing transactions, crucial to safety of users against replay attacks.
 Sourcecode: https://github.com/status-im/status-react/blob/develop/src/status_im/ethereum/core.cljs
 
 ### EIP165 - Standard Interface Detection
@@ -109,7 +109,7 @@ Sourcecode: https://github.com/status-im/status-react/blob/develop/src/status_im
 Support: Dependency/Partial
 Reference: https://eips.ethereum.org/EIPS/eip-165
 Description: Standard interface for contract to answer if it supports other interfaces.
-Used for:  a dependency of ENS and EIP721.
+Used for: Dependency of ENS and EIP721.
 Sourcecode: https://github.com/status-im/status-react/blob/develop/src/status_im/ethereum/eip165.cljs
 
 ### EIP181 - ENS support for reverse resolution of Ethereum addresses 
@@ -117,7 +117,7 @@ Sourcecode: https://github.com/status-im/status-react/blob/develop/src/status_im
 Support: Partial
 Reference: https://eips.ethereum.org/EIPS/eip-181
 Description: Enable wallets to render reverse resolution of Ethereum addresses
-Used for:  important as feature
+Used for: Wallet feature
 Sourcecode: https://github.com/status-im/status-react/blob/develop/src/status_im/ethereum/ens.cljs#L86
 
 ### EIP191 - Signed Message
@@ -125,21 +125,21 @@ Sourcecode: https://github.com/status-im/status-react/blob/develop/src/status_im
 Support: Full
 Reference: https://eips.ethereum.org/EIPS/eip-191
 Description: Contract signature standard, adds an obrigatory padding to signed message to differentiate from Ethereum Transaction messages. 
-Used for:  Important for Dapp support and security, dependency of ERC712.
+Used for: Dapp support, security, dependency of ERC712.
 
 ### EIP627 - Whisper Specification
 
 Support: Full
 Reference: https://eips.ethereum.org/EIPS/eip-627
 Description: format of Whisper messages within the ÐΞVp2p Wire Protocol
-Used for: chat protocol
+Used for: Chat protocol
 
 ### EIP681 - URL Format for Transaction Requests
 
 Support: Partial
 Reference: https://eips.ethereum.org/EIPS/eip-681
 Description: A link that pop up a transaction in the wallet. 
-Used for:  Useful as QRCode data for tranasction requests, chat transaction requests and for dapp links to transaction requests.
+Used for: Useful as QRCode data for tranasction requests, chat transaction requests and for dapp links to transaction requests.
 Sourcecode: https://github.com/status-im/status-react/blob/develop/src/status_im/ethereum/eip681.cljs
 Related: [Issue #9183: URL Format for Transaction Requests (EIP681) is poorly supported](https://github.com/status-im/status-react/issues/9183) https://github.com/status-im/status-react/pull/9240 https://github.com/status-im/status-react/issues/9238 https://github.com/status-im/status-react/issues/7214 https://github.com/status-im/status-react/issues/7325 https://github.com/status-im/status-react/issues/8150
 
@@ -148,7 +148,7 @@ Related: [Issue #9183: URL Format for Transaction Requests (EIP681) is poorly su
 Support: Partial
 Reference: https://eips.ethereum.org/EIPS/eip-712
 Description: Standarize types for contract siganture, allowing users to easily inspect whats being signed.
-Used for:  important for user experience and safety.
+Used for: User experience, security.
 Related: https://github.com/status-im/status-react/issues/5461 https://github.com/status-im/status-react/commit/ba37f7b8d029d3358c7b284f6a2383b9ef9526c9
 
 ### EIP721 - Non Fungible Token
@@ -156,7 +156,7 @@ Related: https://github.com/status-im/status-react/issues/5461 https://github.co
 Support: Partial
 Reference: https://eips.ethereum.org/EIPS/eip-721
 Description: Enable wallets to use tokens based on smart contracts compilant with this standard. 
-Used for:  Important as wallet feature.
+Used for: Wallet feature.
 Related: https://github.com/status-im/status-react/issues/8909
 Sourcecode: https://github.com/status-im/status-react/blob/develop/src/status_im/ethereum/erc721.cljs https://github.com/status-im/status-react/blob/develop/src/status_im/ethereum/tokens.cljs
 
@@ -164,7 +164,7 @@ Sourcecode: https://github.com/status-im/status-react/blob/develop/src/status_im
 
 Support: Full
 Reference: https://github.com/ethereum/EIPs/issues/945
-Used for:  web3 feature
+Used for: Sharing contactcode, reading transaction requests. 
 Related: https://github.com/status-im/status-react/issues/5870
 
 ### EIP1102 - Opt-in account exposure
@@ -172,7 +172,7 @@ Related: https://github.com/status-im/status-react/issues/5870
 Support: Full
 Reference: https://eips.ethereum.org/EIPS/eip-1102
 Description: Allow users to opt-in the exposure of their ethereum address to dapps they browse.
-Used for: important for user privacy.
+Used for: Privacy, DApp support.
 Related: https://github.com/status-im/status-react/issues/7985
 
 ### EIP1193 - Ethereum Provider JavaScript API
@@ -180,7 +180,7 @@ Related: https://github.com/status-im/status-react/issues/7985
 Support: Full
 Reference: https://eips.ethereum.org/EIPS/eip-1193
 Description: Allows dapps to recognize event changes on wallet
-Used for:  important for DApps work properly.
+Used for: DApp support.
 Related: https://github.com/status-im/status-react/pull/7246
 
 ### EIP1577 - contenthash field for ENS
@@ -188,7 +188,7 @@ Related: https://github.com/status-im/status-react/pull/7246
 Support: Partial
 Reference: https://eips.ethereum.org/EIPS/eip-1577
 Description: Allows users browse ENS domains using contenthash standard.
-Used for:  important as feature
+Used for: Browser, DApp support
 Related: https://github.com/status-im/status-react/issues/6688
 Sourcecode: https://github.com/status-im/status-react/blob/develop/src/status_im/utils/contenthash.cljs https://github.com/status-im/status-react/blob/develop/test/cljs/status_im/test/utils/contenthash.cljs#L5
 
@@ -197,7 +197,7 @@ Sourcecode: https://github.com/status-im/status-react/blob/develop/src/status_im
 Support: Partial
 Reference: https://eips.ethereum.org/EIPS/eip-1581 
 Description: Allow wallet to derive keys that are less sensible (non wallet)
-Used for:  important for security (dont reuse wallet key) and user experience (dont request keycard every login)
+Used for: Security (dont reuse wallet key) and user experience (dont request keycard every login)
 Related: https://github.com/status-im/status-react/issues/9088 https://github.com/status-im/status-react/pull/9096
 Sourcecode: https://github.com/status-im/status-react/blob/develop/src/status_im/constants.cljs#L242
 
