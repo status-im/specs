@@ -9,12 +9,12 @@
   - [Reason](#reason)
   - [Terminology](#terminology)
   - [Whisper node configuration](#whisper-node-configuration)
+  - [Handshake](#handshake)
   - [Rate limiting](#rate-limiting)
   - [Keys management](#keys-management)
     - [Contact code topic](#contact-code-topic)
     - [Partitioned topic](#partitioned-topic)
     - [Public chats](#public-chats)
-    - [Personal discovery topic](#personal-discovery-topic)
     - [Generic discovery topic](#generic-discovery-topic)
     - [One-to-one topic](#one-to-one-topic)
     - [Group chat topic](#group-chat-topic)
@@ -60,6 +60,20 @@ Whisper's Proof Of Work algorithm is used to deter denial of service and various
 * proof-of-work requirement not larger than `0.002`
 * time-to-live not lower than `10` (in seconds)
 
+## Handshake
+
+Handshake is a RLP-encoded packet sent to a newly connected peer. It MUST start with a Status Code (`0x00`) and follow up with items:
+```
+[ protocolVersion, PoW, bloom, isLightNode, confirmationsEnabled, rateLimits ]
+```
+
+`protocolVersion`: version of the Whisper protocol
+`PoW`: minimum PoW accepted by the peer
+`bloom`: bloom filter of Whisper topic accepted by the peer
+`isLightNode`: when true, the peer won't forward messages
+`confirmationsEnabled`: when true, the peer will send message confirmations
+`rateLimits`: is `[ RateLimitIP, RateLimitPeerID, RateLimitTopic ]` where each values is an integer with a number of accepted packets per second per IP, Peer ID, and Topic respectively
+
 ## Rate limiting
 
 In order to provide an optional very basic Denial-of-Service attack protection, each node SHOULD define its own rate limits. The rate limits SHOULD be applied on IPs, peer IDs, and envelope topics.
@@ -80,11 +94,7 @@ Each node SHOULD broadcast its rate limits to its peers using rate limits packet
 
 The rate limits MAY also be sent as an optional parameter in the handshake.
 
-Each node SHOULD record rate limits advertised by its peers and adjust the number of sent packets in order not to exceed peer's rate limits. If the limit gets exceeded, the connection MAY be dropped.
-
-<!-- TODO: provide an instruction how to start a Whisper node with proper configuration using geth.-->
-
-<!-- @TODO: is there a higher bound -->
+Each node SHOULD respect rate limits advertised by its peers. The number of packets SHOULD be throttled in order not to exceed peer's rate limits. If the limit gets exceeded, the connection MAY be dropped by the peer.
 
 ## Keys management
 
