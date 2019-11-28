@@ -199,6 +199,11 @@ payload formats for things like 1:1 chat, group chat and public chat. These have
 various degrees of standardization. Please refer to [Initial Message Payload
 Specification](status-payloads-spec.md) for more details.
 
+### BIPs and EIPs Standards support
+
+For a list of EIPs and BIPs that SHOULD be supported by Status client, please
+see [Status EIPs Standards](status-EIPs.md).
+
 ## Security Considerations
 
 TBD.
