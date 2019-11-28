@@ -25,11 +25,30 @@ Status should follow all standards as possible. Whenever a feature is needed, it
 
 ### Support table
 
-|           | BIP32 | BIP39 | BIP43 | BIP44 | EIP20 | EIP55 | EIP67 | EIP137 | EIP155 | EIP165 | EIP181 | EIP191 | EIP627 | EIP681 | EIP712 | EIP721 | EIP831 | EIP945 | EIP1102 | EIP1193 | EIP1577 | EIP1581 |
-| --------- | ----- | ----- | ----- | ----- | ----- | ----- | ----- | ------ | ------ | ------ | ------ | ------ | ------ | ------ | ------ | ------ | ------ | ------ | ------- | ------- | ------- | ------- |
-| Status v0 | N     | Y     | N     | N     | Y     | Y     | P     | P      | Y      | P      | P      | Y?     | Y      | Y      | P      | P      | N      | Y      | Y       | Y       | Y       | N       |
-| Status v1 | Y     | Y     | Y     | Y     | Y     | Y     | P     | P      | Y      | N      | N      | N      | Y      | N      | P      | P      | Y      | Y      | Y       | Y       | P       | Y       |
-| Other     | N     | Y     | N     | N     | Y     | Y     | N     | N      | Y      | N      | N      | Y      | N      | Y      | Y      | Y      | N      | N      | Y       | Y       | N       | N       |
+|          | Status v0 | Status v1 | Other    |
+|----------|-----------|-----------|----------|
+| BIP32    | N         | Y         | N        |
+| BIP39    | Y         | Y         | Y        |
+| BIP43    | N         | Y         | N        |
+| BIP44    | N         | Y         | N        |
+| EIP20    | Y         | Y         | Y        |
+| EIP55    | Y         | Y         | Y        |
+| EIP67    | P         | P         | N        |
+| EIP137   | P         | P         | N        |
+| EIP155   | Y         | Y         | Y        |
+| EIP165   | P         | N         | N        |
+| EIP181   | P         | N         | N        |
+| EIP191   | Y?        | N         | Y        |
+| EIP627   | Y         | Y         | N        |
+| EIP681   | Y         | N         | Y        |
+| EIP712   | P         | P         | Y        |
+| EIP721   | P         | P         | Y        |
+| EIP831   | N         | Y         | N        |
+| EIP945   | Y         | Y         | N        |
+| EIP1102  | Y         | Y         | Y        |
+| EIP1193  | Y         | Y         | Y        |
+| EIP1577  | Y         | P         | N        |
+| EIP1581  | N         | Y         | N        |
 
 ## Components
 
