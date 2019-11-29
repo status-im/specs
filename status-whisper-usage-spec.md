@@ -74,6 +74,7 @@ Handshake is a RLP-encoded packet sent to a newly connected peer. It MUST start 
 `confirmationsEnabled`: when true, the peer will send message confirmations
 `rateLimits`: is `[ RateLimitIP, RateLimitPeerID, RateLimitTopic ]` where each values is an integer with a number of accepted packets per second per IP, Peer ID, and Topic respectively
 
+`bloom, isLightNode, confirmationsEnabled, and rateLimits` are all optional arguments in the handshake. However, if you specify optional field you MUST also specify all optional fields preceding it, in order to be unambiguous.
 ## Rate limiting
 
 In order to provide an optional very basic Denial-of-Service attack protection, each node SHOULD define its own rate limits. The rate limits SHOULD be applied on IPs, peer IDs, and envelope topics.
