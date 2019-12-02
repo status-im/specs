@@ -9,18 +9,19 @@
   - [Reason](#reason)
   - [Terminology](#terminology)
   - [Whisper node configuration](#whisper-node-configuration)
+  - [Handshake](#handshake)
+  - [Rate limiting](#rate-limiting)
   - [Keys management](#keys-management)
     - [Contact code topic](#contact-code-topic)
     - [Partitioned topic](#partitioned-topic)
     - [Public chats](#public-chats)
-    - [Personal discovery topic](#personal-discovery-topic)
     - [Generic discovery topic](#generic-discovery-topic)
     - [One-to-one topic](#one-to-one-topic)
     - [Group chat topic](#group-chat-topic)
   - [Message encryption](#message-encryption)
   - [Whisper V6 extensions](#whisper-v6-extensions)
     - [Request historic messages](#request-historic-messages)
-      - [shhext_requestMessages](#shhext_requestmessages)
+      - [shhext_requestMessages](#shhextrequestmessages)
 
 ## Abstract
 
@@ -59,9 +60,42 @@ Whisper's Proof Of Work algorithm is used to deter denial of service and various
 * proof-of-work requirement not larger than `0.002`
 * time-to-live not lower than `10` (in seconds)
 
-<!-- TODO: provide an instruction how to start a Whisper node with proper configuration using geth.-->
+## Handshake
 
-<!-- @TODO: is there a higher bound -->
+Handshake is a RLP-encoded packet sent to a newly connected peer. It MUST start with a Status Code (`0x00`) and follow up with items:
+```
+[ protocolVersion, PoW, bloom, isLightNode, confirmationsEnabled, rateLimits ]
+```
+
+`protocolVersion`: version of the Whisper protocol
+`PoW`: minimum PoW accepted by the peer
+`bloom`: bloom filter of Whisper topic accepted by the peer
+`isLightNode`: when true, the peer won't forward messages
+`confirmationsEnabled`: when true, the peer will send message confirmations
+`rateLimits`: is `[ RateLimitIP, RateLimitPeerID, RateLimitTopic ]` where each values is an integer with a number of accepted packets per second per IP, Peer ID, and Topic respectively
+
+`bloom, isLightNode, confirmationsEnabled, and rateLimits` are all optional arguments in the handshake. However, if you specify optional field you MUST also specify all optional fields preceding it, in order to be unambiguous.
+## Rate limiting
+
+In order to provide an optional very basic Denial-of-Service attack protection, each node SHOULD define its own rate limits. The rate limits SHOULD be applied on IPs, peer IDs, and envelope topics.
+
+Each node MAY decide to whitelist, i.e. do not rate limit, selected IPs or peer IDs.
+
+If a peer exceeds node's rate limits, the connection between them MAY be dropped.
+
+Each node SHOULD broadcast its rate limits to its peers using rate limits packet code (`0x14`). The rate limits is RLP-encoded information:
+
+```
+[ IP limits, PeerID limits, Topic limits ]
+```
+
+`IP limits`: 4-byte wide unsigned integer
+`PeerID limits`: 4-byte wide unsigned integer
+`Topic limits`: 4-byte wide unsigned integer
+
+The rate limits MAY also be sent as an optional parameter in the handshake.
+
+Each node SHOULD respect rate limits advertised by its peers. The number of packets SHOULD be throttled in order not to exceed peer's rate limits. If the limit gets exceeded, the connection MAY be dropped by the peer.
 
 ## Keys management
 
@@ -145,7 +179,7 @@ for i = 0; i < topicLen; i++ {
 }
 ```
 
-<!-- NOTE: commented out as it is currently not used.  In code for potential future use. - C.P. Oct 8, 2019 
+<!-- NOTE: commented out as it is currently not used.  In code for potential future use. - C.P. Oct 8, 2019
 ### Personal discovery topic
 
  Personal discovery topic is used to ???
@@ -169,7 +203,7 @@ for i = 0; i < topicLen; i++ {
 
 Each Status Client SHOULD listen to this topic in order to receive ??? -->
 
-<!-- NOTE: commented out as it is no longer valid as of V1. - C.P. Oct 8, 2019 
+<!-- NOTE: commented out as it is no longer valid as of V1. - C.P. Oct 8, 2019
 ### Generic discovery topic
 
 Generic discovery topic is a legacy topic used to handle all one-to-one chats. The newer implementation should rely on [Partitioned Topic](#partitioned-topic) and [Personal discovery topic](#personal-discovery-topic).
