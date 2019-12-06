@@ -8,6 +8,7 @@
   - [Abstract](#abstract)
   - [Reason](#reason)
   - [Terminology](#terminology)
+  - [Whisper packets](#whisper-packets)
   - [Whisper node configuration](#whisper-node-configuration)
   - [Handshake](#handshake)
   - [Rate limiting](#rate-limiting)
@@ -52,6 +53,23 @@ encryption properties to support asynchronous chat.
 * *Offline message*: an archived envelope
 * *Envelope*: encrypted message with metadata like topic and Time-To-Live
 
+## Whisper packets
+
+| Packet Name | Code | EIP-627 | References |
+| --- | --: | --- | --- |
+| Status | 0 | ✔ | [Handshake](#handshake) |
+| Messages | 1 | ✔ | [EIP-627](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-627.md) |
+| PoW Requirement | 2 | ✔ | [EIP-627](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-627.md) |
+| Bloom Filter | 3 | ✔ | [EIP-627](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-627.md) |
+| Batch Ack | 11 | 𝘅 | TODO |
+| Message Response | 12 | 𝘅 | TODO |
+| P2P Sync Request | 123 | 𝘅 | TODO |
+| P2P Sync Response | 124 | 𝘅 | TODO |
+| P2P Request Complete | 125 | 𝘅 | [Status Whisper Mailserver Spec](status-whisper-mailserver-spec.md) |
+| P2P Request | 126 | ✔ | [Status Whisper Mailserver Spec](status-whisper-mailserver-spec.md) |
+| P2P Messages | 127 | ✔/𝘅 (EIP-627 supports only single envelope in a packet) | [Status Whisper Mailserver Spec](status-whisper-mailserver-spec.md) |
+
+
 ## Whisper node configuration
 
 If you want to run a Whisper node and receive messages from Status clients, it must be properly configured.
@@ -75,6 +93,7 @@ Handshake is a RLP-encoded packet sent to a newly connected peer. It MUST start 
 `rateLimits`: is `[ RateLimitIP, RateLimitPeerID, RateLimitTopic ]` where each values is an integer with a number of accepted packets per second per IP, Peer ID, and Topic respectively
 
 `bloom, isLightNode, confirmationsEnabled, and rateLimits` are all optional arguments in the handshake. However, if you specify optional field you MUST also specify all optional fields preceding it, in order to be unambiguous.
+
 ## Rate limiting
 
 In order to provide an optional very basic Denial-of-Service attack protection, each node SHOULD define its own rate limits. The rate limits SHOULD be applied on IPs, peer IDs, and envelope topics.
