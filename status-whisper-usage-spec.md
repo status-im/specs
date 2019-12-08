@@ -20,6 +20,7 @@
     - [One-to-one topic](#one-to-one-topic)
     - [Group chat topic](#group-chat-topic)
   - [Message encryption](#message-encryption)
+  - [Message confirmations](#message-confirmations)
   - [Whisper V6 extensions](#whisper-v6-extensions)
     - [Request historic messages](#request-historic-messages)
       - [shhext_requestMessages](#shhextrequestmessages)
@@ -244,6 +245,29 @@ Even though, the protocol specifies an encryption layer that encrypts messages b
 Public and group messages are encrypted using symmetric encryption and the key is created from a channel name string. The implementation is available in [`shh_generateSymKeyFromPassword`](https://github.com/ethereum/go-ethereum/wiki/Whisper-v6-RPC-API#shh_generatesymkeyfrompassword) JSON-RPC method of go-ethereum Whisper implementation.
 
 One-to-one messages are encrypted using asymmetric encryption.
+
+## Message confirmations
+
+Sending a message is a complex process where many things can go wrong. Message confirmations tells a node that a message originating from it has been received by its peers.
+
+A node MAY send a message confirmation for any batch of messages received with a packet Messages Code (`0x01`).
+
+A message confirmation is sent using Batch Acknowledge packet (`0x0b`) or Message Response packet (`0x0c`).
+
+The Batch Acknowledge packet is followed by a keccak256 hash of the envelopes batch data (raw bytes).
+
+The Message Response packet is more complex and is followed by a Versioned Message Response:
+```
+[ Version, Response]
+```
+
+`Version`: a version of the Message Response, equal to `1`,
+`Response`: `[ Hash, Errors ]` where `Hash` is a keccak256 hash of the envelopes batch data (raw bytes) for which the confirmation is sent and `Errors` is a list of envelope errors when processing the batch. A single error contains `[ Hash, Code, Description ]` where `Hash` is a hash of the processed envelope, `Code` is an error code and `Description` is a descriptive error message.
+
+The supported codes:
+`1`: means time sync error which happens when an envelope is too old or created in the future (the root cause is no time sync between nodes).
+
+The drawback of sending message confirmations is that it increases the noise in the network because for each sent message, a corresponding confirmation is broadcasted by one or more peers.
 
 ## Whisper V6 extensions
 
