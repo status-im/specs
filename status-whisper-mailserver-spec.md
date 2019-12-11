@@ -67,8 +67,8 @@ For a requester, to know that all messages have been sent by mailserver, it SHOU
 [ RequestID, LastEnvelopeHash, Cursor ]
 ```
 
-`RequestID`: 32-byte wide array with a hash of the envelope containing the original request  
-`LastEnvelopeHash`: 32-byte wide array with a hash of the last sent envelope for the request  
+`RequestID`: 32-byte wide array with a Keccak-256 hash of the envelope containing the original request  
+`LastEnvelopeHash`: 32-byte wide array with a Keccak-256 hash of the last sent envelope for the request  
 `Cursor`: an array of a cursor returned from the previous request (optional)
 
 If `Cursor` is not empty, it means that not all messages were sent due to the set `Limit` in the request. One or more consecutive requests MAY be sent with `Cursor` field filled in in order to receive the rest of the messages.
