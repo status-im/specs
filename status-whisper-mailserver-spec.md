@@ -51,7 +51,7 @@ In the Whisper envelope's payload section, there MUST be RLP-encoded information
 
 The `Cursor` field SHOULD be filled in if a number of envelopes between `Lower` and `Upper` is greater than `Limit` so that the requester can send another request using the obtained `Cursor` value. What exactly is in the `Cursor` is up to the implementation. The requester SHOULD NOT use a `Cursor` obtained from one mailserver in a request to another mailserver because the format or the result MAY be different.
 
-The envelope MUST be signed with a symmetric key agreed between the requester and Mailserver.
+The envelope MUST be encrypted with a symmetric key agreed between the requester and Mailserver.
 
 ### Receiving historic messages
 
