@@ -31,6 +31,7 @@ have to be implemented in order to be a full Status client. The second gives a d
     - [Secure Transport](#secure-transport)
     - [Data Sync](#data-sync)
     - [Payloads and clients](#payloads-and-clients)
+    - [BIPs and EIPs Standards support](#bips-and-eips-standards-support)
   - [Security Considerations](#security-considerations)
     - [Censorship-resistance](#censorship-resistance)
   - [Design Rationale](#design-rationale)
@@ -45,6 +46,11 @@ have to be implemented in order to be a full Status client. The second gives a d
     - [Data sync](#data-sync)
       - [Why is MVDS not used for public chats?](#why-is-mvds-not-used-for-public-chats)
   - [Footnotes](#footnotes)
+  - [Appendix A: Security considerations](#appendix-a-security-considerations)
+    - [Scalability and UX](#scalability-and-ux)
+    - [Privacy](#privacy)
+    - [Spam resistance](#spam-resistance)
+    - [Censorship resistance](#censorship-resistance)
   - [Acknowledgements](#acknowledgements)
 
 ## Introduction
@@ -310,5 +316,65 @@ very bandwidth heavy.
 1. <https://github.com/status-im/status-protocol-go/>
 2. <https://github.com/status-im/status-console-client/>
 3. <https://github.com/status-im/status-react/>
+
+## Appendix A: Security considerations
+
+There are several security considerations to take into account when running Status. Chief among them are: scalability, DDoS-resistance and privacy. These also vary depending on what capabilities are used, such as mailserver, light node, and so on.
+
+### Scalability and UX
+
+**Bandwidth usage:**
+
+In version 1 of Status, bandwidth usage is likely to be an issue. For more investigation into this, see the theoretical scaling model described [here](https://github.com/vacp2p/research/tree/dcc71f4779be832d3b5ece9c4e11f1f7ec24aac2/whisper_scalability).
+
+**Mailserver High Availability requirement:**
+
+A mailserver has to be online to receive messages for other nodes, this puts a high availability requirement on it.
+
+**Gossip-based routing:**
+
+Use of gossip-based routing doesn't necessarily scale. It means each node can see a message multiple times, and having too many light nodes can cause propagation probability that is too low. See [Whisper vs PSS](https://our.status.im/whisper-pss-comparison/) for more and a possible Kademlia based alternative.
+
+**Lack of incentives:**
+
+Status currently lacks incentives to run nodes, which means node operators are more likely to create centralized choke points.
+
+### Privacy
+
+**Light node privacy:**
+
+The main privacy concern with light nodes is that directly connected peers will know that a message originates from them (as it are the only ones it sends). This means nodes can make assumptions about what messages (topics) their peers are interested in.
+
+**Bloom filter privacy:**
+
+By having a bloom filter where only the topics you are interested in are set, you reveal which messages you are interested in. This is a fundamental tradeoff between bandwidth usage and privacy, though the tradeoff space is likely suboptimal in terms of the [Anonymity](https://eprint.iacr.org/2017/954.pdf) [trilemma](https://petsymposium.org/2019/files/hotpets/slides/coordination-helps-anonymity-slides.pdf).
+
+**Mailserver client privacy:**
+
+A mailserver client has to trust a mailserver, which means they can send direct traffic. This reveals what topics / bloom filter a node is interested in, along with its peerID (with IP).
+
+**Privacy guarantees not rigorous:**
+
+Privacy for Whisper hasn't been studied rigorously for various threat models like global passive adversary, local active attacker, etc. This is unlike e.g. Tor and mixnets.
+
+**Topic hygiene:**
+
+Similar to bloom filter privacy, if you use a very specific topic you reveal more information. See scalability model linked above.
+
+### Spam resistance
+
+**PoW bad for heterogenerous devices:**
+
+Proof of work is a poor spam prevention mechanism. A mobile device can only have a very low PoW in order not to use too much CPU / burn up its phone battery. This means someone can spin up a powerful node and overwhelm the network.
+
+**Mailserver trusted connection:**
+
+A mailserver has a direct TCP connection, which means they are trusted to send traffic. This means a malicious or malfunctioning mailserver can overwhelm an individual node.
+
+### Censorship resistance
+
+**Devp2p TCP port blockable:**
+
+By default Devp2p runs on port `30303`, which is not commonly used for any other service. This means it is easy to censor, e.g. airport WiFi. This can be mitigated somewhat by running on e.g. port `80` or `443`, but there are still outstanding issues. See libp2p and Tor's Pluggable Transport for how this can be improved.
 
 ## Acknowledgements
