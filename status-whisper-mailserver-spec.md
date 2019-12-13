@@ -61,7 +61,7 @@ In order to receive historic messages from a mailserver, a node MUST trust the s
 
 Received envelopes MUST be passed through the Whisper envelope pipelines so that they are picked up by registered filters and passed to subscribers.
 
-For a requester, to know that all messages have been sent by mailserver, it SHOULD handle P2P Request Complete code (`0x7d`). This code is followed by a list with:
+For a requester, to know that all messages have been sent by mailserver, it SHOULD handle P2P Request Complete code (`0x7d`). This code is followed by the following parameters:
 
 ```
 [ RequestID, LastEnvelopeHash, Cursor ]
