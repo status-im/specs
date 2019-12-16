@@ -248,7 +248,7 @@ One-to-one messages are encrypted using asymmetric encryption.
 
 ## Message confirmations
 
-Sending a message is a complex process where many things can go wrong. Message confirmations tells a node that a message originating from it has been received by its peers.
+Sending a message is a complex process where many things can go wrong. Message confirmations tell a node that a message originating from it has been received by its peers.
 
 A node MAY send a message confirmation for any batch of messages received with a packet Messages Code (`0x01`).
 
