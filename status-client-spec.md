@@ -108,7 +108,7 @@ Currently the main bootstrap nodes are provided by Status Gmbh, but anyone can
 run these provided they are connected to the rest of the Whisper network.
 
 In order to retrieve the addresses of bootstrap nodes, a client MUST traverse
-he merkle tree found at [`fleet.status.im`](https://fleet.status.im), as described in [EIP-1459](https://eips.ethereum.org/EIPS/eip-1459#client-protocol).
+the merkle tree found at [`fleet.status.im`](https://fleet.status.im), as described in [EIP-1459](https://eips.ethereum.org/EIPS/eip-1459#client-protocol).
 
 #### Discovery
 
