@@ -107,19 +107,8 @@ nodes allow you to discover other nodes of the network.
 Currently the main bootstrap nodes are provided by Status Gmbh, but anyone can
 run these provided they are connected to the rest of the Whisper network.
 
-Status maintains a list of boootstrap nodes in the following locations:
-- Asia:
-  - `enode://e8a7c03b58911e98bbd66accb2a55d57683f35b23bf9dfca89e5e244eb5cc3f25018b4112db507faca34fb69ffb44b362f79eda97a669a8df29c72e654416784@47.91.224.35:443`
-  - `enode://43947863cfa5aad1178f482ac35a8ebb9116cded1c23f7f9af1a47badfc1ee7f0dd9ec0543417cc347225a6e47e46c6873f647559e43434596c54e17a4d3a1e4@47.52.74.140:443`
-- Europe:
-  - `enode://436cc6f674928fdc9a9f7990f2944002b685d1c37f025c1be425185b5b1f0900feaf1ccc2a6130268f9901be4a7d252f37302c8335a2c1a62736e9232691cc3a@174.138.105.243:443`
-  - `enode://5395aab7833f1ecb671b59bf0521cf20224fe8162fc3d2675de4ee4d5636a75ec32d13268fc184df8d1ddfa803943906882da62a4df42d4fccf6d17808156a87@206.189.243.57:443`
-- North America:
-  - `enode://7427dfe38bd4cf7c58bb96417806fab25782ec3e6046a8053370022cbaa281536e8d64ecd1b02e1f8f72768e295d06258ba43d88304db068e6f2417ae8bcb9a6@104.154.88.123:443`
-  - `enode://ebefab39b69bbbe64d8cd86be765b3be356d8c4b24660f65d493143a0c44f38c85a257300178f7845592a1b0332811542e9a58281c835babdd7535babb64efc1@35.202.99.224:443`
-
-These bootstrap nodes do not change, however, we can't guarantee that it will stay this way forever
-and at some point we might be forced to change them.
+In order to retrieve the addresses of bootstrap nodes, a client MUST traverse
+he merkle tree found at [`fleet.status.im`](https://fleet.status.im), as described in [EIP-1459](https://eips.ethereum.org/EIPS/eip-1459#client-protocol).
 
 #### Discovery
 
