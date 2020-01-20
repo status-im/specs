@@ -28,15 +28,15 @@ as various clients created using different technologies.
       - [Message types](#message-types)
       - [Clock vs Timestamp and message ordering](#clock-vs-timestamp-and-message-ordering)
       - [Chats](#chats)
-    - [Contact requests](#contact-requests)
+    - [ContactUpdate](#contact-update)
       - [Payload] (#payload)
-      - [Contact update] (#contact-update)
-      - [Handling contact messages] (#handling-contact-messages)
-    - [SyncInstallation](#sync-installation)
+    - [SyncInstallationContact](#sync-installation-contact)
+      - [Payload](#payload)
+    - [SyncInstallationPublicChat](#sync-installation-public-chat)
       - [Payload](#payload)
     - [PairInstallation](#pair-installation)
       - [Payload](#payload)
-    - [GroupMembershipUpdate](#group-membership-update)
+    - [MembershipUpdateMessage](#membership-update-message)
       - [Payload](#payload)
   - [Upgradability](#upgradability)
   - [Security Considerations](#security-considerations)
@@ -65,46 +65,99 @@ If a signature is not present but an author is provided by a layer below, the me
 
 ## Encoding
 
-The payload is encoded using [Transit format](https://github.com/cognitect/transit-format). Transit was chosen over JSON in order to reduce the bandwidth.
+The payload is encoded using [Protobuf](https://developers.google.com/protocol-buffers)
 
 ## Types of messages
 
 ### Message
 
-The type `Message` represents a text message exchanged between clients and is identified by the transit tag `c4`.
+The type `ChatMessage` represents a chat message exchanged between clients.
 
 #### Payload
 
-Payload is a struct (a compound data type) with the following fields (order is important):
+The protobuf description is:
 
-<!-- TODO: Be more precise in struct description, a la RFC, e.g. TLS style https://tools.ietf.org/html/rfc8446 -->
+```protobuf
+message ChatMessage {
+  // Lamport timestamp of the chat message
+  uint64 clock = 1;
+  // Unix timestamp in milliseconds, not 
+  uint64 timestamp = 2;
+  // Text of the message
+  string text = 3;
+  // Id of the message that we are replying to
+  string response_to = 4;
+  // Ens name of the sender
+  string ens_name = 5;
+  // Local chatID of the message
+  string chat_id = 6;
+
+  // The type of message (public/one-to-one/private-group-chat)
+  MessageType message_type = 7;
+  // The type of the content of the message
+  ContentType content_type = 8;
+
+  oneof payload {
+    StickerMessage sticker = 9;
+  }
+
+  enum MessageType {
+    UNKNOWN_MESSAGE_TYPE = 0;
+    ONE_TO_ONE = 1;
+    PUBLIC_GROUP = 2;
+    PRIVATE_GROUP = 3;
+    // Only local
+    SYSTEM_MESSAGE_PRIVATE_GROUP = 4;
+    }
+  enum ContentType {
+    UNKNOWN_CONTENT_TYPE = 0;
+    TEXT_PLAIN = 1;
+    STICKER = 2;
+    STATUS = 3;
+    EMOJI = 4;
+    TRANSACTION_COMMAND = 5;
+  }
+}
+```
+
+#### Payload
 
 | Field | Name | Type | Description |
 | ----- | ---- | ---- | ---- |
-| 1 | text | `string` | The text version of the message content |
-| 2 | content type | `enum` (more in [Content types](#content-types)) | See details |
-| 3 | message type | `enum` (more in [Message types](#message-types)) | See details |
-| 4 | clock | `int64` | See details |
-| 5 | timestamp | `int64` | See details |
-| 6 | content | `struct { chat-id string, text string, response-to string }` | The chat-id of the chat this message is destined to, the text of the content and optionally the id of the message it is responding to|
+| 1 | clock | `uint64` | The clock of the chat|
+| 2 | timestamp | `uint64` | The sender timestamp at message creation |
+| 3 | text | `string` | The content of the message |
+| 4 | response_to | `string` | The ID of the message replied to |
+| 5 | ens_name | `string` | The ENS name of the user sending the message |
+| 6 | chat_id | `string` | The local ID of the chat the message is sent to |
+| 7 | message_type | `MessageType` | The type of message, different for one-to-one, public or group chats |
+| 8 | content_type | `ContentType` | The type of the content of the message | 
+| 9 | payload | `Sticker|nil` | The payload of the message based on the content type |
 
 #### Content types
 
 Content types are required for a proper interpretation of incoming messages. Not each message is plain text but may carry a different information.
 
 The following content types MUST be supported:
-* `text/plain` identifies a message which content is a plain text.
+* `TEXT_PLAIN` identifies a message which content is a plaintext.
 
 There are also other content types that MAY be implemented by the client:
-* `sticker`
-* `status`
-* `command`
-* `command-request`
-* `emoji`
+* `STICKER`
+* `STATUS`
+* `EMOJI`
+* `TRANSACTION_COMMAND`
 
-These are currently underspecified. We refer to real-world implementations for clients who wish to interoperate.
+##### Sticker content type
 
-<!-- TODO: Ideally specify this, but barring that, link to implementation. -->
+A `ChatMessage` with `STICKER` `Content/Type` MUST also specify the ID of the `Pack` and 
+the `Hash` of the pack, in the `Sticker` field of `ChatMessage`
+
+```protobuf
+message StickerMessage {
+  string hash = 1;
+  int32 pack = 2;
+}
+```
 
 #### Message types
 
@@ -114,15 +167,19 @@ Message types are required to decide how a particular message is encrypted and w
 
 
 The following messages types MUST be supported:
-* `public-group-user-message` is a message to the public group
-* `user-message` is a private message
-* `group-user-message` is a message to the private group.
+* `ONE_TO_ONE` is a message to the public group
+* `PUBLIC_GROUP` is a private message
+* `PRIVATE_GROUP` is a message to the private group.
 
 #### Clock vs Timestamp and message ordering
 
 `timestamp` MUST be Unix time calculated when the message is created in milliseconds. This field SHOULD not be relied upon for message ordering.
 
-`clock` SHOULD be calculated using the algorithm of [Lamport timestamps](https://en.wikipedia.org/wiki/Lamport_timestamps). When there are messages available in a chat, `clock`'s value is calculated based on the last received message in a particular chat: `last-message-clock-value + 1`. If there are no messages, `clock` is initialized with `timestamp * 100`'s value.
+`clock` SHOULD be calculated using the algorithm of [Lamport timestamps](https://en.wikipedia.org/wiki/Lamport_timestamps). When there are messages available in a chat, `clock`'s value is calculated based on the last received message in a particular chat: `max(timeNowInMs, last-message-clock-value + 1)`. If there are no messages, `clock` is initialized with `timestamp`'s value.
+
+Messages with a `clock` greater than `120` seconds over the whisper timestamp SHOULD be discarded, in order to avoid malicious users to increase the `clock` of a chat arbitrarily.
+
+Messages with a `clock` less than `120` might indicate an attempt to insert messages in the chat history, this is not distinguishable though from a re-transmit from the `datasync` layer. Client MIGHT mark this messages with a warning to the user, or discard them.
 
 `clock` value is used for the message ordering. Due to the used algorithm and distributed nature of the system, we achieve casual ordering which might produce counterintuitive results in some edge cases. For example, when one joins a public chat and sends a message before receiving the exist messages, their message `clock` value might be lower and the message will end up in the past when the historical messages are fetched.
 
@@ -134,94 +191,122 @@ All incoming messages can be matched against a chat. Below you can find a table 
 
 |Message Type|Chat ID Calculation|Direction|Comment|
 |------------|-------------------|---------|-------|
-|public-group-user-message|chat ID is equal to a public channel name; it should equal `chat-id` from message's `content` field|Incoming/Outgoing||
-|user-message|let `P` be a public key of the recipient; `hex-encode(P)` is a chat ID; use it as `chat-id` value in message's `content` field|Outgoing||
-|user-message|let `P` be a public key of message's signature; `hex-encode(P)` is a chat ID; discard `chat-id` from message's `content` field|Incoming|if there is no matched chat, it might be the first message from public key `P`; you can discard it or create a new chat; Status official clients create a new chat|
-|group-user-message|use `chat-id` from message's `content` field|Incoming/Outgoing|find an existing chat by `chat-id`; if none is found discard the message (TODO: incomplete)|
+|PUBLIC_GROUP|chat ID is equal to a public channel name; it should equal `chatId` from the message|Incoming/Outgoing||
+|ONE_TO_ONE|let `P` be a public key of the recipient; `hex-encode(P)` is a chat ID; use it as `chatId` value in the message|Outgoing||
+|user-message|let `P` be a public key of message's signature; `hex-encode(P)` is a chat ID; discard `chat-id` from message|Incoming|if there is no matched chat, it might be the first message from public key `P`; you can discard it or create a new chat; Status official clients create a new chat|
+|PRIVATE_GROUP|use `chatId` from the message|Incoming/Outgoing|find an existing chat by `chatId`; if none is found, we are not a member of that chat or we haven't joined that chat, the message MUST be discarded |
 
-<!-- TODO: "group-user-message" is not complete. Does it require to explicitly join the group chat? Is there a way to invite someone? Also, if I start a new group chat (or join an existing one), I need to somehow calculate this chatID by myself. How to do it? -->
+### Contact Update
 
-### Contact Requests
+`ContactUpdate` is a message exchange to notify peers that either the
+user has been added as a contact, or that information about the sending user have
+changed.
 
-Contact requests consists in 3 kind of messages: `ContactRequest`, `ContactRequestConfirmed` and `ContactUpdate`.
-These messages are used to notify the receiving end that it has been added to the sender's contact. They are identified by the transit tags `c2`, `c3`, `c4` respectively, but they are all interchangeable, meaning a client SHOULD handle them in exactly the same way.  The payload of the 3 messages is identical.
+```protobuf
+message ContactUpdate {
+  uint64 clock = 1;
+  string ens_name = 2;
+  string profile_image = 3;
+}
+```
 
 #### Payload
 
 | Field | Name | Type | Description |
 | ----- | ---- | ---- | ---- |
-| 1 | name | `string` | The self-assigned name of the user (DEPRECATED) |
-| 2 | profile image | `string` | The base64 encoded profile picture of the user |
-| 3 | address | `string` | The ethereum address of the user |
-| 4 | fcm-token | `string` | The FCM Token used by mobile devices for push notifications (DEPRECATED) |
-| 5 | device-info | `[struct { id string, fcm-token string }]` | A list of pair `installation-id`, `fcm-token` for each device that is currently paired |
+| 1 | clock | `uint64` | The clock of the chat with the user |
+| 2 | ens_name | `string` | The ENS name if set |
+| 3 | profile_image | `string` | The base64 encoded profile picture of the user |
 
 #### Contact update
 
 A client SHOULD send a `ContactUpdate` to all the contacts each time:
 
-- The name is edited
+- The ens_name has changed
 - The profile image is edited
-- A new device has been paired
 
 A client SHOULD also periodically send a `ContactUpdate` to all the contacts, the interval is up to the client, the Status official client sends these updates every 48 hours.
 
+### SyncInstallationContact
 
-#### Handling contact messages
+`SyncInstallationContact` messages are used to synchronize in a best-effort the contacts to other devices.
 
-A client SHOULD handle any `Contact*` message in the same way. Any `Contact*` message with a whisper timestamp lower than the last one processed MUST be discarded.
+```protobuf
+message SyncInstallationContact {
+  uint64 clock = 1;
+  string id = 2;
+  string profile_image = 3;
+  string ens_name = 4;
+  uint64 last_updated = 5;
+  repeated string system_tags = 6;
+}
+```
 
-### SyncInstallation
-
-`SyncInstallation` messages are used to synchronize in a best-effort way all the paired installations. It is identified by a transit tag of `p1` 
 
 #### Payload
 
 | Field | Name | Type | Description |
 | ----- | ---- | ---- | ---- |
-| 1| contacts | `[struct { name string last-updated int device-info struct {id string fcm-token string } pending? bool}` | An array of contacts |
-| 2 | account | `struct {name string photo-path string last-updated int}` | Information about your own account |
-| 3 | chat | `struct {:public? bool :chat-id string}` | A description of a public chat opened by the client |
+| 1 | clock | `uint64` | clock value of the chat | 
+| 2 | id | `string` | id of the contact synced |
+| 3 | profile_image | `string` |  `base64` encoded profile picture of the user |
+| 4 | ens_name | `string` | ENS name of the contact |
+| 5 | `array[string]` | Array of `system_tags` for the user, this can currently be: `":contact/added", ":contact/blocked", ":contact/request-received"`|
+
+### SyncInstallationPublicChat
+
+`SyncInstallationPublicChat` message is used to synchronize in a best-effort the public chats to other devices.
+
+```protobuf
+message SyncInstallationPublicChat {
+  uint64 clock = 1;
+  string id = 2;
+}
+```
+
+#### Payload
+
+| Field | Name | Type | Description |
+| ----- | ---- | ---- | ---- |
+| 1 | clock | `uint64` | clock value of the chat | 
+| 2 | id | `string` | id of the chat synced |
 
 ### PairInstallation
 
-`PairInstallation` messages are used to propagate informations about a device to its paired devices. It is identified by a transit tag of `p2` 
+`PairInstallation` messages are used to propagate informations about a device to its paired devices.
+
+```protobuf
+message PairInstallation {
+  uint64 clock = 1;
+  string installation_id = 2;
+  string device_type = 3;
+  string name = 4;
+}
+```
 
 #### Payload
 
 | Field | Name | Type | Description |
 | ----- | ---- | ---- | ---- |
-| 1| installation-id | `string` | A randomly generated id that identifies this device |
-| 2 | device-type | `string` | The OS of the device `ios`,`android` or `desktop` |
-| 3 | name | `string` | The self-assigned name of the device |
-| 4 | fcm-token | `string` | The FCM Token used by mobile devices for push notifications |
+| 1 | clock | `uint64` | clock value of the chat | 
+| 2| installation_id | `string` | A randomly generated id that identifies this device |
+| 3 | device_type | `string` | The OS of the device `ios`,`android` or `desktop` |
+| 4 | name | `string` | The self-assigned name of the device |
 
-### GroupMembershipUpdate
+### MembershipUpdateMessage and MembershipUpdateEvent
 
-`GroupMembershipUpdate` is a message used to propagate information about group membership changes in a group chat.. It is identified by a transit tag of `g5`.
+`MembershipUpdateEvent` is a message used to propagate information about group membership changes in a group chat.
 The details are in the  [Group chats specs](status-group-chats-spec.md)
-
-#### Payload
-
-| Field | Name | Type | Description |
-| ----- | ---- | ---- | ---- |
-| 1| chat-id | `string` | The chat id of the chat where the change is to take place |
-| 2 | membership-updates | See details | A list of events that describe the membership changes |
-| 3 | message | `Transit message` | An optional message, described in [Message](#message) |
 
 ## Upgradability
 
 There are two ways to upgrade the protocol without breaking compatibility:
 
-- Struct fields can be enriched with a new key, which will be ignored by old clients.
-- An element can be appended to the `Transit` array, which will also be ignored by old clients.
+- Accretion is always supported
+- Deletion of existing fields or messages is not supported and might break compatibility
 
 ## Security Considerations
 
 TBD.
 
 ## Design rationale
-
-### Why are you using Transit and Protobuf?
-
-Transit was initially chose for encoding, and Protobuf was added afterwards. This is partly due to the history of the protocol living inside of `status-react`, which is written in Clojurescript.
