@@ -169,7 +169,7 @@ new ones.
 The current list of static peers is published on https://fleets.status.im/. `eth.beta` is the current
 group of peers the official Status client uses. The others are test networks.
 
-In order to retrieve the addresses of Waku nodes, a client MUST traverse
+Waku nodes addresses can be retrieved by traversing 
 the merkle tree found at [`fleet.status.im`](https://fleet.status.im), as described in [EIP-1459](https://eips.ethereum.org/EIPS/eip-1459#client-protocol).
 
 #### Mobile nodes
