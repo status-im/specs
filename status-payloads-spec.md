@@ -179,7 +179,7 @@ The following messages types MUST be supported:
 
 Messages with a `clock` greater than `120` seconds over the whisper timestamp SHOULD be discarded, in order to avoid malicious users to increase the `clock` of a chat arbitrarily.
 
-Messages with a `clock` less than `120` might indicate an attempt to insert messages in the chat history, this is not distinguishable though from a re-transmit from the `datasync` layer. Client MIGHT mark this messages with a warning to the user, or discard them.
+Messages with a `clock` less than `120` might indicate an attempt to insert messages in the chat history, this is not distinguishable though from a re-transmit from the `datasync` layer. A client MAY mark this messages with a warning to the user, or discard them.
 
 `clock` value is used for the message ordering. Due to the used algorithm and distributed nature of the system, we achieve casual ordering which might produce counterintuitive results in some edge cases. For example, when one joins a public chat and sends a message before receiving the exist messages, their message `clock` value might be lower and the message will end up in the past when the historical messages are fetched.
 

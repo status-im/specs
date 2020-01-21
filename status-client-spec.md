@@ -69,7 +69,7 @@ Implementing a Status clients means implementing the following layers. Additiona
 
 ### Protobuf
 
-We use `protobuf` in different layers, the version used is `proto3` unless stated otherwise.
+We use [`protobuf`](https://developers.google.com/protocol-buffers/) in different layers, the version used is `proto3` unless stated otherwise.
 
 ## Components
 
