@@ -225,7 +225,7 @@ Sourcecode: https://github.com/status-im/status-react/blob/develop/src/status_im
 
 Support: -
 Reference: https://eips.ethereum.org/EIPS/eip-1459
-Description: Allows the storing and retreving of nodes through merkle trees stored in TXT records of a domain.
+Description: Allows the storing and retrieving of nodes through merkle trees stored in TXT records of a domain.
 Used for: Finding Waku nodes.
 Related: -
 Sourcecode: - 
