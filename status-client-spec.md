@@ -170,7 +170,7 @@ The current list of static peers is published on https://fleets.status.im/. `eth
 group of peers the official Status client uses. The others are test networks.
 
 Finally, Waku node addresses can be retrieved by traversing 
-the merkle tree found at [`fleet.status.im`](https://fleet.status.im), as described in [EIP-1459](https://eips.ethereum.org/EIPS/eip-1459#client-protocol).
+the merkle tree found at [`fleets.status.im`](https://fleets.status.im), as described in [EIP-1459](https://eips.ethereum.org/EIPS/eip-1459#client-protocol).
 
 #### Mobile nodes
 
