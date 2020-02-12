@@ -21,7 +21,6 @@ TBD.
     - [X3DH Prekey bundles](#x3dh-prekey-bundles)
 - [Optional Account additions](#optional-account-additions)
     - [ENS Username](#ens-username)
-    - [User Chosen Name](#user-chosen-name)
     - [User Profile Picture](#user-profile-picture)
 - [Trust establishment](#trust-establishment)
     - [Terms Glossary](#terms-glossary)
@@ -98,11 +97,8 @@ not do this.
 ### ENS Username
 - A user MAY register a public username on the Ethereum Name System (ENS).  This username is a user-chosen subdomain of the `stateofus.eth` ENS registration that maps to their whisper identity key (`IK`). 
 
-### User Chosen Name
-- An account MAY create a display name to replace the `IK` generated 3-word pseudonym in chat screens.  This chosen display name will become part of the publicly broadcasted profile of the account.
-
-### User Profile Picture
-- An account MAY edit the `IK` generated identicon with a chosen picture.  This picture will become part of the publicly broadcasted profile of the account.
+<!-- ### User Profile Picture
+- An account MAY edit the `IK` generated identicon with a chosen picture.  This picture will become part of the publicly broadcasted profile of the account. -->
 
 <!-- TODO: Elaborate on wallet account and multiaccount -->
 <!-- TODO: Elaborate on security implications -->
