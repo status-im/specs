@@ -67,6 +67,10 @@ Implementing a Status clients means implementing the following layers. Additiona
 | Transport privacy | Routing, Metadata protection    | Whisper                      |
 | P2P Overlay       | Overlay routing, NAT traversal  | devp2p                       |
 
+### Protobuf
+
+We use [`protobuf`](https://developers.google.com/protocol-buffers/) in different layers, the version used is `proto3` unless stated otherwise.
+
 ## Components
 
 ### P2P Overlay
