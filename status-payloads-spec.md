@@ -173,13 +173,22 @@ The following messages types MUST be supported:
 
 #### Clock vs Timestamp and message ordering
 
+If a user sends a new message before the messages sent while the user was offline are received, the new
+message is supposed to be displayed last in a chat. This is where the basic algorithm of Lamport timestamp would fall short
+as it's only meant to order causally related events.
+
+The status client therefore makes a "bid", speculating that it will beat the current chat-timestamp, s.t. the status client's
+Lamport timestamp format is: `clock = `max({timestamp}, chat_clock + 1)`
+
+This will satisfy the Lamport requirement, namely: a -> b then T(a) < T(b)
+
 `timestamp` MUST be Unix time calculated when the message is created in milliseconds. This field SHOULD not be relied upon for message ordering.
 
 `clock` SHOULD be calculated using the algorithm of [Lamport timestamps](https://en.wikipedia.org/wiki/Lamport_timestamps). When there are messages available in a chat, `clock`'s value is calculated based on the last received message in a particular chat: `max(timeNowInMs, last-message-clock-value + 1)`. If there are no messages, `clock` is initialized with `timestamp`'s value.
 
 Messages with a `clock` greater than `120` seconds over the whisper timestamp SHOULD be discarded, in order to avoid malicious users to increase the `clock` of a chat arbitrarily.
 
-Messages with a `clock` less than `120` might indicate an attempt to insert messages in the chat history, this is not distinguishable though from a re-transmit from the `datasync` layer. A client MAY mark this messages with a warning to the user, or discard them.
+Messages with a `clock` less than `120` seconds under the whisper timestamp might indicate an attempt to insert messages in the chat history which is not distinguishable from a `datasync` layer re-transit event. A client MAY mark this messages with a warning to the user, or discard them.
 
 `clock` value is used for the message ordering. Due to the used algorithm and distributed nature of the system, we achieve casual ordering which might produce counterintuitive results in some edge cases. For example, when one joins a public chat and sends a message before receiving the exist messages, their message `clock` value might be lower and the message will end up in the past when the historical messages are fetched.
 
