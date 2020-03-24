@@ -87,7 +87,7 @@ In order to be useful, a mailserver SHOULD be online most of time. That means
 you either have to be a bit tech-savvy to run your own node, or rely on someone
 else to run it for you.
 
-Currently Status Gmbh provides mailservers in an altruistic manner, but this is
+Currently one of Status's legal entities provides mailservers in an altruistic manner, but this is
 suboptimal from a decentralization, continuance and risk point of view. Coming
 up with a better system for this is ongoing research.
 
@@ -98,8 +98,9 @@ A Status client SHOULD allow the mailserver selection to be customizable.
 In order to use a Mailserver, a given node needs to connect to it directly,
 i.e. add the Mailserver as its peer and mark it as trusted. This means that the
 Mailserver is able to send direct p2p messages to the node instead of
-broadcasting them. Effectively, it knows which topics the node is interested in,
-when it is online as well as many metadata like IP address.
+broadcasting them. Effectively, it will have access to the bloom filter of
+topics that the user is interested in, when it is online as well as many
+metadata like IP address.
 
 ### Denial-of-service
 
