@@ -1,6 +1,8 @@
 # Status EIPs standards 
 
-> Version: 0.1 (Draft)
+> Version: 0.2
+>
+> Status: Stable
 >
 > Authors: Ricardo Guilherme Schmidt <ricardo3@status.im>
 
