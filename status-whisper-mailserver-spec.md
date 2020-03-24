@@ -1,5 +1,7 @@
 # Status Whisper Mailserver Specification
-> Version: 0.1 (Draft)
+> Version: 0.2
+>
+> Status: Stable
 >
 > Authors: Adam Babik <adam@status.im>, Oskar Thorén <oskar@status.im> (alphabetical order)
 
