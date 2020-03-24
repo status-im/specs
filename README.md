@@ -15,12 +15,13 @@ Every spec has its own lifecycle that shows its maturity. We indicate this in a 
 
 No stable specs right now. De facto a lot of the draft ones are stable and indicating this is work in progress.
 
+- [Status Secure Transport Specification](status-secure-transport-spec.md). How Status provide a secure transport with conversational security properties.
+
 ### Draft
 
 The following SIPs are under consideration for standardization.
 
 - [Status Client Specification](status-client-spec.md). The main specification for writing a Status client. **Start here**
-- [Status Secure Transport Specification](status-secure-transport-spec.md). How Status provide a secure transport with conversational security properties.
 - [Status Payload Specification](status-payloads-spec.md). What the message payloads look like.
 - [Status Account Specification](status-account-spec.md). What a Status account is and how trust is established.
 - [Status Whisper Usage Specification](status-whisper-usage-spec.md). How we use Whisper to do routing, metadata protection and provide 1:1/group/public chat.

@@ -1,6 +1,8 @@
 # Status Secure Transport Specification
 
-> Version: 0.1 (Draft)
+> Version: 0.2
+>
+> Status: Stable
 >
 > Authors: Andrea Piana <andreap@status.im>, Pedro Pombeiro <pedro@status.im>, Corey Petty <corey@status.im>, Oskar Thorén <oskar@status.im>, Dean Eigenmann <dean@status.im
 
