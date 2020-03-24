@@ -27,12 +27,13 @@ The following SIPs are stable and running in production.
 
 - [Status Account Specification](status-account-spec.md). What a Status account is and how trust is established.
 
+- [Status Payload Specification](status-payloads-spec.md). What the message payloads look like.
+
 ### Draft
 
 The following SIPs are under consideration for standardization.
 
 - [Status Client Specification](status-client-spec.md). The main specification for writing a Status client. **Start here**
-- [Status Payload Specification](status-payloads-spec.md). What the message payloads look like.
 
 ### Raw
 

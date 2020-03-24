@@ -1,8 +1,10 @@
 # Status Message Payloads Specification
 
-> Version: 0.1 (Draft)
+> Version: 0.2
 >
-> Authors: Adam Babik <adam@status.im>, Oskar Thorén <oskar@status.im> (alphabetical order)
+> Status: Stable
+>
+> Authors: Adam Babik <adam@status.im>, Andrea Maria Piana <andreap@status.im>, Oskar Thorén <oskar@status.im> (alphabetical order)
 
 ## Abstract
 
@@ -316,6 +318,6 @@ There are two ways to upgrade the protocol without breaking compatibility:
 
 ## Security Considerations
 
-TBD.
+-
 
 ## Design rationale
