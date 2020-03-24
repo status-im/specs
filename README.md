@@ -3,18 +3,17 @@
 This repository contains a list of specifications for implementing Status and
 its various capabilities.
 
-## Current state
+## Spec lifecycle
 
-As of August 2019, we are currently in the process of documenting current
-specifications. We are als implementing an isolated reference library for them.
-These specifications are expected to be frozen at the Status V1 launch and be
-used as a reference point for client implementers and security audits.
+Every spec has its own lifecycle that shows its maturity. We indicate this in a similar fashion to [COSS Lifecycle](https://rfc.unprotocols.org/spec:2/COSS/):
+
+![](assets/lifecycle.png)
 
 ## Status Improvement Proposals (SIPs)
 
-### Accepted
+### Stable
 
-No accepted SIPs right now.
+No stable specs right now. De facto a lot of the draft ones are stable and indicating this is work in progress.
 
 ### Draft
 
@@ -27,6 +26,14 @@ The following SIPs are under consideration for standardization.
 - [Status Whisper Usage Specification](status-whisper-usage-spec.md). How we use Whisper to do routing, metadata protection and provide 1:1/group/public chat.
 - [Status Whisper Mailserver Specification](status-whisper-mailserver-spec.md). How we use Whisper mailservers to provide offline inboxing.
 - [Status EIPs Standards](status-EIPs.md). Ethereum Improvement Proposals used in Status.
+
+### Raw
+
+No raw specs right now.
+
+### Deprecated
+
+No deprecated specs right now.
 
 ## Protocol Research
 
