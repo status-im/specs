@@ -110,6 +110,7 @@ not do this.
 **Trust establishment deals with users verifying they are communicating with who they think they are.**
 
 ### Terms Glossary
+
 | term | description |
 | ---- | ----------- |
 | privkey | ECDSA secp256k1 private key |
