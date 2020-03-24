@@ -29,6 +29,8 @@ The following SIPs are stable and running in production.
 
 - [Status Payload Specification](status-payloads-spec.md). What the message payloads look like.
 
+- [Status Client Specification](status-client-spec.md). The main specification for writing a Status client. **Start here**
+
 ### Draft
 
 The following SIPs are under consideration for standardization.
