@@ -1,12 +1,14 @@
 # Status Account Specification
 
-> Version: 0.1 (Draft)
+> Version: 0.2
+> 
+> Status: Stable
 >
 > Authors: Corey Petty <corey@status.im>, Oskar Thorén <oskar@status.im> (alphabetical order)
 
 ## Abstract
 
-TBD.
+What a Status account is and how trust is established.
 
 ## Table of Contents
 
@@ -214,4 +216,4 @@ All messages sent are encrypted with the public key of the destination and signe
 
 ## Security Considerations
 
-TBD.
+-
