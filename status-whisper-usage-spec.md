@@ -1,6 +1,8 @@
 # Status Whisper Usage Specification
 
-> Version: 0.1 (Draft)
+> Version: 0.2
+>
+> Status: Stable
 >
 > Authors: Adam Babik <adam@status.im>, Corey Petty <corey@status.im>, Oskar Thorén <oskar@status.im> (alphabetical order)
 
@@ -62,10 +64,10 @@ encryption properties to support asynchronous chat.
 | Messages | 1 | ✔ | [EIP-627](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-627.md) |
 | PoW Requirement | 2 | ✔ | [EIP-627](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-627.md) |
 | Bloom Filter | 3 | ✔ | [EIP-627](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-627.md) |
-| Batch Ack | 11 | 𝘅 | TODO |
-| Message Response | 12 | 𝘅 | TODO |
-| P2P Sync Request | 123 | 𝘅 | TODO |
-| P2P Sync Response | 124 | 𝘅 | TODO |
+| Batch Ack | 11 | 𝘅 | Undocumented |
+| Message Response | 12 | 𝘅 | Undocumented |
+| P2P Sync Request | 123 | 𝘅 | Undocumented |
+| P2P Sync Response | 124 | 𝘅 | Undocumented |
 | P2P Request Complete | 125 | 𝘅 | [Status Whisper Mailserver Spec](status-whisper-mailserver-spec.md) |
 | P2P Request | 126 | ✔ | [Status Whisper Mailserver Spec](status-whisper-mailserver-spec.md) |
 | P2P Messages | 127 | ✔/𝘅 (EIP-627 supports only single envelope in a packet) | [Status Whisper Mailserver Spec](status-whisper-mailserver-spec.md) |
