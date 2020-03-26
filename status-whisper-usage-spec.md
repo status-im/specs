@@ -284,9 +284,9 @@ One-to-one messages are encrypted using asymmetric encryption.
 
 ## Message confirmations
 
-Sending a message is a complex process where many things can go wrong. Message confirmations tell a node that a message originating from it has been received by its peers.
+Sending a message is a complex process where many things can go wrong. Message confirmations tell a node that a message originating from it has been seen by its direct peers.
 
-A node MAY send a message confirmation for any batch of messages received with a packet Messages Code (`0x01`).
+A node MAY send a message confirmation for any batch of messages received in a packet Messages Code (`0x01`).
 
 A message confirmation is sent using Batch Acknowledge packet (`0x0b`) or Message Response packet (`0x0c`).
 
@@ -303,7 +303,9 @@ The Message Response packet is more complex and is followed by a Versioned Messa
 The supported codes:
 `1`: means time sync error which happens when an envelope is too old or created in the future (the root cause is no time sync between nodes).
 
-The drawback of sending message confirmations is that it increases the noise in the network because for each sent message, a corresponding confirmation is broadcasted by one or more peers.
+The drawback of sending message confirmations is that it increases the noise in the network because for each sent message, a corresponding confirmation is broadcasted by one or more peers. To limit that, both Batch Acknowledge packet (`0x0b`) and Message Response packet (`0x0c`) are not broadcasted to peers of the peers, i.e. they do not follow epidemic spread.
+
+In the current Status network setup, only Mailservers support message confirmations. A client posting a message to the network and after receiving a confirmation can be sure that the message got processed by the Mailserver. If additionally, sending a message is limited to non-Mailserver peers, it also guarantees that the message got broadcasted through the network and it reached the selected Mailserver.
 
 ## Whisper V6 extensions
 
