@@ -173,7 +173,7 @@ way because there is no peers discovery algorithm overhead introduced. The disad
 is that these peers might be gone and without peers discovery mechanism, it won't be possible to find
 new ones.
 
-The current list of static peers is published on https://fleets.status.im/. `eth.beta` is the current
+The current list of static peers is published on https://fleets.status.im/. `eth.prod` is the current
 group of peers the official Status client uses. The others are test networks.
 
 #### Mobile nodes
@@ -219,9 +219,7 @@ see [Status EIPs Standards](status-EIPs.md).
 
 ## Security Considerations
 
-TBD.
-
-<!-- TODO: Fill this out. -->
+-
 
 ### Censorship-resistance
 
@@ -231,8 +229,6 @@ take care of all cases though, and this quickly leads into efforts such as
 obfuscated transports a la Tor.
 
 See https://github.com/status-im/status-react/issues/6351 for some discussion.
-
-<!-- TODO: More detail on interop of ports and what we do precisely -->
 
 ## Design Rationale
 
