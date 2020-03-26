@@ -133,7 +133,7 @@ and at some point we might be forced to change them.
 
 #### Discovery
 
-To implement a Status client you MUST discover peers to connect to. We use a
+To implement a Status client you MUST discover or have a list of peers to connect to. We use a
 light discovery mechanism based on a combination of [Discovery
 v5](https://github.com/ethereum/devp2p/blob/master/discv5/discv5.md) and
 [Rendezvous Protocol](https://github.com/libp2p/specs/tree/master/rendezvous),
