@@ -157,7 +157,7 @@ for i = 0; i < topicLen; i++ {
 
 ### Partitioned topic
 
-Whisper is broadcast-based protocol. In theory, everyone could communicate using a single topic but that would be extremaly inefficient. Opposite would be using a unique topic for each conversation, however, this brings privacy concerns because it would be much easier to detect whether and when two parties have an active conversation.
+Whisper is broadcast-based protocol. In theory, everyone could communicate using a single topic but that would be extremely inefficient. Opposite would be using a unique topic for each conversation, however, this brings privacy concerns because it would be much easier to detect whether and when two parties have an active conversation.
 
 Partitioned topics are used to broadcast private messages efficiently. By selecting a number of topic, it is possible to balance efficiency and privacy.
 
@@ -180,8 +180,6 @@ for i = 0; i < topicLen; i++ {
     topic[i] = hash[i]
 }
 ```
-
-If partitioned topic support is enabled by the Status client, it MUST listen to its paritioned topic. It MUST be generated using the algorithm above and active public key.
 
 ### Public chats
 
@@ -232,13 +230,48 @@ Generic discovery topic is a legacy topic used to handle all one-to-one chats. T
 
 Generic discovery topic MUST be created following [Public chats](#public-chats) topic algorithm using string `contact-discovery` as a name. -->
 
-### One-to-one topic
-
-In order to receive one-to-one messages incoming from a public key `P`, the Status Client MUST listen to a [Contact Code Topic](#contact-code-topic) created for that public key.
-
 ### Group chat topic
 
 Group chats does not have a dedicated topic. All group chat messages (including membership updates) are sent as one-to-one messages to multiple recipients.
+
+### Negotiated topic
+
+When a client sends a one to one message to another client, it MUST listen to their negotiated topic. This is computed by generating
+a diffie-hellman key exchange between two members and taking the first four bytes of the `SHA3-256` of the key generated.
+
+```golang
+
+sharedKey, err := ecies.ImportECDSA(myPrivateKey).GenerateShared(
+      ecies.ImportECDSAPublic(theirPublicKey),
+      16,
+      16,
+)
+
+
+hexEncodedKey := hex.EncodeToString(sharedKey)
+
+var hash []byte = keccak256(hexEncodedKey)
+var topicLen int = 4
+
+if len(hash) < topicLen {
+    topicLen = len(hash)
+}
+
+var topic [4]byte
+for i = 0; i < topicLen; i++ {
+    topic[i] = hash[i]
+}
+```
+
+A client SHOULD send to the negotiated topic only if it has received a message from all the devices included in the conversation.
+
+### Flow
+
+To exchange messages with client B, a client A SHOULD:
+
+- Listen to client's B Contact Code Topic to retrieve their bundle information, including a list of active devices
+- Send a message on client's B partitioned topic
+- Listen to the Negotiated Topic between A & B
 
 ## Message encryption
 
