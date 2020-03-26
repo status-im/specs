@@ -4,7 +4,7 @@
 >
 > Status: Stable
 >
-> Authors: Adam Babik <adam@status.im>, Dean Eigenmann <dean@status.im>, Oskar Thorén <oskar@status.im> (alphabetical order)
+> Authors: Adam Babik [adam@status.im](mailto:adam@status.im), Dean Eigenmann [dean@status.im](mailto:dean@status.im), Corey Petty [corey@status.im](mailto:corey@status.im), Oskar Thorén [oskar@status.im](mailto:oskar@status.im) (alphabetical order)
 
 ## Abstract
 
@@ -18,56 +18,70 @@ This document consists of two parts. The first outlines the specifications that
 have to be implemented in order to be a full Status client. The second gives a design rationale and answers some common questions.
 
 ## Table of Contents
-- [Status Client Specification](#status-client-specification)
-  - [Abstract](#abstract)
-  - [Table of Contents](#table-of-contents)
-  - [Introduction](#introduction)
-    - [Protocol layers](#protocol-layers)
-    - [Protobuf](#protobuf)
-  - [Components](#components)
-    - [P2P Overlay](#p2p-overlay)
-      - [Node discovery and roles](#node-discovery-and-roles)
-      - [Bootstrapping](#bootstrapping)
-      - [Discovery](#discovery)
-      - [Mobile nodes](#mobile-nodes)
-    - [Transport privacy and Whisper usage](#transport-privacy-and-whisper-usage)
-    - [Secure Transport](#secure-transport)
-    - [Data Sync](#data-sync)
-    - [Payloads and clients](#payloads-and-clients)
-    - [BIPs and EIPs Standards support](#bips-and-eips-standards-support)
-  - [Security Considerations](#security-considerations)
-  - [Design Rationale](#design-rationale)
-    - [P2P Overlay](#p2p-overlay-1)
-      - [Why devp2p? Why not use libp2p?](#why-devp2p-why-not-use-libp2p)
-      - [What about other RLPx subprotocols like LES, and Swarm?](#what-about-other-rlpx-subprotocols-like-les-and-swarm)
-      - [Why do you use Whisper?](#why-do-you-use-whisper)
-      - [I heard you were moving away from Whisper?](#i-heard-you-were-moving-away-from-whisper)
-      - [Why is PoW for Whisper set so low?](#why-is-pow-for-whisper-set-so-low)
-      - [Why do you not use Discovery v5 for node discovery?](#why-do-you-not-use-discovery-v5-for-node-discovery)
-      - [I heard something about mailservers being trusted somehow?](#i-heard-something-about-mailservers-being-trusted-somehow)
-    - [Data sync](#data-sync-1)
-      - [Why is MVDS not used for public chats?](#why-is-mvds-not-used-for-public-chats)
-  - [Footnotes](#footnotes)
-  - [Appendix A: Security considerations](#appendix-a-security-considerations)
-    - [Scalability and UX](#scalability-and-ux)
-    - [Privacy](#privacy)
-    - [Spam resistance](#spam-resistance)
-    - [Censorship resistance](#censorship-resistance)
-  - [Acknowledgements](#acknowledgements)
+
+-   [Status Client Specification](#status-client-specification)
+    -   [Abstract](#abstract)
+    -   [Table of Contents](#table-of-contents)
+    -   [Introduction](#introduction)
+        -   [Protocol layers](#protocol-layers)
+        -   [Protobuf](#protobuf)
+    -   [Components](#components)
+        -   [P2P Overlay](#p2p-overlay)
+            -   [Node discovery and roles](#node-discovery-and-roles)
+            -   [Bootstrapping](#bootstrapping)
+            -   [Discovery](#discovery)
+            -   [Mobile nodes](#mobile-nodes)
+        -   [Transport privacy and Whisper usage](#transport-privacy-and-whisper-usage)
+        -   [Secure Transport](#secure-transport)
+        -   [Data Sync](#data-sync)
+        -   [Payloads and clients](#payloads-and-clients)
+        -   [BIPs and EIPs Standards support](#bips-and-eips-standards-support)
+    -   [Security Considerations](#security-considerations)
+    -   [Design Rationale](#design-rationale)
+        -   [P2P Overlay](#p2p-overlay-1)
+            -   [Why devp2p? Why not use libp2p?](#why-devp2p-why-not-use-libp2p)
+            -   [What about other RLPx subprotocols like LES, and Swarm?](#what-about-other-rlpx-subprotocols-like-les-and-swarm)
+            -   [Why do you use Whisper?](#why-do-you-use-whisper)
+            -   [I heard you were moving away from Whisper?](#i-heard-you-were-moving-away-from-whisper)
+            -   [Why is PoW for Whisper set so low?](#why-is-pow-for-whisper-set-so-low)
+            -   [Why do you not use Discovery v5 for node discovery?](#why-do-you-not-use-discovery-v5-for-node-discovery)
+            -   [I heard something about mailservers being trusted somehow?](#i-heard-something-about-mailservers-being-trusted-somehow)
+        -   [Data sync](#data-sync-1)
+            -   [Why is MVDS not used for public chats?](#why-is-mvds-not-used-for-public-chats)
+    -   [Footnotes](#footnotes)
+    -   [Appendix A: Security considerations](#appendix-a-security-considerations)
+        -   [Scalability and UX](#scalability-and-ux)
+        -   [Privacy](#privacy)
+        -   [Spam resistance](#spam-resistance)
+        -   [Censorship resistance](#censorship-resistance)
+    -   [Acknowledgements](#acknowledgements)
 
 ## Introduction
+
+The Status mobile app is a multifunction application. This document mainly describes the requirements for establishing connections and communicating between clients. The other features specific to the Status application can be found as follows:
+
+-   [Account management](./status-account-spec.md)
+    -   This spec details what a Status Account is.  Namely, what keys are required, how they are generated, and the ancillary items derived from them. 
+-   [Web3 browser](./status-browser-spec.md)
+    -   This spec details how a Status client should access web3 content.
+-   [Cryptocurrency wallet](./status-blockchain-spec.md)
+    -   This spec details how the Status client interacts with the Ethereum network.
+-   [Decentralized storage](./status-storage-spec.md)
+    -   This spec details how the Status client uses decentralized storage.
+-   Decentralized chat
+    -   Decentralized chat is spread across this spec and others that are explained and linked below.
 
 ### Protocol layers
 
 Implementing a Status clients means implementing the following layers. Additionally, there are separate specifications for things like key management and account lifecycle.
 
-| Layer             | Purpose                         | Technology                   |
-|-------------------|---------------------------------|------------------------------|
-| Data and payloads | End user functionality          | 1:1, group chat, public chat |
-| Data sync         | Data consistency                | MVDS Ratchet                 |
-| Secure transport  | Confidentiality, PFS, etc       | Double Ratchet               |
-| Transport privacy | Routing, Metadata protection    | Whisper                      |
-| P2P Overlay       | Overlay routing, NAT traversal  | devp2p                       |
+| Layer             | Purpose                        | Technology                   |
+| ----------------- | ------------------------------ | ---------------------------- |
+| Data and payloads | End user functionality         | 1:1, group chat, public chat |
+| Data sync         | Data consistency               | MVDS Ratchet                 |
+| Secure transport  | Confidentiality, PFS, etc      | Double Ratchet               |
+| Transport privacy | Routing, Metadata protection   | Whisper                      |
+| P2P Overlay       | Overlay routing, NAT traversal | devp2p                       |
 
 ### Protobuf
 
@@ -101,7 +115,7 @@ There are four types of node roles:
 3. Mailservers (servers and clients)
 4. Mobile nodes (Status Clients)
 
-To implement a standard Status client you MUST implement the last node type. The
+To implement a standard Status client you MUST implement both 2. and 4. node types. The
 other node types are optional, but we RECOMMEND you implement a mailserver
 client mode, otherwise the user experience is likely to be poor.
 
@@ -116,16 +130,19 @@ run these provided they are connected to the rest of the Whisper network.
 Status maintains a list of production fleet boootstrap nodes in the following locations:
 
 **Hong Kong:**
-   - `enode://6e6554fb3034b211398fcd0f0082cbb6bd13619e1a7e76ba66e1809aaa0c5f1ac53c9ae79cf2fd4a7bacb10d12010899b370c75fed19b991d9c0cdd02891abad@47.75.99.169:443`
-   - `enode://23d0740b11919358625d79d4cac7d50a34d79e9c69e16831c5c70573757a1f5d7d884510bc595d7ee4da3c1508adf87bbc9e9260d804ef03f8c1e37f2fb2fc69@47.52.106.107:443`
+
+-   `enode://6e6554fb3034b211398fcd0f0082cbb6bd13619e1a7e76ba66e1809aaa0c5f1ac53c9ae79cf2fd4a7bacb10d12010899b370c75fed19b991d9c0cdd02891abad@47.75.99.169:443`
+-   `enode://23d0740b11919358625d79d4cac7d50a34d79e9c69e16831c5c70573757a1f5d7d884510bc595d7ee4da3c1508adf87bbc9e9260d804ef03f8c1e37f2fb2fc69@47.52.106.107:443`
 
 **Amsterdam:**
-   - `enode://436cc6f674928fdc9a9f7990f2944002b685d1c37f025c1be425185b5b1f0900feaf1ccc2a6130268f9901be4a7d252f37302c8335a2c1a62736e9232691cc3a@178.128.138.128:443`
-    - `enode://5395aab7833f1ecb671b59bf0521cf20224fe8162fc3d2675de4ee4d5636a75ec32d13268fc184df8d1ddfa803943906882da62a4df42d4fccf6d17808156a87@178.128.140.188:443`
+
+-   `enode://436cc6f674928fdc9a9f7990f2944002b685d1c37f025c1be425185b5b1f0900feaf1ccc2a6130268f9901be4a7d252f37302c8335a2c1a62736e9232691cc3a@178.128.138.128:443`
+-   `enode://5395aab7833f1ecb671b59bf0521cf20224fe8162fc3d2675de4ee4d5636a75ec32d13268fc184df8d1ddfa803943906882da62a4df42d4fccf6d17808156a87@178.128.140.188:443`
 
 **Central US:**
-   - `enode://32ff6d88760b0947a3dee54ceff4d8d7f0b4c023c6dad34568615fcae89e26cc2753f28f12485a4116c977be937a72665116596265aa0736b53d46b27446296a@34.70.75.208:443`
-   - `enode://5405c509df683c962e7c9470b251bb679dd6978f82d5b469f1f6c64d11d50fbd5dd9f7801c6ad51f3b20a5f6c7ffe248cc9ab223f8bcbaeaf14bb1c0ef295fd0@35.223.215.156:443`
+
+-   `enode://32ff6d88760b0947a3dee54ceff4d8d7f0b4c023c6dad34568615fcae89e26cc2753f28f12485a4116c977be937a72665116596265aa0736b53d46b27446296a@34.70.75.208:443`
+-   `enode://5405c509df683c962e7c9470b251bb679dd6978f82d5b469f1f6c64d11d50fbd5dd9f7801c6ad51f3b20a5f6c7ffe248cc9ab223f8bcbaeaf14bb1c0ef295fd0@35.223.215.156:443`
 
 These bootstrap nodes MAY change and we can't guarantee that it will stay this way forever
 and at some point we might be forced to change them.
@@ -175,7 +192,7 @@ way because there is no peers discovery algorithm overhead introduced. The disad
 is that these peers might be gone and without peers discovery mechanism, it won't be possible to find
 new ones.
 
-The current list of static peers is published on https://fleets.status.im/. `eth.prod` is the current
+The current list of static peers is published on <https://fleets.status.im/>. `eth.prod` is the current
 group of peers the official Status client uses. The others are test networks.
 
 #### Mobile nodes
@@ -264,10 +281,10 @@ computer.
 Whisper is not currently under active development, and it has several drawbacks.
 Among others:
 
-- It is very wasteful bandwidth-wise and it doesn't appear to be scalable
-- Proof of work is a poor spam protection mechanism for heterogenerous devices
-- The privacy guarantees provided are not rigorous
-- There's no incentives to run a node
+-   It is very wasteful bandwidth-wise and it doesn't appear to be scalable
+-   Proof of work is a poor spam protection mechanism for heterogenerous devices
+-   The privacy guarantees provided are not rigorous
+-   There's no incentives to run a node
 
 Finding a more suitable transport privacy is an ongoing research effort,
 together with [Vac](https://vac.dev/vac-overview) and other teams in the space.
@@ -309,9 +326,9 @@ very bandwidth heavy.
 
 ## Footnotes
 
-1. <https://github.com/status-im/status-protocol-go/>
-2. <https://github.com/status-im/status-console-client/>
-3. <https://github.com/status-im/status-react/>
+1.  <https://github.com/status-im/status-protocol-go/>
+2.  <https://github.com/status-im/status-console-client/>
+3.  <https://github.com/status-im/status-react/>
 
 ## Appendix A: Security considerations
 
@@ -373,6 +390,6 @@ A mailserver has a direct TCP connection, which means they are trusted to send t
 
 By default Devp2p runs on port `30303`, which is not commonly used for any other service. This means it is easy to censor, e.g. airport WiFi. This can be mitigated somewhat by running on e.g. port `80` or `443`, but there are still outstanding issues. See libp2p and Tor's Pluggable Transport for how this can be improved.
 
-See https://github.com/status-im/status-react/issues/6351 for some discussion.
+See <https://github.com/status-im/status-react/issues/6351> for some discussion.
 
 ## Acknowledgements
