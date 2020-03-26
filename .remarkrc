@@ -12,7 +12,6 @@
             "heading-increment": false,
             "no-multiple-toplevel-headings": true,
             "no-consecutive-blank-lines": false,
-            "maximum-line-length": 9000,
             "maximum-heading-length": 300,
             "no-heading-punctuation": false,
             "no-duplicate-headings": false,
