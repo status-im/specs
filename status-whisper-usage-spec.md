@@ -272,6 +272,7 @@ To exchange messages with client B, a client A SHOULD:
 - Listen to client's B Contact Code Topic to retrieve their bundle information, including a list of active devices
 - Send a message on client's B partitioned topic
 - Listen to the Negotiated Topic between A & B
+- Once a message is received from B, the Negotiated Topic SHOULD be used
 
 ## Message encryption
 
