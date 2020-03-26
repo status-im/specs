@@ -78,7 +78,7 @@ We use [`protobuf`](https://developers.google.com/protocol-buffers/) in differen
 
 ### P2P Overlay
 
-Status clients run on a private peer-to-peer network, as specified by the devP2P
+Status clients run on a public, permissionless peer-to-peer network, as specified by the devP2P
 network protocols. devP2P provides a protocol for node discovery which is in
 draft mode
 [here](https://github.com/ethereum/devp2p/blob/master/discv5/discv5.md). See
