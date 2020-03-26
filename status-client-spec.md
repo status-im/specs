@@ -78,20 +78,20 @@ We use [`protobuf`](https://developers.google.com/protocol-buffers/) in differen
 
 ### P2P Overlay
 
-Status clients run on the public Ethereum network, as specified by the devP2P
+Status clients run on a private peer-to-peer network, as specified by the devP2P
 network protocols. devP2P provides a protocol for node discovery which is in
 draft mode
 [here](https://github.com/ethereum/devp2p/blob/master/discv5/discv5.md). See
 more on node discovery and management in the next section.
 
-To communicate between Ethereum nodes, the [RLPx Transport
+To communicate between Status nodes, the [RLPx Transport
 Protocol, v5](https://github.com/ethereum/devp2p/blob/master/rlpx.md) is used, which
 allows for TCP-based communication between nodes.
 
 On top of this we run the RLPx-based subprotocol [Whisper
 v6](https://eips.ethereum.org/EIPS/eip-627) for privacy-preserving messaging.
 
-There MUST be an Ethereum node that is capable of discovering peers and
+There MUST be a node that is capable of discovering peers and
 implements Whisper V6 specification.
 
 #### Node discovery and roles
@@ -130,7 +130,7 @@ and at some point we might be forced to change them.
 
 #### Discovery
 
-To implement a Status client you need to discover peers to connect to. We use a
+To implement a Status client you MUST discover peers to connect to. We use a
 light discovery mechanism based on a combination of [Discovery
 v5](https://github.com/ethereum/devp2p/blob/master/discv5/discv5.md) and
 [Rendezvous Protocol](https://github.com/libp2p/specs/tree/master/rendezvous),
@@ -156,14 +156,14 @@ Status nodes that want to be discovered MUST register to Discovery V5 and/or Ren
 with the `whisper` topic. Status nodes that are mail servers and want to
 be discoverable MUST additionally register with the `whispermail` topic.
 
-The recommended strategy is to use both mechanisms but at the same time implement a structure
+It is RECOMMENDED to use both mechanisms but at the same time implement a structure
 called `PeerPool`. `PeerPool` is responsible for maintaining an optimal number of peers.
 For mobile nodes, there is no significant advantage to have more than 2-3 peers and one mail server.
 `PeerPool` can notify peers discovery protocol implementations that they should suspend
 their execution because the optimal number of peers is found. They should resume
 if the number of connected peers drops or a mail server disconnects.
 
-It is worth noticing that an efficient caching strategy can be of great use, especially,
+It is worth noticing that an efficient caching strategy MAY be of great use, especially,
 on mobile devices. Discovered peers can be cached as they rarely change and used
 when the client starts again. In such a case, there might be no need to even start
 peers discovery protocols because cached peers will satisfy the optimal number of peers.
@@ -219,7 +219,7 @@ see [Status EIPs Standards](status-EIPs.md).
 
 ## Security Considerations
 
--
+See [Appendix A](#appendix-a-security-considerations)
 
 ### Censorship-resistance
 
