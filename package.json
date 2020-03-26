@@ -1,5 +1,5 @@
 {
-  "name": "@vacp2p/specs",
+  "name": "specs",
   "dependencies": {
     "remark-cli": "^6.0.1",
     "remark-lint": "^6.0.2",
