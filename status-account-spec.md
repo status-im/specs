@@ -8,7 +8,7 @@
 
 ## Abstract
 
-What a Status account is and how trust is established.
+In this specification we explain what Status account is, and how trust is established.
 
 ## Table of Contents
 
