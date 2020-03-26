@@ -514,9 +514,6 @@ This mean that every time a new device is paired, the bundle needs to be updated
 
 The method is loosely based on https://signal.org/docs/specifications/sesame/ .
 
-<!-- TODO: This multi device section isn't clear enough -->
-<!-- TODO: Additionally, it seems tightly coupled with secure transport, which makes things like multi device public chats harder to reason about (IMO). E.g. as a client impl I might want multi device support but not want to impl double ratchet etc, so what does this mean? -->
-<!-- It is coupled to the secure transport because otherwise there's no need of multidevice. Without a secure transport multi-device is trivial (nothing to implement, such in public chats, nothing to reason about), the type of secure transport we use dictates the type of multi-device support we want, same as signal's "Sesame was designed for use with Double Ratchet sessions created via X3DH key agreement.". Please read the specs of sesame, it clearly shows that it's tightly coupled to the encryption layer and its purpose is to allow encrypting messages for multiple devices, such in our case. Let's take some time understanding and reading things before commenting. -->
 
 ### Pairing
 
