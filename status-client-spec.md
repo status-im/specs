@@ -36,7 +36,6 @@ have to be implemented in order to be a full Status client. The second gives a d
     - [Payloads and clients](#payloads-and-clients)
     - [BIPs and EIPs Standards support](#bips-and-eips-standards-support)
   - [Security Considerations](#security-considerations)
-    - [Censorship-resistance](#censorship-resistance)
   - [Design Rationale](#design-rationale)
     - [P2P Overlay](#p2p-overlay-1)
       - [Why devp2p? Why not use libp2p?](#why-devp2p-why-not-use-libp2p)
@@ -53,7 +52,7 @@ have to be implemented in order to be a full Status client. The second gives a d
     - [Scalability and UX](#scalability-and-ux)
     - [Privacy](#privacy)
     - [Spam resistance](#spam-resistance)
-    - [Censorship resistance](#censorship-resistance-1)
+    - [Censorship resistance](#censorship-resistance)
   - [Acknowledgements](#acknowledgements)
 
 ## Introduction
@@ -224,15 +223,6 @@ see [Status EIPs Standards](status-EIPs.md).
 
 See [Appendix A](#appendix-a-security-considerations)
 
-### Censorship-resistance
-
-With default settings Whisper over DevP2P runs on odd ports in 30k range, which
-are easy to block. One workaround for this is to run ports on 443. This doesn't
-take care of all cases though, and this quickly leads into efforts such as
-obfuscated transports a la Tor.
-
-See https://github.com/status-im/status-react/issues/6351 for some discussion.
-
 ## Design Rationale
 
 ### P2P Overlay
@@ -382,5 +372,7 @@ A mailserver has a direct TCP connection, which means they are trusted to send t
 **Devp2p TCP port blockable:**
 
 By default Devp2p runs on port `30303`, which is not commonly used for any other service. This means it is easy to censor, e.g. airport WiFi. This can be mitigated somewhat by running on e.g. port `80` or `443`, but there are still outstanding issues. See libp2p and Tor's Pluggable Transport for how this can be improved.
+
+See https://github.com/status-im/status-react/issues/6351 for some discussion.
 
 ## Acknowledgements
