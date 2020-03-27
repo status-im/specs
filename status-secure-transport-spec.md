@@ -477,13 +477,6 @@ TODO: this requires more detail
 
 ## Session management
 
-### Abstract
-
-In this specification we describe how status sessions are handled.
-
-<!-- TODO: Clarify what we mean by a session -->
-
-### Introduction
 
 A peer is identified by two pieces of data:
 
