@@ -29,15 +29,20 @@ The following SIPs are stable and running in production.
 
 - [Status Payload Specification](status-payloads-spec.md). What the message payloads look like.
 
+- [Status Client Specification](status-client-spec.md). The main specification for writing a Status client. **Start here**
+
 ### Draft
 
 The following SIPs are under consideration for standardization.
 
-- [Status Client Specification](status-client-spec.md). The main specification for writing a Status client. **Start here**
-
 ### Raw
 
-No raw specs right now.
+These parts are currently underspecified:
+
+- [Status Blockchain Usage Specification](./status-blockchain-spec.md). How we use the Ethereum blockchain to facilitate the Web3 Browser and Wallet functionality
+- [Status Storage Usage Specification](./status-storage-spec.md). How we use decentralized storage solutions to facilitate various Status features.
+- [Status Browser Specification](./status-browser-spec.md). How the Status client interacts with both Web3 and Web2.
+
 
 ### Deprecated
 
