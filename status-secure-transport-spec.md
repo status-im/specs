@@ -541,7 +541,3 @@ Account recovery is no different from adding a new device, and it is handled in 
 
 In some cases (i.e. account recovery when no other pairing device is available, device not paired), it is possible that a device will receive a message that is not targeted to its own `installation-id`.
 In this case an empty message containing bundle information is sent back, which will notify the receiving end of including this device in any further communication.
-
-### Trust establishment
-
-Trust establishment deals with users verifying they are communicating with who they think they are.
