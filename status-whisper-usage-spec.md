@@ -1,6 +1,8 @@
 # Status Whisper Usage Specification
 
-> Version: 0.1 (Draft)
+> Version: 0.2
+>
+> Status: Stable
 >
 > Authors: Adam Babik <adam@status.im>, Corey Petty <corey@status.im>, Oskar Thorén <oskar@status.im> (alphabetical order)
 
@@ -62,10 +64,10 @@ encryption properties to support asynchronous chat.
 | Messages | 1 | ✔ | [EIP-627](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-627.md) |
 | PoW Requirement | 2 | ✔ | [EIP-627](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-627.md) |
 | Bloom Filter | 3 | ✔ | [EIP-627](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-627.md) |
-| Batch Ack | 11 | 𝘅 | TODO |
-| Message Response | 12 | 𝘅 | TODO |
-| P2P Sync Request | 123 | 𝘅 | TODO |
-| P2P Sync Response | 124 | 𝘅 | TODO |
+| Batch Ack | 11 | 𝘅 | Undocumented |
+| Message Response | 12 | 𝘅 | Undocumented |
+| P2P Sync Request | 123 | 𝘅 | Undocumented |
+| P2P Sync Response | 124 | 𝘅 | Undocumented |
 | P2P Request Complete | 125 | 𝘅 | [Status Whisper Mailserver Spec](status-whisper-mailserver-spec.md) |
 | P2P Request | 126 | ✔ | [Status Whisper Mailserver Spec](status-whisper-mailserver-spec.md) |
 | P2P Messages | 127 | ✔/𝘅 (EIP-627 supports only single envelope in a packet) | [Status Whisper Mailserver Spec](status-whisper-mailserver-spec.md) |
@@ -155,7 +157,7 @@ for i = 0; i < topicLen; i++ {
 
 ### Partitioned topic
 
-Whisper is broadcast-based protocol. In theory, everyone could communicate using a single topic but that would be extremaly inefficient. Opposite would be using a unique topic for each conversation, however, this brings privacy concerns because it would be much easier to detect whether and when two parties have an active conversation.
+Whisper is broadcast-based protocol. In theory, everyone could communicate using a single topic but that would be extremely inefficient. Opposite would be using a unique topic for each conversation, however, this brings privacy concerns because it would be much easier to detect whether and when two parties have an active conversation.
 
 Partitioned topics are used to broadcast private messages efficiently. By selecting a number of topic, it is possible to balance efficiency and privacy.
 
@@ -178,8 +180,6 @@ for i = 0; i < topicLen; i++ {
     topic[i] = hash[i]
 }
 ```
-
-If partitioned topic support is enabled by the Status client, it MUST listen to its paritioned topic. It MUST be generated using the algorithm above and active public key.
 
 ### Public chats
 
@@ -230,13 +230,49 @@ Generic discovery topic is a legacy topic used to handle all one-to-one chats. T
 
 Generic discovery topic MUST be created following [Public chats](#public-chats) topic algorithm using string `contact-discovery` as a name. -->
 
-### One-to-one topic
-
-In order to receive one-to-one messages incoming from a public key `P`, the Status Client MUST listen to a [Contact Code Topic](#contact-code-topic) created for that public key.
-
 ### Group chat topic
 
 Group chats does not have a dedicated topic. All group chat messages (including membership updates) are sent as one-to-one messages to multiple recipients.
+
+### Negotiated topic
+
+When a client sends a one to one message to another client, it MUST listen to their negotiated topic. This is computed by generating
+a diffie-hellman key exchange between two members and taking the first four bytes of the `SHA3-256` of the key generated.
+
+```golang
+
+sharedKey, err := ecies.ImportECDSA(myPrivateKey).GenerateShared(
+      ecies.ImportECDSAPublic(theirPublicKey),
+      16,
+      16,
+)
+
+
+hexEncodedKey := hex.EncodeToString(sharedKey)
+
+var hash []byte = keccak256(hexEncodedKey)
+var topicLen int = 4
+
+if len(hash) < topicLen {
+    topicLen = len(hash)
+}
+
+var topic [4]byte
+for i = 0; i < topicLen; i++ {
+    topic[i] = hash[i]
+}
+```
+
+A client SHOULD send to the negotiated topic only if it has received a message from all the devices included in the conversation.
+
+### Flow
+
+To exchange messages with client B, a client A SHOULD:
+
+- Listen to client's B Contact Code Topic to retrieve their bundle information, including a list of active devices
+- Send a message on client's B partitioned topic
+- Listen to the Negotiated Topic between A & B
+- Once a message is received from B, the Negotiated Topic SHOULD be used
 
 ## Message encryption
 
@@ -248,9 +284,9 @@ One-to-one messages are encrypted using asymmetric encryption.
 
 ## Message confirmations
 
-Sending a message is a complex process where many things can go wrong. Message confirmations tell a node that a message originating from it has been received by its peers.
+Sending a message is a complex process where many things can go wrong. Message confirmations tell a node that a message originating from it has been seen by its direct peers.
 
-A node MAY send a message confirmation for any batch of messages received with a packet Messages Code (`0x01`).
+A node MAY send a message confirmation for any batch of messages received in a packet Messages Code (`0x01`).
 
 A message confirmation is sent using Batch Acknowledge packet (`0x0b`) or Message Response packet (`0x0c`).
 
@@ -267,7 +303,9 @@ The Message Response packet is more complex and is followed by a Versioned Messa
 The supported codes:
 `1`: means time sync error which happens when an envelope is too old or created in the future (the root cause is no time sync between nodes).
 
-The drawback of sending message confirmations is that it increases the noise in the network because for each sent message, a corresponding confirmation is broadcasted by one or more peers.
+The drawback of sending message confirmations is that it increases the noise in the network because for each sent message, a corresponding confirmation is broadcasted by one or more peers. To limit that, both Batch Acknowledge packet (`0x0b`) and Message Response packet (`0x0c`) are not broadcasted to peers of the peers, i.e. they do not follow epidemic spread.
+
+In the current Status network setup, only Mailservers support message confirmations. A client posting a message to the network and after receiving a confirmation can be sure that the message got processed by the Mailserver. If additionally, sending a message is limited to non-Mailserver peers, it also guarantees that the message got broadcasted through the network and it reached the selected Mailserver.
 
 ## Whisper V6 extensions
 
