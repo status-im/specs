@@ -13,7 +13,9 @@ Every spec has its own lifecycle that shows its maturity. We indicate this in a 
 
 ### Stable
 
-No stable specs right now. De facto a lot of the draft ones are stable and indicating this is work in progress.
+The following SIPs are stable and running in production.
+
+- [Status EIPs Standards](status-EIPs.md). Ethereum Improvement Proposals used in Status.
 
 ### Draft
 
@@ -25,7 +27,6 @@ The following SIPs are under consideration for standardization.
 - [Status Account Specification](status-account-spec.md). What a Status account is and how trust is established.
 - [Status Whisper Usage Specification](status-whisper-usage-spec.md). How we use Whisper to do routing, metadata protection and provide 1:1/group/public chat.
 - [Status Whisper Mailserver Specification](status-whisper-mailserver-spec.md). How we use Whisper mailservers to provide offline inboxing.
-- [Status EIPs Standards](status-EIPs.md). Ethereum Improvement Proposals used in Status.
 
 ### Raw
 
