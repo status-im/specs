@@ -1,8 +1,10 @@
 # Status Message Payloads Specification
 
-> Version: 0.1 (Draft)
+> Version: 0.2
 >
-> Authors: Adam Babik <adam@status.im>, Oskar Thorén <oskar@status.im> (alphabetical order)
+> Status: Stable
+>
+> Authors: Adam Babik <adam@status.im>, Andrea Maria Piana <andreap@status.im>, Oskar Thorén <oskar@status.im> (alphabetical order)
 
 ## Abstract
 
@@ -21,27 +23,28 @@ as various clients created using different technologies.
   - [Introduction](#introduction)
   - [Payload wrapper](#payload-wrapper)
   - [Encoding](#encoding)
-  - [Types of Messages] (#types-of-messages)
+  - [Types of messages](#types-of-messages)
     - [Message](#message)
       - [Payload](#payload)
+      - [Payload](#payload-1)
       - [Content types](#content-types)
+        - [Sticker content type](#sticker-content-type)
       - [Message types](#message-types)
       - [Clock vs Timestamp and message ordering](#clock-vs-timestamp-and-message-ordering)
       - [Chats](#chats)
-    - [ContactUpdate](#contact-update)
-      - [Payload] (#payload)
-    - [SyncInstallationContact](#sync-installation-contact)
-      - [Payload](#payload)
-    - [SyncInstallationPublicChat](#sync-installation-public-chat)
-      - [Payload](#payload)
-    - [PairInstallation](#pair-installation)
-      - [Payload](#payload)
-    - [MembershipUpdateMessage](#membership-update-message)
-      - [Payload](#payload)
+    - [Contact Update](#contact-update)
+      - [Payload](#payload-2)
+      - [Contact update](#contact-update-1)
+    - [SyncInstallationContact](#syncinstallationcontact)
+      - [Payload](#payload-3)
+    - [SyncInstallationPublicChat](#syncinstallationpublicchat)
+      - [Payload](#payload-4)
+    - [PairInstallation](#pairinstallation)
+      - [Payload](#payload-5)
+    - [MembershipUpdateMessage and MembershipUpdateEvent](#membershipupdatemessage-and-membershipupdateevent)
   - [Upgradability](#upgradability)
   - [Security Considerations](#security-considerations)
   - [Design rationale](#design-rationale)
-    - [Why are you using Transit and Protobuf?](#why-are-you-using-transit-and-protobuf)
 
 ## Introduction
 
@@ -61,7 +64,7 @@ message StatusProtocolMessage {
 
 `signature` is the bytes of the signed `SHA3-256` of the payload, signed with the key of the author of the message.
 The signature is needed to validate authorship of the message, so that the message can be relayed to third parties.
-If a signature is not present but an author is provided by a layer below, the message is not to be relayed to third parties and its considered plausibly deniable.
+If a signature is not present but an author is provided by a layer below, the message is not to be relayed to third parties and it is considered plausibly deniable.
 
 ## Encoding
 
@@ -81,7 +84,8 @@ The protobuf description is:
 message ChatMessage {
   // Lamport timestamp of the chat message
   uint64 clock = 1;
-  // Unix timestamp in milliseconds, not 
+  // Unix timestamps in milliseconds, currently not used as we use whisper as more reliable, but here
+  // so that we don't rely on it
   uint64 timestamp = 2;
   // Text of the message
   string text = 3;
@@ -89,7 +93,10 @@ message ChatMessage {
   string response_to = 4;
   // Ens name of the sender
   string ens_name = 5;
-  // Local chatID of the message
+  // Chat id, this field is symmetric for public-chats and private group chats,
+  // but asymmetric in case of one-to-ones, as the sender will use the chat-id
+  // of the received, while the receiver will use the chat-id of the sender.
+  // Probably should be the concatenation of sender-pk & receiver-pk in alphabetical order
   string chat_id = 6;
 
   // The type of message (public/one-to-one/private-group-chat)
@@ -107,8 +114,7 @@ message ChatMessage {
     PUBLIC_GROUP = 2;
     PRIVATE_GROUP = 3;
     // Only local
-    SYSTEM_MESSAGE_PRIVATE_GROUP = 4;
-    }
+    SYSTEM_MESSAGE_PRIVATE_GROUP = 4;}
   enum ContentType {
     UNKNOWN_CONTENT_TYPE = 0;
     TEXT_PLAIN = 1;
@@ -116,6 +122,8 @@ message ChatMessage {
     STATUS = 3;
     EMOJI = 4;
     TRANSACTION_COMMAND = 5;
+    // Only local
+    SYSTEM_MESSAGE_CONTENT_PRIVATE_GROUP = 6;
   }
 }
 ```
@@ -316,6 +324,6 @@ There are two ways to upgrade the protocol without breaking compatibility:
 
 ## Security Considerations
 
-TBD.
+-
 
 ## Design rationale
