@@ -19,6 +19,10 @@ The following SIPs are stable and running in production.
 
 - [Status Secure Transport Specification](status-secure-transport-spec.md). How Status provide a secure transport with conversational security properties.
 
+- [Status Whisper Mailserver Specification](status-whisper-mailserver-spec.md). How we use Whisper mailservers to provide offline inboxing.
+
+- [Status EIPs Standards](status-EIPs.md). Ethereum Improvement Proposals used in Status.
+
 ### Draft
 
 The following SIPs are under consideration for standardization.
@@ -27,7 +31,6 @@ The following SIPs are under consideration for standardization.
 - [Status Payload Specification](status-payloads-spec.md). What the message payloads look like.
 - [Status Account Specification](status-account-spec.md). What a Status account is and how trust is established.
 - [Status Whisper Usage Specification](status-whisper-usage-spec.md). How we use Whisper to do routing, metadata protection and provide 1:1/group/public chat.
-- [Status Whisper Mailserver Specification](status-whisper-mailserver-spec.md). How we use Whisper mailservers to provide offline inboxing.
 
 ### Raw
 
