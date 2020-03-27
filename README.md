@@ -15,7 +15,8 @@ Every spec has its own lifecycle that shows its maturity. We indicate this in a 
 
 The following SIPs are stable and running in production.
 
-- [Status EIPs Standards](status-EIPs.md). Ethereum Improvement Proposals used in Status.
+
+- [Status Client Specification](status-client-spec.md). The main specification for writing a Status client. **Start here**
 
 - [Status Secure Transport Specification](status-secure-transport-spec.md). How Status provide a secure transport with conversational security properties.
 
@@ -29,7 +30,7 @@ The following SIPs are stable and running in production.
 
 - [Status Payload Specification](status-payloads-spec.md). What the message payloads look like.
 
-- [Status Client Specification](status-client-spec.md). The main specification for writing a Status client. **Start here**
+- [Status EIPs Standards](status-EIPs.md). Ethereum Improvement Proposals used in Status.
 
 ### Draft
 
