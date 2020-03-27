@@ -1,12 +1,14 @@
 # Status Account Specification
 
-> Version: 0.1 (Draft)
+> Version: 0.2
+> 
+> Status: Stable
 >
 > Authors: Corey Petty <corey@status.im>, Oskar Thorén <oskar@status.im> (alphabetical order)
 
 ## Abstract
 
-TBD.
+In this specification we explain what Status account is, and how trust is established.
 
 ## Table of Contents
 
@@ -108,6 +110,7 @@ not do this.
 **Trust establishment deals with users verifying they are communicating with who they think they are.**
 
 ### Terms Glossary
+
 | term | description |
 | ---- | ----------- |
 | privkey | ECDSA secp256k1 private key |
@@ -214,4 +217,4 @@ All messages sent are encrypted with the public key of the destination and signe
 
 ## Security Considerations
 
-TBD.
+-
