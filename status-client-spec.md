@@ -56,24 +56,11 @@ have to be implemented in order to be a full Status client. The second gives a d
         -   [Censorship resistance](#censorship-resistance)
     -   [Acknowledgements](#acknowledgements)
 
-## Introduction
-
-The Status mobile app is a multifunction application. This document mainly describes the requirements for establishing connections and communicating between clients. The other features specific to the Status application can be found as follows:
-
--   [Account management](./status-account-spec.md)
-    -   This spec details what a Status Account is.  Namely, what keys are required, how they are generated, and the ancillary items derived from them. 
--   [Web3 browser](./status-browser-spec.md)
-    -   This spec details how a Status client should access web3 content.
--   [Cryptocurrency wallet](./status-blockchain-spec.md)
-    -   This spec details how the Status client interacts with the Ethereum network.
--   [Decentralized storage](./status-storage-spec.md)
-    -   This spec details how the Status client uses decentralized storage.
--   Decentralized chat
-    -   Decentralized chat is spread across this spec and others that are explained and linked below.
-
 ### Protocol layers
 
-Implementing a Status clients means implementing the following layers. Additionally, there are separate specifications for things like key management and account lifecycle.
+Implementing a Status clients largely means implementing the following layers. Additionally, there are separate specifications for things like key management and account lifecycle.
+
+Some things, such as storage and blockchain usage, are currently underspecified.
 
 | Layer             | Purpose                        | Technology                   |
 | ----------------- | ------------------------------ | ---------------------------- |
