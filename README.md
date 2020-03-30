@@ -1,3 +1,9 @@
+---
+layout: default
+permalink: /
+nav_exclude: true
+---
+
 # Specifications for Status clients
 
 This repository contains a list of specifications for implementing Status and
