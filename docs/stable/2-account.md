@@ -1,6 +1,6 @@
 ---
 permalink: /spec/2
-parent: Stable
+parent: Stable specs
 ---
 
 # Status Account Specification

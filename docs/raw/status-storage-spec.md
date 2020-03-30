@@ -1,5 +1,6 @@
 ---
 nav_exclude: true
+parent: Raw specs
 ---
 
 # Status Storage Specification

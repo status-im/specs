@@ -1,7 +1,7 @@
 ---
 layout: default
 nav_exclude: true
-parent: Raw
+parent: Raw specs
 ---
 
 # Status Blockchain Specification

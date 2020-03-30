@@ -1,6 +1,6 @@
 ---
 permalink: /spec/8
-parent: Stable
+parent: Stable specs
 ---
 
 # Status EIPs standards 

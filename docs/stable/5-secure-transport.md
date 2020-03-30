@@ -1,6 +1,6 @@
 ---
 permalink: /spec/5
-parent: Stable
+parent: Stable specs
 ---
 
 # Status Secure Transport Specification

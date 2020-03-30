@@ -1,6 +1,6 @@
 ---
 permalink: /spec/7
-parent: Stable
+parent: Stable specs
 ---
 
 # Status Group Chat Specification

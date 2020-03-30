@@ -1,6 +1,6 @@
 ---
 permalink: /spec/3
-parent: Stable
+parent: Stable specs
 ---
 
 # Status Whisper Usage Specification

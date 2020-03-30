@@ -1,6 +1,6 @@
 ---
 permalink: /spec/6
-parent: Stable
+parent: Stable specs
 ---
 
 # Status Message Payloads Specification

@@ -1,6 +1,6 @@
 ---
 permalink: /spec/4
-parent: Stable
+parent: Stable specs
 ---
 
 # Status Whisper Mailserver Specification
