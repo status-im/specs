@@ -1,3 +1,8 @@
+---
+permalink: /spec/8
+parent: Stable
+---
+
 # Status EIPs standards 
 
 > Version: 0.2

@@ -1,3 +1,8 @@
+---
+permalink: /spec/3
+parent: Stable
+---
+
 # Status Whisper Usage Specification
 
 > Version: 0.2

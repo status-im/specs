@@ -1,3 +1,8 @@
+---
+permalink: /spec/7
+parent: Stable
+---
+
 # Status Group Chat Specification
 
 > Version: 0.1 (Draft)

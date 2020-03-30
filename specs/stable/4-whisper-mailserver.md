@@ -1,3 +1,8 @@
+---
+permalink: /spec/4
+parent: Stable
+---
+
 # Status Whisper Mailserver Specification
 > Version: 0.2
 >

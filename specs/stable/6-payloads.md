@@ -1,3 +1,8 @@
+---
+permalink: /spec/6
+parent: Stable
+---
+
 # Status Message Payloads Specification
 
 > Version: 0.2

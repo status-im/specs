@@ -1,3 +1,8 @@
+---
+permalink: /spec/5
+parent: Stable
+---
+
 # Status Secure Transport Specification
 
 > Version: 0.2
