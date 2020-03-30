@@ -1,3 +1,7 @@
+---
+nav_exclude: true
+---
+
 # Status Storage Specification
 
 > Version: 0.1

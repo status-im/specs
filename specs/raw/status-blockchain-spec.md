@@ -1,3 +1,9 @@
+---
+layout: default
+nav_exclude: true
+parent: Raw
+---
+
 # Status Blockchain Specification
 
 > Version: 0.1
