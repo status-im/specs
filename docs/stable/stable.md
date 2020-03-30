@@ -7,3 +7,5 @@ permalink: /specs/stable
 ---
 
 # Stable specifications
+
+{.toc.}
