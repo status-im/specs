@@ -1,6 +1,7 @@
 ---
 permalink: /spec/1
 parent: Stable specs
+title: 1/CLIENT
 ---
 
 # Status Client Specification
