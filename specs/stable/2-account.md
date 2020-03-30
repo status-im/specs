@@ -1,3 +1,8 @@
+---
+permalink: /spec/2
+parent: Stable
+---
+
 # Status Account Specification
 
 > Version: 0.2
