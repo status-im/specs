@@ -9,6 +9,13 @@ nav_exclude: true
 This repository contains a list of specifications for implementing Status and
 its various capabilities.
 
+## How to contribute
+
+1. Create an issue for a new Status Improvement Proposal (SIP) or some bug that you'd like to address
+2. Create a corresponding PR and ping some exisiting SIP editors for review
+
+If you need help, ask in #protocol at Status / Discord.
+
 ## Spec lifecycle
 
 Every spec has its own lifecycle that shows its maturity. We indicate this in a similar fashion to [COSS Lifecycle](https://rfc.unprotocols.org/spec:2/COSS/):
