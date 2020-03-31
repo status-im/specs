@@ -1,12 +1,14 @@
 ---
 permalink: /spec/7
-parent: Stable specs
+parent: Draft specs
 title: 7/GROUP-CHAT
 ---
 
 # Status Group Chat Specification
 
-> Version: 0.1 (Draft)
+> Version: 0.1
+>
+> Status: Draft
 >
 > Authors: Andrea Maria Piana <andreap@status.im>
 >
