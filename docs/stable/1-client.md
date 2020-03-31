@@ -199,17 +199,15 @@ communicate with other Status nodes.
 Once a Whisper node is up and running there are some specific settings required
 to commmunicate with other Status nodes.
 
-See [Status Whisper Usage Spec](status-whisper-usage-spec.md) for more details.
+See [3/WHISPER-USAGE](https://specs.status.im/spec/3) for more details.
 
-For providing offline inboxing, see the complementary [Whisper Mailserver
-Spec](status-whisper-mailserver-spec.md).
+For providing offline inboxing, see the complementary [4/WHISPER-MAILSERVER](https://specs.status.im/spec/4).
 
 ### Secure Transport
 
 In order to provide confidentiality, integrity, authentication and forward
 secrecy of messages we implement a secure transport on top of Whisper. This is
-used in 1:1 chats and group chats, but not for public chats. See [Status Secure
-Transport Spec](status-secure-transport-spec.md) for more.
+used in 1:1 chats and group chats, but not for public chats. See [5/SECURE-TRANSPORT](https://specs.status.im/spec/5) for more.
 
 ### Data Sync
 
@@ -221,13 +219,12 @@ Transport Spec](status-secure-transport-spec.md) for more.
 
 On top of secure transport, we have various types of data sync clients and
 payload formats for things like 1:1 chat, group chat and public chat. These have
-various degrees of standardization. Please refer to [Initial Message Payload
-Specification](status-payloads-spec.md) for more details.
+various degrees of standardization. Please refer to [6/PAYLOADS](https://specs.status.im/spec/6) for more details.
 
 ### BIPs and EIPs Standards support
 
 For a list of EIPs and BIPs that SHOULD be supported by Status client, please
-see [Status EIPs Standards](status-EIPs.md).
+see [8/EIPS](https://specs.status.im/spec/8).
 
 ## Security Considerations
 
@@ -386,3 +383,5 @@ By default Devp2p runs on port `30303`, which is not commonly used for any other
 See <https://github.com/status-im/status-react/issues/6351> for some discussion.
 
 ## Acknowledgements
+
+Jacek Sieka
