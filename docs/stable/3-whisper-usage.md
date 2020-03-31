@@ -74,9 +74,9 @@ encryption properties to support asynchronous chat.
 | Message Response | 12 | 𝘅 | Undocumented |
 | P2P Sync Request | 123 | 𝘅 | Undocumented |
 | P2P Sync Response | 124 | 𝘅 | Undocumented |
-| P2P Request Complete | 125 | 𝘅 | [Status Whisper Mailserver Spec](status-whisper-mailserver-spec.md) |
-| P2P Request | 126 | ✔ | [Status Whisper Mailserver Spec](status-whisper-mailserver-spec.md) |
-| P2P Messages | 127 | ✔/𝘅 (EIP-627 supports only single envelope in a packet) | [Status Whisper Mailserver Spec](status-whisper-mailserver-spec.md) |
+| P2P Request Complete | 125 | 𝘅 | [4/WHISPER-MAILSERVER](https://specs.status.im/spec/4) |
+| P2P Request | 126 | ✔ | [4/WHISPER-MAILSERVER](https://specs.status.im/spec/4) |
+| P2P Messages | 127 | ✔/𝘅 (EIP-627 supports only single envelope in a packet) | [4/WHISPER-MAILSERVER](https://specs.status.im/spec/4) |
 
 
 ## Whisper node configuration
@@ -134,7 +134,7 @@ The protocol requires a key (symmetric or asymmetric) for the following actions:
 As asymmetric keys and symmetric keys are required to process incoming messages,
 they must be available all the time and are stored in memory.
 
-Keys management for PFS is described in [Perfect forward secrecy section](#perfect-forward-secrecy-pfs).
+Keys management for PFS is described in [5/SECURE-TRANSPORT](https://specs.status.im/spec/5).
 
 The Status protocols uses a few particular Whisper topics to achieve its goals.
 
