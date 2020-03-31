@@ -10,7 +10,7 @@ title: 5/SECURE-TRANSPORT
 >
 > Status: Stable
 >
-> Authors: Andrea Piana <andreap@status.im>, Pedro Pombeiro <pedro@status.im>, Corey Petty <corey@status.im>, Oskar Thorén <oskar@status.im>, Dean Eigenmann <dean@status.im
+> Authors: Andrea Piana <andreap@status.im>, Pedro Pombeiro <pedro@status.im>, Corey Petty <corey@status.im>, Oskar Thorén <oskar@status.im>, Dean Eigenmann <dean@status.im>
 
 ## Abstract
 
@@ -130,13 +130,14 @@ Every client initially generates some key material which is stored locally:
 - A signed prekey based on secp256k1 - `SPK`
 - A prekey signature - `Sig(IK, Encode(SPK))`
 
-More details can be found in the `X3DH Prekey bundle creation` section of [Account specification](./status-account-spec.md#x3dh-prekey-bundle-creation).
+More details can be found in the `X3DH Prekey bundle creation` section of [2/ACCOUNT](https://specs.status.im/spec/2#x3dh-prekey-bundles).
 
 Prekey bundles can be extracted from any user's messages, or found via searching for their specific topic, `{IK}-contact-code`.
 
 TODO: See below on bundle retrieval, this seems like enhancement and parameter for recommendation
 
 ### Bundle retrieval
+
 <!-- TODO: Potentially move this completely over to [Trust Establishment](./status-account-spec.md) -->
 
 X3DH works by having client apps create and make available a bundle of prekeys (the X3DH bundle) that can later be requested by other interlocutors when they wish to start a conversation with a given user.
@@ -161,7 +162,7 @@ There are two phases in the initial negotiation of a 1:1 chat:
 1. **Identity verification** (e.g., face-to-face contact exchange through QR code, Identicon matching). A QR code serves two purposes simultaneously - identity verification and initial bundle retrieval;
 1. **Asynchronous initial key exchange**, using X3DH.
 
-For more information on account generation and trust establishment, see [Status Account Specification](status-account-spec.md)
+For more information on account generation and trust establishment, see [2/ACCOUNT](https://specs.status.im/spec/2)
 
 #### Initial key exchange flow (X3DH)
 

@@ -175,7 +175,7 @@ message StickerMessage {
 
 #### Message types
 
-Message types are required to decide how a particular message is encrypted and what metadata needs to be attached when passing a message to the transport layer. For more on this, see [Status Whisper Usage Specification](./status-whisper-usage-spec.md).
+Message types are required to decide how a particular message is encrypted and what metadata needs to be attached when passing a message to the transport layer. For more on this, see [3/WHISPER-USAGE](https://specs.status.im/spec/3).
 
 <!-- TODO: This reference is a bit odd, considering the layer payloads should interact with is Secure Transport, and not Whisper. This requires more detail -->
 
