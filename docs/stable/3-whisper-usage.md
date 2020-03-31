@@ -4,7 +4,7 @@ parent: Stable specs
 title: 3/WHISPER-USAGE
 ---
 
-# Status Whisper Usage Specification
+# 3/WHISPER-USAGE
 
 > Version: 0.2
 >

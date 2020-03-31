@@ -4,7 +4,7 @@ parent: Stable specs
 title: 1/CLIENT
 ---
 
-# Status Client Specification
+# 1/CLIENT
 
 > Version: 0.2
 >

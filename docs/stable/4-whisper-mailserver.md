@@ -4,7 +4,8 @@ parent: Stable specs
 title: 4/WHISPER-MAILSERVER
 ---
 
-# Status Whisper Mailserver Specification
+# 4/WHISPER-MAILSERVER
+
 > Version: 0.2
 >
 > Status: Stable

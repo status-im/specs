@@ -4,7 +4,7 @@ parent: Stable specs
 title: 6/PAYLOADS
 ---
 
-# Status Message Payloads Specification
+# 6/PAYLOADS
 
 > Version: 0.2
 >

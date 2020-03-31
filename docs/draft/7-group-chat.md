@@ -4,7 +4,7 @@ parent: Draft specs
 title: 7/GROUP-CHAT
 ---
 
-# Status Group Chat Specification
+# 7/GROUP-CHAT
 
 > Version: 0.1
 >
@@ -12,7 +12,6 @@ title: 7/GROUP-CHAT
 >
 > Authors: Andrea Maria Piana <andreap@status.im>
 >
-
 
 ## Table of Contents
 

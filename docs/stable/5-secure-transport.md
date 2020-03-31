@@ -4,7 +4,7 @@ parent: Stable specs
 title: 5/SECURE-TRANSPORT
 ---
 
-# Status Secure Transport Specification
+# 5/SECURE-TRANSPORT
 
 > Version: 0.2
 >

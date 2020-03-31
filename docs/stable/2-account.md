@@ -4,7 +4,7 @@ parent: Stable specs
 title: 2/ACCOUNT
 ---
 
-# Status Account Specification
+# 2/ACCOUNT
 
 > Version: 0.2
 > 

@@ -4,7 +4,7 @@ parent: Stable specs
 title: 8/EIPS
 ---
 
-# Status EIPs standards 
+# 8/EIPS
 
 > Version: 0.2
 >
