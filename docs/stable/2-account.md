@@ -24,7 +24,6 @@ In this specification we explain what Status account is, and how trust is establ
 - [Initial Key Generation](#initial-key-generation)
     - [Public/Private Keypairs](#publicprivate-keypairs)
     - [X3DH Prekey bundle creation](#x3dh-prekey-bundle-creation)
-    - [Register at push notification system](#register-at-push-notification-system)
 - [Account Broadcasting](#account-broadcasting)
     - [X3DH Prekey bundles](#x3dh-prekey-bundles)
 - [Optional Account additions](#optional-account-additions)
@@ -81,14 +80,6 @@ Everything else associated with the contact is either verified or derived from t
     - Prekey signature: `Sig(IK, Encode(SPK))`
     - Timestamp
 - These bundles are made available in a variety of ways, as defined in section 2.1.
-
-### Register at push notification system
-
-If you want to receive and send push notifications, you MUST register a push
-notification server. This part is currently underspecified. You MAY choose to
-not do this.
-
-<!-- TODO: Add details on this this. -->
 
 ## Account Broadcasting
 - A user is responsible for broadcasting certain information publicly so that others may contact them.
