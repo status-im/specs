@@ -72,8 +72,6 @@ Everything else associated with the contact is either verified or derived from t
         - following [BIP44](https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki)
         - NOTE: this (`i=0`) is also the current (and only) path for Whisper key before Multiaccount integration
 
-<!-- TODO: Remove time dependency, only write what is the case now - i.e. remove "post Multiaccount integration" -->
-
 ### X3DH Prekey bundle creation
 - Status follows the X3DH prekey bundle scheme that Open Whisper Systems outlines [in their documentation](https://signal.org/docs/specifications/x3dh/#the-x3dh-protocol) with the following exceptions:
     - Because there are no central servers, we do not publish one-time keys `OPK` or perform DH including them. 
@@ -102,6 +100,7 @@ not do this.
 - TODO: retreival of long-time offline users bundle via `{IK}-contact-code` 
 
 ## Optional Account additions
+
 ### ENS Username
 - A user MAY register a public username on the Ethereum Name System (ENS).  This username is a user-chosen subdomain of the `stateofus.eth` ENS registration that maps to their whisper identity key (`IK`). 
 
@@ -125,10 +124,11 @@ not do this.
 
 
 ### Contact Discovery
+
 #### Public channels
 - Public group channels in Status are a broadcast/subscription system.  All public messages are encrypted with a symmetric key drived from the channel name, `K_{pub,sym}`, which is publicly known.
 - A public group channel's symmetric key MUST creation must follow the [web3 API](https://web3js.readthedocs.io/en/1.0/web3-shh.html#generatesymkeyfrompassword)'s `web3.ssh.generateSymKeyFromPassword` function
-- In order to post to a public group channel, a client MUST have a valid account created (as per section [Account Creation Specification](./status-account-spec)).
+- In order to post to a public group channel, a client MUST have a valid account created.
 - In order to listen to a public group channel, a client must subscribe to the channel name.  The sender of a message is derived from the message's signature.
 - Discovery of channel names is not currently part of the protocol, and is typically done out of band.  If a channel name is used that has not been used, it will be created.
 - A client MUST sign the message otherwise it will be discarded by the recipients.
@@ -165,12 +165,16 @@ This can be done in the following ways:
 - a bundle SHOULD be distributed on the contact code channel. This is the whisper topic `{IK}-contact-code`, where `IK` is the hex encoded public key of the user, prefixed with `0x`. The channel is encrypted in the same way public chats are encrypted.
 
 ### Contact Verification
+
 Once you have the information of a contact, the following can be used to verify that the key material is as it should be.
+
 #### Identicon
 A low-poly identicon is deterministically generated from the whisper chat public key.  This can then be compared out of band to ensure the reciever's public key is the one you have locally.
+
 #### 3 word pseudonym / whisper key fingerprint
 Status generates a deterministic 3-word random pseudonym from the whisper chat public key.  This pseudonym acts as a human readable fingerprint to the whisper chat public key.  This name also shows when viewing a contact's public profile and in the chat UI.
 - implementation: [gfycat](https://github.com/status-im/status-react/tree/develop/src/status_im/utils/gfycat)
+
 #### ENS name
 Status offers the ability to register a mapping of a human readable subdomain of `stateofus.eth` to their whisper chat public key.  This registration is purchased (currently by staking 10 SNT) and stored on the Ethereum mainnet blockchain for public lookup.
 
