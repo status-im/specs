@@ -5,3 +5,6 @@ search_enabled: true
 url: "https://specs.status.im"
 
 exclude: ["node_modules/", "*.gemspec", "*.gem", "Gemfile", "Gemfile.lock", "package.json", "package-lock.json",  "script/", "LICENSE.txt", "lib/", "bin/", "Rakefile"]
+
+plugins:
+  - jekyll-sitemap
