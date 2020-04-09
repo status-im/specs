@@ -10,7 +10,7 @@ title: 1/CLIENT
 >
 > Status: Stable
 >
-> Authors: Adam Babik [adam@status.im](mailto:adam@status.im), Dean Eigenmann [dean@status.im](mailto:dean@status.im), Corey Petty [corey@status.im](mailto:corey@status.im), Oskar Thorén [oskar@status.im](mailto:oskar@status.im) (alphabetical order)
+> Authors: Adam Babik [adam@status.im](mailto:adam@status.im), Andrea Maria Piana [andreap@status.im](mailto:andreap@status.im), Dean Eigenmann [dean@status.im](mailto:dean@status.im), Corey Petty [corey@status.im](mailto:corey@status.im), Oskar Thorén [oskar@status.im](mailto:oskar@status.im) (alphabetical order)
 
 ## Abstract
 
