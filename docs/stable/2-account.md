@@ -111,7 +111,7 @@ Everything else associated with the contact is either verified or derived from t
 | ---- | ----------- |
 | privkey | ECDSA secp256k1 private key |
 | pubkey | ECDSA secp256k1 public key |
-| whisper key | pubkey for chat with HD derivation path m/44'/60'/0'/0/0 |
+| whisper key | pubkey for chat with HD derivation path m/43'/60'/1581'/0'/0 |
 
 
 ### Contact Discovery
