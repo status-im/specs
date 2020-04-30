@@ -1,14 +1,14 @@
 ---
 permalink: /spec/6
-parent: Stable specs
+parent: Draft specs
 title: 6/PAYLOADS
 ---
 
 # 6/PAYLOADS
 
-> Version: 0.2
+> Version: 0.3
 >
-> Status: Stable
+> Status: Draft
 >
 > Authors: Adam Babik <adam@status.im>, Andrea Maria Piana <andreap@status.im>, Oskar Thorén <oskar@status.im> (alphabetical order)
 
@@ -35,6 +35,7 @@ as various clients created using different technologies.
       - [Payload](#payload-1)
       - [Content types](#content-types)
         - [Sticker content type](#sticker-content-type)
+        - [Image content type](#image-content-type)
       - [Message types](#message-types)
       - [Clock vs Timestamp and message ordering](#clock-vs-timestamp-and-message-ordering)
       - [Chats](#chats)
@@ -112,6 +113,7 @@ message ChatMessage {
 
   oneof payload {
     StickerMessage sticker = 9;
+    ImageMessage image = 10;
   }
 
   enum MessageType {
@@ -130,6 +132,7 @@ message ChatMessage {
     TRANSACTION_COMMAND = 5;
     // Only local
     SYSTEM_MESSAGE_CONTENT_PRIVATE_GROUP = 6;
+    IMAGE = 7;
   }
 }
 ```
@@ -146,7 +149,7 @@ message ChatMessage {
 | 6 | chat_id | `string` | The local ID of the chat the message is sent to |
 | 7 | message_type | `MessageType` | The type of message, different for one-to-one, public or group chats |
 | 8 | content_type | `ContentType` | The type of the content of the message | 
-| 9 | payload | `Sticker|nil` | The payload of the message based on the content type |
+| 9 | payload | `Sticker|Image|nil` | The payload of the message based on the content type |
 
 #### Content types
 
@@ -160,6 +163,7 @@ There are also other content types that MAY be implemented by the client:
 * `STATUS`
 * `EMOJI`
 * `TRANSACTION_COMMAND`
+* `IMAGE`
 
 ##### Sticker content type
 
@@ -171,6 +175,26 @@ message StickerMessage {
   string hash = 1;
   int32 pack = 2;
 }
+```
+
+##### Image content type
+
+A `ChatMessage` with `IMAGE` `Content/Type` MUST also specify the `payload` of the image
+and the `type`
+
+```protobuf
+message ImageMessage {
+  bytes payload = 1;
+  ImageType type = 2;
+}
+
+enum ImageType {
+  UNKNOWN_IMAGE_TYPE = 0;
+  IMAGE_JPEG = 1;
+  IMAGE_PNG = 2;
+  IMAGE_WEBP = 3;
+}
+
 ```
 
 #### Message types
