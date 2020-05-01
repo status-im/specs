@@ -78,6 +78,7 @@ Gheorghe
 Gmbh
 golang
 Guilherme
+hardwallet
 Hawksby
 HD
 HeaderByNumber
@@ -86,6 +87,7 @@ Helman
 hexEncode
 hexEncodedKey
 HMAC
+html
 http
 HTTPS
 identicon
@@ -135,6 +137,7 @@ NonceAt
 oneof
 Oskar
 PairInstallation
+params
 partitionsNum
 partitionTopic
 peerID
@@ -144,6 +147,7 @@ permalink
 permissionless
 PFS
 Piana
+pin
 Pinzaru
 plaintext
 Pluggable
@@ -160,6 +164,7 @@ ProtocolMessage
 PSS
 pubkey
 publicKey
+puk
 pyspelling
 relayers
 requestMessages
@@ -209,6 +214,7 @@ URIs
 uuid
 UX
 Volodymyr
+Volosovskyi
 Vp
 Waku
 Waku's
