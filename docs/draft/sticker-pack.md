@@ -17,7 +17,7 @@ redirect_from:
 
 In this specification, we describe how Status app uses IPFS gateway to store stickers.
 We will explore image format, how they are uploaded and how an end user can see them
-insed the Status app.
+inside the Status app.
 
 ## Definition
 
@@ -41,7 +41,7 @@ hyperlinks are publically available and can be accessed by any user inside the s
 Stickers can be sent in chat only by accounts that own the sticker pack.
 
 ### IPFS gateway
-At the moment of writing, the Status uses the [Infura](https://infura.io/) gateway.
+At the moment of writing, Status uses the [Infura](https://infura.io/) gateway.
 Infura gateway is an HTTPS gateway, which based on an HTTP GET request with the
 multihash block will return the stored content at that block address. 
 
@@ -65,14 +65,13 @@ The following steps are needed to fetch all sticker packs:
 #### 1. Get total number of sticker packs
 Call `packCount()` on the sticker market contract, will return number of sticker pack registered as `uint256`.
 #### 2. Get sticker pack by id
-ID's are represented as `uint256` and are incremental from `0` to totatl number of sticker packs in contract, which we received on previous step. To get a sticker pack we should call `getPackData(sticker-pack-id)`, the return type is  `["bytes4[]" "address" "bool" "uint256" "uint256" "bytes"]` which represents the following fields: `[category owner mintable timestamp price contenthash]`. 
+ID's are represented as `uint256` and are incremental from `0` to total number of sticker packs in contract, which we received on previous step. To get a sticker pack we should call `getPackData(sticker-pack-id)`, the return type is  `["bytes4[]" "address" "bool" "uint256" "uint256" "bytes"]` which represents the following fields: `[category owner mintable timestamp price contenthash]`. 
 `TODO:` Describe contenthash, it's a hash in IPFS (what it contains?)
 ##### 3. Get owned stick packs
-To get owned packs, we should get all owned tokens for the current account address. To do that we should call `balanceOf(address)` where address is the address for current account. This method returns a `uint256` representing the token id representing the count of available tokens. Using `tokenOfOwnerByIndex(address,uint256)` method, with the address of the user and ID in form of a `uint256` which is an incremented int from 0 to total number of tokens, we will get token id. To get sticker pack id from token we call`tokenPackId(uint256)` where `uint256` is the token id. This method will return an `uint256` which is the id of the owned sticker pack.
+To get owned packs, we should get all owned tokens for the current account address. To do that we should call `balanceOf(address)` where address is the address for current account. This method returns a `uint256` representing the count of available tokens. Using `tokenOfOwnerByIndex(address,uint256)` method, with the address of the user and ID in form of a `uint256` which is an incremented int from 0 to total number of tokens, we will get token id. To get sticker pack id from token we call`tokenPackId(uint256)` where `uint256` is the token id. This method will return an `uint256` which is the id of the owned sticker pack.
 
 ##### 4. Buy a sticker pack
 To buy a sticker pack we should call `approveAndCall(address,uint256,bytes)` where `address` is the address of buyer,`uint256` is the price and third parameters `bytes` is the callback  called if approved. In callback we call `buyToken(uint256,address,uint256)`, first parameter is sticker pack id, second buyers address, and the last is the price.
 ## Copyright
 
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
-
