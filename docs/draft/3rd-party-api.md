@@ -1,17 +1,26 @@
-# (DRAFT) 3rd party APIs used for core functionality that impacts things like availability/censorship and privacy
+---
+title: 3rd party APIs used for core functionality that impacts things like availability/censorship and privacy
+version: 0.1.0
+status: Draft
+authors:
+---
 
-Authors:	Volodymyr Kozieiev
-
-Status:	Draft
-
-Version:	0.1.0
+# 3rd party APIs used for core functionality that impacts things like availability/censorship and privacy
 
 ## Table of Contents
 
 1. [Abstract](Abstract)
 2. [Definitions](#definitions)
-3. [Why 3rd party API can be a problem?]()
-
+3. [Why 3rd party API can be a problem?](#why-3rd-party-api-can-be-a-problem)
+4. [3rd party APIs used by Status](#3rd-party-apis-used-by-status)
+  * [Infura](#infura)
+  * [Etherscan](#etherscan)
+  * [CryptoCompare](#cryptocompare)
+  * [Collectibles](#collectibles)
+  * [Iubenda](#iubenda)
+5. [Changelog](#changelog)
+6. [Acknowledgements](#acknowledgements)
+7. [Copyright](#copyright)
 
 ## Abstract
 In this specification listed 3rd party APIs that Status functionality rely on.
@@ -86,3 +95,15 @@ Privacy policy of Status hosted on Iubenda.
 
 ##### Concerns
 If Iubenda fails Status users won't be able to navigate to app's privacy policy.
+
+## Changelog
+
+| Version | Comment |
+| :-----: | ------- |
+| [0.1.0](https://github.com/specs/...)   | Initial Release |
+
+## Acknowledgements
+
+## Copyright
+
+Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
