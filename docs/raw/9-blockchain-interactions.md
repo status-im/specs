@@ -1,6 +1,6 @@
 ---
 permalink: /spec/9
-parent: Stable specs
+parent: Raw specs
 title: 9/BLOCKCHAIN-USAGE
 ---
 
@@ -8,7 +8,7 @@ title: 9/BLOCKCHAIN-USAGE
 
 > Version: 0.1
 >
-> Status: Stable
+> Status: Raw
 >
 > Authors: Andrea Maria Piana <andreap@status.im>
 
@@ -31,22 +31,22 @@ In the section below are described the `RPC` calls made the nodes, with a brief
 description of their functionality and how it is used by Status.
 
 1. [Sending transactions](#Sending-transactions)
-  *[EstimateGas](#EstimateGas)
-  *[PendingNonceAt](#PendingNonceAt)
-  *[SuggestGasPrice](#SuggestGasPrice)
-  *[SendTransaction](#SendTransaction)
+  - [EstimateGas](#EstimateGas)
+  - [PendingNonceAt](#PendingNonceAt)
+  - [SuggestGasPrice](#SuggestGasPrice)
+  - [SendTransaction](#SendTransaction)
 2. [Fetching balance](#Fetching-balance)
-  *[BlockByHash](#BlockByHash)
-  *[BlockByNumber](#BlockByNumber)
-  *[FilterLogs](#FilterLogs)
-  *[HeaderByNumber](#HeaderByNumber)
-  *[NonceAt](#NonceAt)
-  *[TransactionByHash](#TransactionByHash)
-  *[TransactionReceipt](#TransactionReceipt)
+  - [BlockByHash](#BlockByHash)
+  - [BlockByNumber](#BlockByNumber)
+  - [FilterLogs](#FilterLogs)
+  - [HeaderByNumber](#HeaderByNumber)
+  - [NonceAt](#NonceAt)
+  - [TransactionByHash](#TransactionByHash)
+  - [TransactionReceipt](#TransactionReceipt)
 
 ### Sending transactions
 
-#### EstimateGase
+#### EstimateGas
 
 EstimateGas tries to estimate the gas needed to execute a specific transaction based on
 the current pending state of the backend blockchain. There is no guarantee that this is
@@ -100,7 +100,7 @@ https://github.com/ethereum/go-ethereum/blob/26d271dfbba1367326dec38068f9df828d4
 
 #### BlockByHash
 
-BlockByHash returns the given full block.
+`BlockByHash` returns the given full block.
 
 It is used by status to fetch a given block which will then be inspected for 
 transfers to the user address, both tokens and ETH.
@@ -182,3 +182,5 @@ https://github.com/ethereum/go-ethereum/blob/26d271dfbba1367326dec38068f9df828d4
 
 
 ## ENS
+
+All the interactions with `ENS` are made through the [ENS contract](https://github.com/ensdomains/ens)
