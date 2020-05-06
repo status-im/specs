@@ -1,6 +1,14 @@
-# Status EIPs standards 
+---
+permalink: /spec/8
+parent: Stable specs
+title: 8/EIPS
+---
 
-> Version: 0.1 (Draft)
+# 8/EIPS
+
+> Version: 0.2
+>
+> Status: Stable
 >
 > Authors: Ricardo Guilherme Schmidt <ricardo3@status.im>
 
