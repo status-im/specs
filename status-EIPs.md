@@ -25,31 +25,31 @@ Status should follow all standards as possible. Whenever a feature is needed, it
 
 ### Support table
 
-|          | Status v0 | Status v1 | Other    |
-|----------|-----------|-----------|----------|
-| BIP32    | N         | Y         | N        |
-| BIP39    | Y         | Y         | Y        |
-| BIP43    | N         | Y         | N        |
-| BIP44    | N         | Y         | N        |
-| EIP20    | Y         | Y         | Y        |
-| EIP55    | Y         | Y         | Y        |
-| EIP67    | P         | P         | N        |
-| EIP137   | P         | P         | N        |
-| EIP155   | Y         | Y         | Y        |
-| EIP165   | P         | N         | N        |
-| EIP181   | P         | N         | N        |
-| EIP191   | Y?        | N         | Y        |
-| EIP627   | Y         | Y         | N        |
-| EIP681   | Y         | N         | Y        |
-| EIP712   | P         | P         | Y        |
-| EIP721   | P         | P         | Y        |
-| EIP831   | N         | Y         | N        |
-| EIP945   | Y         | Y         | N        |
-| EIP1102  | Y         | Y         | Y        |
-| EIP1193  | Y         | Y         | Y        |
-| EIP1577  | Y         | P         | N        |
-| EIP1581  | N         | Y         | N        |
-| EIP1459  | N         |           | N        |
+|          | Status v0 | Status v1 | Other    | State    |
+|----------|-----------|-----------|----------| -------- |
+| BIP32    | N         | Y         | N        | `stable` |
+| BIP39    | Y         | Y         | Y        | `stable` |
+| BIP43    | N         | Y         | N        | `stable` |
+| BIP44    | N         | Y         | N        | `stable` |
+| EIP20    | Y         | Y         | Y        | `stable` |
+| EIP55    | Y         | Y         | Y        | `stable` |
+| EIP67    | P         | P         | N        | `stable` |
+| EIP137   | P         | P         | N        | `stable` |
+| EIP155   | Y         | Y         | Y        | `stable` |
+| EIP165   | P         | N         | N        | `stable` |
+| EIP181   | P         | N         | N        | `stable` |
+| EIP191   | Y?        | N         | Y        | `stable` |
+| EIP627   | Y         | Y         | N        | `stable` |
+| EIP681   | Y         | N         | Y        | `stable` |
+| EIP712   | P         | P         | Y        | `stable` |
+| EIP721   | P         | P         | Y        | `stable` |
+| EIP831   | N         | Y         | N        | `stable` |
+| EIP945   | Y         | Y         | N        | `stable` |
+| EIP1102  | Y         | Y         | Y        | `stable` |
+| EIP1193  | Y         | Y         | Y        | `stable` |
+| EIP1577  | Y         | P         | N        | `stable` |
+| EIP1581  | N         | Y         | N        | `stable` |
+| EIP1459  | N         |           | N        | `raw`    |
 
 ## Components
 
