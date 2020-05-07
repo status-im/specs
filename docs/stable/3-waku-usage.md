@@ -1,10 +1,10 @@
 ---
 permalink: /spec/3
 parent: Stable specs
-title: 3/WHISPER-USAGE
+title: 3/WAKU-USAGE
 ---
 
-# 3/WHISPER-USAGE
+# 3/WAKU-USAGE
 
 > Version: 0.2
 >
@@ -12,42 +12,47 @@ title: 3/WHISPER-USAGE
 >
 > Authors: Adam Babik <adam@status.im>, Corey Petty <corey@status.im>, Oskar Thorén <oskar@status.im> (alphabetical order)
 
-- [Status Whisper Usage Specification](#status-whisper-usage-specification)
+- [Status Waku Usage Specification](#3waku-usage)
   - [Abstract](#abstract)
   - [Reason](#reason)
   - [Terminology](#terminology)
-  - [Whisper packets](#whisper-packets)
-  - [Whisper node configuration](#whisper-node-configuration)
+  - [Waku packets](#waku-packets)
+  - [Waku node configuration](#waku-node-configuration)
   - [Handshake](#handshake)
   - [Rate limiting](#rate-limiting)
   - [Keys management](#keys-management)
     - [Contact code topic](#contact-code-topic)
     - [Partitioned topic](#partitioned-topic)
     - [Public chats](#public-chats)
-    - [Generic discovery topic](#generic-discovery-topic)
-    - [One-to-one topic](#one-to-one-topic)
+    <!-- - [Generic discovery topic](#generic-discovery-topic) -->
+    <!-- - [One-to-one topic](#one-to-one-topic) -->
     - [Group chat topic](#group-chat-topic)
+    - [Negotiated topic](#negotiated-topic)
   - [Message encryption](#message-encryption)
   - [Message confirmations](#message-confirmations)
   - [Whisper V6 extensions](#whisper-v6-extensions)
     - [Request historic messages](#request-historic-messages)
-      - [shhext_requestMessages](#shhextrequestmessages)
+      - [shhext_requestMessages](#shhext_requestmessages)
 
 ## Abstract
 
-Status uses [Whisper](https://eips.ethereum.org/EIPS/eip-627) to provide
-privacy-preserving routing and messaging on top of devP2P. Whisper uses topics
+Status uses [Waku](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-1.md) to provide
+privacy-preserving routing and messaging on top of devP2P. Waku uses topics
 to partition its messages, and these are leveraged for all chat capabilities. In
-the case of public chats, the channel name maps directly to its Whisper topic.
-This allows allows anyone to listen on a single channel.
+the case of public chats, the channel name maps directly to its Waku topic.
+This allows anyone to listen on a single channel.
 
-Additionally, since anyone can receive Whisper envelopes, it relies on the
+Additionally, since anyone can receive Waku envelopes, it relies on the
 ability to decrypt messages to decide who is the correct recipient. We do
 however not rely on this property, but instead implement another secure
-transport layer on top of Whisper.
+transport layer on top of Waku.
 
 Finally, we use an extension of Whisper to provide the ability to do offline
 messaging.
+
+```js
+// TODO is the extension for offline messaging part of Waku? Or do we still use a Whisper extension?
+```
 
 ## Reason
 
@@ -56,34 +61,38 @@ encryption properties to support asynchronous chat.
 
 ## Terminology
 
-* *Whisper node*: an Ethereum node with Whisper V6 enabled (in the case of geth, it's `--shh` option)
-* *Whisper network*: a group of Whisper nodes connected together through the internet connection and forming a graph
-* *Message*: decrypted Whisper message
+* *Waku node*: an Ethereum node with Waku V1 enabled
+* *Waku network*: a group of Waku nodes connected together through the internet connection and forming a graph
+* *Message*: decrypted Waku message
 * *Offline message*: an archived envelope
 * *Envelope*: encrypted message with metadata like topic and Time-To-Live
 
-## Whisper packets
+## Waku packets
 
-| Packet Name | Code | EIP-627 | References |
-| --- | --: | --- | --- |
-| Status | 0 | ✔ | [Handshake](#handshake) |
-| Messages | 1 | ✔ | [EIP-627](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-627.md) |
-| PoW Requirement | 2 | ✔ | [EIP-627](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-627.md) |
-| Bloom Filter | 3 | ✔ | [EIP-627](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-627.md) |
-| Batch Ack | 11 | 𝘅 | Undocumented |
-| Message Response | 12 | 𝘅 | Undocumented |
-| P2P Sync Request | 123 | 𝘅 | Undocumented |
-| P2P Sync Response | 124 | 𝘅 | Undocumented |
-| P2P Request Complete | 125 | 𝘅 | [4/WHISPER-MAILSERVER](https://specs.status.im/spec/4) |
-| P2P Request | 126 | ✔ | [4/WHISPER-MAILSERVER](https://specs.status.im/spec/4) |
-| P2P Messages | 127 | ✔/𝘅 (EIP-627 supports only single envelope in a packet) | [4/WHISPER-MAILSERVER](https://specs.status.im/spec/4) |
+| Packet Name          | Code | References |
+| -------------------- | ---: | --- |
+| Status               |    0 | [Handshake](#handshake), [WAKU-1](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-1.md#status) |
+| Messages             |    1 | [WAKU-1](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-1.md#messages) |
+| PoW Requirement      |    2 | [WAKU-1](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-1.md#pow-requirement-update) |
+| Bloom Filter         |    3 | [WAKU-1](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-1.md#bloom-filter-update) |
+| Batch Ack            |   11 | Undocumented |
+| Message Response     |   12 | [WAKU-1](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-1.md#message-confirmations-update) |
+| Status Update        |   22 | [WAKU-1](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-1.md#status-update)
+| P2P Sync Request     |  123 | Undocumented |
+| P2P Sync Response    |  124 | Undocumented |
+| P2P Request Complete |  125 | [4/WAKU-MAILSERVER](https://specs.status.im/spec/4) |
+| P2P Request          |  126 | [4/WAKU-MAILSERVER](https://specs.status.im/spec/4), [WAKU-1](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-1.md#p2p-request) |
+| P2P Messages         |  127 | [4/WAKU-MAILSERVER](https://specs.status.im/spec/4), [WAKU-1](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-1.md#p2p-message) |
 
+```js
+// TODO add details for Topic Interest and Rate Limits
+```
 
-## Whisper node configuration
+## Waku node configuration
 
-If you want to run a Whisper node and receive messages from Status clients, it must be properly configured.
+If you want to run a Waku node and receive messages from Status clients, it must be properly configured.
 
-Whisper's Proof Of Work algorithm is used to deter denial of service and various spam/flood attacks against the Whisper network. The sender of a message must perform some work which in this case means processing time. Because Status' main client is a mobile client, this easily leads to battery draining and poor performance of the app itself. Hence, all clients MUST use the following Whisper node settings:
+Waku's Proof Of Work algorithm is used to deter denial of service and various spam/flood attacks against the Waku network. The sender of a message must perform some work which in this case means processing time. Because Status' main client is a mobile client, this easily leads to battery draining and poor performance of the app itself. Hence, all clients MUST use the following Waku node settings:
 * proof-of-work requirement not larger than `0.002`
 * time-to-live not lower than `10` (in seconds)
 
@@ -94,9 +103,9 @@ Handshake is a RLP-encoded packet sent to a newly connected peer. It MUST start 
 [ protocolVersion, PoW, bloom, isLightNode, confirmationsEnabled, rateLimits ]
 ```
 
-`protocolVersion`: version of the Whisper protocol
+`protocolVersion`: version of the Waku protocol
 `PoW`: minimum PoW accepted by the peer
-`bloom`: bloom filter of Whisper topic accepted by the peer
+`bloom`: bloom filter of Waku topic accepted by the peer
 `isLightNode`: when true, the peer won't forward messages
 `confirmationsEnabled`: when true, the peer will send message confirmations
 `rateLimits`: is `[ RateLimitIP, RateLimitPeerID, RateLimitTopic ]` where each values is an integer with a number of accepted packets per second per IP, Peer ID, and Topic respectively
@@ -136,7 +145,7 @@ they must be available all the time and are stored in memory.
 
 Keys management for PFS is described in [5/SECURE-TRANSPORT](https://specs.status.im/spec/5).
 
-The Status protocols uses a few particular Whisper topics to achieve its goals.
+The Status protocols uses a few particular Waku topics to achieve its goals.
 
 ### Contact code topic
 
@@ -163,7 +172,7 @@ for i = 0; i < topicLen; i++ {
 
 ### Partitioned topic
 
-Whisper is broadcast-based protocol. In theory, everyone could communicate using a single topic but that would be extremely inefficient. Opposite would be using a unique topic for each conversation, however, this brings privacy concerns because it would be much easier to detect whether and when two parties have an active conversation.
+Waku is broadcast-based protocol. In theory, everyone could communicate using a single topic but that would be extremely inefficient. Opposite would be using a unique topic for each conversation, however, this brings privacy concerns because it would be much easier to detect whether and when two parties have an active conversation.
 
 Partitioned topics are used to broadcast private messages efficiently. By selecting a number of topic, it is possible to balance efficiency and privacy.
 
@@ -229,12 +238,20 @@ for i = 0; i < topicLen; i++ {
 
 Each Status Client SHOULD listen to this topic in order to receive ??? -->
 
+```js
+// TODO should we keep this commented out section? ^^^
+```
+
 <!-- NOTE: commented out as it is no longer valid as of V1. - C.P. Oct 8, 2019
 ### Generic discovery topic
 
 Generic discovery topic is a legacy topic used to handle all one-to-one chats. The newer implementation should rely on [Partitioned Topic](#partitioned-topic) and [Personal discovery topic](#personal-discovery-topic).
 
 Generic discovery topic MUST be created following [Public chats](#public-chats) topic algorithm using string `contact-discovery` as a name. -->
+
+```js
+// TODO should we keep this commented out section? ^^^
+```
 
 ### Group chat topic
 
@@ -282,9 +299,13 @@ To exchange messages with client B, a client A SHOULD:
 
 ## Message encryption
 
-Even though, the protocol specifies an encryption layer that encrypts messages before passing them to the transport layer, Whisper protocol requires each Whisper message to be encrypted anyway.
+Even though, the protocol specifies an encryption layer that encrypts messages before passing them to the transport layer, Waku protocol requires each Waku message to be encrypted anyway.
 
 Public and group messages are encrypted using symmetric encryption and the key is created from a channel name string. The implementation is available in [`shh_generateSymKeyFromPassword`](https://github.com/ethereum/go-ethereum/wiki/Whisper-v6-RPC-API#shh_generatesymkeyfrompassword) JSON-RPC method of go-ethereum Whisper implementation.
+
+```js
+// TODO is there a Waku analogous version of `shh_generateSymKeyFromPassword`?
+```
 
 One-to-one messages are encrypted using asymmetric encryption.
 
@@ -314,6 +335,10 @@ The drawback of sending message confirmations is that it increases the noise in 
 In the current Status network setup, only Mailservers support message confirmations. A client posting a message to the network and after receiving a confirmation can be sure that the message got processed by the Mailserver. If additionally, sending a message is limited to non-Mailserver peers, it also guarantees that the message got broadcasted through the network and it reached the selected Mailserver.
 
 ## Whisper V6 extensions
+
+```js
+// TODO does Waku use extensions. Are the extensions now part of the Waku spec?
+```
 
 ### Request historic messages
 
