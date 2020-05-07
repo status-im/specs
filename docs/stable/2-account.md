@@ -28,7 +28,7 @@ In this specification we explain what Status account is, and how trust is establ
     - [X3DH Prekey bundles](#x3dh-prekey-bundles)
 - [Optional Account additions](#optional-account-additions)
     - [ENS Username](#ens-username)
-    - [User Profile Picture](#user-profile-picture)
+    <!-- - [User Profile Picture](#user-profile-picture) -->
 - [Trust establishment](#trust-establishment)
     - [Terms Glossary](#terms-glossary)
     - [Contact Discovery](#contact-discovery)
@@ -37,10 +37,9 @@ In this specification we explain what Status account is, and how trust is establ
     - [Initial Key Exchange](#initial-key-exchange)
         - [Contact Request](#contact-request)
         - [Bundles](#bundles)
-        - [QR code](#qr-code)
     - [Contact Verification](#contact-verification)
         - [Identicon](#identicon)
-        - [3 word pseudonym / whisper key fingerprint](#3-word-pseudonym--whisper-key-fingerprint)
+        - [3 word pseudonym / Waku key fingerprint](#3-word-pseudonym--waku-key-fingerprint)
         - [ENS name](#ens-name)
 - [Security Considerations](#security-considerations)
 
@@ -49,7 +48,7 @@ In this specification we explain what Status account is, and how trust is establ
 ## Introduction
 
 The core concept of an account in Status is a set of cryptographic keypairs. Namely, the combination of the following:
-1. a whisper chat identity keypair
+1. a Waku chat identity keypair
 1. a set of cryptocurrency wallet keypairs
 
 Everything else associated with the contact is either verified or derived from the above items, including:
@@ -62,14 +61,14 @@ Everything else associated with the contact is either verified or derived from t
 ### Public/Private Keypairs 
 - An ECDSA (secp256k1 curve) public/private keypair MUST be generated via a [BIP43](https://github.com/bitcoin/bips/blob/master/bip-0043.mediawiki) derived path from a [BIP39](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki) mnemonic seed phrase.
 - The default paths are defined as such:
-    - Whisper Chat Key (`IK`): `m/43'/60'/1581'/0'/0`  (post Multiaccount integration)
+    - Waku Chat Key (`IK`): `m/43'/60'/1581'/0'/0`  (post Multiaccount integration)
         - following [EIP1581](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1581.md)
     <!-- WE CURRENTLY DO NOT IMPLEMENT ENCRYPTION KEY, FOR FUTURE - C.P. -->
     <!-- - DB encryption Key (`DBK`): `m/43'/60'/1581'/1'/0` (post Multiaccount integration)
         - following [EIP1581](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1581.md) -->
     - Status Wallet paths: `m/44'/60'/0'/0/i` starting at `i=0`
         - following [BIP44](https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki)
-        - NOTE: this (`i=0`) is also the current (and only) path for Whisper key before Multiaccount integration
+        - NOTE: this (`i=0`) is also the current (and only) path for Waku key before Multiaccount integration
 
 ### X3DH Prekey bundle creation
 - Status follows the X3DH prekey bundle scheme that Open Whisper Systems outlines [in their documentation](https://signal.org/docs/specifications/x3dh/#the-x3dh-protocol) with the following exceptions:
@@ -81,19 +80,23 @@ Everything else associated with the contact is either verified or derived from t
     - Timestamp
 - These bundles are made available in a variety of ways, as defined in section 2.1.
 
+```js
+// TODO is there an "Open Waku Systems" ^^^?
+```
+
 ## Account Broadcasting
 - A user is responsible for broadcasting certain information publicly so that others may contact them.
 
 ### X3DH Prekey bundles
 - A client SHOULD regenerate a new X3DH prekey bundle every 24 hours.  This MAY be done in a lazy way, such that a client that does not come online past this time period does not regenerate or broadcast bundles.
-- The current bundle SHOULD be broadcast on a whisper topic specific to his Identity Key, `{IK}-contact-code`, intermittently.  This MAY be done every 6 hours.
+- The current bundle SHOULD be broadcast on a Waku topic specific to his Identity Key, `{IK}-contact-code`, intermittently.  This MAY be done every 6 hours.
 - A bundle SHOULD accompany every message sent.
 - TODO: retreival of long-time offline users bundle via `{IK}-contact-code` 
 
 ## Optional Account additions
 
 ### ENS Username
-- A user MAY register a public username on the Ethereum Name System (ENS).  This username is a user-chosen subdomain of the `stateofus.eth` ENS registration that maps to their whisper identity key (`IK`). 
+- A user MAY register a public username on the Ethereum Name System (ENS).  This username is a user-chosen subdomain of the `stateofus.eth` ENS registration that maps to their Waku identity key (`IK`). 
 
 <!-- ### User Profile Picture
 - An account MAY edit the `IK` generated identicon with a chosen picture.  This picture will become part of the publicly broadcasted profile of the account. -->
@@ -111,7 +114,7 @@ Everything else associated with the contact is either verified or derived from t
 | ---- | ----------- |
 | privkey | ECDSA secp256k1 private key |
 | pubkey | ECDSA secp256k1 public key |
-| whisper key | pubkey for chat with HD derivation path m/43'/60'/1581'/0'/0 |
+| Waku key | pubkey for chat with HD derivation path m/43'/60'/1581'/0'/0 |
 
 
 ### Contact Discovery
@@ -136,7 +139,7 @@ This can be done in the following ways:
     - `status-react/src/status_im/contact_code/core.cljs`
 1. contact codes
 2. decentralized storage (not implemented)
-3. whisper
+3. Waku
 
 ### Initial Key Exchange
 
@@ -153,21 +156,21 @@ This can be done in the following ways:
   - include BundleContainer???
 - a new bundle SHOULD be created at least every 12 hours
 - a bundle is only generated when it is used
-- a bundle SHOULD be distributed on the contact code channel. This is the whisper topic `{IK}-contact-code`, where `IK` is the hex encoded public key of the user, prefixed with `0x`. The channel is encrypted in the same way public chats are encrypted.
+- a bundle SHOULD be distributed on the contact code channel. This is the Waku topic `{IK}-contact-code`, where `IK` is the hex encoded public key of the user, prefixed with `0x`. The channel is encrypted in the same way public chats are encrypted.
 
 ### Contact Verification
 
 Once you have the information of a contact, the following can be used to verify that the key material is as it should be.
 
 #### Identicon
-A low-poly identicon is deterministically generated from the whisper chat public key.  This can then be compared out of band to ensure the reciever's public key is the one you have locally.
+A low-poly identicon is deterministically generated from the Waku chat public key.  This can then be compared out of band to ensure the reciever's public key is the one you have locally.
 
-#### 3 word pseudonym / whisper key fingerprint
-Status generates a deterministic 3-word random pseudonym from the whisper chat public key.  This pseudonym acts as a human readable fingerprint to the whisper chat public key.  This name also shows when viewing a contact's public profile and in the chat UI.
+#### 3 word pseudonym / Waku key fingerprint
+Status generates a deterministic 3-word random pseudonym from the Waku chat public key.  This pseudonym acts as a human readable fingerprint to the Waku chat public key.  This name also shows when viewing a contact's public profile and in the chat UI.
 - implementation: [gfycat](https://github.com/status-im/status-react/tree/develop/src/status_im/utils/gfycat)
 
 #### ENS name
-Status offers the ability to register a mapping of a human readable subdomain of `stateofus.eth` to their whisper chat public key.  This registration is purchased (currently by staking 10 SNT) and stored on the Ethereum mainnet blockchain for public lookup.
+Status offers the ability to register a mapping of a human readable subdomain of `stateofus.eth` to their Waku chat public key.  This registration is purchased (currently by staking 10 SNT) and stored on the Ethereum mainnet blockchain for public lookup.
 
 <!-- TODO: Elaborate on security implications -->
 
@@ -185,7 +188,7 @@ possible connections
     - public chat
 - client - mailserver (statusd + ???)
     - a mailserver identifies itself by an [enode address](https://github.com/ethereum/wiki/wiki/enode-url-format) 
-- client - whisper node (statusd)
+- client - Waku node (statusd)
     - a node identifies itself by an enode address
 - client - bootnode (geth)
     - a bootnode identifies itself by
