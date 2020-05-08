@@ -202,9 +202,9 @@ group of peers the official Status client uses. The others are test networks.
 
 #### Mobile nodes
 
-This is a Waku node which connects to part of the Waku network. It MAY
-relay messages. See next section for more details on how to use Waku to
-communicate with other Status nodes.
+This is a Whisper and/or Waku node which connects to part of the respective Whisper
+and/or Waku network(s). It MAY relay messages. See next section for more details on how
+to use Whisper and/or Waku to communicate with other Status nodes.
 
 ### Transport privacy and Whisper / Waku usage
 
@@ -218,14 +218,17 @@ For providing offline inboxing, see the complementary [4/WHISPER-MAILSERVER](htt
 ### Secure Transport
 
 In order to provide confidentiality, integrity, authentication and forward
-secrecy of messages we implement a secure transport on top of Waku. This is
+secrecy of messages we implement a secure transport on top of Whisper and Waku. This is
 used in 1:1 chats and group chats, but not for public chats. See [5/SECURE-TRANSPORT](https://specs.status.im/spec/5) for more.
 
 ### Data Sync
 
 [MVDS](https://specs.vac.dev/mvds.html) is used for 1:1 and group chats, however it is currently not in use for public chats.
 
-[Status payloads](#payloads-and-clients) are serialized and then wrapped inside a MVDS message which is added to an [MVDS payload](https://specs.vac.dev/mvds.html#payloads), this payload is then encrypted (if necessary for 1-to-1 / group-chats) and sent using Waku which also encrypts it.
+[Status payloads](#payloads-and-clients) are serialized and then wrapped inside a
+MVDS message which is added to an [MVDS payload](https://specs.vac.dev/mvds.html#payloads),
+this payload is then encrypted (if necessary for 1-to-1 / group-chats) and sent using
+Whisper or Waku which also encrypts it.
 
 ### Payloads and clients
 
