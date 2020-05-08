@@ -12,7 +12,7 @@ title: 3/WHISPER-USAGE
 >
 > Authors: Adam Babik <adam@status.im>, Corey Petty <corey@status.im>, Oskar Thorén <oskar@status.im> (alphabetical order)
 
-- [Status Whisper Usage Specification](#3whisper-usage)
+- [Status Whisper Usage Specification](#status-whisper-usage-specification)
   - [Abstract](#abstract)
   - [Reason](#reason)
   - [Terminology](#terminology)
@@ -24,15 +24,14 @@ title: 3/WHISPER-USAGE
     - [Contact code topic](#contact-code-topic)
     - [Partitioned topic](#partitioned-topic)
     - [Public chats](#public-chats)
-    <!-- - [Generic discovery topic](#generic-discovery-topic) -->
-    <!-- - [One-to-one topic](#one-to-one-topic) -->
+    - [Generic discovery topic](#generic-discovery-topic)
+    - [One-to-one topic](#one-to-one-topic)
     - [Group chat topic](#group-chat-topic)
-    - [Negotiated topic](#negotiated-topic)
   - [Message encryption](#message-encryption)
   - [Message confirmations](#message-confirmations)
   - [Whisper V6 extensions](#whisper-v6-extensions)
     - [Request historic messages](#request-historic-messages)
-      - [shhext_requestMessages](#shhext_requestmessages)
+      - [shhext_requestMessages](#shhextrequestmessages)
 
 ## Abstract
 
