@@ -96,27 +96,29 @@ To communicate between Status nodes, the [RLPx Transport
 Protocol, v5](https://github.com/ethereum/devp2p/blob/master/rlpx.md) is used, which
 allows for TCP-based communication between nodes.
 
-On top of this we run the RLPx-based subprotocol [Waku
-V1](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-1.md) for privacy-preserving messaging.
+On top of this we run RLPx-based subprotocols, the client
+MAY use [Whisper v6](https://eips.ethereum.org/EIPS/eip-627), though the client 
+SHOULD use [Waku V1](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-1.md)
+for privacy-preserving messaging.
 
-There MUST be a node that is capable of discovering peers and
-implements Waku V0 specification.
+There MUST be a node that is capable of discovering peers and implements
+[Whisper v6](https://eips.ethereum.org/EIPS/eip-627),
+[Waku V0](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-0.md) and
+[Waku V1](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-1.md) specifications.
 
 #### Node discovery and roles
 
-There are four types of node roles:
-1. Bootstrap nodes
-2. Waku relayers
-3. Mailservers (servers and clients)
-4. Mobile nodes (Status Clients)
+There are five types of node roles:
+1. `Bootstrap node`
+1. `Waku relayer`
+1. `Whisper relayer`
+1. `Mailserver` (servers and clients)
+1. `Mobile node` (Status Clients)
 
-```js
-// TODO do waku relayers exist? Are they different from mobile nodes?
-```
-
-To implement a standard Status client you MUST implement both 2. and 4. node types. The
-other node types are optional, but we RECOMMEND you implement a mailserver
-client mode, otherwise the user experience is likely to be poor.
+To implement a standard Status client you MUST implement `Waku relayer` and/or `Whisper relayer` roles,
+additionally the Status client MUST implement the `Mobile node` role.
+The other node types are optional, but we RECOMMEND you implement a `Mailserver`
+client node, otherwise the user experience is likely to be poor.
 
 #### Bootstrapping
 
@@ -171,7 +173,7 @@ It uses Ethereum Node Records (ENR) to report discovered peers.
 Both peers discovery mechanisms use topics to provide peers with certain capabilities.
 There is no point in returning peers that do not support a particular protocol.
 Status nodes that want to be discovered MUST register to Discovery V5 and/or Rendezvous
-with the `waku` topic. Status nodes that are mail servers and want to
+with the `whisper` and/or `waku` topic(s). Status nodes that are mail servers and want to
 be discoverable MUST additionally register with the `whispermail` topic.
 
 ```js
