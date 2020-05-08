@@ -71,18 +71,14 @@ Everything else associated with the contact is either verified or derived from t
         - NOTE: this (`i=0`) is also the current (and only) path for Waku key before Multiaccount integration
 
 ### X3DH Prekey bundle creation
-- Status follows the X3DH prekey bundle scheme that Open Whisper Systems outlines [in their documentation](https://signal.org/docs/specifications/x3dh/#the-x3dh-protocol) with the following exceptions:
-    - Because there are no central servers, we do not publish one-time keys `OPK` or perform DH including them. 
+- Status follows the X3DH prekey bundle scheme that [Open Whisper Systems](https://en.wikipedia.org/wiki/Signal_Messenger#2013%E2%80%932018:_Open_Whisper_Systems) (not to be confused with the Whisper sub-protocol) outlines [in their documentation](https://signal.org/docs/specifications/x3dh/#the-x3dh-protocol) with the following exceptions:
+    - Status does not publish one-time keys `OPK` or perform DH including them, because there are no central servers in the Status implementation. 
 - A client MUST create X3DH prekey bundles, each defined by the following items:
     - Identity Key: `IK`
     - Signed prekey: `SPK`
     - Prekey signature: `Sig(IK, Encode(SPK))`
     - Timestamp
 - These bundles are made available in a variety of ways, as defined in section 2.1.
-
-```js
-// TODO is there an "Open Waku Systems" ^^^?
-```
 
 ## Account Broadcasting
 - A user is responsible for broadcasting certain information publicly so that others may contact them.
