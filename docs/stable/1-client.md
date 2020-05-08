@@ -206,14 +206,14 @@ This is a Waku node which connects to part of the Waku network. It MAY
 relay messages. See next section for more details on how to use Waku to
 communicate with other Status nodes.
 
-### Transport privacy and Waku usage
+### Transport privacy and Whisper / Waku usage
 
-Once a Waku node is up and running there are some specific settings required
+Once a Whisper and/or Waku node is up and running there are some specific settings required
 to commmunicate with other Status nodes.
 
-See [3/WAKU-USAGE](https://specs.status.im/spec/3) for more details.
+See [3/WHISPER-USAGE](https://specs.status.im/spec/3) and [9/WAKU-USAGE](https://specs.status.im/spec/9) for more details.
 
-For providing offline inboxing, see the complementary [4/WAKU-MAILSERVER](https://specs.status.im/spec/4).
+For providing offline inboxing, see the complementary [4/WHISPER-MAILSERVER](https://specs.status.im/spec/4) and [10/WAKU-MAILSERVER](https://specs.status.im/spec/10).
 
 ### Secure Transport
 
