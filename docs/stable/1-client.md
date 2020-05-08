@@ -47,8 +47,8 @@ have to be implemented in order to be a full Status client. The second gives a d
         -   [P2P Overlay](#p2p-overlay-1)
             -   [Why devp2p? Why not use libp2p?](#why-devp2p-why-not-use-libp2p)
             -   [What about other RLPx subprotocols like LES, and Swarm?](#what-about-other-rlpx-subprotocols-like-les-and-swarm)
+            -   [Why do you use Whisper?](#why-do-you-use-whisper)
             -   [Why do you use Waku?](#why-do-you-use-waku)
-            -   [I heard you were moving away from Whisper?](#i-heard-you-were-moving-away-from-whisper)
             -   [Why is PoW for Waku set so low?](#why-is-pow-for-waku-set-so-low)
             -   [Why do you not use Discovery v5 for node discovery?](#why-do-you-not-use-discovery-v5-for-node-discovery)
             -   [I heard something about mailservers being trusted somehow?](#i-heard-something-about-mailservers-being-trusted-somehow)
@@ -75,7 +75,7 @@ Other aspects, such as how IPFS is used for stickers, how we interact with the E
 | Data and payloads | End user functionality         | 1:1, group chat, public chat |
 | Data sync         | Data consistency               | MVDS Ratchet                 |
 | Secure transport  | Confidentiality, PFS, etc      | Double Ratchet               |
-| Transport privacy | Routing, Metadata protection   | Waku                         |
+| Transport privacy | Routing, Metadata protection   | Waku / Whisper               |
 | P2P Overlay       | Overlay routing, NAT traversal | devp2p                       |
 
 ### Protobuf
@@ -271,29 +271,35 @@ For transaction support, Status clients currently have to rely on Infura.
 
 Status clients currently do not offer native support for file storage.
 
-#### Why do you use Waku?
+#### Why do you use Whisper?
 
-Waku is one of the [three parts](http://gavwood.com/dappsweb3.html) of the
+Whisper is one of the [three parts](http://gavwood.com/dappsweb3.html) of the
 vision of Ethereum as the world computer, Ethereum and Swarm being the other
 two. Status was started as an encapsulation of and a clear window to this world
 computer.
 
-#### I heard you were moving away from Whisper?
+#### Why do you use Waku?
 
-Whisper is not currently under active development, and it has several drawbacks.
-Among others:
+Waku is a direct upgrade and replacement for Whisper, the main motivation for 
+developing and implementing Waku can be found in the [Waku specs](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-1.md#motivation).
 
--   It is very wasteful bandwidth-wise and it doesn't appear to be scalable
+>Waku was created to incrementally improve in areas that Whisper is lacking in, 
+>with special attention to resource restricted devices. We specify the standard for 
+>Waku messages in order to ensure forward compatibility of different Waku clients, 
+>backwards compatibility with Whisper clients, as well as to allow multiple 
+>implementations of Waku and its capabilities. We also modify the language to be more 
+>unambiguous, concise and consistent.
+
+Considerable work has gone into the active development of Ethereum, in contrast Whisper 
+is not currently under active development, and it has several drawbacks. Among others:
+
+-   Whisper is very wasteful bandwidth-wise and doesn't appear to be scalable
 -   Proof of work is a poor spam protection mechanism for heterogenerous devices
 -   The privacy guarantees provided are not rigorous
--   There's no incentives to run a node
+-   There are no incentives to run a node
 
 Finding a more suitable transport privacy is an ongoing research effort,
 together with [Vac](https://vac.dev/vac-overview) and other teams in the space.
-
-```js
-// TODO section needs a rewrite to discuss this from a post Whisper perspective ^^^
-```
 
 #### Why is PoW for Waku set so low?
 
