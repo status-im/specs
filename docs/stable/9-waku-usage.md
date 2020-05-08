@@ -1,10 +1,10 @@
 ---
-permalink: /spec/3
+permalink: /spec/9
 parent: Stable specs
-title: 3/WAKU-USAGE
+title: 9/WAKU-USAGE
 ---
 
-# 3/WAKU-USAGE
+# 9/WAKU-USAGE
 
 > Version: 0.2
 >
@@ -12,7 +12,7 @@ title: 3/WAKU-USAGE
 >
 > Authors: Adam Babik <adam@status.im>, Corey Petty <corey@status.im>, Oskar Thorén <oskar@status.im> (alphabetical order)
 
-- [Status Waku Usage Specification](#3waku-usage)
+- [Status Waku Usage Specification](#9waku-usage)
   - [Abstract](#abstract)
   - [Reason](#reason)
   - [Terminology](#terminology)
