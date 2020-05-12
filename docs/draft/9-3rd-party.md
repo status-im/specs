@@ -1,9 +1,17 @@
 ---
-title: 3rd party APIs used for core functionality that impacts things like availability/censorship and privacy
-version: 0.1.0
-status: Draft
-authors:
+permalink: /spec/9
+parent: Stable specs
+title: 9/3RD-PARTY
 ---
+
+# 9/3RD-PARTY
+
+> Version: 0.1
+>
+> Status: Draft
+>
+> Authors: Volodymyr Kozieiev <volodymyr@status.im>
+
 
 # 3rd party APIs used for core functionality that impacts things like availability/censorship and privacy
 
@@ -12,7 +20,7 @@ authors:
 1. [Abstract](Abstract)
 2. [Definitions](#definitions)
 3. [Why 3rd party API can be a problem?](#why-3rd-party-api-can-be-a-problem)
-4. [3rd party APIs used by Status](#3rd-party-apis-used-by-status)
+4. [3rd party APIs used by Status](#3rd-party-apis-used-by-current-status-app)
   * [Infura](#infura)
   * [Etherscan](#etherscan)
   * [CryptoCompare](#cryptocompare)
@@ -23,7 +31,12 @@ authors:
 7. [Copyright](#copyright)
 
 ## Abstract
-In this specification listed 3rd party APIs that Status functionality rely on.
+In this specification listed 3rd party APIs that Status rely on. With the help of that APIs Status:
+- communicates to Ethereum network
+- allows user to see address and transaction details on external website
+- gets fiat<->crypto exchange prices
+- gets information about collectibles
+- hosts privacy policy
 
 ## Definitions
 
@@ -37,7 +50,7 @@ In this specification listed 3rd party APIs that Status functionality rely on.
 ## Why 3rd party API can be a problem?
 Relying on 3rd party APIs interferes with `censorship resistance` Status principle. Since we aim to avoid suppression of information it is important to reduce amount of 3rd parties crucial for app functionality.
 
-## 3rd party APIs used by Status
+## 3rd party APIs used by current Status app
 
 ### Infura
 
