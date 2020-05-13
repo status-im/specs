@@ -37,7 +37,7 @@ have to be implemented in order to be a full Status client. The second gives a d
             -   [Bootstrapping](#bootstrapping)
             -   [Discovery](#discovery)
             -   [Mobile nodes](#mobile-nodes)
-        -   [Transport privacy and Waku usage](#transport-privacy-and-waku-usage)
+        -   [Transport privacy and Waku usage](#transport-privacy-and-whisper--waku-usage)
         -   [Secure Transport](#secure-transport)
         -   [Data Sync](#data-sync)
         -   [Payloads and clients](#payloads-and-clients)
@@ -364,10 +364,6 @@ A mailserver has to be online to receive messages for other nodes, this puts a h
 **Gossip-based routing:**
 
 Use of gossip-based routing doesn't necessarily scale. It means each node can see a message multiple times, and having too many light nodes can cause propagation probability that is too low. See [Whisper vs PSS](https://our.status.im/whisper-pss-comparison/) for more and a possible Kademlia based alternative.
-
-```js
-// TODO investigate update or Waku analogous ^^^
-```
 
 **Lack of incentives:**
 
