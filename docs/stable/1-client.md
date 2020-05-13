@@ -117,7 +117,7 @@ There are five types of node roles:
 
 A standard Status client MUST implement `Waku relayer` and/or `Whisper relayer` roles,
 additionally the Status client MUST implement the `Mobile node` role.
-The other node types are optional, but we RECOMMEND you implement a `Mailserver`
+The other node types are optional, but it is RECOMMENDED to implement a `Mailserver`
 client node, otherwise the user experience is likely to be poor.
 
 #### Bootstrapping
