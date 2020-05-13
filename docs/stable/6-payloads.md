@@ -14,16 +14,16 @@ title: 6/PAYLOADS
 
 ## Abstract
 
-This specifications decribes how the payload of each message in Status looks
-like. It is primarly centered around chat and chat-related use cases.
+This specification describes how the payload of each message in Status looks
+like. It is primarily centered around chat and chat-related use cases.
 
-The payloads aims be flexible enough to support messaging but also cases
+The payloads aim be flexible enough to support messaging but also cases
 described in the [Status Whitepaper](https://status.im/whitepaper.pdf) as well
 as various clients created using different technologies.
 
 ## Table of Contents
 
-- [Status Message Payloads Specification](#status-message-payloads-specification)
+- [Status Message Payloads Specification](#6payloads)
   - [Abstract](#abstract)
   - [Table of Contents](#table-of-contents)
   - [Introduction](#introduction)
@@ -31,22 +31,22 @@ as various clients created using different technologies.
   - [Encoding](#encoding)
   - [Types of messages](#types-of-messages)
     - [Message](#message)
-      - [Payload](#payload)
-      - [Payload](#payload-1)
+      - [Description](#message-description)
+      - [Payload](#message-payload)
       - [Content types](#content-types)
         - [Sticker content type](#sticker-content-type)
       - [Message types](#message-types)
       - [Clock vs Timestamp and message ordering](#clock-vs-timestamp-and-message-ordering)
       - [Chats](#chats)
     - [Contact Update](#contact-update)
-      - [Payload](#payload-2)
+      - [Payload](#contact-update-payload)
       - [Contact update](#contact-update-1)
     - [SyncInstallationContact](#syncinstallationcontact)
-      - [Payload](#payload-3)
+      - [Payload](#syncinstallationcontact-payload)
     - [SyncInstallationPublicChat](#syncinstallationpublicchat)
-      - [Payload](#payload-4)
+      - [Payload](#syncinstallationpublicchat-payload)
     - [PairInstallation](#pairinstallation)
-      - [Payload](#payload-5)
+      - [Payload](#pairinstallation-payload)
     - [MembershipUpdateMessage and MembershipUpdateEvent](#membershipupdatemessage-and-membershipupdateevent)
   - [Upgradability](#upgradability)
   - [Security Considerations](#security-considerations)
@@ -70,7 +70,7 @@ message StatusProtocolMessage {
 
 `signature` is the bytes of the signed `SHA3-256` of the payload, signed with the key of the author of the message.
 The signature is needed to validate authorship of the message, so that the message can be relayed to third parties.
-If a signature is not present but an author is provided by a layer below, the message is not to be relayed to third parties and it is considered plausibly deniable.
+If a signature is not present, but an author is provided by a layer below, the message is not to be relayed to third parties and it is considered plausibly deniable.
 
 ## Encoding
 
@@ -82,7 +82,7 @@ The payload is encoded using [Protobuf](https://developers.google.com/protocol-b
 
 The type `ChatMessage` represents a chat message exchanged between clients.
 
-#### Payload
+#### Message Description
 
 The protobuf description is:
 
@@ -134,7 +134,7 @@ message ChatMessage {
 }
 ```
 
-#### Payload
+#### Message Payload
 
 | Field | Name | Type | Description |
 | ----- | ---- | ---- | ---- |
@@ -233,7 +233,7 @@ message ContactUpdate {
 }
 ```
 
-#### Payload
+#### Contact Update Payload
 
 | Field | Name | Type | Description |
 | ----- | ---- | ---- | ---- |
@@ -241,7 +241,7 @@ message ContactUpdate {
 | 2 | ens_name | `string` | The ENS name if set |
 | 3 | profile_image | `string` | The base64 encoded profile picture of the user |
 
-#### Contact update
+#### Contact update 1
 
 A client SHOULD send a `ContactUpdate` to all the contacts each time:
 
@@ -266,7 +266,7 @@ message SyncInstallationContact {
 ```
 
 
-#### Payload
+#### SyncInstallationContact Payload
 
 | Field | Name | Type | Description |
 | ----- | ---- | ---- | ---- |
@@ -287,7 +287,7 @@ message SyncInstallationPublicChat {
 }
 ```
 
-#### Payload
+#### SyncInstallationPublicChat Payload
 
 | Field | Name | Type | Description |
 | ----- | ---- | ---- | ---- |
@@ -307,7 +307,7 @@ message PairInstallation {
 }
 ```
 
-#### Payload
+#### PairInstallation Payload
 
 | Field | Name | Type | Description |
 | ----- | ---- | ---- | ---- |
@@ -319,7 +319,7 @@ message PairInstallation {
 ### MembershipUpdateMessage and MembershipUpdateEvent
 
 `MembershipUpdateEvent` is a message used to propagate information about group membership changes in a group chat.
-The details are in the  [Group chats specs](status-group-chats-spec.md)
+The details are in the  [Group chats specs](/docs/draft/7-group-chat.md)
 
 ## Upgradability
 
