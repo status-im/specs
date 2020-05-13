@@ -90,7 +90,7 @@ The protobuf description is:
 message ChatMessage {
   // Lamport timestamp of the chat message
   uint64 clock = 1;
-  // Unix timestamps in milliseconds, currently not used as we use whisper as more reliable, but here
+  // Unix timestamps in milliseconds, currently not used as we use Whisper/Waku as more reliable, but here
   // so that we don't rely on it
   uint64 timestamp = 2;
   // Text of the message
@@ -175,9 +175,9 @@ message StickerMessage {
 
 #### Message types
 
-Message types are required to decide how a particular message is encrypted and what metadata needs to be attached when passing a message to the transport layer. For more on this, see [3/WHISPER-USAGE](https://specs.status.im/spec/3).
+Message types are required to decide how a particular message is encrypted and what metadata needs to be attached when passing a message to the transport layer. For more on this, see [3/WHISPER-USAGE](3-whisper-usage.md) and [9/WAKU-USAGE](9-waku-usage.md).
 
-<!-- TODO: This reference is a bit odd, considering the layer payloads should interact with is Secure Transport, and not Whisper. This requires more detail -->
+<!-- TODO: This reference is a bit odd, considering the layer payloads should interact with is Secure Transport, and not Whisper/Waku. This requires more detail -->
 
 
 The following messages types MUST be supported:
@@ -200,9 +200,9 @@ This will satisfy the Lamport requirement, namely: a -> b then T(a) < T(b)
 
 `clock` SHOULD be calculated using the algorithm of [Lamport timestamps](https://en.wikipedia.org/wiki/Lamport_timestamps). When there are messages available in a chat, `clock`'s value is calculated based on the last received message in a particular chat: `max(timeNowInMs, last-message-clock-value + 1)`. If there are no messages, `clock` is initialized with `timestamp`'s value.
 
-Messages with a `clock` greater than `120` seconds over the whisper timestamp SHOULD be discarded, in order to avoid malicious users to increase the `clock` of a chat arbitrarily.
+Messages with a `clock` greater than `120` seconds over the whisper/Waku timestamp SHOULD be discarded, in order to avoid malicious users to increase the `clock` of a chat arbitrarily.
 
-Messages with a `clock` less than `120` seconds under the whisper timestamp might indicate an attempt to insert messages in the chat history which is not distinguishable from a `datasync` layer re-transit event. A client MAY mark this messages with a warning to the user, or discard them.
+Messages with a `clock` less than `120` seconds under the whisper/Waku timestamp might indicate an attempt to insert messages in the chat history which is not distinguishable from a `datasync` layer re-transit event. A client MAY mark this messages with a warning to the user, or discard them.
 
 `clock` value is used for the message ordering. Due to the used algorithm and distributed nature of the system, we achieve casual ordering which might produce counterintuitive results in some edge cases. For example, when one joins a public chat and sends a message before receiving the exist messages, their message `clock` value might be lower and the message will end up in the past when the historical messages are fetched.
 
