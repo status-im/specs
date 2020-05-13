@@ -37,7 +37,7 @@ have to be implemented in order to be a full Status client. The second gives a d
             -   [Bootstrapping](#bootstrapping)
             -   [Discovery](#discovery)
             -   [Mobile nodes](#mobile-nodes)
-        -   [Transport privacy and Waku usage](#transport-privacy-and-whisper--waku-usage)
+        -   [Transport privacy and Whisper/Waku usage](#transport-privacy-and-whisper--waku-usage)
         -   [Secure Transport](#secure-transport)
         -   [Data Sync](#data-sync)
         -   [Payloads and clients](#payloads-and-clients)
@@ -125,7 +125,7 @@ To connect to other Status nodes you need to connect to a bootstrap node. These
 nodes allow you to discover other nodes of the network.
 
 Currently the main bootstrap nodes are provided by Status Gmbh, but anyone can
-run these provided they are connected to the rest of the Waku network.
+run these provided they are connected to the rest of the Whisper/Waku network.
 
 Status maintains a list of production fleet bootstrap nodes in the following locations:
 
@@ -201,8 +201,8 @@ group of peers the official Status client uses. The others are test networks.
 
 #### Mobile nodes
 
-This is a Whisper and/or Waku node which connects to part of the respective Whisper
-and/or Waku network(s). It MAY relay messages. See next section for more details on how
+A `Mobile node` is a Whisper and/or Waku node which connects to part of the respective Whisper
+and/or Waku network(s). A `Mobile node` MAY relay messages. See next section for more details on how
 to use Whisper and/or Waku to communicate with other Status nodes.
 
 ### Transport privacy and Whisper / Waku usage
