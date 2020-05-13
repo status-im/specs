@@ -20,13 +20,13 @@ title: 7/GROUP-CHAT
   - [Chat ID](#chat-id)
   - [Signature](#signature)
   - [Group membership event](#group-membership-event)
-    - [chat-created](#chat-created)
-    - [name-changed](#name-changed)
-    - [members-added](#members-added)
-    - [members-joined](#members-joined)
-    - [admins-added](#admins-added)
-    - [members-removed](#members-removed)
-    - [admin-removed](#admin-removed)
+    - [CHAT_CREATED](#chat_created)
+    - [NAME_CHANGED](#name_changed)
+    - [MEMBERS_ADDED](#members_added)
+    - [MEMBER_JOINED](#member_joined)
+    - [ADMINS_ADDED](#admins_added)
+    - [MEMBER_REMOVED](#member_removed)
+    - [ADMIN_REMOVED](#admin_removed)
 
 
 ## Abstract
@@ -83,7 +83,7 @@ message MembershipUpdateEvent {
 | ----- | ---- | ---- | ---- |
 | 1 | chat-id | `string` | The chat id of the chat where the change is to take place |
 | 2 | events | See details | A list of events that describe the membership changes, in their encoded protobuf form |
-| 3 | message | `ChatMessage` | An optional message, described in [Message](#message) |
+| 3 | message | `ChatMessage` | An optional message, described in [Message](docs/stable/6-payloads.md#message) |
 
 `MembershipUpdateEvent`:
 
