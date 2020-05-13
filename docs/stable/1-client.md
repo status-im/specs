@@ -110,12 +110,11 @@ There MUST be a node that is capable of discovering peers and implements
 
 There are five types of node roles:
 1. `Bootstrap node`
-1. `Waku relayer`
-1. `Whisper relayer`
+1. `Whisper/Waku relayer`
 1. `Mailserver` (servers and clients)
 1. `Mobile node` (Status Clients)
 
-A standard Status client MUST implement `Waku relayer` and/or `Whisper relayer` roles,
+A standard Status client MUST implement `Whisper/Waku relayer` roles,
 additionally the Status client MUST implement the `Mobile node` role.
 The other node types are optional, but it is RECOMMENDED to implement a `Mailserver`
 client node, otherwise the user experience is likely to be poor.
