@@ -22,7 +22,7 @@ title: 8/IPFS gateway for Sticker Pack
 
 ## Abstract
 
-In this specification, we describe how Status app uses IPFS gateway to store stickers.
+In this specification, we describe how Status uses the IPFS gateway to store stickers.
 We will explore image format, how they are uploaded and how an end user can see them inside the Status app.
 
 ## Definition
@@ -36,12 +36,12 @@ We will explore image format, how they are uploaded and how an end user can see 
 ## Specification
 
 ### Image format
-Accepted image file types are **PNG, JPG/JPEG and GIF**, with a maximum allowed size of 300kb.
-The minimum sticker image resoulution is 512x512, and background of clipart should be transparent.
+Accepted image file types are `PNG`, `JPG/JPEG` and `GIF`, with a maximum allowed size of 300kb.
+The minimum sticker image resolution is 512x512, and its background SHOULD be transparent.
 
 ### Distribution
 
-Sticker pack are implemented as [ERC721 token](https://eips.ethereum.org/EIPS/eip-721) and contains a set of stickers. These stickers
+Sticker packs are implemented as [ERC721 token](https://eips.ethereum.org/EIPS/eip-721) and contain a set of stickers. These stickers
 are stored inside the sticker pack as a set of hyperlinks pointing to IPFS storage. These hyperlinks are publically available and can be accessed by any user inside the status chat.
 Stickers can be sent in chat only by accounts that own the sticker pack.
 
