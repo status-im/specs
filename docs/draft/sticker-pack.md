@@ -71,11 +71,12 @@ To submit a sticker pack, the author should upload all assets to IPFS. Then gene
 ```
 {meta {:name "Sticker pack name"
        :author "Author Name"
-       :thumbnail "https://ipfs.infura.io/ipfs/QmfFVKK6uvP7nqZGx6MQd2oiwxgz1d14RAHsnADazq6dBw"
-       :preview "https://ipfs.infura.io/ipfs/QmfFVKK6uvP7nqZGx6MQd2oiwxgz1d14RAHsnADazq6dBw"
-       :stickers [{:uri "https://ipfs.infura.io/ipfs/QmSakonhLgK9zoyZmDW3oTqNeKoQPYoL9CJvoQ4uUQvTpc/"}
-                  {:uri "https://ipfs.infura.io/ipfs/Qmf1iMPeMaNf2aSww7yhVbCVyDy5iiZPyrLA4qPgZ9LWpM/"}]}}
+       :thumbnail "e30101701220602163b4f56c747333f43775fdcbe4e62d6a3e147b22aaf6097ce0143a6b2373"
+       :preview "e30101701220ef54a5354b78ef82e542bd468f58804de71c8ec268da7968a1422909357f2456"
+       :stickers [{:hash "e301017012207737b75367b8068e5bdd027d7b71a25138c83e155d1f0c9bc5c48ff158724495"}
+       {:hash "e301017012201a9cdea03f27cda1aede7315f79579e160c7b2b6a2eb51a66e47a96f47fe5284"}]}}
 ```
+All assets fileds, are contenthash fileds as per [EIP 1577](https://eips.ethereum.org/EIPS/eip-1577).
  This payload is uploaded also to IPFS, and the IPFS address is used in the content field of the Sticker Market contract. See [Sticker Market spec](https://github.com/status-im/sticker-market/blob/651e88e5f38c690e57ecaad47f46b9641b8b1e27/docs/specification.md) for a detailed description of the contract.
 
 #### Install a sticker pack
