@@ -12,7 +12,7 @@ title: 10/WAKU-MAILSERVER
 >
 > Authors: Adam Babik <adam@status.im>, Oskar Thorén <oskar@status.im> (alphabetical order)
 
-- [Status Whisper Mailserver Specification](#10waku-mailserver)
+- [Status Waku Mailserver Specification](#10waku-mailserver)
   - [Abstract](#abstract)
   - [Mailserver](#mailserver)
     - [Archiving messages](#archiving-messages)
@@ -26,27 +26,29 @@ title: 10/WAKU-MAILSERVER
 
 ## Abstract
 
-Being mostly offline is an intrinsic property of mobile clients. They need to save network transfer and battery consumption to avoid spending too much money or constant charging. Whisper protocol, on the other hand, is an online protocol. Messages are available in the Whisper network only for short period of time calculate in seconds.
+Being mostly offline is an intrinsic property of mobile clients. They need to save network transfer and battery consumption to avoid spending too much money or constant charging. Waku protocol, on the other hand, is an online protocol. Messages are available in the Waku network only for short period of time calculate in seconds.
 
-Whisper Mailserver is a Whisper extension that allows to store messages permanently and deliver them to the clients even though they are already not available in the network and expired.
+Waku Mailserver is a specification that allows messages to be stored permanently and to allows the stored messages to be delivered to requesting client nodes, regardless if the messages are not available in the network due to the message TTL expiring.
 
 ## Mailserver
 
-From the network perspective, Mailserver is just like any other Whisper node. The only difference is that it has a capability of archiving messages and delivering them to its peers on-demand.
+From the network perspective, a Mailserver is just like any other Waku node. The only difference is that a Mailserver has the capability of archiving messages and delivering them to its peers on-demand.
 
-It is important to notice that Mailserver will only handle requests from its direct peers and exchanged packets between Mailserver and a peer are p2p messages.
+It is important to notice that a Mailserver will only handle requests from its direct peers and exchanged packets between a Mailserver and a peer are p2p messages.
 
 ### Archiving messages
 
-A node which wants to provide mailserver functionality MUST store envelopes from incoming message packets (Whisper packet-code `0x01`). The envelopes can be stored in any format, however they MUST be serialized and deserialized to the Whisper envelope format.
+A node which wants to provide mailserver functionality MUST store envelopes from
+incoming message packets (Waku packet-code `0x01`). The envelopes can be stored in any
+format, however they MUST be serialized and deserialized to the Waku envelope format.
 
-A mailserver SHOULD store envelopes for all topics to be generally useful for any peer, however for specific use cases it MAY store envelopes for a subset of topics.
+A Mailserver SHOULD store envelopes for all topics to be generally useful for any peer, however for specific use cases it MAY store envelopes for a subset of topics.
 
 ### Requesting messages
 
-In order to request historic messages, a node MUST send a packet P2P Request (`0x7e`) to a peer providing mailserver functionality. This packet requires one argument which MUST be a Whisper envelope.
+In order to request historic messages, a node MUST send a packet P2P Request (`0x7e`) to a peer providing mailserver functionality. This packet requires one argument which MUST be a Waku envelope.
 
-In the Whisper envelope's payload section, there MUST be RLP-encoded information about the details of the request:
+In the Waku envelope's payload section, there MUST be RLP-encoded information about the details of the request:
 
 ```
 [ Lower, Upper, Bloom, Limit, Cursor ]
@@ -54,7 +56,7 @@ In the Whisper envelope's payload section, there MUST be RLP-encoded information
 
 `Lower`: 4-byte wide unsigned integer (UNIX time in seconds; oldest requested envelope's creation time)  
 `Upper`: 4-byte wide unsigned integer (UNIX time in seconds; newest requested envelope's creation time)  
-`Bloom`: 64-byte wide array of Whisper topics encoded in a bloom filter to filter envelopes  
+`Bloom`: 64-byte wide array of Waku topics encoded in a bloom filter to filter envelopes  
 `Limit`: 4-byte wide unsigned integer limiting the number of returned envelopes  
 `Cursor`: an array of a cursor returned from the previous request (optional)
 
@@ -64,13 +66,13 @@ The envelope MUST be encrypted with a symmetric key agreed between the requester
 
 ### Receiving historic messages
 
-Historic messages MUST be sent to a peer as a packet with a P2P Message code (`0x7f`) followed by an array of Whisper envelopes. It is incompatible with the original Whisper spec (EIP-627) because it allows only a single envelope, however, an array of envelopes is much more performant. In order to stay compatible with EIP-627, a peer receiving historic message MUST handle both cases.
+Historic messages MUST be sent to a peer as a packet with a P2P Message code (`0x7f`) followed by an array of Waku envelopes.
 
 In order to receive historic messages from a mailserver, a node MUST trust the selected mailserver, that is allow to receive packets with the P2P Message code. By default, such packets are discarded.
 
-Received envelopes MUST be passed through the Whisper envelope pipelines so that they are picked up by registered filters and passed to subscribers.
+Received envelopes MUST be passed through the Waku envelope pipelines so that they are picked up by registered filters and passed to subscribers.
 
-For a requester, to know that all messages have been sent by mailserver, it SHOULD handle P2P Request Complete code (`0x7d`). This code is followed by the following parameters:
+For a requester, to know that all messages have been sent by a mailserver, it SHOULD handle P2P Request Complete code (`0x7d`). This code is followed by the following parameters:
 
 ```
 [ RequestID, LastEnvelopeHash, Cursor ]
@@ -86,7 +88,7 @@ If `Cursor` is not empty, it means that not all messages were sent due to the se
 
 ### Confidentiality
 
-All Whisper envelopes are encrypted. Mailserver node can not inspect their contents.
+All Waku envelopes are encrypted. A Mailserver node can not inspect their contents.
 
 ### Altruistic and centralized operator risk
 
@@ -112,3 +114,7 @@ metadata like IP address.
 ### Denial-of-service
 
 Since a mailserver is delivering expired envelopes and has a direct TCP connection with the recipient, the recipient is vulnerable to DoS attacks from a malicious mailserver node.
+
+```js
+// TODO should the term be "a Mailserver", "Mailserver", "a mailserver" or "mailserver"?
+```
