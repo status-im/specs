@@ -47,13 +47,6 @@ ability to decrypt messages to decide who is the correct recipient. We do
 however not rely on this property, but instead implement another secure
 transport layer on top of Waku.
 
-Finally, we use an extension of Whisper to provide the ability to do offline
-messaging.
-
-```js
-// TODO is the extension for offline messaging part of Waku? Or do we still use a Whisper extension?
-```
-
 ## Reason
 
 Provide routing, metadata protection, topic-based multicasting and basic
@@ -73,13 +66,9 @@ encryption properties to support asynchronous chat.
 | -------------------- | ---: | --- |
 | Status               |    0 | [Handshake](#handshake), [WAKU-1](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-1.md#status) |
 | Messages             |    1 | [WAKU-1](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-1.md#messages) |
-| PoW Requirement      |    2 | [WAKU-1](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-1.md#pow-requirement-update) |
-| Bloom Filter         |    3 | [WAKU-1](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-1.md#bloom-filter-update) |
 | Batch Ack            |   11 | Undocumented |
 | Message Response     |   12 | [WAKU-1](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-1.md#message-confirmations-update) |
 | Status Update        |   22 | [WAKU-1](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-1.md#status-update)
-| P2P Sync Request     |  123 | Undocumented |
-| P2P Sync Response    |  124 | Undocumented |
 | P2P Request Complete |  125 | [4/WAKU-MAILSERVER](https://specs.status.im/spec/4) |
 | P2P Request          |  126 | [4/WAKU-MAILSERVER](https://specs.status.im/spec/4), [WAKU-1](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-1.md#p2p-request) |
 | P2P Messages         |  127 | [4/WAKU-MAILSERVER](https://specs.status.im/spec/4), [WAKU-1](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-1.md#p2p-message) |
@@ -96,6 +85,10 @@ Waku's Proof Of Work algorithm is used to deter denial of service and various sp
 * proof-of-work requirement not larger than `0.002`
 * time-to-live not lower than `10` (in seconds)
 
+```js
+// TODO should we include the new PoW for image messages here?
+```
+
 ## Handshake
 
 Handshake is a RLP-encoded packet sent to a newly connected peer. It MUST start with a Status Code (`0x00`) and follow up with items:
@@ -103,14 +96,13 @@ Handshake is a RLP-encoded packet sent to a newly connected peer. It MUST start 
 [ protocolVersion, PoW, bloom, isLightNode, confirmationsEnabled, rateLimits ]
 ```
 
-`protocolVersion`: version of the Waku protocol
-`PoW`: minimum PoW accepted by the peer
-`bloom`: bloom filter of Waku topic accepted by the peer
-`isLightNode`: when true, the peer won't forward messages
-`confirmationsEnabled`: when true, the peer will send message confirmations
-`rateLimits`: is `[ RateLimitIP, RateLimitPeerID, RateLimitTopic ]` where each values is an integer with a number of accepted packets per second per IP, Peer ID, and Topic respectively
-
-`bloom, isLightNode, confirmationsEnabled, and rateLimits` are all optional arguments in the handshake. However, if you specify optional field you MUST also specify all optional fields preceding it, in order to be unambiguous.
+- `protocolVersion`: version of the Waku protocol
+- `PoW`: minimum PoW accepted by the peer
+- `bloom`: bloom filter of Waku topic accepted by the peer
+- `isLightNode`: when true, the peer won't forward messages
+- `confirmationsEnabled`: when true, the peer will send message confirmations
+- `rateLimits`: is `[ RateLimitIP, RateLimitPeerID, RateLimitTopic ]` where each values is an integer with a number of accepted packets per second per IP, Peer ID, and Topic respectively
+- `bloom, isLightNode, confirmationsEnabled, and rateLimits` are all optional arguments in the handshake. However, if you specify optional field you MUST also specify all optional fields preceding it, in order to be unambiguous.
 
 ## Rate limiting
 
