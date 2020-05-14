@@ -101,11 +101,6 @@ MAY use [Whisper v6](https://eips.ethereum.org/EIPS/eip-627), though the client
 SHOULD use [Waku V1](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-1.md)
 for privacy-preserving messaging.
 
-There MUST be a node that is capable of discovering peers and implements
-[Whisper v6](https://eips.ethereum.org/EIPS/eip-627),
-[Waku V0](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-0.md) and
-[Waku V1](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-1.md) specifications.
-
 #### Node discovery and roles
 
 There are five types of node roles:

@@ -30,6 +30,7 @@ title: 3/WHISPER-USAGE
     - [Negotiated topic](#negotiated-topic)
   - [Message encryption](#message-encryption)
   - [Message confirmations](#message-confirmations)
+  - [Whisper / Waku bridging](#whisper--waku-bridging)
   - [Whisper V6 extensions](#whisper-v6-extensions)
     - [Request historic messages](#request-historic-messages)
       - [shhext_requestMessages](#shhext_requestmessages)
@@ -313,6 +314,19 @@ The supported codes:
 The drawback of sending message confirmations is that it increases the noise in the network because for each sent message, a corresponding confirmation is broadcasted by one or more peers. To limit that, both Batch Acknowledge packet (`0x0b`) and Message Response packet (`0x0c`) are not broadcasted to peers of the peers, i.e. they do not follow epidemic spread.
 
 In the current Status network setup, only Mailservers support message confirmations. A client posting a message to the network and after receiving a confirmation can be sure that the message got processed by the Mailserver. If additionally, sending a message is limited to non-Mailserver peers, it also guarantees that the message got broadcasted through the network and it reached the selected Mailserver.
+
+## Whisper / Waku bridging
+
+In order to maintain compatibility between Whisper and Waku nodes, a Status network that
+implements both Whisper and Waku messaging protocols MUST have at least one node that is
+capable of discovering peers and implements
+[Whisper v6](https://eips.ethereum.org/EIPS/eip-627),
+[Waku V0](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-0.md) and
+[Waku V1](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-1.md) specifications.
+
+Additionally, any Status network that implements both Whisper and Waku messaging protocols
+MUST implement bridging capabilities as detailed in
+[Waku V1#Bridging](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-1.md#waku-whisper-bridging).  
 
 ## Whisper V6 extensions
 

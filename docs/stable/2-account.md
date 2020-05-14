@@ -154,6 +154,10 @@ This can be done in the following ways:
 - a bundle is only generated when it is used
 - a bundle SHOULD be distributed on the contact code channel. This is the Whisper and Waku topic `{IK}-contact-code`, where `IK` is the hex encoded public key of the user, prefixed with `0x`. The channel is encrypted in the same way public chats are encrypted.
 
+```js
+// TODO is "include BundleContainer???" supposed to have "???"
+```
+
 ### Contact Verification
 
 Once you have the information of a contact, the following can be used to verify that the key material is as it should be.
