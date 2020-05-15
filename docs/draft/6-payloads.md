@@ -100,10 +100,7 @@ message ChatMessage {
   string response_to = 4;
   // Ens name of the sender
   string ens_name = 5;
-  // Chat id, this field is symmetric for public-chats and private group chats,
-  // but asymmetric in case of one-to-ones, as the sender will use the chat-id
-  // of the received, while the receiver will use the chat-id of the sender.
-  // Probably should be the concatenation of sender-pk & receiver-pk in alphabetical order
+  // Chat id is the ID of the chat
   string chat_id = 6;
 
   // The type of message (public/one-to-one/private-group-chat)
@@ -186,15 +183,14 @@ and the `type`
 message ImageMessage {
   bytes payload = 1;
   ImageType type = 2;
+  enum ImageType {
+    UNKNOWN_IMAGE_TYPE = 0;
+    PNG = 1;
+    JPEG = 2;
+    WEBP = 3;
+    GIF = 4;
+  }
 }
-
-enum ImageType {
-  UNKNOWN_IMAGE_TYPE = 0;
-  IMAGE_JPEG = 1;
-  IMAGE_PNG = 2;
-  IMAGE_WEBP = 3;
-}
-
 ```
 
 #### Message types
@@ -357,3 +353,8 @@ There are two ways to upgrade the protocol without breaking compatibility:
 -
 
 ## Design rationale
+
+
+## Copyright
+
+Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
