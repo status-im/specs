@@ -1,21 +1,29 @@
 ---
 permalink: /spec/9
-parent: Raw specs
-title: 9/BLOCKCHAIN-USAGE
+parent: Stable specs
+title: 9/ETHEREUM-USAGE
 ---
 
-# 3/BLOCKCHAIN-USAGE
+# 9/ETHEREUM-USAGE
 
 > Version: 0.1
 >
-> Status: Raw
+> Status: Stable
 >
 > Authors: Andrea Maria Piana <andreap@status.im>
 
-# Status interactions with the blockchain
+# Status interactions with the Ethereum blockchain
 
-In this document is document all the interactions that the Status client has
-with the blockchain.
+In this document we document all the interactions that the Status client has
+with the [Ethereum](https://ethereum.org/developers/) blockchain.
+
+All the interactions are made through [JSON-RPC](https://github.com/ethereum/wiki/wiki/JSON-RPC).
+Currently [Infura](https://infura.io/) is used. The client assumes high-availability, otherwise 
+it will not be able to interact with the Ethereum blockchain.
+We rely on these nodes to validate the integrity of the transaction and report a 
+consistent history.
+
+Key handling is described [here](./2-account.md)
 
 1. [Wallet](#Wallet)
 2. [ENS](#ENS)
@@ -97,6 +105,11 @@ func (ec *Client) SendTransaction(ctx context.Context, tx *types.Transaction) er
 https://github.com/ethereum/go-ethereum/blob/26d271dfbba1367326dec38068f9df828d462c61/ethclient/ethclient.go#L512
 
 ### Fetching balance
+
+We currently fetch the current and historical [ECR20] (https://eips.ethereum.org/EIPS/eip-20) and ETH balance for the user wallet address.
+Collectibles following the [ECR-721](https://eips.ethereum.org/EIPS/eip-721) are also fetched if enabled.
+
+We support by default the following [tokens](https://github.com/status-im/status-react/blob/develop/src/status_im/ethereum/tokens.cljs). Custom tokens can be added by specifying the `address`, `symbol` and `decimals`.
 
 #### BlockByHash
 
@@ -184,3 +197,33 @@ https://github.com/ethereum/go-ethereum/blob/26d271dfbba1367326dec38068f9df828d4
 ## ENS
 
 All the interactions with `ENS` are made through the [ENS contract](https://github.com/ensdomains/ens)
+
+For the `stateofus.eth` username, one can be registered through these [contracts](https://github.com/status-im/ens-usernames)
+
+### Registering, releasing and updating
+
+- [Registering a username](https://github.com/status-im/ens-usernames/blob/77d9394d21a5b6213902473b7a16d62a41d9cd09/contracts/registry/UsernameRegistrar.sol#L113)
+- [Releasing a username](https://github.com/status-im/ens-usernames/blob/77d9394d21a5b6213902473b7a16d62a41d9cd09/contracts/registry/UsernameRegistrar.sol#L131)
+- [Updating a username] (https://github.com/status-im/ens-usernames/blob/77d9394d21a5b6213902473b7a16d62a41d9cd09/contracts/registry/UsernameRegistrar.sol#L174)
+
+### Slashing
+
+Usernames MUST be in a specific format, otherwise they MAY be slashed:
+
+- They MUST only contain alphanumeric characters
+- They MUST NOT  be in the form `0x[0-9a-f]{5}.*` and have more than 12 characters
+- They MUST NOT be in the [reserved list] (https://github.com/status-im/ens-usernames/blob/47c4c6c2058be0d80b7d678e611e166659414a3b/config/ens-usernames/reservedNames.js)
+- They MUST NOT be too short, this is dinamically set in the contract and can be checked against the [contract](https://github.com/status-im/ens-usernames/blob/master/contracts/registry/UsernameRegistrar.sol#L26)
+
+- [Slash a reserved username](https://github.com/status-im/ens-usernames/blob/77d9394d21a5b6213902473b7a16d62a41d9cd09/contracts/registry/UsernameRegistrar.sol#L237)
+- [Slash an invalid username] (https://github.com/status-im/ens-usernames/blob/77d9394d21a5b6213902473b7a16d62a41d9cd09/contracts/registry/UsernameRegistrar.sol#L261)
+- [Slash a username too similar to an address](https://github.com/status-im/ens-usernames/blob/77d9394d21a5b6213902473b7a16d62a41d9cd09/contracts/registry/UsernameRegistrar.sol#L215)
+- [Slash a username that is too short](https://github.com/status-im/ens-usernames/blob/77d9394d21a5b6213902473b7a16d62a41d9cd09/contracts/registry/UsernameRegistrar.sol#L200)
+
+ENS names are propagated through `ChatMessage` and `ContactUpdate` [payload](./6-payloads.md).
+A client SHOULD verify ens names against the public key of the sender on receiving the message against the [ENS contract](https://github.com/ensdomains/ens)
+
+## Copyright
+
+Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
+
