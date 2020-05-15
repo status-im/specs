@@ -148,7 +148,7 @@ v5](https://github.com/ethereum/devp2p/blob/master/discv5/discv5.md) and
 [Rendezvous Protocol](https://github.com/libp2p/specs/tree/master/rendezvous),
 (with some
 [modifications](https://github.com/status-im/rendezvous#differences-with-original-rendezvous)).
-Additionally, some static nodes MAY also be used.
+Additionally, some static nodes MAY also be used. 
 
 A Status client MUST use at least one discovery method or use static nodes
 to communicate with other clients.
@@ -187,6 +187,9 @@ new ones.
 
 The current list of static peers is published on <https://fleets.status.im/>. `eth.prod` is the current
 group of peers the official Status client uses. The others are test networks.
+
+Finally, Waku node addresses can be retrieved by traversing 
+the merkle tree found at [`fleets.status.im`](https://fleets.status.im), as described in [EIP-1459](https://eips.ethereum.org/EIPS/eip-1459#client-protocol).
 
 #### Mobile nodes
 
