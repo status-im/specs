@@ -1,7 +1,7 @@
 ---
 permalink: /spec/9
-parent: Stable specs
-title: 9/3RD-PARTY
+parent: Draft specs
+title: 9/3RD-PARTY-USAGE
 ---
 
 # 9/3RD-PARTY
@@ -13,7 +13,7 @@ title: 9/3RD-PARTY
 > Authors: Volodymyr Kozieiev <volodymyr@status.im>
 
 
-# 3rd party APIs used for core functionality that impacts things like availability/censorship and privacy
+# Third party APIs used for core functionality
 
 ## Table of Contents
 
@@ -31,11 +31,11 @@ title: 9/3RD-PARTY
 7. [Copyright](#copyright)
 
 ## Abstract
-In this specification listed 3rd party APIs that Status rely on. With the help of that APIs Status:
-- communicates to Ethereum network
-- allows user to see address and transaction details on external website
-- gets fiat<->crypto exchange prices
-- gets information about collectibles
+In this specification, we discuss 3rd party APIs that Status relies on. These APIs provide various capabilities such as:
+- communicate with the Ethereum network
+- allow users to see address and transaction details on external website
+- get fiat/crypto exchange rates
+- get information about collectibles
 - hosts privacy policy
 
 ## Definitions
@@ -55,22 +55,22 @@ Relying on 3rd party APIs interferes with `censorship resistance` Status princip
 ### Infura
 
 ##### What is it?
-Infura hosts a collection of own full nodes on the Ethereum network and provides an API access to the Ethereum and IPFS networks without having to run a full node.
+Infura hosts a collection of full nodes for the Ethereum network and provides an API to access both the Ethereum and IPFS networks without having to run a full node.
 
 ##### How Status use it?
 Status works on mobile devices and therefore can't rely on local node. So all communication to Ethereum network happens via Infura.
 
 ##### Concerns
-Making http request means that user metadata leaks. Also if service hacked it can be used in various attacks, e.g. by faking returning data.
-Infura hosts on Amazon. It can fail or Amazon can cut off service or their servers crash. In this case all Status features related to Ethereum network calls will fail.
+Making http request means that a user leaks metadata, which can be used in various attacks if the service is hacked.
+Infura hosts on centralized providers. If these fail or the provider cuts off service, then Status features requiring Ethereum calls will.
 
 
 ### Etherscan
 ##### What is it?
-Etherscan is a service that allows user to explore and search the Ethereum blockchain for transactions, addresses, tokens, prices and other activities taking place on Ethereum network.
+Etherscan is a service that allows user to explore and search the Ethereum blockchain for transactions, addresses, tokens, prices and other activities taking place on Ethereum.
 
 ##### How Status use it?
-Status Wallet has buttons that allow user to view details of address or transactions on Etherscan site.
+Status Wallet allows users to view details of addresses and transactions on Etherscan.
 
 ##### Concerns
 If Etherscan fails user won't be able to view address or transaction details with it. But inside the app this info will still be available.
@@ -84,7 +84,7 @@ CryptoCompare is a service that shows live streaming prices, charts and analysis
 Status regularly fetches crypto prices from CryptoCompare. Using that info Status calculates fiat value for transaction or wallet assets.
 
 ##### Concerns
-Making http request means that user metadata leaks. Also if service hacked it can be used in various attacks, e.g. by faking returning data.
+Making http request means that a user leaks metadata, which can be used in various attacks if the service is hacked.
 If CryptoCompare fails Status won't be able to show fiat equivalent of crypto in wallet.
 
 ### Collectibles
@@ -97,7 +97,7 @@ There is a set of services that used for getting information about collectibles:
 
 
 ##### Concerns
-Making http request means that user metadata leaks. Also if service hacked they can be used in various attacks, e.g. by faking returning data.
+Making http request means that a user leaks metadata, which can be used in various attacks if the service is hacked.
 
 ### Iubenda
 ##### What is it?
