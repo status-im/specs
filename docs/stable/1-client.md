@@ -167,7 +167,7 @@ It uses Ethereum Node Records (ENR) to report discovered peers.
 Both peers discovery mechanisms use topics to provide peers with certain capabilities.
 There is no point in returning peers that do not support a particular protocol.
 Status nodes that want to be discovered MUST register to Discovery V5 and/or Rendezvous
-with the `whisper` and/or `waku` topic(s). Status nodes that are mail servers and want to
+with the `whisper` and/or `waku` topic(s). Status nodes that are `Mailservers` and want to
 be discoverable MUST additionally register with the `whispermail` topic.
 
 ```js
@@ -176,10 +176,10 @@ be discoverable MUST additionally register with the `whispermail` topic.
 
 It is RECOMMENDED to use both mechanisms but at the same time implement a structure
 called `PeerPool`. `PeerPool` is responsible for maintaining an optimal number of peers.
-For mobile nodes, there is no significant advantage to have more than 2-3 peers and one mail server.
+For mobile nodes, there is no significant advantage to have more than 2-3 peers and one `Mailserver`.
 `PeerPool` can notify peers discovery protocol implementations that they should suspend
 their execution because the optimal number of peers is found. They should resume
-if the number of connected peers drops or a mail server disconnects.
+if the number of connected peers drops or a `Mailserver` disconnects.
 
 It is worth noticing that an efficient caching strategy MAY be of great use, especially,
 on mobile devices. Discovered peers can be cached as they rarely change and used
@@ -318,7 +318,7 @@ For some further investigation, see
 
 #### I heard something about `Mailservers` being trusted somehow?
 
-In order to use a mail server, a given node needs to connect to it directly, i.e. add the `Mailserver` as its peer and mark it as trusted. This means that the mail server is able to send direct p2p messages to the node instead of broadcasting them. Effectively, it knows the bloom filter of the topics the node is interested in, when it is online as well as many metadata like IP address.
+In order to use a `Mailserver`, a given node needs to connect to it directly, i.e. add the `Mailserver` as its peer and mark it as trusted. This means that the `Mailserver` is able to send direct p2p messages to the node instead of broadcasting them. Effectively, it knows the bloom filter of the topics the node is interested in, when it is online as well as many metadata like IP address.
 
 ### Data sync 1
 
