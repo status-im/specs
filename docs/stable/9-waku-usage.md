@@ -230,21 +230,6 @@ for i = 0; i < topicLen; i++ {
 
 Each Status Client SHOULD listen to this topic in order to receive ??? -->
 
-```js
-// TODO should we keep this commented out section? ^^^
-```
-
-<!-- NOTE: commented out as it is no longer valid as of V1. - C.P. Oct 8, 2019
-### Generic discovery topic
-
-Generic discovery topic is a legacy topic used to handle all one-to-one chats. The newer implementation should rely on [Partitioned Topic](#partitioned-topic) and [Personal discovery topic](#personal-discovery-topic).
-
-Generic discovery topic MUST be created following [Public chats](#public-chats) topic algorithm using string `contact-discovery` as a name. -->
-
-```js
-// TODO should we keep this commented out section? ^^^
-```
-
 ### Group chat topic
 
 Group chats does not have a dedicated topic. All group chat messages (including membership updates) are sent as one-to-one messages to multiple recipients.
