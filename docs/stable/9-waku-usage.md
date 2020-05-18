@@ -18,7 +18,7 @@ title: 9/WAKU-USAGE
   - [Terminology](#terminology)
   - [Waku packets](#waku-packets)
   - [Waku node configuration](#waku-node-configuration)
-  - [Handshake](#handshake)
+  - [Status](#status)
   - [Rate limiting](#rate-limiting)
   - [Keys management](#keys-management)
     - [Contact code topic](#contact-code-topic)
@@ -68,14 +68,10 @@ encryption properties to support asynchronous chat.
 | Messages             |    1 | [WAKU-1](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-1.md#messages) |
 | Batch Ack            |   11 | Undocumented |
 | Message Response     |   12 | [WAKU-1](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-1.md#message-confirmations-update) |
-| Status Update        |   22 | [WAKU-1](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-1.md#status-update)
+| Status Update        |   22 | [WAKU-1](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-1.md#status-update) |
 | P2P Request Complete |  125 | [4/WAKU-MAILSERVER](https://specs.status.im/spec/4) |
 | P2P Request          |  126 | [4/WAKU-MAILSERVER](https://specs.status.im/spec/4), [WAKU-1](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-1.md#p2p-request) |
 | P2P Messages         |  127 | [4/WAKU-MAILSERVER](https://specs.status.im/spec/4), [WAKU-1](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-1.md#p2p-message) |
-
-```js
-// TODO add details for Topic Interest and Rate Limits
-```
 
 ## Waku node configuration
 
@@ -86,20 +82,28 @@ Waku's Proof Of Work algorithm is used to deter denial of service and various sp
 * proof-of-work requirement not larger than `0.000002` for payloads greater than or equal to 50,000 bytes
 * time-to-live not lower than `10` (in seconds)
 
-## Handshake
+## Status
 
 Handshake is a RLP-encoded packet sent to a newly connected peer. It MUST start with a Status Code (`0x00`) and follow up with items:
 ```
-[ protocolVersion, PoW, bloom, isLightNode, confirmationsEnabled, rateLimits ]
+[
+  [ pow-requirement-key pow-requirement ]
+  [ bloom-filter-key bloom-filter ]
+  [ light-node-key light-node ]
+  [ confirmations-enabled-key confirmations-enabled ]
+  [ rate-limits-key rate-limits ]
+  [ topic-interest-key topic-interest ]
+]
 ```
 
-- `protocolVersion`: version of the Waku protocol
-- `PoW`: minimum PoW accepted by the peer
-- `bloom`: bloom filter of Waku topic accepted by the peer
-- `isLightNode`: when true, the peer won't forward messages
-- `confirmationsEnabled`: when true, the peer will send message confirmations
-- `rateLimits`: is `[ RateLimitIP, RateLimitPeerID, RateLimitTopic ]` where each values is an integer with a number of accepted packets per second per IP, Peer ID, and Topic respectively
-- `bloom, isLightNode, confirmationsEnabled, and rateLimits` are all optional arguments in the handshake. However, if you specify optional field you MUST also specify all optional fields preceding it, in order to be unambiguous.
+| Option Name             | Key    | Type     | Description | References |
+| ----------------------- | ------ | -------- | ----------- | --- |
+| `pow-requirement`       | `0x00` | `uint64` | minimum PoW accepted by the peer | [WAKU-1#pow-requirement](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-1.md#pow-requirement-field) |
+| `bloom-filter`          | `0x01` | `[]byte` | bloom filter of Waku topic accepted by the peer | [WAKU-1#bloom-filter](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-1.md#bloom-filter-field) |
+| `light-node`            | `0x02` | `bool`   | when true, the peer won't forward envelopes through the Messages packet. | [WAKU-1#topic-interest](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-1.md#topic-interest-field) |
+| `confirmations-enabled` | `0x03` | `bool`   | when true, the peer will send message confirmations | `TODO` |
+| `rate-limits`           | `0x04` |          | See [Rate limiting](#rate-limiting) | [WAKU-1#rate-limits](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-1.md#rate-limits-field) |
+| `topic-interest`        | `0x05` | `[10000][4]byte` | Topic interest is used to share a node's interest in envelopes with specific topics. It does this in a more bandwidth considerate way, at the expense of some metadata protection. Peers MUST only send envelopes with specified topics. | [WAKU-1#topic-interest](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-1.md#topic-interest-field) |
 
 ## Rate limiting
 
@@ -109,7 +113,7 @@ Each node MAY decide to whitelist, i.e. do not rate limit, selected IPs or peer 
 
 If a peer exceeds node's rate limits, the connection between them MAY be dropped.
 
-Each node SHOULD broadcast its rate limits to its peers using rate limits packet code (`0x14`). The rate limits is RLP-encoded information:
+Each node SHOULD broadcast its rate limits to its peers using `rate limits` in `status-options` via packet code `0x00` or `0x22`. The rate limits is RLP-encoded information:
 
 ```
 [ IP limits, PeerID limits, Topic limits ]
