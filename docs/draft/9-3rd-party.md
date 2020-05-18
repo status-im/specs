@@ -113,7 +113,7 @@ If Iubenda fails Status users won't be able to navigate to app's privacy policy.
 
 | Version | Comment |
 | :-----: | ------- |
-| [0.1.0](https://github.com/specs/...)   | Initial Release |
+| [0.1.0](https://github.com/status-im/specs/blob/master/docs/draft/9-3rd-party.md)   | Initial Release |
 
 ## Acknowledgements
 
