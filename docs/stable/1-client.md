@@ -51,7 +51,7 @@ have to be implemented in order to be a full Status client. The second gives a d
             -   [Why do you use Waku?](#why-do-you-use-waku)
             -   [Why is PoW for Waku set so low?](#why-is-pow-for-waku-set-so-low)
             -   [Why do you not use Discovery v5 for node discovery?](#why-do-you-not-use-discovery-v5-for-node-discovery)
-            -   [I heard something about mailservers being trusted somehow?](#i-heard-something-about-mailservers-being-trusted-somehow)
+            -   [I heard something about `Mailservers` being trusted somehow?](#i-heard-something-about-mailservers-being-trusted-somehow)
         -   [Data sync](#data-sync-1)
             -   [Why is MVDS not used for public chats?](#why-is-mvds-not-used-for-public-chats)
     -   [Footnotes](#footnotes)
@@ -316,9 +316,9 @@ Discovery v5 for a short period of time until their peer list is populated.
 For some further investigation, see
 [here](https://github.com/status-im/swarms/blob/master/ideas/092-disc-v5-research.md).
 
-#### I heard something about mailservers being trusted somehow?
+#### I heard something about `Mailservers` being trusted somehow?
 
-In order to use a mail server, a given node needs to connect to it directly, i.e. add the mailserver as its peer and mark it as trusted. This means that the mail server is able to send direct p2p messages to the node instead of broadcasting them. Effectively, it knows the bloom filter of the topics the node is interested in, when it is online as well as many metadata like IP address.
+In order to use a mail server, a given node needs to connect to it directly, i.e. add the `Mailserver` as its peer and mark it as trusted. This means that the mail server is able to send direct p2p messages to the node instead of broadcasting them. Effectively, it knows the bloom filter of the topics the node is interested in, when it is online as well as many metadata like IP address.
 
 ### Data sync 1
 
@@ -340,7 +340,7 @@ area of research.
 
 ## Appendix A: Security considerations
 
-There are several security considerations to take into account when running Status. Chief among them are: scalability, DDoS-resistance and privacy. These also vary depending on what capabilities are used, such as mailserver, light node, and so on.
+There are several security considerations to take into account when running Status. Chief among them are: scalability, DDoS-resistance and privacy. These also vary depending on what capabilities are used, such as `Mailserver`, light node, and so on.
 
 ### Scalability and UX
 
@@ -352,9 +352,9 @@ In version 1 of Status, bandwidth usage is likely to be an issue. For more inves
 // TODO investigate update for this ^^^
 ```
 
-**Mailserver High Availability requirement:**
+**`Mailserver` High Availability requirement:**
 
-A mailserver has to be online to receive messages for other nodes, this puts a high availability requirement on it.
+A `Mailserver` has to be online to receive messages for other nodes, this puts a high availability requirement on it.
 
 **Gossip-based routing:**
 
@@ -374,9 +374,9 @@ The main privacy concern with light nodes is that directly connected peers will 
 
 By having a bloom filter where only the topics you are interested in are set, you reveal which messages you are interested in. This is a fundamental tradeoff between bandwidth usage and privacy, though the tradeoff space is likely suboptimal in terms of the [Anonymity](https://eprint.iacr.org/2017/954.pdf) [trilemma](https://petsymposium.org/2019/files/hotpets/slides/coordination-helps-anonymity-slides.pdf).
 
-**Mailserver client privacy:**
+**`Mailserver` client privacy:**
 
-A mailserver client has to trust a mailserver, which means they can send direct traffic. This reveals what topics / bloom filter a node is interested in, along with its peerID (with IP).
+A `Mailserver` client has to trust a `Mailserver`, which means they can send direct traffic. This reveals what topics / bloom filter a node is interested in, along with its peerID (with IP).
 
 **Privacy guarantees not rigorous:**
 
@@ -396,9 +396,9 @@ Similar to bloom filter privacy, if you use a very specific topic you reveal mor
 
 Proof of work is a poor spam prevention mechanism. A mobile device can only have a very low PoW in order not to use too much CPU / burn up its phone battery. This means someone can spin up a powerful node and overwhelm the network.
 
-**Mailserver trusted connection:**
+**`Mailserver` trusted connection:**
 
-A mailserver has a direct TCP connection, which means they are trusted to send traffic. This means a malicious or malfunctioning mailserver can overwhelm an individual node.
+A `Mailserver` has a direct TCP connection, which means they are trusted to send traffic. This means a malicious or malfunctioning `Mailserver` can overwhelm an individual node.
 
 ### Censorship resistance
 

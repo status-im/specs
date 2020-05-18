@@ -313,7 +313,7 @@ The supported codes:
 
 The drawback of sending message confirmations is that it increases the noise in the network because for each sent message, a corresponding confirmation is broadcasted by one or more peers. To limit that, both Batch Acknowledge packet (`0x0b`) and Message Response packet (`0x0c`) are not broadcasted to peers of the peers, i.e. they do not follow epidemic spread.
 
-In the current Status network setup, only Mailservers support message confirmations. A client posting a message to the network and after receiving a confirmation can be sure that the message got processed by the Mailserver. If additionally, sending a message is limited to non-Mailserver peers, it also guarantees that the message got broadcasted through the network and it reached the selected Mailserver.
+In the current Status network setup, only `Mailservers` support message confirmations. A client posting a message to the network and after receiving a confirmation can be sure that the message got processed by the `Mailserver`. If additionally, sending a message is limited to non-`Mailserver` peers, it also guarantees that the message got broadcasted through the network and it reached the selected `Mailserver`.
 
 ## Whisper / Waku bridging
 
@@ -332,9 +332,9 @@ MUST implement bridging capabilities as detailed in
 
 ### Request historic messages
 
-Sends a request for historic messages to a Mailserver. The Mailserver node MUST be a direct peer and MUST be marked as trusted (using `shh_markTrustedPeer`).
+Sends a request for historic messages to a `Mailserver`. The `Mailserver` node MUST be a direct peer and MUST be marked as trusted (using `shh_markTrustedPeer`).
 
-The request does not wait for the response. It merely sends a peer-to-peer message to the Mailserver and it's up to Mailserver to process it and start sending historic messages.
+The request does not wait for the response. It merely sends a peer-to-peer message to the `Mailserver` and it's up to `Mailserver` to process it and start sending historic messages.
 
 The drawback of this approach is that it is impossible to tell which historic messages are the result of which request.
 
@@ -344,17 +344,17 @@ It's recommended to return messages from newest to oldest. To move further back 
 
 **Parameters**:
 1. Object - The message request object:
-   * `mailServerPeer` - `String`: Mailserver's enode address.
+   * `mailServerPeer` - `String`: `Mailserver`'s enode address.
    * `from` - `Number` (optional): Lower bound of time range as unix timestamp, default is 24 hours back from now.
    * `to` - `Number` (optional): Upper bound of time range as unix timestamp, default is now.
    * `limit` - `Number` (optional): Limit the number of messages sent back, default is no limit.
    * `cursor` - `String` (optional): Used for paginated requests.
    * `topics` - `Array`: hex-encoded message topics.
-   * `symKeyID` - `String`: an ID of a symmetric key to authenticate to Mailserver, derived from Mailserver password.
+   * `symKeyID` - `String`: an ID of a symmetric key used to authenticate with the `Mailserver`, derived from Mailserver password.
 
 **Returns**:
 `Boolean` - returns `true` if the request was sent.
 
-The above `topics` is then converted into a bloom filter and then and sent to the Mailserver.
+The above `topics` is then converted into a bloom filter and then and sent to the `Mailserver`.
 
 <!-- TODO: Clarify actual request with bloom filter to mailserver -->
