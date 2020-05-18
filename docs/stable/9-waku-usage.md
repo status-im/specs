@@ -82,12 +82,9 @@ encryption properties to support asynchronous chat.
 If you want to run a Waku node and receive messages from Status clients, it must be properly configured.
 
 Waku's Proof Of Work algorithm is used to deter denial of service and various spam/flood attacks against the Waku network. The sender of a message must perform some work which in this case means processing time. Because Status' main client is a mobile client, this easily leads to battery draining and poor performance of the app itself. Hence, all clients MUST use the following Waku node settings:
-* proof-of-work requirement not larger than `0.002`
+* proof-of-work requirement not larger than `0.002` for payloads less than 50,000 bytes
+* proof-of-work requirement not larger than `0.000002` for payloads greater than or equal to 50,000 bytes
 * time-to-live not lower than `10` (in seconds)
-
-```js
-// TODO should we include the new PoW for image messages here?
-```
 
 ## Handshake
 
