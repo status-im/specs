@@ -160,7 +160,7 @@ This can be done in the following ways:
 Once you have the information of a contact, the following can be used to verify that the key material is as it should be.
 
 #### Identicon
-A low-poly identicon is deterministically generated from the whisper chat public key.  This can then be compared out of band to ensure the reciever's public key is the one you have locally.
+A low-poly identicon is deterministically generated from the whisper chat public key.  This can then be compared out of band to ensure the receiver's public key is the one you have locally.
 
 #### 3 word pseudonym / whisper key fingerprint
 Status generates a deterministic 3-word random pseudonym from the whisper chat public key.  This pseudonym acts as a human readable fingerprint to the whisper chat public key.  This name also shows when viewing a contact's public profile and in the chat UI.

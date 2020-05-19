@@ -1,1 +1,17 @@
 Waku
+SIPs
+SIP
+Lifecycle
+im
+COSS
+permalink
+nav
+TODO
+mainnet
+blockchain
+ethereum
+gfycat
+SNT
+UI
+identicon
+deterministically
