@@ -23,7 +23,7 @@ as various clients created using different technologies.
 
 ## Table of Contents
 
-- [Status Message Payloads Specification](#status-message-payloads-specification)
+- [Status Message Payloads Specification](#6payloads)
   - [Abstract](#abstract)
   - [Table of Contents](#table-of-contents)
   - [Introduction](#introduction)
@@ -339,7 +339,7 @@ message PairInstallation {
 ### MembershipUpdateMessage and MembershipUpdateEvent
 
 `MembershipUpdateEvent` is a message used to propagate information about group membership changes in a group chat.
-The details are in the  [Group chats specs](status-group-chats-spec.md)
+The details are in the  [Group chats specs](7-group-chat.md)
 
 ## Upgradability
 
