@@ -60,7 +60,7 @@ have to be implemented in order to be a full Status client. The second gives a d
         -   [Privacy](#privacy)
         -   [Spam resistance](#spam-resistance)
         -   [Censorship resistance](#censorship-resistance)
-    -   [Acknowledgements](#acknowledgements)
+    -   [Acknowledgments](#acknowledgments)
 
 ### Protocol layers
 
@@ -120,7 +120,7 @@ nodes allow you to discover other nodes of the network.
 Currently the main bootstrap nodes are provided by Status Gmbh, but anyone can
 run these provided they are connected to the rest of the Whisper network.
 
-Status maintains a list of production fleet boootstrap nodes in the following locations:
+Status maintains a list of production fleet bootstrap nodes in the following locations:
 
 **Hong Kong:**
 
@@ -200,11 +200,11 @@ communicate with other Status nodes.
 ### Transport privacy and Whisper usage
 
 Once a Whisper node is up and running there are some specific settings required
-to commmunicate with other Status nodes.
+to communicate with other Status nodes.
 
 See [3/WHISPER-USAGE](https://specs.status.im/spec/3) for more details.
 
-For providing offline inboxing, see the complementary [4/WHISPER-MAILSERVER](https://specs.status.im/spec/4).
+For providing an offline inbox, see the complementary [4/WHISPER-MAILSERVER](https://specs.status.im/spec/4).
 
 ### Secure Transport
 
@@ -275,7 +275,7 @@ Whisper is not currently under active development, and it has several drawbacks.
 Among others:
 
 -   It is very wasteful bandwidth-wise and it doesn't appear to be scalable
--   Proof of work is a poor spam protection mechanism for heterogenerous devices
+-   Proof of work is a poor spam protection mechanism for heterogeneous devices
 -   The privacy guarantees provided are not rigorous
 -   There's no incentives to run a node
 
@@ -284,7 +284,7 @@ together with [Vac](https://vac.dev/vac-overview) and other teams in the space.
 
 #### Why is PoW for Whisper set so low?
 
-A higher PoW would be desirable, but this kills the battery on mobilephones,
+A higher PoW would be desirable, but this kills the battery on mobile phones,
 which is a prime target for Status clients.
 
 This means the network is currently vulnerable to DDoS attacks. Alternative
@@ -353,7 +353,7 @@ The main privacy concern with light nodes is that directly connected peers will 
 
 **Bloom filter privacy:**
 
-By having a bloom filter where only the topics you are interested in are set, you reveal which messages you are interested in. This is a fundamental tradeoff between bandwidth usage and privacy, though the tradeoff space is likely suboptimal in terms of the [Anonymity](https://eprint.iacr.org/2017/954.pdf) [trilemma](https://petsymposium.org/2019/files/hotpets/slides/coordination-helps-anonymity-slides.pdf).
+By having a bloom filter where only the topics you are interested in are set, you reveal which messages you are interested in. This is a fundamental trade-off between bandwidth usage and privacy, though the trade-off space is likely suboptimal in terms of the [Anonymity](https://eprint.iacr.org/2017/954.pdf) [trilemma](https://petsymposium.org/2019/files/hotpets/slides/coordination-helps-anonymity-slides.pdf).
 
 **Mailserver client privacy:**
 
@@ -369,7 +369,7 @@ Similar to bloom filter privacy, if you use a very specific topic you reveal mor
 
 ### Spam resistance
 
-**PoW bad for heterogenerous devices:**
+**PoW bad for heterogeneous devices:**
 
 Proof of work is a poor spam prevention mechanism. A mobile device can only have a very low PoW in order not to use too much CPU / burn up its phone battery. This means someone can spin up a powerful node and overwhelm the network.
 
@@ -385,6 +385,6 @@ By default Devp2p runs on port `30303`, which is not commonly used for any other
 
 See <https://github.com/status-im/status-react/issues/6351> for some discussion.
 
-## Acknowledgements
+## Acknowledgments
 
 Jacek Sieka

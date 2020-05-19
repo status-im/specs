@@ -27,7 +27,7 @@ title: 9/3RD-PARTY-USAGE
   * [Collectibles](#collectibles)
   * [Iubenda](#iubenda)
 5. [Changelog](#changelog)
-6. [Acknowledgements](#acknowledgements)
+6. [Acknowledgments](#acknowledgments)
 7. [Copyright](#copyright)
 
 ## Abstract
@@ -100,7 +100,9 @@ There is a set of services that used for getting information about collectibles:
 Making http request means that a user leaks metadata, which can be used in various attacks if the service is hacked.
 
 ### Iubenda
+
 ##### What is it?
+
 Service that helps in creating documents that make websites and apps compliant with the law across multiple countries and legislations.
 
 ##### How Status use it?
@@ -115,7 +117,7 @@ If Iubenda fails Status users won't be able to navigate to app's privacy policy.
 | :-----: | ------- |
 | [0.1.0](https://github.com/status-im/specs/blob/master/docs/draft/9-3rd-party.md)   | Initial Release |
 
-## Acknowledgements
+## Acknowledgments
 
 ## Copyright
 

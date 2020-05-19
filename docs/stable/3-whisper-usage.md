@@ -56,7 +56,7 @@ encryption properties to support asynchronous chat.
 
 ## Terminology
 
-* *Whisper node*: an Ethereum node with Whisper V6 enabled (in the case of geth, it's `--shh` option)
+* *Whisper node*: an Ethereum node with Whisper V6 enabled (in the case of go-ethereum, it's `--shh` option)
 * *Whisper network*: a group of Whisper nodes connected together through the internet connection and forming a graph
 * *Message*: decrypted Whisper message
 * *Offline message*: an archived envelope
@@ -309,9 +309,9 @@ The Message Response packet is more complex and is followed by a Versioned Messa
 The supported codes:
 `1`: means time sync error which happens when an envelope is too old or created in the future (the root cause is no time sync between nodes).
 
-The drawback of sending message confirmations is that it increases the noise in the network because for each sent message, a corresponding confirmation is broadcasted by one or more peers. To limit that, both Batch Acknowledge packet (`0x0b`) and Message Response packet (`0x0c`) are not broadcasted to peers of the peers, i.e. they do not follow epidemic spread.
+The drawback of sending message confirmations is that it increases the noise in the network because for each sent message, a corresponding confirmation is broadcast by one or more peers. To limit that, both Batch Acknowledge packet (`0x0b`) and Message Response packet (`0x0c`) are not broadcast to peers of the peers, i.e. they do not follow epidemic spread.
 
-In the current Status network setup, only Mailservers support message confirmations. A client posting a message to the network and after receiving a confirmation can be sure that the message got processed by the Mailserver. If additionally, sending a message is limited to non-Mailserver peers, it also guarantees that the message got broadcasted through the network and it reached the selected Mailserver.
+In the current Status network setup, only Mailservers support message confirmations. A client posting a message to the network and after receiving a confirmation can be sure that the message got processed by the Mailserver. If additionally, sending a message is limited to non-Mailserver peers, it also guarantees that the message got broadcast through the network and it reached the selected Mailserver.
 
 ## Whisper V6 extensions
 

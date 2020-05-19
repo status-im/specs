@@ -42,11 +42,11 @@ The minimum sticker image resolution is 512x512, and its background SHOULD be tr
 ### Distribution
 
 Sticker packs are implemented as [ERC721 token](https://eips.ethereum.org/EIPS/eip-721) and contain a set of stickers. These stickers
-are stored inside the sticker pack as a set of hyperlinks pointing to IPFS storage. These hyperlinks are publically available and can be accessed by any user inside the status chat.
+are stored inside the sticker pack as a set of hyperlinks pointing to IPFS storage. These hyperlinks are publicly available and can be accessed by any user inside the status chat.
 Stickers can be sent in chat only by accounts that own the sticker pack.
 
 ### IPFS gateway
-At the moment of writing, the current main Status app uses the [Infura](https://infura.io/) gateway. However clients could choose a different gateway or to run own IPFS node.
+At the moment of writing, the current main Status app uses the [Infura](https://infura.io/) gateway. However, clients could choose a different gateway or to run own IPFS node.
 Infura gateway is an HTTPS gateway, which based on an HTTP GET request with the multihash block will return the stored content at that block address. 
 
 The use of gateway is required to enable easy access to the resources over HTTP.
@@ -56,7 +56,7 @@ derived from the hash of the file. This ensures that a file can't be overridden,
 ### Security
 The IPFS gateway acts as an end-user of the IPFS and allows users of the gateway to access IPFS without connection to the P2P network.
 Usage of a gateway introduces potential risk for the users of that gateway provider. In case of a compromise in the security of the provider, meta information such as IP address, User-Agent and other of its users can be leaked.
-If the provider servers are unavailable the access trought gateway to the IPFS network is lost.
+If the provider servers are unavailable the access trough gateway to the IPFS network is lost.
 
 ### Status sticker usage
 When a sticker is shown in the app, Status app makes an http GET request to IPFS gateway using the hyperlink. 
@@ -76,7 +76,7 @@ To submit a sticker pack, the author should upload all assets to IPFS. Then gene
        :stickers [{:hash "e301017012207737b75367b8068e5bdd027d7b71a25138c83e155d1f0c9bc5c48ff158724495"}
        {:hash "e301017012201a9cdea03f27cda1aede7315f79579e160c7b2b6a2eb51a66e47a96f47fe5284"}]}}
 ```
-All assets fileds, are contenthash fileds as per [EIP 1577](https://eips.ethereum.org/EIPS/eip-1577).
+All assets fields, are contenthash fields as per [EIP 1577](https://eips.ethereum.org/EIPS/eip-1577).
  This payload is uploaded also to IPFS, and the IPFS address is used in the content field of the Sticker Market contract. See [Sticker Market spec](https://github.com/status-im/sticker-market/blob/651e88e5f38c690e57ecaad47f46b9641b8b1e27/docs/specification.md) for a detailed description of the contract.
 
 #### Install a sticker pack
@@ -87,7 +87,7 @@ To install a sticker pack, we need to fetch all sticker packs which are availabl
 Call `packCount()` on the sticker market contract, will return number of sticker pack registered as `uint256`.
 
 #### 2. Get sticker pack by id
-ID's are represented as `uint256` and are incremental from `0` to total number of sticker packs in contract, which we received on previous step. To get a sticker pack we should call `getPackData(sticker-pack-id)`, the return type is  `["bytes4[]" "address" "bool" "uint256" "uint256" "bytes"]` which represents the following fields: `[category owner mintable timestamp price contenthash]`. Price is the SNT value in wei setted by sticker pack owner. The contenthash is the IPFS address described in the [submit description](#submit-a-sticker-pack) above. Other fields specification could be found in [Sticker Market spec](https://github.com/status-im/sticker-market/blob/651e88e5f38c690e57ecaad47f46b9641b8b1e27/docs/specification.md)
+ID's are represented as `uint256` and are incremental from `0` to total number of sticker packs in contract, which we received on previous step. To get a sticker pack we should call `getPackData(sticker-pack-id)`, the return type is  `["bytes4[]" "address" "bool" "uint256" "uint256" "bytes"]` which represents the following fields: `[category owner mintable timestamp price contenthash]`. Price is the SNT value in wei set by sticker pack owner. The contenthash is the IPFS address described in the [submit description](#submit-a-sticker-pack) above. Other fields specification could be found in [Sticker Market spec](https://github.com/status-im/sticker-market/blob/651e88e5f38c690e57ecaad47f46b9641b8b1e27/docs/specification.md)
 
 ##### 3. Get owned sticker packs
 The current Status app fetches owned sticker packs during the open of any sticker view (a screen which shows a sticker pack or the list of sticker packs).
