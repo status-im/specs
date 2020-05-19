@@ -344,14 +344,6 @@ There are several security considerations to take into account when running Stat
 
 ### Scalability and UX
 
-**Bandwidth usage:**
-
-In version 1 of Status, bandwidth usage is likely to be an issue. For more investigation into this, see [the theoretical scaling model](https://github.com/vacp2p/research/tree/dcc71f4779be832d3b5ece9c4e11f1f7ec24aac2/whisper_scalability).
-
-```js
-// TODO investigate update for this ^^^
-```
-
 **`Mailserver` High Availability requirement:**
 
 A `Mailserver` has to be online to receive messages for other nodes, this puts a high availability requirement on it.
@@ -380,11 +372,7 @@ A `Mailserver` client has to trust a `Mailserver`, which means they can send dir
 
 **Privacy guarantees not rigorous:**
 
-Privacy for Whisper hasn't been studied rigorously for various threat models like global passive adversary, local active attacker, etc. This is unlike e.g. Tor and mixnets.
-
-```js
-// TODO investigate has research for Waku been done ^^^
-```
+Privacy for Whisper or Waku hasn't been studied rigorously for various threat models like global passive adversary, local active attacker, etc. This is unlike e.g. Tor and mixnets.
 
 **Topic hygiene:**
 

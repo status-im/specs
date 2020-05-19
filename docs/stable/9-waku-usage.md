@@ -24,8 +24,6 @@ title: 9/WAKU-USAGE
     - [Contact code topic](#contact-code-topic)
     - [Partitioned topic](#partitioned-topic)
     - [Public chats](#public-chats)
-    <!-- - [Generic discovery topic](#generic-discovery-topic) -->
-    <!-- - [One-to-one topic](#one-to-one-topic) -->
     - [Group chat topic](#group-chat-topic)
     - [Negotiated topic](#negotiated-topic)
   - [Message encryption](#message-encryption)
@@ -64,9 +62,9 @@ encryption properties to support asynchronous chat.
 
 | Packet Name          | Code | References |
 | -------------------- | ---: | --- |
-| Status               |    0 | [Handshake](#handshake), [WAKU-1](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-1.md#status) |
+| Status               |    0 | [Status](#status), [WAKU-1](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-1.md#status) |
 | Messages             |    1 | [WAKU-1](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-1.md#messages) |
-| Batch Ack            |   11 | Undocumented |
+| Batch Ack            |   11 | Undocumented. Marked for Deprecation |
 | Message Response     |   12 | [WAKU-1](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-1.md#message-confirmations-update) |
 | Status Update        |   22 | [WAKU-1](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-1.md#status-update) |
 | P2P Request Complete |  125 | [4/WAKU-MAILSERVER](https://specs.status.im/spec/4) |
@@ -103,7 +101,7 @@ Handshake is a RLP-encoded packet sent to a newly connected peer. It MUST start 
 | `light-node`            | `0x02` | `bool`   | when true, the peer won't forward envelopes through the Messages packet. | [WAKU-1#topic-interest](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-1.md#topic-interest-field) |
 | `confirmations-enabled` | `0x03` | `bool`   | when true, the peer will send message confirmations | `TODO` |
 | `rate-limits`           | `0x04` |          | See [Rate limiting](#rate-limiting) | [WAKU-1#rate-limits](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-1.md#rate-limits-field) |
-| `topic-interest`        | `0x05` | `[10000][4]byte` | Topic interest is used to share a node's interest in envelopes with specific topics. It does this in a more bandwidth considerate way, at the expense of some metadata protection. Peers MUST only send envelopes with specified topics. | [WAKU-1#topic-interest](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-1.md#topic-interest-field) |
+| `topic-interest`        | `0x05` | `[10000][4]byte` | Topic interest is used to share a node's interest in envelopes with specific topics. It does this in a more bandwidth considerate way, at the expense of some metadata protection. Peers MUST only send envelopes with specified topics. | [WAKU-1#topic-interest](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-1.md#topic-interest-field), [the theoretical scaling model](https://github.com/vacp2p/research/tree/dcc71f4779be832d3b5ece9c4e11f1f7ec24aac2/whisper_scalability) |
 
 ## Rate limiting
 
