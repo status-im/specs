@@ -17,7 +17,7 @@ title: 9/3RD-PARTY-USAGE
 
 ## Table of Contents
 
-1. [Abstract](Abstract)
+1. [Abstract](#abstract)
 2. [Definitions](#definitions)
 3. [Why 3rd party API can be a problem?](#why-3rd-party-api-can-be-a-problem)
 4. [3rd party APIs used by Status](#3rd-party-apis-used-by-current-status-app)

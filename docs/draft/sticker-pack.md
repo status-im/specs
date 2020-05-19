@@ -65,7 +65,7 @@ To send a sticker in chat, a user of Status should buy or install a sticker pack
 
 To be available for installation a Sticker Pack should be submitted to Sticker market by an author.
 
-#### Submit a sticker
+#### Submit a sticker pack
 
 To submit a sticker pack, the author should upload all assets to IPFS. Then generate a payload including name, author, thumbnail, preview and a list of stickers in the [EDN format](https://github.com/edn-format/edn). Following this structure:
 ```
