@@ -60,7 +60,7 @@ have to be implemented in order to be a full Status client. The second gives a d
         -   [Privacy](#privacy)
         -   [Spam resistance](#spam-resistance)
         -   [Censorship resistance](#censorship-resistance)
-    -   [Acknowledgements](#acknowledgements)
+    -   [Acknowledgments](#acknowledgments)
 
 ### Protocol layers
 
@@ -385,6 +385,6 @@ By default Devp2p runs on port `30303`, which is not commonly used for any other
 
 See <https://github.com/status-im/status-react/issues/6351> for some discussion.
 
-## Acknowledgements
+## Acknowledgments
 
 Jacek Sieka

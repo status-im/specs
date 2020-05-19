@@ -224,7 +224,7 @@ Messages with a `clock` greater than `120` seconds over the whisper timestamp SH
 
 Messages with a `clock` less than `120` seconds under the whisper timestamp might indicate an attempt to insert messages in the chat history which is not distinguishable from a `datasync` layer re-transit event. A client MAY mark this messages with a warning to the user, or discard them.
 
-`clock` value is used for the message ordering. Due to the used algorithm and distributed nature of the system, we achieve casual ordering which might produce counterintuitive results in some edge cases. For example, when one joins a public chat and sends a message before receiving the exist messages, their message `clock` value might be lower and the message will end up in the past when the historical messages are fetched.
+`clock` value is used for the message ordering. Due to the used algorithm and distributed nature of the system, we achieve casual ordering which might produce counter-intuitive results in some edge cases. For example, when one joins a public chat and sends a message before receiving the exist messages, their message `clock` value might be lower and the message will end up in the past when the historical messages are fetched.
 
 #### Chats
 
@@ -316,7 +316,7 @@ message SyncInstallationPublicChat {
 
 ### PairInstallation
 
-`PairInstallation` messages are used to propagate informations about a device to its paired devices.
+`PairInstallation` messages are used to propagate information about a device to its paired devices.
 
 ```protobuf
 message PairInstallation {

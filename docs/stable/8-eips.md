@@ -25,7 +25,7 @@ In this specification, we describe how Status relates with EIPs.
   - [Security Considerations](#security-considerations)
   - [Design Rationale](#design-rationale)
   - [Footnotes](#footnotes)
-  - [Acknowledgements](#acknowledgements)
+  - [Acknowledgments](#acknowledgments)
 
 ## Introduction
 
@@ -244,4 +244,4 @@ Sourcecode: -
 
 ## Footnotes
 
-## Acknowledgements
+## Acknowledgments
