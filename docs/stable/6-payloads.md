@@ -241,7 +241,7 @@ message ContactUpdate {
 | 2 | ens_name | `string` | The ENS name if set |
 | 3 | profile_image | `string` | The base64 encoded profile picture of the user |
 
-#### Contact update 1
+#### Contact update
 
 A client SHOULD send a `ContactUpdate` to all the contacts each time:
 
