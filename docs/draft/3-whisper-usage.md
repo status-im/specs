@@ -1,16 +1,16 @@
 ---
 permalink: /spec/3
-parent: Stable specs
+parent: Draft specs
 title: 3/WHISPER-USAGE
 ---
 
 # 3/WHISPER-USAGE
 
-> Version: 0.2
+> Version: 0.3
 >
-> Status: Stable
+> Status: Draft
 >
-> Authors: Adam Babik <adam@status.im>, Corey Petty <corey@status.im>, Oskar Thorén <oskar@status.im> (alphabetical order)
+> Authors: Adam Babik <adam@status.im>, Andrea Maria Piana <andreap@status.im>, Corey Petty <corey@status.im>, Oskar Thorén <oskar@status.im> (alphabetical order)
 
 - [Status Whisper Usage Specification](#status-whisper-usage-specification)
   - [Abstract](#abstract)
@@ -24,14 +24,13 @@ title: 3/WHISPER-USAGE
     - [Contact code topic](#contact-code-topic)
     - [Partitioned topic](#partitioned-topic)
     - [Public chats](#public-chats)
-    - [Generic discovery topic](#generic-discovery-topic)
-    - [One-to-one topic](#one-to-one-topic)
     - [Group chat topic](#group-chat-topic)
   - [Message encryption](#message-encryption)
   - [Message confirmations](#message-confirmations)
   - [Whisper V6 extensions](#whisper-v6-extensions)
     - [Request historic messages](#request-historic-messages)
       - [shhext_requestMessages](#shhextrequestmessages)
+  - [Changelog](#changelog)
 
 ## Abstract
 
@@ -84,8 +83,9 @@ encryption properties to support asynchronous chat.
 If you want to run a Whisper node and receive messages from Status clients, it must be properly configured.
 
 Whisper's Proof Of Work algorithm is used to deter denial of service and various spam/flood attacks against the Whisper network. The sender of a message must perform some work which in this case means processing time. Because Status' main client is a mobile client, this easily leads to battery draining and poor performance of the app itself. Hence, all clients MUST use the following Whisper node settings:
-* proof-of-work requirement not larger than `0.002`
+* proof-of-work requirement not larger than `0.00001`
 * time-to-live not lower than `10` (in seconds)
+* any payload below `50000` bytes MUST be sent with a PoW Target of at least `0.002`, in order to maintain backward compatibility with version `0.2` and [Status app version `1.3`](https://github.com/status-im/status-react/releases/tag/untagged-079a6d98babfeaa3f8c0) and below
 
 ## Handshake
 
@@ -343,3 +343,14 @@ It's recommended to return messages from newest to oldest. To move further back 
 The above `topics` is then converted into a bloom filter and then and sent to the Mailserver.
 
 <!-- TODO: Clarify actual request with bloom filter to mailserver -->
+
+## Changelog
+
+### 0.3
+  - Updated minimum PoW to `0.00001`
+### 0.2
+  - Document created
+
+## Copyright
+
+Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
