@@ -25,7 +25,7 @@ have to be implemented in order to be a full Status client. The second gives a d
 
 ## Table of Contents
 
--   [Status Client Specification](#1client)
+-   [Status Client Specification](#status-client-specification)
     -   [Abstract](#abstract)
     -   [Table of Contents](#table-of-contents)
     -   [Introduction](#introduction)
