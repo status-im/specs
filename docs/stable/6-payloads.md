@@ -23,7 +23,7 @@ as various clients created using different technologies.
 
 ## Table of Contents
 
-- [Status Message Payloads Specification](#6payloads)
+- [Status Message Payloads Specification](#status-message-payloads-specification)
   - [Abstract](#abstract)
   - [Table of Contents](#table-of-contents)
   - [Introduction](#introduction)
@@ -31,22 +31,22 @@ as various clients created using different technologies.
   - [Encoding](#encoding)
   - [Types of messages](#types-of-messages)
     - [Message](#message)
-      - [Description](#message-description)
-      - [Payload](#message-payload)
+      - [Payload](#payload)
+      - [Payload](#payload-1)
       - [Content types](#content-types)
         - [Sticker content type](#sticker-content-type)
       - [Message types](#message-types)
       - [Clock vs Timestamp and message ordering](#clock-vs-timestamp-and-message-ordering)
       - [Chats](#chats)
     - [Contact Update](#contact-update)
-      - [Payload](#contact-update-payload)
+      - [Payload](#payload-2)
       - [Contact update](#contact-update-1)
     - [SyncInstallationContact](#syncinstallationcontact)
-      - [Payload](#syncinstallationcontact-payload)
+      - [Payload](#payload-3)
     - [SyncInstallationPublicChat](#syncinstallationpublicchat)
-      - [Payload](#syncinstallationpublicchat-payload)
+      - [Payload](#payload-4)
     - [PairInstallation](#pairinstallation)
-      - [Payload](#pairinstallation-payload)
+      - [Payload](#payload-5)
     - [MembershipUpdateMessage and MembershipUpdateEvent](#membershipupdatemessage-and-membershipupdateevent)
   - [Upgradability](#upgradability)
   - [Security Considerations](#security-considerations)
@@ -82,7 +82,7 @@ The payload is encoded using [Protobuf](https://developers.google.com/protocol-b
 
 The type `ChatMessage` represents a chat message exchanged between clients.
 
-#### Message Description
+#### Payload
 
 The protobuf description is:
 
@@ -134,7 +134,7 @@ message ChatMessage {
 }
 ```
 
-#### Message Payload
+#### Payload
 
 | Field | Name | Type | Description |
 | ----- | ---- | ---- | ---- |
@@ -233,7 +233,7 @@ message ContactUpdate {
 }
 ```
 
-#### Contact Update Payload
+#### Payload
 
 | Field | Name | Type | Description |
 | ----- | ---- | ---- | ---- |
@@ -266,7 +266,7 @@ message SyncInstallationContact {
 ```
 
 
-#### SyncInstallationContact Payload
+#### Payload
 
 | Field | Name | Type | Description |
 | ----- | ---- | ---- | ---- |
@@ -287,7 +287,7 @@ message SyncInstallationPublicChat {
 }
 ```
 
-#### SyncInstallationPublicChat Payload
+#### Payload
 
 | Field | Name | Type | Description |
 | ----- | ---- | ---- | ---- |
@@ -307,7 +307,7 @@ message PairInstallation {
 }
 ```
 
-#### PairInstallation Payload
+#### Payload
 
 | Field | Name | Type | Description |
 | ----- | ---- | ---- | ---- |
@@ -319,7 +319,7 @@ message PairInstallation {
 ### MembershipUpdateMessage and MembershipUpdateEvent
 
 `MembershipUpdateEvent` is a message used to propagate information about group membership changes in a group chat.
-The details are in the  [Group chats specs](/docs/draft/7-group-chat.md)
+The details are in the  [Group chats specs](status-group-chats-spec.md)
 
 ## Upgradability
 
