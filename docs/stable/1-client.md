@@ -25,7 +25,7 @@ have to be implemented in order to be a full Status client. The second gives a d
 
 ## Table of Contents
 
--   [Status Client Specification](#status-client-specification)
+-   [Status Client Specification](#1client)
     -   [Abstract](#abstract)
     -   [Table of Contents](#table-of-contents)
     -   [Introduction](#introduction)
@@ -61,6 +61,8 @@ have to be implemented in order to be a full Status client. The second gives a d
         -   [Spam resistance](#spam-resistance)
         -   [Censorship resistance](#censorship-resistance)
     -   [Acknowledgements](#acknowledgements)
+
+## Introduction
 
 ### Protocol layers
 
