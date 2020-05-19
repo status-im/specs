@@ -204,7 +204,7 @@ to communicate with other Status nodes.
 
 See [3/WHISPER-USAGE](https://specs.status.im/spec/3) for more details.
 
-For providing offline inboxing, see the complementary [4/WHISPER-MAILSERVER](https://specs.status.im/spec/4).
+For providing an offline inbox, see the complementary [4/WHISPER-MAILSERVER](https://specs.status.im/spec/4).
 
 ### Secure Transport
 
@@ -284,7 +284,7 @@ together with [Vac](https://vac.dev/vac-overview) and other teams in the space.
 
 #### Why is PoW for Whisper set so low?
 
-A higher PoW would be desirable, but this kills the battery on mobilephones,
+A higher PoW would be desirable, but this kills the battery on mobile phones,
 which is a prime target for Status clients.
 
 This means the network is currently vulnerable to DDoS attacks. Alternative
@@ -353,7 +353,7 @@ The main privacy concern with light nodes is that directly connected peers will 
 
 **Bloom filter privacy:**
 
-By having a bloom filter where only the topics you are interested in are set, you reveal which messages you are interested in. This is a fundamental trade-off between bandwidth usage and privacy, though the tradeoff space is likely suboptimal in terms of the [Anonymity](https://eprint.iacr.org/2017/954.pdf) [trilemma](https://petsymposium.org/2019/files/hotpets/slides/coordination-helps-anonymity-slides.pdf).
+By having a bloom filter where only the topics you are interested in are set, you reveal which messages you are interested in. This is a fundamental trade-off between bandwidth usage and privacy, though the trade-off space is likely suboptimal in terms of the [Anonymity](https://eprint.iacr.org/2017/954.pdf) [trilemma](https://petsymposium.org/2019/files/hotpets/slides/coordination-helps-anonymity-slides.pdf).
 
 **Mailserver client privacy:**
 

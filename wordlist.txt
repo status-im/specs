@@ -74,6 +74,9 @@ relayers
 Mailservers
 permissionless
 devp
+devP
+devP2P
+Pluggable
 libp
 underspecified
 multihash
@@ -84,6 +87,8 @@ crypto
 http
 Eigenmann
 cryptographically
+cryptocurrency
+blockable
 Kozieiev
 Volodymyr
 ImageMessage
@@ -91,6 +96,8 @@ StickerMessage
 chatid
 pre
 AES
+keypair
+keypairs
 ECDSA
 ECIES
 GCM
@@ -107,4 +114,5 @@ Sourcecode
 keycard
 Ack
 RLP
+RLPx
 IPs
