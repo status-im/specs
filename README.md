@@ -6,6 +6,8 @@ nav_exclude: true
 
 # Specifications for Status clients
 
+![CI](https://github.com/status-im/specs/workflows/CI/badge.svg)
+
 This repository contains a list of specifications for implementing Status and
 its various capabilities.
 
