@@ -187,12 +187,12 @@ possible connections
     - a mailserver identifies itself by an [enode address](https://github.com/ethereum/wiki/wiki/enode-url-format) 
 - client - whisper node (statusd)
     - a node identifies itself by an enode address
-- client - bootnode (geth)
+- client - bootnode (go-ethereum)
     - a bootnode identifies itself by
         - an enode address
         - `NOTE: redezvous information here`
 - client - ENS registry (ethereum blockchain -> default to infura)
-- client - Ethereum RPC (custom geth RPC API -> default to infura API)
+- client - Ethereum RPC (custom go-ethereum RPC API -> default to infura API)
 - client - IPFS (Status hosted IPFS gateway -> defaults to ???)
     - we have a status hosted IPFS gateway for pinning but it currently isn't used much.
 

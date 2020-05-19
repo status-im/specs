@@ -56,7 +56,7 @@ encryption properties to support asynchronous chat.
 
 ## Terminology
 
-* *Whisper node*: an Ethereum node with Whisper V6 enabled (in the case of geth, it's `--shh` option)
+* *Whisper node*: an Ethereum node with Whisper V6 enabled (in the case of go-ethereum, it's `--shh` option)
 * *Whisper network*: a group of Whisper nodes connected together through the internet connection and forming a graph
 * *Message*: decrypted Whisper message
 * *Offline message*: an archived envelope

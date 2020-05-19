@@ -225,7 +225,7 @@ Sourcecode: https://github.com/status-im/status-react/blob/develop/src/status_im
 Support: Partial.  
 Reference: https://eips.ethereum.org/EIPS/eip-1581  
 Description: Allow wallet to derive keys that are less sensible (non wallet).  
-Used for: Security (dont reuse wallet key) and user experience (dont request keycard every login).  
+Used for: Security (don't reuse wallet key) and user experience (don't request keycard every login).  
 Related: https://github.com/status-im/status-react/issues/9088 https://github.com/status-im/status-react/pull/9096  
 Sourcecode: https://github.com/status-im/status-react/blob/develop/src/status_im/constants.cljs#L242  
 

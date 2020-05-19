@@ -42,11 +42,11 @@ The minimum sticker image resolution is 512x512, and its background SHOULD be tr
 ### Distribution
 
 Sticker packs are implemented as [ERC721 token](https://eips.ethereum.org/EIPS/eip-721) and contain a set of stickers. These stickers
-are stored inside the sticker pack as a set of hyperlinks pointing to IPFS storage. These hyperlinks are publically available and can be accessed by any user inside the status chat.
+are stored inside the sticker pack as a set of hyperlinks pointing to IPFS storage. These hyperlinks are publicly available and can be accessed by any user inside the status chat.
 Stickers can be sent in chat only by accounts that own the sticker pack.
 
 ### IPFS gateway
-At the moment of writing, the current main Status app uses the [Infura](https://infura.io/) gateway. However clients could choose a different gateway or to run own IPFS node.
+At the moment of writing, the current main Status app uses the [Infura](https://infura.io/) gateway. However, clients could choose a different gateway or to run own IPFS node.
 Infura gateway is an HTTPS gateway, which based on an HTTP GET request with the multihash block will return the stored content at that block address. 
 
 The use of gateway is required to enable easy access to the resources over HTTP.
