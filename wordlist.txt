@@ -37,6 +37,7 @@ infura
 Etherscan
 CryptoCompare
 Iubenda
+enr
 Changelog
 ETH
 mailserver
@@ -62,7 +63,7 @@ TCP
 Gheorghe
 Pinzaru
 IPFS
-Kademlia
+kademlia
 PSS
 UX
 DDoS
@@ -116,3 +117,13 @@ Ack
 RLP
 RLPx
 IPs
+multiaccount
+HD
+privkey
+pubkey
+BundleContainer
+mailservers
+scalable
+subprotocols
+merkle
+discoverable
