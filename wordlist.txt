@@ -141,3 +141,10 @@ EventType
 chatId
 chatID
 APIs
+contenthash
+wei
+EstimateGas
+SuggestGasPrice
+FilterLogs
+SendTransaction
+subprotocol
