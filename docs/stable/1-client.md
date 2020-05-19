@@ -62,8 +62,6 @@ have to be implemented in order to be a full Status client. The second gives a d
         -   [Censorship resistance](#censorship-resistance)
     -   [Acknowledgements](#acknowledgements)
 
-## Introduction
-
 ### Protocol layers
 
 Implementing a Status clients largely means implementing the following layers. Additionally, there are separate specifications for things like key management and account lifecycle.
