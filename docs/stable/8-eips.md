@@ -17,7 +17,7 @@ title: 8/EIPS
 In this specification, we describe how Status relates with EIPs.
 
 ## Table of Contents
-- [Status EIPs standards ](#status-client-specification)
+- [Status EIPs standards ](#8eips)
   - [Abstract](#abstract)
   - [Table of Contents](#table-of-contents)
   - [Introduction](#introduction)
