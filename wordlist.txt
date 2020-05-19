@@ -47,3 +47,13 @@ Jacek
 Diffie
 Helman
 unencrypted
+BIP
+EIP
+enode
+PFS
+PoW
+DoS
+TCP
+Gheorghe
+Pinzaru
+IPFS

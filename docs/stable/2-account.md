@@ -96,7 +96,7 @@ Everything else associated with the contact is either verified or derived from t
 - A user MAY register a public username on the Ethereum Name System (ENS).  This username is a user-chosen subdomain of the `stateofus.eth` ENS registration that maps to their whisper identity key (`IK`). 
 
 <!-- ### User Profile Picture
-- An account MAY edit the `IK` generated identicon with a chosen picture.  This picture will become part of the publicly broadcasted profile of the account. -->
+- An account MAY edit the `IK` generated identicon with a chosen picture.  This picture will become part of the publicly broadcast profile of the account. -->
 
 <!-- TODO: Elaborate on wallet account and multiaccount -->
 <!-- TODO: Elaborate on security implications -->
