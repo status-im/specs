@@ -167,7 +167,7 @@ Used for: Chat protocol.
 Support: Partial.  
 Reference: https://eips.ethereum.org/EIPS/eip-681
 Description: A link that pop up a transaction in the wallet.  
-Used for: Useful as QRCode data for transaction requests, chat transaction requests and for dapp links to transaction requests.  
+Used for: Useful as QR code data for transaction requests, chat transaction requests and for dapp links to transaction requests.  
 Sourcecode: https://github.com/status-im/status-react/blob/develop/src/status_im/ethereum/eip681.cljs  
 Related: [Issue #9183: URL Format for Transaction Requests (EIP681) is poorly supported](https://github.com/status-im/status-react/issues/9183) https://github.com/status-im/status-react/pull/9240 https://github.com/status-im/status-react/issues/9238 https://github.com/status-im/status-react/issues/7214 https://github.com/status-im/status-react/issues/7325 https://github.com/status-im/status-react/issues/8150  
 

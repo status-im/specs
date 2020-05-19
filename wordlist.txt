@@ -124,10 +124,19 @@ pubkey
 PendingNonceAt
 JSON
 RPC
+dapp
+dapps
+Vp
+chainId
 BlockByNumber
+URIs
+URI
+Guilherme
+unix
 BlockByHash
 BundleContainer
 mailservers
+Mailserver's
 scalable
 subprotocols
 legislations
@@ -148,3 +157,4 @@ SuggestGasPrice
 FilterLogs
 SendTransaction
 subprotocol
+contactcode
