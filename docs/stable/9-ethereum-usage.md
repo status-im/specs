@@ -213,7 +213,7 @@ Usernames MUST be in a specific format, otherwise they MAY be slashed:
 - They MUST only contain alphanumeric characters
 - They MUST NOT  be in the form `0x[0-9a-f]{5}.*` and have more than 12 characters
 - They MUST NOT be in the [reserved list] (https://github.com/status-im/ens-usernames/blob/47c4c6c2058be0d80b7d678e611e166659414a3b/config/ens-usernames/reservedNames.js)
-- They MUST NOT be too short, this is dinamically set in the contract and can be checked against the [contract](https://github.com/status-im/ens-usernames/blob/master/contracts/registry/UsernameRegistrar.sol#L26)
+- They MUST NOT be too short, this is dynamically set in the contract and can be checked against the [contract](https://github.com/status-im/ens-usernames/blob/master/contracts/registry/UsernameRegistrar.sol#L26)
 
 - [Slash a reserved username](https://github.com/status-im/ens-usernames/blob/77d9394d21a5b6213902473b7a16d62a41d9cd09/contracts/registry/UsernameRegistrar.sol#L237)
 - [Slash an invalid username] (https://github.com/status-im/ens-usernames/blob/77d9394d21a5b6213902473b7a16d62a41d9cd09/contracts/registry/UsernameRegistrar.sol#L261)

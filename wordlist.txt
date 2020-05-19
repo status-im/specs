@@ -3,6 +3,7 @@ AES
 APIs
 apis
 Babik
+backend
 BIP
 BIPs
 blockable
@@ -22,11 +23,23 @@ ContentType
 COSS
 crypto
 CryptoCompare
+ECR
+performant
 cryptocurrencies
+customizable
+requestMessages
 cryptocurrency
+Keccak
 cryptographic
 cryptographically
 dapp
+shhext
+decrypt
+multicasting
+len
+diffie
+
+deserialized
 dapps
 DDoS
 deterministically
@@ -64,6 +77,7 @@ Helman
 HMAC
 http
 HTTPS
+hellman
 identicon
 im
 ImageMessage
@@ -78,6 +92,7 @@ kb
 KECCAK
 keycard
 keypair
+golang
 keypairs
 Kozieiev
 Lamport
@@ -145,6 +160,7 @@ TCP
 Thorén
 TODO
 TransactionByHash
+TransactionReceipt
 trilemma
 UI
 uint
