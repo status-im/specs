@@ -122,7 +122,7 @@ nodes allow you to discover other nodes of the network.
 Currently the main bootstrap nodes are provided by Status Gmbh, but anyone can
 run these provided they are connected to the rest of the Whisper/Waku network.
 
-Status maintains a list of production fleet bootstrap nodes in the following locations:
+Status maintains a list of production fleet boootstrap nodes in the following locations:
 
 **Hong Kong:**
 
