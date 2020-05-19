@@ -27,7 +27,6 @@ title: 3/WHISPER-USAGE
     - [Generic discovery topic](#generic-discovery-topic)
     - [One-to-one topic](#one-to-one-topic)
     - [Group chat topic](#group-chat-topic)
-    - [Negotiated topic](#negotiated-topic)
   - [Message encryption](#message-encryption)
   - [Message confirmations](#message-confirmations)
   - [Whisper / Waku bridging](#whisper--waku-bridging)
