@@ -37,6 +37,7 @@ In this specification we explain what Status account is, and how trust is establ
     - [Initial Key Exchange](#initial-key-exchange)
         - [Contact Request](#contact-request)
         - [Bundles](#bundles)
+        - [QR code](#qr-code)
     - [Contact Verification](#contact-verification)
         - [Identicon](#identicon)
         - [3 word pseudonym / Whisper/Waku key fingerprint](#3-word-pseudonym--whisperwaku-key-fingerprint)
