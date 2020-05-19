@@ -86,7 +86,7 @@ Types used in this specification are defined using [Protobuf](https://developers
 
 #### Account generation
 
-See [Account specification](2-account.md)
+See [Account specification](./status-account-spec.md)
 
 #### Account recovery
 
