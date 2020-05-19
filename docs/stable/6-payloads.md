@@ -17,7 +17,7 @@ title: 6/PAYLOADS
 This specifications describes how the payload of each message in Status looks
 like. It is primarily centered around chat and chat-related use cases.
 
-The payloads aims be flexible enough to support messaging but also cases
+The payloads aim to be flexible enough to support messaging but also cases
 described in the [Status Whitepaper](https://status.im/whitepaper.pdf) as well
 as various clients created using different technologies.
 
