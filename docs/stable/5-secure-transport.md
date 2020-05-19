@@ -47,8 +47,12 @@ It builds on the [X3DH](https://signal.org/docs/specifications/x3dh/) and [Doubl
     - [Multi-device support](#multi-device-support)
     - [Pairing](#pairing)
     - [Sending messages to a paired group](#sending-messages-to-a-paired-group)
-    - [Account recovery](#account-recovery-1)
+    - [Account recovery](#account-recovery)
     - [Partitioned devices](#partitioned-devices)
+    - [Trust establishment](#trust-establishment)
+      - [Contact request](#contact-request)
+    - [Expired session](#expired-session)
+    - [Stale devices](#stale-devices)
 
 
 ## Introduction
@@ -529,7 +533,7 @@ When sending a message, the peer will send a message to other `installation-id` 
 The number of devices is capped to 3, ordered by last activity. 
 Messages are sent using pairwise encryption, including their own devices.
 
-### Account recovery 1
+### Account recovery
 
 Account recovery is no different from adding a new device, and it is handled in exactly the same way.
 
