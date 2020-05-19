@@ -88,7 +88,7 @@ Everything else associated with the contact is either verified or derived from t
 - A client SHOULD regenerate a new X3DH prekey bundle every 24 hours.  This MAY be done in a lazy way, such that a client that does not come online past this time period does not regenerate or broadcast bundles.
 - The current bundle SHOULD be broadcast on a whisper topic specific to his Identity Key, `{IK}-contact-code`, intermittently.  This MAY be done every 6 hours.
 - A bundle SHOULD accompany every message sent.
-- TODO: retreival of long-time offline users bundle via `{IK}-contact-code` 
+- TODO: retrieval of long-time offline users bundle via `{IK}-contact-code` 
 
 ## Optional Account additions
 
@@ -117,7 +117,7 @@ Everything else associated with the contact is either verified or derived from t
 ### Contact Discovery
 
 #### Public channels
-- Public group channels in Status are a broadcast/subscription system.  All public messages are encrypted with a symmetric key drived from the channel name, `K_{pub,sym}`, which is publicly known.
+- Public group channels in Status are a broadcast/subscription system.  All public messages are encrypted with a symmetric key derived from the channel name, `K_{pub,sym}`, which is publicly known.
 - A public group channel's symmetric key MUST creation must follow the [web3 API](https://web3js.readthedocs.io/en/1.0/web3-shh.html#generatesymkeyfrompassword)'s `web3.ssh.generateSymKeyFromPassword` function
 - In order to post to a public group channel, a client MUST have a valid account created.
 - In order to listen to a public group channel, a client must subscribe to the channel name.  The sender of a message is derived from the message's signature.
@@ -131,7 +131,7 @@ Everything else associated with the contact is either verified or derived from t
 This can be done in the following ways:
 1. scanning a user generated QR code
 1. discovery through the Status app
-1. asyncronous X3DH key exchange
+1. asynchronous X3DH key exchange
 1. public key via public channel listening
     - `status-react/src/status_im/contact_code/core.cljs`
 1. contact codes
