@@ -12,7 +12,7 @@ title: 4/WHISPER-MAILSERVER
 >
 > Authors: Adam Babik <adam@status.im>, Oskar Thorén <oskar@status.im> (alphabetical order)
 
-- [Status Whisper Mailserver Specification](#4whisper-mailserver)
+- [Status Whisper Mailserver Specification](#status-whisper-mailserver-specification)
   - [Abstract](#abstract)
   - [`Mailserver`](#mailserver)
     - [Archiving messages](#archiving-messages)
