@@ -100,7 +100,9 @@ There is a set of services that used for getting information about collectibles:
 Making http request means that a user leaks metadata, which can be used in various attacks if the service is hacked.
 
 ### Iubenda
+
 ##### What is it?
+
 Service that helps in creating documents that make websites and apps compliant with the law across multiple countries and legislations.
 
 ##### How Status use it?
