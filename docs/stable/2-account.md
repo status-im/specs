@@ -28,7 +28,7 @@ In this specification we explain what Status account is, and how trust is establ
     - [X3DH Prekey bundles](#x3dh-prekey-bundles)
 - [Optional Account additions](#optional-account-additions)
     - [ENS Username](#ens-username)
-    <!-- - [User Profile Picture](#user-profile-picture) -->
+    - [User Profile Picture](#user-profile-picture)
 - [Trust establishment](#trust-establishment)
     - [Terms Glossary](#terms-glossary)
     - [Contact Discovery](#contact-discovery)
