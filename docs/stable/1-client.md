@@ -97,13 +97,13 @@ Protocol, v5](https://github.com/ethereum/devp2p/blob/master/rlpx.md) is used, w
 allows for TCP-based communication between nodes.
 
 On top of this we run RLPx-based subprotocols, the client
-MAY use [Whisper v6](https://eips.ethereum.org/EIPS/eip-627), though the client 
+SHOULD NOT use [Whisper v6](https://eips.ethereum.org/EIPS/eip-627), the client 
 SHOULD use [Waku V1](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-1.md)
-for privacy-preserving messaging.
+for privacy-preserving messaging and efficient usage of a node's bandwidth.
 
 #### Node discovery and roles
 
-There are five types of node roles:
+There are four types of node roles:
 1. `Bootstrap node`
 1. `Whisper/Waku relayer`
 1. `Mailserver` (servers and clients)
@@ -219,7 +219,7 @@ used in 1:1 chats and group chats, but not for public chats. See [5/SECURE-TRANS
 
 [MVDS](https://specs.vac.dev/mvds.html) is used for 1:1 and group chats, however it is currently not in use for public chats.
 
-[Status payloads](#payloads-and-clients) are serialized and then wrapped inside a
+[Status payloads](#payloads-and-clients) are serialized and then wrapped inside an
 MVDS message which is added to an [MVDS payload](https://specs.vac.dev/mvds.html#payloads),
 this payload is then encrypted (if necessary for 1-to-1 / group-chats) and sent using
 Whisper or Waku which also encrypts it.
@@ -241,7 +241,7 @@ See [Appendix A](#appendix-a-security-considerations)
 
 ## Design Rationale
 
-### P2P Overlay 1
+### P2P Overlay
 
 #### Why devp2p? Why not use libp2p?
 
@@ -320,7 +320,7 @@ For some further investigation, see
 
 In order to use a `Mailserver`, a given node needs to connect to it directly, i.e. add the `Mailserver` as its peer and mark it as trusted. This means that the `Mailserver` is able to send direct p2p messages to the node instead of broadcasting them. Effectively, it knows the bloom filter of the topics the node is interested in, when it is online as well as many metadata like IP address.
 
-### Data sync 1
+### Data sync
 
 #### Why is MVDS not used for public chats?
 
@@ -344,6 +344,10 @@ There are several security considerations to take into account when running Stat
 
 ### Scalability and UX
 
+**Bandwidth usage:**
+
+In version 1 of Status, bandwidth usage is likely to be an issue. In version this is partially addressed with Waku usage, see [the theoretical scaling model](https://github.com/vacp2p/research/tree/dcc71f4779be832d3b5ece9c4e11f1f7ec24aac2/whisper_scalability).
+
 **`Mailserver` High Availability requirement:**
 
 A `Mailserver` has to be online to receive messages for other nodes, this puts a high availability requirement on it.
@@ -366,9 +370,9 @@ The main privacy concern with light nodes is that directly connected peers will 
 
 By having a bloom filter where only the topics you are interested in are set, you reveal which messages you are interested in. This is a fundamental tradeoff between bandwidth usage and privacy, though the tradeoff space is likely suboptimal in terms of the [Anonymity](https://eprint.iacr.org/2017/954.pdf) [trilemma](https://petsymposium.org/2019/files/hotpets/slides/coordination-helps-anonymity-slides.pdf).
 
-**`Mailserver` client privacy:**
+**`Mailserver client` privacy:**
 
-A `Mailserver` client has to trust a `Mailserver`, which means they can send direct traffic. This reveals what topics / bloom filter a node is interested in, along with its peerID (with IP).
+A `Mailserver client` has to trust a `Mailserver`, which means they can send direct traffic. This reveals what topics / bloom filter a node is interested in, along with its peerID (with IP).
 
 **Privacy guarantees not rigorous:**
 
