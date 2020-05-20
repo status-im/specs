@@ -105,6 +105,8 @@ Handshake is a RLP-encoded packet sent to a newly connected peer. It MUST start 
 | `rate-limits`           | `0x04` |          | See [Rate limiting](#rate-limiting) | [WAKU-1#rate-limits](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-1.md#rate-limits-field) |
 | `topic-interest`        | `0x05` | `[10000][4]byte` | Topic interest is used to share a node's interest in envelopes with specific topics. It does this in a more bandwidth considerate way, at the expense of some metadata protection. Peers MUST only send envelopes with specified topics. | [WAKU-1#topic-interest](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-1.md#topic-interest-field), [the theoretical scaling model](https://github.com/vacp2p/research/tree/dcc71f4779be832d3b5ece9c4e11f1f7ec24aac2/whisper_scalability) |
 
+<!-- TODO Add `light-node` and `confirmations-enabled` links when https://github.com/vacp2p/specs/pull/128 is merged -->
+
 ## Rate limiting
 
 In order to provide an optional very basic Denial-of-Service attack protection, each node SHOULD define its own rate limits. The rate limits SHOULD be applied on IPs, peer IDs, and envelope topics.
@@ -279,11 +281,7 @@ To exchange messages with client B, a client A SHOULD:
 
 Even though, the protocol specifies an encryption layer that encrypts messages before passing them to the transport layer, Waku protocol requires each Waku message to be encrypted anyway.
 
-Public and group messages are encrypted using symmetric encryption and the key is created from a channel name string. The implementation is available in [`shh_generateSymKeyFromPassword`](https://github.com/ethereum/go-ethereum/wiki/Whisper-v6-RPC-API#shh_generatesymkeyfrompassword) JSON-RPC method of go-ethereum Whisper implementation.
-
-```js
-// TODO is there a Waku analogous version of `shh_generateSymKeyFromPassword`?
-```
+Public and group messages are encrypted using symmetric encryption and the key is created from a channel name string. The implementation is available in [`waku_generateSymKeyFromPassword`](https://github.com/status-im/status-go/tree/develop/_examples) JSON-RPC method of go-ethereum Whisper implementation.
 
 One-to-one messages are encrypted using asymmetric encryption.
 
@@ -312,15 +310,11 @@ The drawback of sending message confirmations is that it increases the noise in 
 
 In the current Status network setup, only `Mailservers` support message confirmations. A client posting a message to the network and after receiving a confirmation can be sure that the message got processed by the `Mailserver`. If additionally, sending a message is limited to non-`Mailserver` peers, it also guarantees that the message got broadcasted through the network and it reached the selected `Mailserver`.
 
-## Whisper V6 extensions
-
-```js
-// TODO does Waku use extensions. Are the extensions now part of the Waku spec?
-```
+## Waku V1 extensions
 
 ### Request historic messages
 
-Sends a request for historic messages to a `Mailserver`. The `Mailserver` node MUST be a direct peer and MUST be marked as trusted (using `shh_markTrustedPeer`).
+Sends a request for historic messages to a `Mailserver`. The `Mailserver` node MUST be a direct peer and MUST be marked as trusted (using `waku_markTrustedPeer`).
 
 The request does not wait for the response. It merely sends a peer-to-peer message to the `Mailserver` and it's up to `Mailserver` to process it and start sending historic messages.
 
@@ -328,7 +322,7 @@ The drawback of this approach is that it is impossible to tell which historic me
 
 It's recommended to return messages from newest to oldest. To move further back in time, use `cursor` and `limit`.
 
-#### shhext_requestMessages
+#### wakuext_requestMessages
 
 **Parameters**:
 1. Object - The message request object:
@@ -360,3 +354,10 @@ Released `TODO`
 - Added [Status options](#status) section
 - Updated [Waku packets](#waku-packets) section to match Waku
 - Added that `Batch Ack` is marked for deprecation 
+- Changed `shh_generateSymKeyFromPassword` to `waku_generateSymKeyFromPassword`
+  - [Exists here](https://github.com/status-im/status-go/blob/2d13ccf5ec3db7e48d7a96a7954be57edb96f12f/waku/api.go#L172-L175)
+  - [Exists here](https://github.com/status-im/status-go/blob/2d13ccf5ec3db7e48d7a96a7954be57edb96f12f/eth-node/bridge/geth/public_waku_api.go#L33-L36)
+- Changed `shh_markTrustedPeer` to `waku_markTrustedPeer`
+  - [Exists here](https://github.com/status-im/status-go/blob/2d13ccf5ec3db7e48d7a96a7954be57edb96f12f/waku/api.go#L100-L108)
+- Changed `shhext_requestMessages` to `wakuext_requestMessages`
+  - [Exists here](https://github.com/status-im/status-go/blob/2d13ccf5ec3db7e48d7a96a7954be57edb96f12f/services/wakuext/api.go#L76-L139)
