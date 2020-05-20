@@ -6,7 +6,7 @@ title: 5/SECURE-TRANSPORT
 
 # 5/SECURE-TRANSPORT
 
-> Version: 0.2
+> Version: 0.3
 >
 > Status: Stable
 >
@@ -452,7 +452,7 @@ TODO: create issues for identity leak of invited members as well as current memb
 - Due to asynchronous forward secrecy and no additional services, private keys might be rotated
 
 [Andrea: That's correct, in some cases if the message is delayed for too long, or really out-of-order, the specific message key might have been deleted, as we only keep the last 3000 message keys]
-[Igor: TTL of a whisper message can expire, so any node-in-transit will drop it. Also, I believe we ignore messages with skewed timestamps]
+[Igor: TTL of a Whisper message can expire, so any node-in-transit will drop it. Also, I believe we ignore messages with skewed timestamps]
 
 #### Dropped Message Resilient (PARTIAL)
 > Messages can be decrypted without receipt of all previous messages. This is desirable for asynchronous and unreliable network services
@@ -478,8 +478,8 @@ TODO: this requires more detail
 #### No Additional Service (NO)
 > The protocol does not require any infrastructure other than the protocol participants. Specifically, the protocol must not require additional servers for relaying messages or storing any kind of key material.
 
-- The protocol requires whisper/Waku relay servers and mailservers currently. 
-- The larger the number of whisper/Waku relay servers, the better the transport security but there might be potential scaling problems.
+- The protocol requires Whisper/Waku relay servers and mailservers currently. 
+- The larger the number of Whisper/Waku relay servers, the better the transport security but there might be potential scaling problems.
 - Mailservers act to provide asynchronicity so users can retrieve messages after coming back from an offline period. 
 
 -->
@@ -490,7 +490,7 @@ TODO: this requires more detail
 A peer is identified by two pieces of data:
 
 1) An `installation-id` which is generated upon creating a new account in the `Status` application
-2) Their identity whisper/Waku key
+2) Their identity Whisper/Waku key
 
 ### Initialization
 
