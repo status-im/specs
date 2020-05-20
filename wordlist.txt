@@ -72,6 +72,7 @@ FilterLogs
 FormatInt
 GCM
 GenerateShared
+geth
 gfycat
 Gheorghe
 Gmbh
@@ -100,9 +101,9 @@ Jacek
 JSON
 kademlia
 kb
-keccak
-Keccak
 KECCAK
+Keccak
+keccak
 keycard
 keypair
 keypairs
