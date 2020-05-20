@@ -6,11 +6,11 @@ title: 2/ACCOUNT
 
 # 2/ACCOUNT
 
-> Version: 0.2
+> Version: 0.3
 > 
 > Status: Stable
 >
-> Authors: Corey Petty <corey@status.im>, Oskar Thorén <oskar@status.im> (alphabetical order)
+> Authors: Corey Petty <corey@status.im>, Oskar Thorén <oskar@status.im>, Samuel Hawksby-Robinson <samuel@status.im> (alphabetical order)
 
 ## Abstract
 
@@ -43,6 +43,8 @@ In this specification we explain what Status account is, and how trust is establ
         - [3 word pseudonym / Whisper/Waku key fingerprint](#3-word-pseudonym--whisperwaku-key-fingerprint)
         - [ENS name](#ens-name)
 - [Security Considerations](#security-considerations)
+- [Changelog](#changelog)
+  - [Version 0.3](#version-03)
 
 <!-- markdown-toc end -->
 
@@ -219,3 +221,13 @@ All messages sent are encrypted with the public key of the destination and signe
 ## Security Considerations
 
 -
+
+## Changelog
+
+### Version 0.3
+
+Released `TODO`
+
+- Added language to include Waku in all relevant places
+- Change to keep `Mailserver` term consistent 
+- Added clarification to Open Whisper Systems

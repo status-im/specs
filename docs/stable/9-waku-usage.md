@@ -6,11 +6,11 @@ title: 9/WAKU-USAGE
 
 # 9/WAKU-USAGE
 
-> Version: 0.2
+> Version: 0.1
 >
 > Status: Stable
 >
-> Authors: Adam Babik <adam@status.im>, Corey Petty <corey@status.im>, Oskar Thorén <oskar@status.im> (alphabetical order)
+> Authors: Adam Babik <adam@status.im>, Corey Petty <corey@status.im>, Oskar Thorén <oskar@status.im>, Samuel Hawksby-Robinson <samuel@status.im> (alphabetical order)
 
 - [Status Waku Usage Specification](#9waku-usage)
   - [Abstract](#abstract)
@@ -31,6 +31,8 @@ title: 9/WAKU-USAGE
   - [Whisper V6 extensions](#whisper-v6-extensions)
     - [Request historic messages](#request-historic-messages)
       - [shhext_requestMessages](#shhext_requestmessages)
+  - [Changelog](#changelog)
+    - [Version 0.3](#version-03)
 
 ## Abstract
 
@@ -344,3 +346,17 @@ It's recommended to return messages from newest to oldest. To move further back 
 The above `topics` is then converted into a bloom filter and then and sent to the `Mailserver`.
 
 <!-- TODO: Clarify actual request with bloom filter to mailserver -->
+
+## Changelog
+
+### Version 0.1
+
+Released `TODO`
+
+- Created document
+- Forked from [3-whisper-usage](3-whisper-usage.md)
+- Change to keep `Mailserver` term consistent
+- Replaced Whisper references with Waku
+- Added [Status options](#status) section
+- Updated [Waku packets](#waku-packets) section to match Waku
+- Added that `Batch Ack` is marked for deprecation 

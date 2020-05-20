@@ -6,7 +6,7 @@ title: 6/PAYLOADS
 
 # 6/PAYLOADS
 
-> Version: 0.2
+> Version: 0.3
 >
 > Status: Stable
 >
@@ -51,6 +51,8 @@ as various clients created using different technologies.
   - [Upgradability](#upgradability)
   - [Security Considerations](#security-considerations)
   - [Design rationale](#design-rationale)
+  - [Changelog](#changelog)
+    - [Version 0.3](#version-03)
 
 ## Introduction
 
@@ -333,3 +335,11 @@ There are two ways to upgrade the protocol without breaking compatibility:
 -
 
 ## Design rationale
+
+## Changelog
+
+### Version 0.3
+
+Released `TODO`
+
+- Added language to include Waku in all relevant places

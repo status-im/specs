@@ -6,7 +6,7 @@ title: 4/WHISPER-MAILSERVER
 
 # 4/WHISPER-MAILSERVER
 
-> Version: 0.2
+> Version: 0.3
 >
 > Status: Stable
 >
@@ -23,6 +23,8 @@ title: 4/WHISPER-MAILSERVER
     - [Altruistic and centralized operator risk](#altruistic-and-centralized-operator-risk)
     - [Privacy concerns](#privacy-concerns)
     - [Denial-of-service](#denial-of-service)
+  - [Changelog](#changelog)
+    - [Version 0.3](#version-03)
 
 ## Abstract
 
@@ -112,3 +114,11 @@ metadata like IP address.
 ### Denial-of-service
 
 Since a `Mailserver` is delivering expired envelopes and has a direct TCP connection with the recipient, the recipient is vulnerable to DoS attacks from a malicious `Mailserver` node.
+
+## Changelog
+
+### Version 0.3
+
+Released `TODO`
+
+- Change to keep `Mailserver` term consistent

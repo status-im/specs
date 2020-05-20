@@ -6,11 +6,11 @@ title: 10/WAKU-MAILSERVER
 
 # 10/WAKU-MAILSERVER
 
-> Version: 0.2
+> Version: 0.1
 >
 > Status: Stable
 >
-> Authors: Adam Babik <adam@status.im>, Oskar Thorén <oskar@status.im> (alphabetical order)
+> Authors: Adam Babik <adam@status.im>, Oskar Thorén <oskar@status.im>, Samuel Hawksby-Robinson <samuel@status.im> (alphabetical order)
 
 - [Status Waku Mailserver Specification](#10waku-mailserver)
   - [Abstract](#abstract)
@@ -23,6 +23,7 @@ title: 10/WAKU-MAILSERVER
     - [Altruistic and centralized operator risk](#altruistic-and-centralized-operator-risk)
     - [Privacy concerns](#privacy-concerns)
     - [Denial-of-service](#denial-of-service)
+  - [Changelog](#changelog)
 
 ## Abstract
 
@@ -114,3 +115,14 @@ metadata like IP address.
 ### Denial-of-service
 
 Since a `Mailserver` is delivering expired envelopes and has a direct TCP connection with the recipient, the recipient is vulnerable to DoS attacks from a malicious `Mailserver` node.
+
+## Changelog
+
+### Version 0.1
+
+Released `TODO`
+
+- Created document
+- Forked from [4-whisper-mailserver](4-whisper-mailserver.md)
+- Change to keep `Mailserver` term consistent
+- Replaced Whisper references with Waku

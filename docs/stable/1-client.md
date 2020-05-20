@@ -6,11 +6,11 @@ title: 1/CLIENT
 
 # 1/CLIENT
 
-> Version: 0.2
+> Version: 0.3
 >
 > Status: Stable
 >
-> Authors: Adam Babik [adam@status.im](mailto:adam@status.im), Andrea Maria Piana [andreap@status.im](mailto:andreap@status.im), Dean Eigenmann [dean@status.im](mailto:dean@status.im), Corey Petty [corey@status.im](mailto:corey@status.im), Oskar Thorén [oskar@status.im](mailto:oskar@status.im) (alphabetical order)
+> Authors: Adam Babik [adam@status.im](mailto:adam@status.im), Andrea Maria Piana [andreap@status.im](mailto:andreap@status.im), Dean Eigenmann [dean@status.im](mailto:dean@status.im), Corey Petty [corey@status.im](mailto:corey@status.im), Oskar Thorén [oskar@status.im](mailto:oskar@status.im), Samuel Hawksby-Robinson [samuel@status.im](mailto:samuel@status.im) (alphabetical order)
 
 ## Abstract
 
@@ -61,6 +61,8 @@ have to be implemented in order to be a full Status client. The second gives a d
         -   [Spam resistance](#spam-resistance)
         -   [Censorship resistance](#censorship-resistance)
     -   [Acknowledgments](#acknowledgments)
+    - [Changelog](#changelog)
+      - [Version 0.3](#version-03)
 
 ### Protocol layers
 
@@ -214,7 +216,6 @@ used in 1:1 chats and group chats, but not for public chats. See [5/SECURE-TRANS
 ### Data Sync
 
 [MVDS](https://specs.vac.dev/mvds.html) is used for 1:1 and group chats, however it is currently not in use for public chats.
-
 [Status payloads](#payloads-and-clients) are serialized and then wrapped inside an
 MVDS message which is added to an [MVDS payload](https://specs.vac.dev/mvds.html#payloads),
 this payload is then encrypted (if necessary for 1-to-1 / group-chats) and sent using
@@ -399,3 +400,15 @@ See <https://github.com/status-im/status-react/issues/6351> for some discussion.
 ## Acknowledgments
 
 Jacek Sieka
+
+## Changelog
+
+### Version 0.3
+
+Released `TODO`
+
+- Added that Waku SHOULD be used
+- Added that Whisper SHOULD NOT be used
+- Added language to include Waku in all relevant places
+- Change to keep `Mailserver` term consistent 
+

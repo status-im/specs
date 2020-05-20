@@ -6,11 +6,11 @@ title: 3/WHISPER-USAGE
 
 # 3/WHISPER-USAGE
 
-> Version: 0.2
+> Version: 0.3
 >
 > Status: Stable
 >
-> Authors: Adam Babik <adam@status.im>, Corey Petty <corey@status.im>, Oskar Thorén <oskar@status.im> (alphabetical order)
+> Authors: Adam Babik <adam@status.im>, Corey Petty <corey@status.im>, Oskar Thorén <oskar@status.im>, Samuel Hawksby-Robinson <samuel@status.im> (alphabetical order)
 
 - [Status Whisper Usage Specification](#status-whisper-usage-specification)
   - [Abstract](#abstract)
@@ -33,6 +33,8 @@ title: 3/WHISPER-USAGE
   - [Whisper V6 extensions](#whisper-v6-extensions)
     - [Request historic messages](#request-historic-messages)
       - [shhext_requestMessages](#shhextrequestmessages)
+  - [Changelog](#changelog)
+    - [Version 0.3](#version-03)
 
 ## Abstract
 
@@ -357,3 +359,12 @@ It's recommended to return messages from newest to oldest. To move further back 
 The above `topics` is then converted into a bloom filter and then and sent to the `Mailserver`.
 
 <!-- TODO: Clarify actual request with bloom filter to mailserver -->
+
+## Changelog
+
+### Version 0.3
+
+Released `TODO`
+
+- Added Whisper / Waku Bridging section
+- Change to keep `Mailserver` term consistent 

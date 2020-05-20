@@ -53,6 +53,8 @@ It builds on the [X3DH](https://signal.org/docs/specifications/x3dh/) and [Doubl
       - [Contact request](#contact-request)
     - [Expired session](#expired-session)
     - [Stale devices](#stale-devices)
+- [Changelog](#changelog)
+  - [Version 0.3](#version-03)
 
 
 ## Introduction
@@ -541,3 +543,11 @@ Account recovery is no different from adding a new device, and it is handled in 
 
 In some cases (i.e. account recovery when no other pairing device is available, device not paired), it is possible that a device will receive a message that is not targeted to its own `installation-id`.
 In this case an empty message containing bundle information is sent back, which will notify the receiving end of including this device in any further communication.
+
+## Changelog
+
+### Version 0.3
+
+Released `TODO`
+
+- Added language to include Waku in all relevant places
