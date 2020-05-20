@@ -1,14 +1,14 @@
 ---
 permalink: /spec/6
-parent: Stable specs
+parent: Draft specs
 title: 6/PAYLOADS
 ---
 
 # 6/PAYLOADS
 
-> Version: 0.2
+> Version: 0.3
 >
-> Status: Stable
+> Status: Draft
 >
 > Authors: Adam Babik <adam@status.im>, Andrea Maria Piana <andreap@status.im>, Oskar Thorén <oskar@status.im> (alphabetical order)
 
@@ -17,7 +17,7 @@ title: 6/PAYLOADS
 This specifications describes how the payload of each message in Status looks
 like. It is primarily centered around chat and chat-related use cases.
 
-The payloads aim to be flexible enough to support messaging but also cases
+The payloads aims be flexible enough to support messaging but also cases
 described in the [Status Whitepaper](https://status.im/whitepaper.pdf) as well
 as various clients created using different technologies.
 
@@ -35,6 +35,7 @@ as various clients created using different technologies.
       - [Payload](#payload-1)
       - [Content types](#content-types)
         - [Sticker content type](#sticker-content-type)
+        - [Image content type](#image-content-type)
       - [Message types](#message-types)
       - [Clock vs Timestamp and message ordering](#clock-vs-timestamp-and-message-ordering)
       - [Chats](#chats)
@@ -70,7 +71,7 @@ message StatusProtocolMessage {
 
 `signature` is the bytes of the signed `SHA3-256` of the payload, signed with the key of the author of the message.
 The signature is needed to validate authorship of the message, so that the message can be relayed to third parties.
-If a signature is not present, but an author is provided by a layer below, the message is not to be relayed to third parties and it is considered plausibly deniable.
+If a signature is not present but an author is provided by a layer below, the message is not to be relayed to third parties and it is considered plausibly deniable.
 
 ## Encoding
 
@@ -90,7 +91,7 @@ The protobuf description is:
 message ChatMessage {
   // Lamport timestamp of the chat message
   uint64 clock = 1;
-  // Unix timestamps in milliseconds, currently not used as we use Whisper/Waku as more reliable, but here
+  // Unix timestamps in milliseconds, currently not used as we use whisper as more reliable, but here
   // so that we don't rely on it
   uint64 timestamp = 2;
   // Text of the message
@@ -99,10 +100,7 @@ message ChatMessage {
   string response_to = 4;
   // Ens name of the sender
   string ens_name = 5;
-  // Chat id, this field is symmetric for public-chats and private group chats,
-  // but asymmetric in case of one-to-ones, as the sender will use the chat-id
-  // of the received, while the receiver will use the chat-id of the sender.
-  // Probably should be the concatenation of sender-pk & receiver-pk in alphabetical order
+  // Chat id is the ID of the chat
   string chat_id = 6;
 
   // The type of message (public/one-to-one/private-group-chat)
@@ -112,6 +110,7 @@ message ChatMessage {
 
   oneof payload {
     StickerMessage sticker = 9;
+    ImageMessage image = 10;
   }
 
   enum MessageType {
@@ -130,6 +129,7 @@ message ChatMessage {
     TRANSACTION_COMMAND = 5;
     // Only local
     SYSTEM_MESSAGE_CONTENT_PRIVATE_GROUP = 6;
+    IMAGE = 7;
   }
 }
 ```
@@ -146,7 +146,7 @@ message ChatMessage {
 | 6 | chat_id | `string` | The local ID of the chat the message is sent to |
 | 7 | message_type | `MessageType` | The type of message, different for one-to-one, public or group chats |
 | 8 | content_type | `ContentType` | The type of the content of the message | 
-| 9 | payload | `Sticker|nil` | The payload of the message based on the content type |
+| 9 | payload | `Sticker|Image|nil` | The payload of the message based on the content type |
 
 #### Content types
 
@@ -160,6 +160,7 @@ There are also other content types that MAY be implemented by the client:
 * `STATUS`
 * `EMOJI`
 * `TRANSACTION_COMMAND`
+* `IMAGE`
 
 ##### Sticker content type
 
@@ -173,11 +174,30 @@ message StickerMessage {
 }
 ```
 
+##### Image content type
+
+A `ChatMessage` with `IMAGE` `Content/Type` MUST also specify the `payload` of the image
+and the `type`
+
+```protobuf
+message ImageMessage {
+  bytes payload = 1;
+  ImageType type = 2;
+  enum ImageType {
+    UNKNOWN_IMAGE_TYPE = 0;
+    PNG = 1;
+    JPEG = 2;
+    WEBP = 3;
+    GIF = 4;
+  }
+}
+```
+
 #### Message types
 
-Message types are required to decide how a particular message is encrypted and what metadata needs to be attached when passing a message to the transport layer. For more on this, see [3/WHISPER-USAGE](3-whisper-usage.md) and [9/WAKU-USAGE](9-waku-usage.md).
+Message types are required to decide how a particular message is encrypted and what metadata needs to be attached when passing a message to the transport layer. For more on this, see [3/WHISPER-USAGE](https://specs.status.im/spec/3).
 
-<!-- TODO: This reference is a bit odd, considering the layer payloads should interact with is Secure Transport, and not Whisper/Waku. This requires more detail -->
+<!-- TODO: This reference is a bit odd, considering the layer payloads should interact with is Secure Transport, and not Whisper. This requires more detail -->
 
 
 The following messages types MUST be supported:
@@ -200,9 +220,9 @@ This will satisfy the Lamport requirement, namely: a -> b then T(a) < T(b)
 
 `clock` SHOULD be calculated using the algorithm of [Lamport timestamps](https://en.wikipedia.org/wiki/Lamport_timestamps). When there are messages available in a chat, `clock`'s value is calculated based on the last received message in a particular chat: `max(timeNowInMs, last-message-clock-value + 1)`. If there are no messages, `clock` is initialized with `timestamp`'s value.
 
-Messages with a `clock` greater than `120` seconds over the whisper/Waku timestamp SHOULD be discarded, in order to avoid malicious users to increase the `clock` of a chat arbitrarily.
+Messages with a `clock` greater than `120` seconds over the whisper timestamp SHOULD be discarded, in order to avoid malicious users to increase the `clock` of a chat arbitrarily.
 
-Messages with a `clock` less than `120` seconds under the whisper/Waku timestamp might indicate an attempt to insert messages in the chat history which is not distinguishable from a `datasync` layer re-transit event. A client MAY mark this messages with a warning to the user, or discard them.
+Messages with a `clock` less than `120` seconds under the whisper timestamp might indicate an attempt to insert messages in the chat history which is not distinguishable from a `datasync` layer re-transit event. A client MAY mark this messages with a warning to the user, or discard them.
 
 `clock` value is used for the message ordering. Due to the used algorithm and distributed nature of the system, we achieve casual ordering which might produce counter-intuitive results in some edge cases. For example, when one joins a public chat and sends a message before receiving the exist messages, their message `clock` value might be lower and the message will end up in the past when the historical messages are fetched.
 
@@ -333,3 +353,8 @@ There are two ways to upgrade the protocol without breaking compatibility:
 -
 
 ## Design rationale
+
+
+## Copyright
+
+Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).

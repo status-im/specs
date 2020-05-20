@@ -60,7 +60,7 @@ have to be implemented in order to be a full Status client. The second gives a d
         -   [Privacy](#privacy)
         -   [Spam resistance](#spam-resistance)
         -   [Censorship resistance](#censorship-resistance)
-    -   [Acknowledgements](#acknowledgements)
+    -   [Acknowledgments](#acknowledgments)
 
 ### Protocol layers
 
@@ -119,7 +119,7 @@ nodes allow you to discover other nodes of the network.
 Currently the main bootstrap nodes are provided by Status Gmbh, but anyone can
 run these provided they are connected to the rest of the Whisper/Waku network.
 
-Status maintains a list of production fleet boootstrap nodes in the following locations:
+Status maintains a list of production fleet bootstrap nodes in the following locations:
 
 **Hong Kong:**
 
@@ -147,7 +147,7 @@ v5](https://github.com/ethereum/devp2p/blob/master/discv5/discv5.md) and
 [Rendezvous Protocol](https://github.com/libp2p/specs/tree/master/rendezvous),
 (with some
 [modifications](https://github.com/status-im/rendezvous#differences-with-original-rendezvous)).
-Additionally, some static nodes MAY also be used.
+Additionally, some static nodes MAY also be used. 
 
 A Status client MUST use at least one discovery method or use static nodes
 to communicate with other clients.
@@ -191,6 +191,9 @@ new ones.
 The current list of static peers is published on <https://fleets.status.im/>. `eth.prod` is the current
 group of peers the official Status client uses. The others are test networks.
 
+Finally, Waku node addresses can be retrieved by traversing 
+the merkle tree found at [`fleets.status.im`](https://fleets.status.im), as described in [EIP-1459](https://eips.ethereum.org/EIPS/eip-1459#client-protocol).
+
 #### Mobile nodes
 
 A `Mobile node` is a Whisper and/or Waku node which connects to part of the respective Whisper
@@ -200,11 +203,11 @@ to use Whisper and/or Waku to communicate with other Status nodes.
 ### Transport privacy and Whisper / Waku usage
 
 Once a Whisper and/or Waku node is up and running there are some specific settings required
-to commmunicate with other Status nodes.
+to communicate with other Status nodes.
 
 See [3/WHISPER-USAGE](https://specs.status.im/spec/3) and [9/WAKU-USAGE](https://specs.status.im/spec/9) for more details.
 
-For providing offline inboxing, see the complementary [4/WHISPER-MAILSERVER](https://specs.status.im/spec/4) and [10/WAKU-MAILSERVER](https://specs.status.im/spec/10).
+For providing an offline inbox, see the complementary [4/WHISPER-MAILSERVER](https://specs.status.im/spec/4) and [10/WAKU-MAILSERVER](https://specs.status.im/spec/10).
 
 ### Secure Transport
 
@@ -288,7 +291,7 @@ Considerable work has gone into the active development of Ethereum, in contrast 
 is not currently under active development, and it has several drawbacks. Among others:
 
 -   Whisper is very wasteful bandwidth-wise and doesn't appear to be scalable
--   Proof of work is a poor spam protection mechanism for heterogenerous devices
+-   Proof of work is a poor spam protection mechanism for heterogeneous devices
 -   The privacy guarantees provided are not rigorous
 -   There are no incentives to run a node
 
@@ -297,7 +300,7 @@ together with [Vac](https://vac.dev/vac-overview) and other teams in the space.
 
 #### Why is PoW for Waku set so low?
 
-A higher PoW would be desirable, but this kills the battery on mobilephones,
+A higher PoW would be desirable, but this kills the battery on mobile phones,
 which is a prime target for Status clients.
 
 This means the network is currently vulnerable to DDoS attacks. Alternative
@@ -365,7 +368,7 @@ The main privacy concern with light nodes is that directly connected peers will 
 
 **Bloom filter privacy:**
 
-By having a bloom filter where only the topics you are interested in are set, you reveal which messages you are interested in. This is a fundamental tradeoff between bandwidth usage and privacy, though the tradeoff space is likely suboptimal in terms of the [Anonymity](https://eprint.iacr.org/2017/954.pdf) [trilemma](https://petsymposium.org/2019/files/hotpets/slides/coordination-helps-anonymity-slides.pdf).
+By having a bloom filter where only the topics you are interested in are set, you reveal which messages you are interested in. This is a fundamental trade-off between bandwidth usage and privacy, though the trade-off space is likely suboptimal in terms of the [Anonymity](https://eprint.iacr.org/2017/954.pdf) [trilemma](https://petsymposium.org/2019/files/hotpets/slides/coordination-helps-anonymity-slides.pdf).
 
 **`Mailserver client` privacy:**
 
@@ -381,7 +384,7 @@ Similar to bloom filter privacy, if you use a very specific topic you reveal mor
 
 ### Spam resistance
 
-**PoW bad for heterogenerous devices:**
+**PoW bad for heterogeneous devices:**
 
 Proof of work is a poor spam prevention mechanism. A mobile device can only have a very low PoW in order not to use too much CPU / burn up its phone battery. This means someone can spin up a powerful node and overwhelm the network.
 
@@ -397,6 +400,6 @@ By default Devp2p runs on port `30303`, which is not commonly used for any other
 
 See <https://github.com/status-im/status-react/issues/6351> for some discussion.
 
-## Acknowledgements
+## Acknowledgments
 
 Jacek Sieka

@@ -88,7 +88,7 @@ Everything else associated with the contact is either verified or derived from t
 - A client SHOULD regenerate a new X3DH prekey bundle every 24 hours.  This MAY be done in a lazy way, such that a client that does not come online past this time period does not regenerate or broadcast bundles.
 - The current bundle SHOULD be broadcast on a Whisper/Waku topic specific to his Identity Key, `{IK}-contact-code`, intermittently.  This MAY be done every 6 hours.
 - A bundle SHOULD accompany every message sent.
-- TODO: retreival of long-time offline users bundle via `{IK}-contact-code` 
+- TODO: retrieval of long-time offline users bundle via `{IK}-contact-code` 
 
 ## Optional Account additions
 
@@ -96,7 +96,7 @@ Everything else associated with the contact is either verified or derived from t
 - A user MAY register a public username on the Ethereum Name System (ENS).  This username is a user-chosen subdomain of the `stateofus.eth` ENS registration that maps to their Whisper/Waku identity key (`IK`). 
 
 <!-- ### User Profile Picture
-- An account MAY edit the `IK` generated identicon with a chosen picture.  This picture will become part of the publicly broadcasted profile of the account. -->
+- An account MAY edit the `IK` generated identicon with a chosen picture.  This picture will become part of the publicly broadcast profile of the account. -->
 
 <!-- TODO: Elaborate on wallet account and multiaccount -->
 <!-- TODO: Elaborate on security implications -->
@@ -117,7 +117,7 @@ Everything else associated with the contact is either verified or derived from t
 ### Contact Discovery
 
 #### Public channels
-- Public group channels in Status are a broadcast/subscription system.  All public messages are encrypted with a symmetric key drived from the channel name, `K_{pub,sym}`, which is publicly known.
+- Public group channels in Status are a broadcast/subscription system.  All public messages are encrypted with a symmetric key derived from the channel name, `K_{pub,sym}`, which is publicly known.
 - A public group channel's symmetric key MUST creation must follow the [web3 API](https://web3js.readthedocs.io/en/1.0/web3-shh.html#generatesymkeyfrompassword)'s `web3.ssh.generateSymKeyFromPassword` function
 - In order to post to a public group channel, a client MUST have a valid account created.
 - In order to listen to a public group channel, a client must subscribe to the channel name.  The sender of a message is derived from the message's signature.
@@ -131,7 +131,7 @@ Everything else associated with the contact is either verified or derived from t
 This can be done in the following ways:
 1. scanning a user generated QR code
 1. discovery through the Status app
-1. asyncronous X3DH key exchange
+1. asynchronous X3DH key exchange
 1. public key via public channel listening
     - `status-react/src/status_im/contact_code/core.cljs`
 1. contact codes
@@ -160,7 +160,7 @@ This can be done in the following ways:
 Once you have the information of a contact, the following can be used to verify that the key material is as it should be.
 
 #### Identicon
-A low-poly identicon is deterministically generated from the Whisper/Waku chat public key.  This can then be compared out of band to ensure the reciever's public key is the one you have locally.
+A low-poly identicon is deterministically generated from the Whisper/Waku chat public key.  This can then be compared out of band to ensure the receiver's public key is the one you have locally.
 
 #### 3 word pseudonym / Whisper/Waku key fingerprint
 Status generates a deterministic 3-word random pseudonym from the Whisper/Waku chat public key.  This pseudonym acts as a human readable fingerprint to the Whisper/Waku chat public key.  This name also shows when viewing a contact's public profile and in the chat UI.
@@ -187,12 +187,12 @@ possible connections
     - a mailserver identifies itself by an [enode address](https://github.com/ethereum/wiki/wiki/enode-url-format) 
 - client - Whisper/Waku node (statusd)
     - a node identifies itself by an enode address
-- client - bootnode (geth)
+- client - bootnode (go-ethereum)
     - a bootnode identifies itself by
         - an enode address
         - `NOTE: redezvous information here`
 - client - ENS registry (ethereum blockchain -> default to infura)
-- client - Ethereum RPC (custom geth RPC API -> default to infura API)
+- client - Ethereum RPC (custom go-ethereum RPC API -> default to infura API)
 - client - IPFS (Status hosted IPFS gateway -> defaults to ???)
     - we have a status hosted IPFS gateway for pinning but it currently isn't used much.
 

@@ -6,13 +6,15 @@ nav_exclude: true
 
 # Specifications for Status clients
 
+![CI](https://github.com/status-im/specs/workflows/CI/badge.svg)
+
 This repository contains a list of specifications for implementing Status and
 its various capabilities.
 
 ## How to contribute
 
 1. Create an issue for a new Status Improvement Proposal (SIP) or some bug that you'd like to address
-2. Create a corresponding PR and ping some exisiting SIP editors for review
+2. Create a corresponding PR and ping some existing SIP editors for review
 
 If you need help, ask in #protocol at Status / Discord.
 

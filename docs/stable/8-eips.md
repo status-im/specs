@@ -25,7 +25,7 @@ In this specification, we describe how Status relates with EIPs.
   - [Security Considerations](#security-considerations)
   - [Design Rationale](#design-rationale)
   - [Footnotes](#footnotes)
-  - [Acknowledgements](#acknowledgements)
+  - [Acknowledgments](#acknowledgments)
 
 ## Introduction
 
@@ -33,30 +33,31 @@ Status should follow all standards as possible. Whenever a feature is needed, it
 
 ### Support table
 
-|          | Status v0 | Status v1 | Other    |
-|----------|-----------|-----------|----------|
-| BIP32    | N         | Y         | N        |
-| BIP39    | Y         | Y         | Y        |
-| BIP43    | N         | Y         | N        |
-| BIP44    | N         | Y         | N        |
-| EIP20    | Y         | Y         | Y        |
-| EIP55    | Y         | Y         | Y        |
-| EIP67    | P         | P         | N        |
-| EIP137   | P         | P         | N        |
-| EIP155   | Y         | Y         | Y        |
-| EIP165   | P         | N         | N        |
-| EIP181   | P         | N         | N        |
-| EIP191   | Y?        | N         | Y        |
-| EIP627   | Y         | Y         | N        |
-| EIP681   | Y         | N         | Y        |
-| EIP712   | P         | P         | Y        |
-| EIP721   | P         | P         | Y        |
-| EIP831   | N         | Y         | N        |
-| EIP945   | Y         | Y         | N        |
-| EIP1102  | Y         | Y         | Y        |
-| EIP1193  | Y         | Y         | Y        |
-| EIP1577  | Y         | P         | N        |
-| EIP1581  | N         | Y         | N        |
+|          | Status v0 | Status v1 | Other    | State    |
+|----------|-----------|-----------|----------| -------- |
+| BIP32    | N         | Y         | N        | `stable` |
+| BIP39    | Y         | Y         | Y        | `stable` |
+| BIP43    | N         | Y         | N        | `stable` |
+| BIP44    | N         | Y         | N        | `stable` |
+| EIP20    | Y         | Y         | Y        | `stable` |
+| EIP55    | Y         | Y         | Y        | `stable` |
+| EIP67    | P         | P         | N        | `stable` |
+| EIP137   | P         | P         | N        | `stable` |
+| EIP155   | Y         | Y         | Y        | `stable` |
+| EIP165   | P         | N         | N        | `stable` |
+| EIP181   | P         | N         | N        | `stable` |
+| EIP191   | Y?        | N         | Y        | `stable` |
+| EIP627   | Y         | Y         | N        | `stable` |
+| EIP681   | Y         | N         | Y        | `stable` |
+| EIP712   | P         | P         | Y        | `stable` |
+| EIP721   | P         | P         | Y        | `stable` |
+| EIP831   | N         | Y         | N        | `stable` |
+| EIP945   | Y         | Y         | N        | `stable` |
+| EIP1102  | Y         | Y         | Y        | `stable` |
+| EIP1193  | Y         | Y         | Y        | `stable` |
+| EIP1577  | Y         | P         | N        | `stable` |
+| EIP1581  | N         | Y         | N        | `stable` |
+| EIP1459  | N         |           | N        | `raw`    |
 
 ## Components
 
@@ -94,7 +95,7 @@ Observation: BIP44 don't solve privacy issues regarding the transparency of tran
 
 Support: Full.  
 Reference: https://eips.ethereum.org/EIPS/eip-20  
-Description: Enable wallets to use tokens based on smart contracts compilant with this standard.  
+Description: Enable wallets to use tokens based on smart contracts compliant with this standard.  
 Used for: Wallet feature.  
 Sourcecode: https://github.com/status-im/status-react/blob/develop/src/status_im/ethereum/tokens.cljs  
 
@@ -151,7 +152,7 @@ Sourcecode: https://github.com/status-im/status-react/blob/develop/src/status_im
 
 Support: Full.  
 Reference: https://eips.ethereum.org/EIPS/eip-191  
-Description: Contract signature standard, adds an obrigatory padding to signed message to differentiate from Ethereum Transaction messages.  
+Description: Contract signature standard, adds an obligatory padding to signed message to differentiate from Ethereum Transaction messages.  
 Used for: Dapp support, security, dependency of ERC712.  
 
 ### EIP627 - Whisper Specification
@@ -166,7 +167,7 @@ Used for: Chat protocol.
 Support: Partial.  
 Reference: https://eips.ethereum.org/EIPS/eip-681
 Description: A link that pop up a transaction in the wallet.  
-Used for: Useful as QRCode data for tranasction requests, chat transaction requests and for dapp links to transaction requests.  
+Used for: Useful as QR code data for transaction requests, chat transaction requests and for dapp links to transaction requests.  
 Sourcecode: https://github.com/status-im/status-react/blob/develop/src/status_im/ethereum/eip681.cljs  
 Related: [Issue #9183: URL Format for Transaction Requests (EIP681) is poorly supported](https://github.com/status-im/status-react/issues/9183) https://github.com/status-im/status-react/pull/9240 https://github.com/status-im/status-react/issues/9238 https://github.com/status-im/status-react/issues/7214 https://github.com/status-im/status-react/issues/7325 https://github.com/status-im/status-react/issues/8150  
 
@@ -174,7 +175,7 @@ Related: [Issue #9183: URL Format for Transaction Requests (EIP681) is poorly su
 
 Support: Partial.  
 Reference: https://eips.ethereum.org/EIPS/eip-712  
-Description: Standarize types for contract siganture, allowing users to easily inspect whats being signed.  
+Description: Standardize types for contract signature, allowing users to easily inspect whats being signed.  
 Used for: User experience, security.  
 Related: https://github.com/status-im/status-react/issues/5461 https://github.com/status-im/status-react/commit/ba37f7b8d029d3358c7b284f6a2383b9ef9526c9  
 
@@ -182,7 +183,7 @@ Related: https://github.com/status-im/status-react/issues/5461 https://github.co
 
 Support: Partial.  
 Reference: https://eips.ethereum.org/EIPS/eip-721  
-Description: Enable wallets to use tokens based on smart contracts compilant with this standard.  
+Description: Enable wallets to use tokens based on smart contracts compliant with this standard.  
 Used for: Wallet feature.  
 Related: https://github.com/status-im/status-react/issues/8909  
 Sourcecode: https://github.com/status-im/status-react/blob/develop/src/status_im/ethereum/erc721.cljs https://github.com/status-im/status-react/blob/develop/src/status_im/ethereum/tokens.cljs  
@@ -224,10 +225,18 @@ Sourcecode: https://github.com/status-im/status-react/blob/develop/src/status_im
 Support: Partial.  
 Reference: https://eips.ethereum.org/EIPS/eip-1581  
 Description: Allow wallet to derive keys that are less sensible (non wallet).  
-Used for: Security (dont reuse wallet key) and user experience (dont request keycard every login).  
+Used for: Security (don't reuse wallet key) and user experience (don't request keycard every login).  
 Related: https://github.com/status-im/status-react/issues/9088 https://github.com/status-im/status-react/pull/9096  
 Sourcecode: https://github.com/status-im/status-react/blob/develop/src/status_im/constants.cljs#L242  
 
+### EIP1459 - Node Discovery via DNS
+
+Support: -
+Reference: https://eips.ethereum.org/EIPS/eip-1459
+Description: Allows the storing and retrieving of nodes through merkle trees stored in TXT records of a domain.
+Used for: Finding Waku nodes.
+Related: -
+Sourcecode: - 
 
 ## Security Considerations
 
@@ -235,4 +244,4 @@ Sourcecode: https://github.com/status-im/status-react/blob/develop/src/status_im
 
 ## Footnotes
 
-## Acknowledgements
+## Acknowledgments
