@@ -49,11 +49,6 @@ It builds on the [X3DH](https://signal.org/docs/specifications/x3dh/) and [Doubl
     - [Sending messages to a paired group](#sending-messages-to-a-paired-group)
     - [Account recovery](#account-recovery)
     - [Partitioned devices](#partitioned-devices)
-    - [Trust establishment](#trust-establishment)
-      - [Contact request](#contact-request)
-    - [Expired session](#expired-session)
-    - [Stale devices](#stale-devices)
-
 
 ## Introduction
 
@@ -80,13 +75,13 @@ Types used in this specification are defined using [Protobuf](https://developers
 
 ### Transport Layer
 
-[Whisper](./status-whisper-usage-spec.md) serves as the transport layer for the Status chat protocol.
+[Whisper](./3-whisper-usage.md) serves as the transport layer for the Status chat protocol.
 
 ### User flow for 1-to-1 communications
 
 #### Account generation
 
-See [Account specification](./status-account-spec.md)
+See [Account specification](./2-account.md)
 
 #### Account recovery
 
