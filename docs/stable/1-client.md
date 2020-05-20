@@ -164,12 +164,8 @@ It uses Ethereum Node Records (ENR) to report discovered peers.
 Both peers discovery mechanisms use topics to provide peers with certain capabilities.
 There is no point in returning peers that do not support a particular protocol.
 Status nodes that want to be discovered MUST register to Discovery V5 and/or Rendezvous
-with the `whisper` and/or `waku` topic(s). Status nodes that are `Mailservers` and want to
+with the `whisper` topic. Status nodes that are `Mailservers` and want to
 be discoverable MUST additionally register with the `whispermail` topic.
-
-```js
-// TODO is there a `Waku` analogous term of `whispermail`?
-```
 
 It is RECOMMENDED to use both mechanisms but at the same time implement a structure
 called `PeerPool`. `PeerPool` is responsible for maintaining an optimal number of peers.
