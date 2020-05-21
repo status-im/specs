@@ -49,13 +49,8 @@ It builds on the [X3DH](https://signal.org/docs/specifications/x3dh/) and [Doubl
     - [Sending messages to a paired group](#sending-messages-to-a-paired-group)
     - [Account recovery](#account-recovery)
     - [Partitioned devices](#partitioned-devices)
-    - [Trust establishment](#trust-establishment)
-      - [Contact request](#contact-request)
-    - [Expired session](#expired-session)
-    - [Stale devices](#stale-devices)
 - [Changelog](#changelog)
   - [Version 0.3](#version-03)
-
 
 ## Introduction
 
@@ -88,7 +83,7 @@ Types used in this specification are defined using [Protobuf](https://developers
 
 #### Account generation
 
-See [Account specification](./status-account-spec.md)
+See [Account specification](./2-account.md)
 
 #### Account recovery
 

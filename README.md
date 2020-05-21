@@ -18,6 +18,27 @@ its various capabilities.
 
 If you need help, ask in #protocol at Status / Discord.
 
+### Spellcheck
+
+To run the spellchecker locally, you must install [pyspelling](https://facelessuser.github.io/pyspelling/).
+
+It can then be run with the following command:
+
+```console
+pyspelling -c spellcheck.yml
+```
+
+Words that should be ignored or are unrecognized must be added to the [wordlist](./wordlist.txt).
+
+### Markdown Verification
+
+We use [remark](https://remark.js.org/) to verify our markdown. You can easily run this tool simply by using our `npm` package:
+
+```console
+npm install
+npm run lint
+```
+
 ## Spec lifecycle
 
 Every spec has its own lifecycle that shows its maturity. We indicate this in a similar fashion to [COSS Lifecycle](https://rfc.unprotocols.org/spec:2/COSS/):

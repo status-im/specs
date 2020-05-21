@@ -12,19 +12,18 @@ title: 4/WHISPER-MAILSERVER
 >
 > Authors: Adam Babik <adam@status.im>, Oskar Thorén <oskar@status.im> (alphabetical order)
 
-- [Status Whisper Mailserver Specification](#status-whisper-mailserver-specification)
-  - [Abstract](#abstract)
-  - [`Mailserver`](#mailserver)
-    - [Archiving messages](#archiving-messages)
-    - [Requesting messages](#requesting-messages)
-    - [Receiving historic messages](#receiving-historic-messages)
-  - [Security considerations](#security-considerations)
-    - [Confidentiality](#confidentiality)
-    - [Altruistic and centralized operator risk](#altruistic-and-centralized-operator-risk)
-    - [Privacy concerns](#privacy-concerns)
-    - [Denial-of-service](#denial-of-service)
-  - [Changelog](#changelog)
-    - [Version 0.3](#version-03)
+ - [Abstract](#abstract)
+ - [`Mailserver`](#mailserver)
+   - [Archiving messages](#archiving-messages)
+   - [Requesting messages](#requesting-messages)
+   - [Receiving historic messages](#receiving-historic-messages)
+ - [Security considerations](#security-considerations)
+   - [Confidentiality](#confidentiality)
+   - [Altruistic and centralized operator risk](#altruistic-and-centralized-operator-risk)
+   - [Privacy concerns](#privacy-concerns)
+   - [Denial-of-service](#denial-of-service)
+ - [Changelog](#changelog)
+   - [Version 0.3](#version-03)
 
 ## Abstract
 

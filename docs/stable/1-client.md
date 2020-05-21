@@ -25,44 +25,45 @@ have to be implemented in order to be a full Status client. The second gives a d
 
 ## Table of Contents
 
--   [Status Client Specification](#status-client-specification)
-    -   [Abstract](#abstract)
-    -   [Table of Contents](#table-of-contents)
-    -   [Introduction](#introduction)
-        -   [Protocol layers](#protocol-layers)
-        -   [Protobuf](#protobuf)
-    -   [Components](#components)
-        -   [P2P Overlay](#p2p-overlay)
-            -   [Node discovery and roles](#node-discovery-and-roles)
-            -   [Bootstrapping](#bootstrapping)
-            -   [Discovery](#discovery)
-            -   [Mobile nodes](#mobile-nodes)
-        -   [Transport privacy and Whisper/Waku usage](#transport-privacy-and-whisper--waku-usage)
-        -   [Secure Transport](#secure-transport)
-        -   [Data Sync](#data-sync)
-        -   [Payloads and clients](#payloads-and-clients)
-        -   [BIPs and EIPs Standards support](#bips-and-eips-standards-support)
-    -   [Security Considerations](#security-considerations)
-    -   [Design Rationale](#design-rationale)
-        -   [P2P Overlay](#p2p-overlay-1)
-            -   [Why devp2p? Why not use libp2p?](#why-devp2p-why-not-use-libp2p)
-            -   [What about other RLPx subprotocols like LES, and Swarm?](#what-about-other-rlpx-subprotocols-like-les-and-swarm)
-            -   [Why do you use Whisper?](#why-do-you-use-whisper)
-            -   [Why do you use Waku?](#why-do-you-use-waku)
-            -   [Why is PoW for Waku set so low?](#why-is-pow-for-waku-set-so-low)
-            -   [Why do you not use Discovery v5 for node discovery?](#why-do-you-not-use-discovery-v5-for-node-discovery)
-            -   [I heard something about `Mailservers` being trusted somehow?](#i-heard-something-about-mailservers-being-trusted-somehow)
-        -   [Data sync](#data-sync-1)
-            -   [Why is MVDS not used for public chats?](#why-is-mvds-not-used-for-public-chats)
-    -   [Footnotes](#footnotes)
-    -   [Appendix A: Security considerations](#appendix-a-security-considerations)
-        -   [Scalability and UX](#scalability-and-ux)
-        -   [Privacy](#privacy)
-        -   [Spam resistance](#spam-resistance)
-        -   [Censorship resistance](#censorship-resistance)
-    -   [Acknowledgments](#acknowledgments)
-    - [Changelog](#changelog)
-      - [Version 0.3](#version-03)
+ - [Abstract](#abstract)
+ - [Table of Contents](#table-of-contents)
+ - [Introduction](#introduction)
+     - [Protocol layers](#protocol-layers)
+     - [Protobuf](#protobuf)
+ - [Components](#components)
+     - [P2P Overlay](#p2p-overlay)
+         - [Node discovery and roles](#node-discovery-and-roles)
+         - [Bootstrapping](#bootstrapping)
+         - [Discovery](#discovery)
+         - [Mobile nodes](#mobile-nodes)
+     - [Transport privacy and Whisper/Waku usage](#transport-privacy-and-whisper--waku-usage)
+     - [Secure Transport](#secure-transport)
+     - [Data Sync](#data-sync)
+     - [Payloads and clients](#payloads-and-clients)
+     - [BIPs and EIPs Standards support](#bips-and-eips-standards-support)
+ - [Security Considerations](#security-considerations)
+ - [Design Rationale](#design-rationale)
+     - [P2P Overlay](#p2p-overlay-1)
+         - [Why devp2p? Why not use libp2p?](#why-devp2p-why-not-use-libp2p)
+         - [What about other RLPx subprotocols like LES, and Swarm?](#what-about-other-rlpx-subprotocols-like-les-and-swarm)
+         - [Why do you use Whisper?](#why-do-you-use-whisper)
+         - [Why do you use Waku?](#why-do-you-use-waku)
+         - [Why is PoW for Waku set so low?](#why-is-pow-for-waku-set-so-low)
+         - [Why do you not use Discovery v5 for node discovery?](#why-do-you-not-use-discovery-v5-for-node-discovery)
+         - [I heard something about `Mailservers` being trusted somehow?](#i-heard-something-about-mailservers-being-trusted-somehow)
+     - [Data sync](#data-sync-1)
+         - [Why is MVDS not used for public chats?](#why-is-mvds-not-used-for-public-chats)
+ - [Footnotes](#footnotes)
+ - [Appendix A: Security considerations](#appendix-a-security-considerations)
+     - [Scalability and UX](#scalability-and-ux)
+     - [Privacy](#privacy)
+     - [Spam resistance](#spam-resistance)
+     - [Censorship resistance](#censorship-resistance)
+ - [Acknowledgments](#acknowledgments)
+ - [Changelog](#changelog)
+   - [Version 0.3](#version-03)
+
+## Introduction
 
 ### Protocol layers
 
@@ -125,18 +126,18 @@ Status maintains a list of production fleet bootstrap nodes in the following loc
 
 **Hong Kong:**
 
--   `enode://6e6554fb3034b211398fcd0f0082cbb6bd13619e1a7e76ba66e1809aaa0c5f1ac53c9ae79cf2fd4a7bacb10d12010899b370c75fed19b991d9c0cdd02891abad@47.75.99.169:443`
--   `enode://23d0740b11919358625d79d4cac7d50a34d79e9c69e16831c5c70573757a1f5d7d884510bc595d7ee4da3c1508adf87bbc9e9260d804ef03f8c1e37f2fb2fc69@47.52.106.107:443`
+ - `enode://6e6554fb3034b211398fcd0f0082cbb6bd13619e1a7e76ba66e1809aaa0c5f1ac53c9ae79cf2fd4a7bacb10d12010899b370c75fed19b991d9c0cdd02891abad@47.75.99.169:443`
+ - `enode://23d0740b11919358625d79d4cac7d50a34d79e9c69e16831c5c70573757a1f5d7d884510bc595d7ee4da3c1508adf87bbc9e9260d804ef03f8c1e37f2fb2fc69@47.52.106.107:443`
 
 **Amsterdam:**
 
--   `enode://436cc6f674928fdc9a9f7990f2944002b685d1c37f025c1be425185b5b1f0900feaf1ccc2a6130268f9901be4a7d252f37302c8335a2c1a62736e9232691cc3a@178.128.138.128:443`
--   `enode://5395aab7833f1ecb671b59bf0521cf20224fe8162fc3d2675de4ee4d5636a75ec32d13268fc184df8d1ddfa803943906882da62a4df42d4fccf6d17808156a87@178.128.140.188:443`
+ - `enode://436cc6f674928fdc9a9f7990f2944002b685d1c37f025c1be425185b5b1f0900feaf1ccc2a6130268f9901be4a7d252f37302c8335a2c1a62736e9232691cc3a@178.128.138.128:443`
+ - `enode://5395aab7833f1ecb671b59bf0521cf20224fe8162fc3d2675de4ee4d5636a75ec32d13268fc184df8d1ddfa803943906882da62a4df42d4fccf6d17808156a87@178.128.140.188:443`
 
 **Central US:**
 
--   `enode://32ff6d88760b0947a3dee54ceff4d8d7f0b4c023c6dad34568615fcae89e26cc2753f28f12485a4116c977be937a72665116596265aa0736b53d46b27446296a@34.70.75.208:443`
--   `enode://5405c509df683c962e7c9470b251bb679dd6978f82d5b469f1f6c64d11d50fbd5dd9f7801c6ad51f3b20a5f6c7ffe248cc9ab223f8bcbaeaf14bb1c0ef295fd0@35.223.215.156:443`
+ - `enode://32ff6d88760b0947a3dee54ceff4d8d7f0b4c023c6dad34568615fcae89e26cc2753f28f12485a4116c977be937a72665116596265aa0736b53d46b27446296a@34.70.75.208:443`
+ - `enode://5405c509df683c962e7c9470b251bb679dd6978f82d5b469f1f6c64d11d50fbd5dd9f7801c6ad51f3b20a5f6c7ffe248cc9ab223f8bcbaeaf14bb1c0ef295fd0@35.223.215.156:443`
 
 These bootstrap nodes MAY change and we can't guarantee that it will stay this way forever
 and at some point we might be forced to change them.
