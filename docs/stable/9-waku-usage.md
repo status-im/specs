@@ -28,11 +28,11 @@ title: 9/WAKU-USAGE
     - [Negotiated topic](#negotiated-topic)
   - [Message encryption](#message-encryption)
   - [Message confirmations](#message-confirmations)
-  - [Whisper V6 extensions](#whisper-v6-extensions)
+  - [Waku V1 extensions](#waku-v1-extensions)
     - [Request historic messages](#request-historic-messages)
-      - [shhext_requestMessages](#shhext_requestmessages)
+      - [wakuext_requestMessages](#wakuext_requestmessages)
   - [Changelog](#changelog)
-    - [Version 0.3](#version-03)
+    - [Version 0.1](#version-01)
 
 ## Abstract
 

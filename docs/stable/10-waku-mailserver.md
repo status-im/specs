@@ -24,6 +24,7 @@ title: 10/WAKU-MAILSERVER
     - [Privacy concerns](#privacy-concerns)
     - [Denial-of-service](#denial-of-service)
   - [Changelog](#changelog)
+    - [Version 0.1](#version-01)
 
 ## Abstract
 

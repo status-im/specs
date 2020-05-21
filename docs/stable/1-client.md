@@ -98,7 +98,7 @@ Protocol, v5](https://github.com/ethereum/devp2p/blob/master/rlpx.md) is used, w
 allows for TCP-based communication between nodes.
 
 On top of this we run RLPx-based subprotocols, the client
-SHOULD NOT use [Whisper v6](https://eips.ethereum.org/EIPS/eip-627), the client 
+SHOULD NOT use [Whisper V6](https://eips.ethereum.org/EIPS/eip-627), the client 
 SHOULD use [Waku V1](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-1.md)
 for privacy-preserving messaging and efficient usage of a node's bandwidth.
 
@@ -344,7 +344,7 @@ There are several security considerations to take into account when running Stat
 
 **Bandwidth usage:**
 
-In version 1 of Status, bandwidth usage is likely to be an issue. In version this is partially addressed with Waku usage, see [the theoretical scaling model](https://github.com/vacp2p/research/tree/dcc71f4779be832d3b5ece9c4e11f1f7ec24aac2/whisper_scalability).
+In version 1 of Status, bandwidth usage is likely to be an issue. In Status version 1.1 this is partially addressed with Waku usage, see [the theoretical scaling model](https://github.com/vacp2p/research/tree/dcc71f4779be832d3b5ece9c4e11f1f7ec24aac2/whisper_scalability).
 
 **`Mailserver` High Availability requirement:**
 
