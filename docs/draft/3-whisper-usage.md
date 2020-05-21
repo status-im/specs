@@ -12,25 +12,24 @@ title: 3/WHISPER-USAGE
 >
 > Authors: Adam Babik <adam@status.im>, Andrea Maria Piana <andreap@status.im>, Corey Petty <corey@status.im>, Oskar Thorén <oskar@status.im> (alphabetical order)
 
-- [Status Whisper Usage Specification](#status-whisper-usage-specification)
-  - [Abstract](#abstract)
-  - [Reason](#reason)
-  - [Terminology](#terminology)
-  - [Whisper packets](#whisper-packets)
-  - [Whisper node configuration](#whisper-node-configuration)
-  - [Handshake](#handshake)
-  - [Rate limiting](#rate-limiting)
-  - [Keys management](#keys-management)
-    - [Contact code topic](#contact-code-topic)
-    - [Partitioned topic](#partitioned-topic)
-    - [Public chats](#public-chats)
-    - [Group chat topic](#group-chat-topic)
-  - [Message encryption](#message-encryption)
-  - [Message confirmations](#message-confirmations)
-  - [Whisper V6 extensions](#whisper-v6-extensions)
-    - [Request historic messages](#request-historic-messages)
-      - [shhext_requestMessages](#shhextrequestmessages)
-  - [Changelog](#changelog)
+ - [Abstract](#abstract)
+ - [Reason](#reason)
+ - [Terminology](#terminology)
+ - [Whisper packets](#whisper-packets)
+ - [Whisper node configuration](#whisper-node-configuration)
+ - [Handshake](#handshake)
+ - [Rate limiting](#rate-limiting)
+ - [Keys management](#keys-management)
+   - [Contact code topic](#contact-code-topic)
+   - [Partitioned topic](#partitioned-topic)
+   - [Public chats](#public-chats)
+   - [Group chat topic](#group-chat-topic)
+ - [Message encryption](#message-encryption)
+ - [Message confirmations](#message-confirmations)
+ - [Whisper V6 extensions](#whisper-v6-extensions)
+   - [Request historic messages](#request-historic-messages)
+     - [shhext_requestMessages](#shhext_requestmessages)
+ - [Changelog](#changelog)
 
 ## Abstract
 
@@ -347,9 +346,9 @@ The above `topics` is then converted into a bloom filter and then and sent to th
 ## Changelog
 
 ### 0.3
-  - Updated minimum PoW to `0.00001`
+ - Updated minimum PoW to `0.00001`
 ### 0.2
-  - Document created
+ - Document created
 
 ## Copyright
 

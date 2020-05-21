@@ -23,35 +23,34 @@ as various clients created using different technologies.
 
 ## Table of Contents
 
-- [Status Message Payloads Specification](#status-message-payloads-specification)
-  - [Abstract](#abstract)
-  - [Table of Contents](#table-of-contents)
-  - [Introduction](#introduction)
-  - [Payload wrapper](#payload-wrapper)
-  - [Encoding](#encoding)
-  - [Types of messages](#types-of-messages)
-    - [Message](#message)
-      - [Payload](#payload)
-      - [Payload](#payload-1)
-      - [Content types](#content-types)
-        - [Sticker content type](#sticker-content-type)
-        - [Image content type](#image-content-type)
-      - [Message types](#message-types)
-      - [Clock vs Timestamp and message ordering](#clock-vs-timestamp-and-message-ordering)
-      - [Chats](#chats)
-    - [Contact Update](#contact-update)
-      - [Payload](#payload-2)
-      - [Contact update](#contact-update-1)
-    - [SyncInstallationContact](#syncinstallationcontact)
-      - [Payload](#payload-3)
-    - [SyncInstallationPublicChat](#syncinstallationpublicchat)
-      - [Payload](#payload-4)
-    - [PairInstallation](#pairinstallation)
-      - [Payload](#payload-5)
-    - [MembershipUpdateMessage and MembershipUpdateEvent](#membershipupdatemessage-and-membershipupdateevent)
-  - [Upgradability](#upgradability)
-  - [Security Considerations](#security-considerations)
-  - [Design rationale](#design-rationale)
+ - [Abstract](#abstract)
+ - [Table of Contents](#table-of-contents)
+ - [Introduction](#introduction)
+ - [Payload wrapper](#payload-wrapper)
+ - [Encoding](#encoding)
+ - [Types of messages](#types-of-messages)
+   - [Message](#message)
+     - [Payload](#payload)
+     - [Payload](#payload-1)
+     - [Content types](#content-types)
+       - [Sticker content type](#sticker-content-type)
+       - [Image content type](#image-content-type)
+     - [Message types](#message-types)
+     - [Clock vs Timestamp and message ordering](#clock-vs-timestamp-and-message-ordering)
+     - [Chats](#chats)
+   - [Contact Update](#contact-update)
+     - [Payload](#payload-2)
+     - [Contact update](#contact-update-1)
+   - [SyncInstallationContact](#syncinstallationcontact)
+     - [Payload](#payload-3)
+   - [SyncInstallationPublicChat](#syncinstallationpublicchat)
+     - [Payload](#payload-4)
+   - [PairInstallation](#pairinstallation)
+     - [Payload](#payload-5)
+   - [MembershipUpdateMessage and MembershipUpdateEvent](#membershipupdatemessage-and-membershipupdateevent)
+ - [Upgradability](#upgradability)
+ - [Security Considerations](#security-considerations)
+ - [Design rationale](#design-rationale)
 
 ## Introduction
 
@@ -339,7 +338,7 @@ message PairInstallation {
 ### MembershipUpdateMessage and MembershipUpdateEvent
 
 `MembershipUpdateEvent` is a message used to propagate information about group membership changes in a group chat.
-The details are in the  [Group chats specs](status-group-chats-spec.md)
+The details are in the  [Group chats specs](./7-group-chat.md)
 
 ## Upgradability
 
