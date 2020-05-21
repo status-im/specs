@@ -95,8 +95,8 @@ All Waku envelopes are encrypted. A `Mailserver` node can not inspect their cont
 ### Altruistic and centralized operator risk
 
 In order to be useful, a `Mailserver` SHOULD be online most of time. That means
-you either have to be a bit tech-savvy to run your own node, or rely on someone
-else to run it for you.
+users either have to be a bit tech-savvy to run their own node, or rely on someone
+else to run it for them.
 
 Currently one of Status's legal entities provides `Mailservers` in an altruistic manner, but this is
 suboptimal from a decentralization, continuance and risk point of view. Coming
