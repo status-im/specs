@@ -121,7 +121,7 @@ Since a `Mailserver` is delivering expired envelopes and has a direct TCP connec
 
 ### Version 0.1
 
-Released `TODO`
+Released [May 22, 2020](https://github.com/status-im/specs/commit/664dd1c9df6ad409e4c007fefc8c8945b8d324e8)
 
 - Created document
 - Forked from [4-whisper-mailserver](4-whisper-mailserver.md)
