@@ -224,7 +224,7 @@ All messages sent are encrypted with the public key of the destination and signe
 
 ### Version 0.3
 
-Released `TODO`
+Released [May 22, 2020](https://github.com/status-im/specs/commit/664dd1c9df6ad409e4c007fefc8c8945b8d324e8)
 
 - Added language to include Waku in all relevant places
 - Change to keep `Mailserver` term consistent 

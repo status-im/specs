@@ -345,7 +345,7 @@ The above `topics` is then converted into a bloom filter and then and sent to th
 
 ### Version 0.1
 
-Released `TODO`
+Released [May 22, 2020](https://github.com/status-im/specs/commit/664dd1c9df6ad409e4c007fefc8c8945b8d324e8)
 
 - Created document
 - Forked from [3-whisper-usage](3-whisper-usage.md)

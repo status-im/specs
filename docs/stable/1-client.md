@@ -406,7 +406,7 @@ Jacek Sieka
 
 ### Version 0.3
 
-Released `TODO`
+Released [May 22, 2020](https://github.com/status-im/specs/commit/664dd1c9df6ad409e4c007fefc8c8945b8d324e8)
 
 - Added that Waku SHOULD be used
 - Added that Whisper SHOULD NOT be used
