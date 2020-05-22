@@ -6,11 +6,11 @@ title: 1/CLIENT
 
 # 1/CLIENT
 
-> Version: 0.2
+> Version: 0.3
 >
 > Status: Stable
 >
-> Authors: Adam Babik [adam@status.im](mailto:adam@status.im), Andrea Maria Piana [andreap@status.im](mailto:andreap@status.im), Dean Eigenmann [dean@status.im](mailto:dean@status.im), Corey Petty [corey@status.im](mailto:corey@status.im), Oskar Thorén [oskar@status.im](mailto:oskar@status.im) (alphabetical order)
+> Authors: Adam Babik [adam@status.im](mailto:adam@status.im), Andrea Maria Piana [andreap@status.im](mailto:andreap@status.im), Dean Eigenmann [dean@status.im](mailto:dean@status.im), Corey Petty [corey@status.im](mailto:corey@status.im), Oskar Thorén [oskar@status.im](mailto:oskar@status.im), Samuel Hawksby-Robinson [samuel@status.im](mailto:samuel@status.im) (alphabetical order)
 
 ## Abstract
 
@@ -36,7 +36,7 @@ have to be implemented in order to be a full Status client. The second gives a d
          - [Bootstrapping](#bootstrapping)
          - [Discovery](#discovery)
          - [Mobile nodes](#mobile-nodes)
-     - [Transport privacy and Whisper usage](#transport-privacy-and-whisper-usage)
+     - [Transport privacy and Whisper/Waku usage](#transport-privacy-and-whisper--waku-usage)
      - [Secure Transport](#secure-transport)
      - [Data Sync](#data-sync)
      - [Payloads and clients](#payloads-and-clients)
@@ -47,10 +47,10 @@ have to be implemented in order to be a full Status client. The second gives a d
          - [Why devp2p? Why not use libp2p?](#why-devp2p-why-not-use-libp2p)
          - [What about other RLPx subprotocols like LES, and Swarm?](#what-about-other-rlpx-subprotocols-like-les-and-swarm)
          - [Why do you use Whisper?](#why-do-you-use-whisper)
-         - [I heard you were moving away from Whisper?](#i-heard-you-were-moving-away-from-whisper)
-         - [Why is PoW for Whisper set so low?](#why-is-pow-for-whisper-set-so-low)
+         - [Why do you use Waku?](#why-do-you-use-waku)
+         - [Why is PoW for Waku set so low?](#why-is-pow-for-waku-set-so-low)
          - [Why do you not use Discovery v5 for node discovery?](#why-do-you-not-use-discovery-v5-for-node-discovery)
-         - [I heard something about mailservers being trusted somehow?](#i-heard-something-about-mailservers-being-trusted-somehow)
+         - [I heard something about `Mailservers` being trusted somehow?](#i-heard-something-about-mailservers-being-trusted-somehow)
      - [Data sync](#data-sync-1)
          - [Why is MVDS not used for public chats?](#why-is-mvds-not-used-for-public-chats)
  - [Footnotes](#footnotes)
@@ -60,6 +60,8 @@ have to be implemented in order to be a full Status client. The second gives a d
      - [Spam resistance](#spam-resistance)
      - [Censorship resistance](#censorship-resistance)
  - [Acknowledgments](#acknowledgments)
+ - [Changelog](#changelog)
+   - [Version 0.3](#version-03)
 
 ## Introduction
 
@@ -74,7 +76,7 @@ Other aspects, such as how IPFS is used for stickers, how we interact with the E
 | Data and payloads | End user functionality         | 1:1, group chat, public chat |
 | Data sync         | Data consistency               | MVDS Ratchet                 |
 | Secure transport  | Confidentiality, PFS, etc      | Double Ratchet               |
-| Transport privacy | Routing, Metadata protection   | Whisper                      |
+| Transport privacy | Routing, Metadata protection   | Waku / Whisper               |
 | P2P Overlay       | Overlay routing, NAT traversal | devp2p                       |
 
 ### Protobuf
@@ -95,22 +97,21 @@ To communicate between Status nodes, the [RLPx Transport
 Protocol, v5](https://github.com/ethereum/devp2p/blob/master/rlpx.md) is used, which
 allows for TCP-based communication between nodes.
 
-On top of this we run the RLPx-based subprotocol [Whisper
-v6](https://eips.ethereum.org/EIPS/eip-627) for privacy-preserving messaging.
-
-There MUST be a node that is capable of discovering peers and
-implements Whisper V6 specification.
+On top of this we run RLPx-based subprotocols, the client
+SHOULD NOT use [Whisper V6](https://eips.ethereum.org/EIPS/eip-627), the client 
+SHOULD use [Waku V1](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-1.md)
+for privacy-preserving messaging and efficient usage of a node's bandwidth.
 
 #### Node discovery and roles
 
 There are four types of node roles:
-1. Bootstrap nodes
-2. Whisper relayers
-3. Mailservers (servers and clients)
-4. Mobile nodes (Status Clients)
+1. `Bootstrap node`
+1. `Whisper/Waku relayer`
+1. `Mailserver` (servers and clients)
+1. `Mobile node` (Status Clients)
 
-To implement a standard Status client you MUST implement both 2. and 4. node types. The
-other node types are optional, but we RECOMMEND you implement a mailserver
+A standard Status client MUST implement both `Whisper/Waku relayer` and `Mobile node` node types. The
+other node types are optional, but it is RECOMMEND to implement a `Mailserver`
 client mode, otherwise the user experience is likely to be poor.
 
 #### Bootstrapping
@@ -119,7 +120,7 @@ To connect to other Status nodes you need to connect to a bootstrap node. These
 nodes allow you to discover other nodes of the network.
 
 Currently the main bootstrap nodes are provided by Status Gmbh, but anyone can
-run these provided they are connected to the rest of the Whisper network.
+run these provided they are connected to the rest of the Whisper/Waku network.
 
 Status maintains a list of production fleet bootstrap nodes in the following locations:
 
@@ -166,15 +167,15 @@ It uses Ethereum Node Records (ENR) to report discovered peers.
 Both peers discovery mechanisms use topics to provide peers with certain capabilities.
 There is no point in returning peers that do not support a particular protocol.
 Status nodes that want to be discovered MUST register to Discovery V5 and/or Rendezvous
-with the `whisper` topic. Status nodes that are mail servers and want to
+with the `whisper` topic. Status nodes that are `Mailservers` and want to
 be discoverable MUST additionally register with the `whispermail` topic.
 
 It is RECOMMENDED to use both mechanisms but at the same time implement a structure
 called `PeerPool`. `PeerPool` is responsible for maintaining an optimal number of peers.
-For mobile nodes, there is no significant advantage to have more than 2-3 peers and one mail server.
+For mobile nodes, there is no significant advantage to have more than 2-3 peers and one `Mailserver`.
 `PeerPool` can notify peers discovery protocol implementations that they should suspend
 their execution because the optimal number of peers is found. They should resume
-if the number of connected peers drops or a mail server disconnects.
+if the number of connected peers drops or a `Mailserver` disconnects.
 
 It is worth noticing that an efficient caching strategy MAY be of great use, especially,
 on mobile devices. Discovered peers can be cached as they rarely change and used
@@ -194,30 +195,32 @@ the merkle tree found at [`fleets.status.im`](https://fleets.status.im), as desc
 
 #### Mobile nodes
 
-This is a Whisper node which connects to part of the Whisper network. It MAY
-relay messages. See next section for more details on how to use Whisper to
-communicate with other Status nodes.
+A `Mobile node` is a Whisper and/or Waku node which connects to part of the respective Whisper
+and/or Waku network(s). A `Mobile node` MAY relay messages. See next section for more details on how
+to use Whisper and/or Waku to communicate with other Status nodes.
 
-### Transport privacy and Whisper usage
+### Transport privacy and Whisper / Waku usage
 
-Once a Whisper node is up and running there are some specific settings required
+Once a Whisper and/or Waku node is up and running there are some specific settings required
 to communicate with other Status nodes.
 
-See [3/WHISPER-USAGE](https://specs.status.im/spec/3) for more details.
+See [3/WHISPER-USAGE](https://specs.status.im/spec/3) and [9/WAKU-USAGE](https://specs.status.im/spec/9) for more details.
 
-For providing an offline inbox, see the complementary [4/WHISPER-MAILSERVER](https://specs.status.im/spec/4).
+For providing an offline inbox, see the complementary [4/WHISPER-MAILSERVER](https://specs.status.im/spec/4) and [10/WAKU-MAILSERVER](https://specs.status.im/spec/10).
 
 ### Secure Transport
 
 In order to provide confidentiality, integrity, authentication and forward
-secrecy of messages we implement a secure transport on top of Whisper. This is
+secrecy of messages we implement a secure transport on top of Whisper and Waku. This is
 used in 1:1 chats and group chats, but not for public chats. See [5/SECURE-TRANSPORT](https://specs.status.im/spec/5) for more.
 
 ### Data Sync
 
 [MVDS](https://specs.vac.dev/mvds.html) is used for 1:1 and group chats, however it is currently not in use for public chats.
-
-[Status payloads](#payloads-and-clients) are serialized and then wrapped inside a MVDS message which is added to an [MVDS payload](https://specs.vac.dev/mvds.html#payloads), this payload is then encrypted (if necessary for 1-to-1 / group-chats) and sent using whisper which also encrypts it.
+[Status payloads](#payloads-and-clients) are serialized and then wrapped inside an
+MVDS message which is added to an [MVDS payload](https://specs.vac.dev/mvds.html#payloads),
+this payload is then encrypted (if necessary for 1-to-1 / group-chats) and sent using
+Whisper or Waku which also encrypts it.
 
 ### Payloads and clients
 
@@ -270,20 +273,30 @@ vision of Ethereum as the world computer, Ethereum and Swarm being the other
 two. Status was started as an encapsulation of and a clear window to this world
 computer.
 
-#### I heard you were moving away from Whisper?
+#### Why do you use Waku?
 
-Whisper is not currently under active development, and it has several drawbacks.
-Among others:
+Waku is a direct upgrade and replacement for Whisper, the main motivation for 
+developing and implementing Waku can be found in the [Waku specs](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-1.md#motivation).
 
- - It is very wasteful bandwidth-wise and it doesn't appear to be scalable
- - Proof of work is a poor spam protection mechanism for heterogeneous devices
- - The privacy guarantees provided are not rigorous
- - There's no incentives to run a node
+>Waku was created to incrementally improve in areas that Whisper is lacking in, 
+>with special attention to resource restricted devices. We specify the standard for 
+>Waku messages in order to ensure forward compatibility of different Waku clients, 
+>backwards compatibility with Whisper clients, as well as to allow multiple 
+>implementations of Waku and its capabilities. We also modify the language to be more 
+>unambiguous, concise and consistent.
+
+Considerable work has gone into the active development of Ethereum, in contrast Whisper 
+is not currently under active development, and it has several drawbacks. Among others:
+
+-   Whisper is very wasteful bandwidth-wise and doesn't appear to be scalable
+-   Proof of work is a poor spam protection mechanism for heterogeneous devices
+-   The privacy guarantees provided are not rigorous
+-   There are no incentives to run a node
 
 Finding a more suitable transport privacy is an ongoing research effort,
 together with [Vac](https://vac.dev/vac-overview) and other teams in the space.
 
-#### Why is PoW for Whisper set so low?
+#### Why is PoW for Waku set so low?
 
 A higher PoW would be desirable, but this kills the battery on mobile phones,
 which is a prime target for Status clients.
@@ -301,9 +314,9 @@ Discovery v5 for a short period of time until their peer list is populated.
 For some further investigation, see
 [here](https://github.com/status-im/swarms/blob/master/ideas/092-disc-v5-research.md).
 
-#### I heard something about mailservers being trusted somehow?
+#### I heard something about `Mailservers` being trusted somehow?
 
-In order to use a mail server, a given node needs to connect to it directly, i.e. add the mailserver as its peer and mark it as trusted. This means that the mail server is able to send direct p2p messages to the node instead of broadcasting them. Effectively, it knows the bloom filter of the topics the node is interested in, when it is online as well as many metadata like IP address.
+In order to use a `Mailserver`, a given node needs to connect to it directly, i.e. add the `Mailserver` as its peer and mark it as trusted. This means that the `Mailserver` is able to send direct p2p messages to the node instead of broadcasting them. Effectively, it knows the bloom filter of the topics the node is interested in, when it is online as well as many metadata like IP address.
 
 ### Data sync
 
@@ -315,8 +328,7 @@ whereby participants can sync. Additionally, MVDS is currently not optimized for
 large group contexts, which means bandwidth usage will be a lot higher than
 reasonable. See [P2P Data Sync for
 Mobile](https://vac.dev/p2p-data-sync-for-mobile) for more. This is an active
-area of research. The bandwidth issue is further exacerbated by Whisper being
-very bandwidth heavy.
+area of research.
 
 ## Footnotes
 
@@ -326,17 +338,17 @@ very bandwidth heavy.
 
 ## Appendix A: Security considerations
 
-There are several security considerations to take into account when running Status. Chief among them are: scalability, DDoS-resistance and privacy. These also vary depending on what capabilities are used, such as mailserver, light node, and so on.
+There are several security considerations to take into account when running Status. Chief among them are: scalability, DDoS-resistance and privacy. These also vary depending on what capabilities are used, such as `Mailserver`, light node, and so on.
 
 ### Scalability and UX
 
 **Bandwidth usage:**
 
-In version 1 of Status, bandwidth usage is likely to be an issue. For more investigation into this, see [the theoretical scaling model](https://github.com/vacp2p/research/tree/dcc71f4779be832d3b5ece9c4e11f1f7ec24aac2/whisper_scalability).
+In version 1 of Status, bandwidth usage is likely to be an issue. In Status version 1.1 this is partially addressed with Waku usage, see [the theoretical scaling model](https://github.com/vacp2p/research/tree/dcc71f4779be832d3b5ece9c4e11f1f7ec24aac2/whisper_scalability).
 
-**Mailserver High Availability requirement:**
+**`Mailserver` High Availability requirement:**
 
-A mailserver has to be online to receive messages for other nodes, this puts a high availability requirement on it.
+A `Mailserver` has to be online to receive messages for other nodes, this puts a high availability requirement on it.
 
 **Gossip-based routing:**
 
@@ -356,13 +368,13 @@ The main privacy concern with light nodes is that directly connected peers will 
 
 By having a bloom filter where only the topics you are interested in are set, you reveal which messages you are interested in. This is a fundamental trade-off between bandwidth usage and privacy, though the trade-off space is likely suboptimal in terms of the [Anonymity](https://eprint.iacr.org/2017/954.pdf) [trilemma](https://petsymposium.org/2019/files/hotpets/slides/coordination-helps-anonymity-slides.pdf).
 
-**Mailserver client privacy:**
+**`Mailserver client` privacy:**
 
-A mailserver client has to trust a mailserver, which means they can send direct traffic. This reveals what topics / bloom filter a node is interested in, along with its peerID (with IP).
+A `Mailserver client` has to trust a `Mailserver`, which means they can send direct traffic. This reveals what topics / bloom filter a node is interested in, along with its peerID (with IP).
 
 **Privacy guarantees not rigorous:**
 
-Privacy for Whisper hasn't been studied rigorously for various threat models like global passive adversary, local active attacker, etc. This is unlike e.g. Tor and mixnets.
+Privacy for Whisper or Waku hasn't been studied rigorously for various threat models like global passive adversary, local active attacker, etc. This is unlike e.g. Tor and mixnets.
 
 **Topic hygiene:**
 
@@ -374,9 +386,9 @@ Similar to bloom filter privacy, if you use a very specific topic you reveal mor
 
 Proof of work is a poor spam prevention mechanism. A mobile device can only have a very low PoW in order not to use too much CPU / burn up its phone battery. This means someone can spin up a powerful node and overwhelm the network.
 
-**Mailserver trusted connection:**
+**`Mailserver` trusted connection:**
 
-A mailserver has a direct TCP connection, which means they are trusted to send traffic. This means a malicious or malfunctioning mailserver can overwhelm an individual node.
+A `Mailserver` has a direct TCP connection, which means they are trusted to send traffic. This means a malicious or malfunctioning `Mailserver` can overwhelm an individual node.
 
 ### Censorship resistance
 
@@ -389,3 +401,15 @@ See <https://github.com/status-im/status-react/issues/6351> for some discussion.
 ## Acknowledgments
 
 Jacek Sieka
+
+## Changelog
+
+### Version 0.3
+
+Released `TODO`
+
+- Added that Waku SHOULD be used
+- Added that Whisper SHOULD NOT be used
+- Added language to include Waku in all relevant places
+- Change to keep `Mailserver` term consistent 
+
