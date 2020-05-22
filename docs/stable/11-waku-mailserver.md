@@ -1,10 +1,10 @@
 ---
-permalink: /spec/10
+permalink: /spec/11
 parent: Stable specs
-title: 10/WAKU-MAILSERVER
+title: 11/WAKU-MAILSERVER
 ---
 
-# 10/WAKU-MAILSERVER
+# 11/WAKU-MAILSERVER
 
 > Version: 0.1
 >
@@ -12,7 +12,7 @@ title: 10/WAKU-MAILSERVER
 >
 > Authors: Adam Babik <adam@status.im>, Oskar Thorén <oskar@status.im>, Samuel Hawksby-Robinson <samuel@status.im> (alphabetical order)
 
-- [Status Waku Mailserver Specification](#10waku-mailserver)
+- [Status Waku Mailserver Specification](#11waku-mailserver)
   - [Abstract](#abstract)
   - [`Mailserver`](#mailserver)
     - [Archiving messages](#archiving-messages)
