@@ -27,8 +27,7 @@ title: 13/3RD-PARTY-USAGE
   * [Collectibles](#collectibles)
   * [Iubenda](#iubenda)
 5. [Changelog](#changelog)
-6. [Acknowledgments](#acknowledgments)
-7. [Copyright](#copyright)
+6. [Copyright](#copyright)
 
 ## Abstract
 
@@ -117,8 +116,6 @@ If Iubenda fails Status users won't be able to navigate to app's privacy policy.
 | Version | Comment |
 | :-----: | ------- |
 | [0.1.0](https://github.com/status-im/specs/blob/master/docs/draft/9-3rd-party.md)   | Initial Release |
-
-## Acknowledgments
 
 ## Copyright
 
