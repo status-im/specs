@@ -1,10 +1,10 @@
 ---
-permalink: /spec/8
+permalink: /spec/12
 parent: Draft specs
-title: 8/IPFS gateway for Sticker Pack
+title: 12/IPFS gateway for Sticker Pack
 ---
 
-# 8/IPFS gateway for Sticker Pack
+# 12/IPFS gateway for Sticker Pack
 
 > Version: 0.1.0
 >

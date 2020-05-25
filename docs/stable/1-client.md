@@ -204,9 +204,9 @@ to use Whisper and/or Waku to communicate with other Status nodes.
 Once a Whisper and/or Waku node is up and running there are some specific settings required
 to communicate with other Status nodes.
 
-See [3/WHISPER-USAGE](https://specs.status.im/spec/3) and [9/WAKU-USAGE](https://specs.status.im/spec/9) for more details.
+See [3/WHISPER-USAGE](https://specs.status.im/spec/3) and [10/WAKU-USAGE](https://specs.status.im/spec/10) for more details.
 
-For providing an offline inbox, see the complementary [4/WHISPER-MAILSERVER](https://specs.status.im/spec/4) and [10/WAKU-MAILSERVER](https://specs.status.im/spec/10).
+For providing an offline inbox, see the complementary [4/WHISPER-MAILSERVER](https://specs.status.im/spec/4) and [11/WAKU-MAILSERVER](https://specs.status.im/spec/11).
 
 ### Secure Transport
 

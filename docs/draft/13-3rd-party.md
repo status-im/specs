@@ -1,10 +1,10 @@
 ---
-permalink: /spec/9
+permalink: /spec/13
 parent: Draft specs
-title: 9/3RD-PARTY-USAGE
+title: 13/3RD-PARTY-USAGE
 ---
 
-# 9/3RD-PARTY
+# 13/3RD-PARTY
 
 > Version: 0.1
 >
