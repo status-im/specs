@@ -21,10 +21,6 @@ In this specification, we describe how Status relates with EIPs.
  - [Table of Contents](#table-of-contents)
  - [Introduction](#introduction)
  - [Components](#components)
- - [Security Considerations](#security-considerations)
- - [Design Rationale](#design-rationale)
- - [Footnotes](#footnotes)
- - [Acknowledgments](#acknowledgments)
 
 ## Introduction
 
@@ -236,11 +232,3 @@ Description: Allows the storing and retrieving of nodes through merkle trees sto
 Used for: Finding Waku nodes.
 Related: -
 Sourcecode: - 
-
-## Security Considerations
-
-## Design Rationale
-
-## Footnotes
-
-## Acknowledgments

@@ -34,7 +34,6 @@ In this specification we explain what Status account is, and how trust is establ
         - [Public channels](#public-channels)
         - [Private 1:1 messages](#private-11-messages)
     - [Initial Key Exchange](#initial-key-exchange)
-        - [Contact Request](#contact-request)
         - [Bundles](#bundles)
     - [Contact Verification](#contact-verification)
         - [Identicon](#identicon)
@@ -139,8 +138,6 @@ This can be done in the following ways:
 1. Whisper/Waku
 
 ### Initial Key Exchange
-
-#### Contact Request
 
 #### Bundles
 - An X3DH prekey bundle is defined as ([code](https://github.com/status-im/status-go/messaging/chat/protobuf/encryption.pb.go)):
