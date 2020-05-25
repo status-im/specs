@@ -77,7 +77,7 @@ Types used in this specification are defined using [Protobuf](https://developers
 
 ### Transport Layer
 
-[Whisper](3-whisper-usage.md) and [Waku](9-waku-usage.md) serves as the transport layers for the Status chat protocol.
+[Whisper](3-whisper-usage.md) and [Waku](10-waku-usage.md) serves as the transport layers for the Status chat protocol.
 
 ### User flow for 1-to-1 communications
 
