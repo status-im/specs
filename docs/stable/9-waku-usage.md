@@ -1,53 +1,51 @@
 ---
-permalink: /spec/3
+permalink: /spec/9
 parent: Stable specs
-title: 3/WHISPER-USAGE
+title: 9/WAKU-USAGE
 ---
 
-# 3/WHISPER-USAGE
+# 9/WAKU-USAGE
 
-> Version: 0.3
+> Version: 0.1
 >
 > Status: Stable
 >
 > Authors: Adam Babik <adam@status.im>, Corey Petty <corey@status.im>, Oskar Thorén <oskar@status.im>, Samuel Hawksby-Robinson <samuel@status.im> (alphabetical order)
 
- - [Abstract](#abstract)
- - [Reason](#reason)
- - [Terminology](#terminology)
- - [Whisper packets](#whisper-packets)
- - [Whisper node configuration](#whisper-node-configuration)
- - [Handshake](#handshake)
- - [Rate limiting](#rate-limiting)
- - [Keys management](#keys-management)
-   - [Contact code topic](#contact-code-topic)
-   - [Partitioned topic](#partitioned-topic)
-   - [Public chats](#public-chats)
-   - [Group chat topic](#group-chat-topic)
- - [Message encryption](#message-encryption)
- - [Message confirmations](#message-confirmations)
- - [Whisper / Waku bridging](#whisper--waku-bridging)
- - [Whisper V6 extensions](#whisper-v6-extensions)
-   - [Request historic messages](#request-historic-messages)
-     - [shhext_requestMessages](#shhext_requestmessages)
- - [Changelog](#changelog)
-   - [Version 0.3](#version-03)
+- [Status Waku Usage Specification](#9waku-usage)
+  - [Abstract](#abstract)
+  - [Reason](#reason)
+  - [Terminology](#terminology)
+  - [Waku packets](#waku-packets)
+  - [Waku node configuration](#waku-node-configuration)
+  - [Status](#status)
+  - [Rate limiting](#rate-limiting)
+  - [Keys management](#keys-management)
+    - [Contact code topic](#contact-code-topic)
+    - [Partitioned topic](#partitioned-topic)
+    - [Public chats](#public-chats)
+    - [Group chat topic](#group-chat-topic)
+    - [Negotiated topic](#negotiated-topic)
+  - [Message encryption](#message-encryption)
+  - [Message confirmations](#message-confirmations)
+  - [Waku V1 extensions](#waku-v1-extensions)
+    - [Request historic messages](#request-historic-messages)
+      - [wakuext_requestMessages](#wakuext_requestmessages)
+  - [Changelog](#changelog)
+    - [Version 0.1](#version-01)
 
 ## Abstract
 
-Status uses [Whisper](https://eips.ethereum.org/EIPS/eip-627) to provide
-privacy-preserving routing and messaging on top of devP2P. Whisper uses topics
+Status uses [Waku](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-1.md) to provide
+privacy-preserving routing and messaging on top of devP2P. Waku uses topics
 to partition its messages, and these are leveraged for all chat capabilities. In
-the case of public chats, the channel name maps directly to its Whisper topic.
-This allows allows anyone to listen on a single channel.
+the case of public chats, the channel name maps directly to its Waku topic.
+This allows anyone to listen on a single channel.
 
-Additionally, since anyone can receive Whisper envelopes, it relies on the
+Additionally, since anyone can receive Waku envelopes, it relies on the
 ability to decrypt messages to decide who is the correct recipient. We do
 however not rely on this property, but instead implement another secure
-transport layer on top of Whisper.
-
-Finally, we use an extension of Whisper to provide the ability to do offline
-messaging.
+transport layer on top of Waku.
 
 ## Reason
 
@@ -56,52 +54,58 @@ encryption properties to support asynchronous chat.
 
 ## Terminology
 
-* *Whisper node*: an Ethereum node with Whisper V6 enabled (in the case of go-ethereum, it's `--shh` option)
-* *Whisper network*: a group of Whisper nodes connected together through the internet connection and forming a graph
-* *Message*: decrypted Whisper message
+* *Waku node*: an Ethereum node with Waku V1 enabled
+* *Waku network*: a group of Waku nodes connected together through the internet connection and forming a graph
+* *Message*: decrypted Waku message
 * *Offline message*: an archived envelope
 * *Envelope*: encrypted message with metadata like topic and Time-To-Live
 
-## Whisper packets
+## Waku packets
 
-| Packet Name | Code | EIP-627 | References |
-| --- | --: | --- | --- |
-| Status | 0 | ✔ | [Handshake](#handshake) |
-| Messages | 1 | ✔ | [EIP-627](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-627.md) |
-| PoW Requirement | 2 | ✔ | [EIP-627](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-627.md) |
-| Bloom Filter | 3 | ✔ | [EIP-627](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-627.md) |
-| Batch Ack | 11 | 𝘅 | Undocumented |
-| Message Response | 12 | 𝘅 | Undocumented |
-| P2P Sync Request | 123 | 𝘅 | Undocumented |
-| P2P Sync Response | 124 | 𝘅 | Undocumented |
-| P2P Request Complete | 125 | 𝘅 | [4/WHISPER-MAILSERVER](https://specs.status.im/spec/4) |
-| P2P Request | 126 | ✔ | [4/WHISPER-MAILSERVER](https://specs.status.im/spec/4) |
-| P2P Messages | 127 | ✔/𝘅 (EIP-627 supports only single envelope in a packet) | [4/WHISPER-MAILSERVER](https://specs.status.im/spec/4) |
+| Packet Name          | Code | References |
+| -------------------- | ---: | --- |
+| Status               |    0 | [Status](#status), [WAKU-1](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-1.md#status) |
+| Messages             |    1 | [WAKU-1](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-1.md#messages) |
+| Batch Ack            |   11 | Undocumented. Marked for Deprecation |
+| Message Response     |   12 | [WAKU-1](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-1.md#message-confirmations-update) |
+| Status Update        |   22 | [WAKU-1](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-1.md#status-update) |
+| P2P Request Complete |  125 | [4/WAKU-MAILSERVER](https://specs.status.im/spec/4) |
+| P2P Request          |  126 | [4/WAKU-MAILSERVER](https://specs.status.im/spec/4), [WAKU-1](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-1.md#p2p-request) |
+| P2P Messages         |  127 | [4/WAKU-MAILSERVER](https://specs.status.im/spec/4), [WAKU-1](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-1.md#p2p-message) |
 
+## Waku node configuration
 
-## Whisper node configuration
+If you want to run a Waku node and receive messages from Status clients, it must be properly configured.
 
-If you want to run a Whisper node and receive messages from Status clients, it must be properly configured.
-
-Whisper's Proof Of Work algorithm is used to deter denial of service and various spam/flood attacks against the Whisper network. The sender of a message must perform some work which in this case means processing time. Because Status' main client is a mobile client, this easily leads to battery draining and poor performance of the app itself. Hence, all clients MUST use the following Whisper node settings:
-* proof-of-work requirement not larger than `0.002`
+Waku's Proof Of Work algorithm is used to deter denial of service and various spam/flood attacks against the Waku network. The sender of a message must perform some work which in this case means processing time. Because Status' main client is a mobile client, this easily leads to battery draining and poor performance of the app itself. Hence, all clients MUST use the following Waku node settings:
+* proof-of-work requirement not larger than `0.002` for payloads less than 50,000 bytes
+* proof-of-work requirement not larger than `0.000002` for payloads greater than or equal to 50,000 bytes
 * time-to-live not lower than `10` (in seconds)
 
-## Handshake
+## Status
 
 Handshake is a RLP-encoded packet sent to a newly connected peer. It MUST start with a Status Code (`0x00`) and follow up with items:
 ```
-[ protocolVersion, PoW, bloom, isLightNode, confirmationsEnabled, rateLimits ]
+[
+  [ pow-requirement-key pow-requirement ]
+  [ bloom-filter-key bloom-filter ]
+  [ light-node-key light-node ]
+  [ confirmations-enabled-key confirmations-enabled ]
+  [ rate-limits-key rate-limits ]
+  [ topic-interest-key topic-interest ]
+]
 ```
 
-`protocolVersion`: version of the Whisper protocol
-`PoW`: minimum PoW accepted by the peer
-`bloom`: bloom filter of Whisper topic accepted by the peer
-`isLightNode`: when true, the peer won't forward messages
-`confirmationsEnabled`: when true, the peer will send message confirmations
-`rateLimits`: is `[ RateLimitIP, RateLimitPeerID, RateLimitTopic ]` where each values is an integer with a number of accepted packets per second per IP, Peer ID, and Topic respectively
+| Option Name             | Key    | Type     | Description | References |
+| ----------------------- | ------ | -------- | ----------- | --- |
+| `pow-requirement`       | `0x00` | `uint64` | minimum PoW accepted by the peer | [WAKU-1#pow-requirement](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-1.md#pow-requirement-field) |
+| `bloom-filter`          | `0x01` | `[]byte` | bloom filter of Waku topic accepted by the peer | [WAKU-1#bloom-filter](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-1.md#bloom-filter-field) |
+| `light-node`            | `0x02` | `bool`   | when true, the peer won't forward envelopes through the Messages packet. | `TODO` |
+| `confirmations-enabled` | `0x03` | `bool`   | when true, the peer will send message confirmations | `TODO` |
+| `rate-limits`           | `0x04` |          | See [Rate limiting](#rate-limiting) | [WAKU-1#rate-limits](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-1.md#rate-limits-field) |
+| `topic-interest`        | `0x05` | `[10000][4]byte` | Topic interest is used to share a node's interest in envelopes with specific topics. It does this in a more bandwidth considerate way, at the expense of some metadata protection. Peers MUST only send envelopes with specified topics. | [WAKU-1#topic-interest](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-1.md#topic-interest-field), [the theoretical scaling model](https://github.com/vacp2p/research/tree/dcc71f4779be832d3b5ece9c4e11f1f7ec24aac2/whisper_scalability) |
 
-`bloom, isLightNode, confirmationsEnabled, and rateLimits` are all optional arguments in the handshake. However, if you specify optional field you MUST also specify all optional fields preceding it, in order to be unambiguous.
+<!-- TODO Add `light-node` and `confirmations-enabled` links when https://github.com/vacp2p/specs/pull/128 is merged -->
 
 ## Rate limiting
 
@@ -111,7 +115,7 @@ Each node MAY decide to whitelist, i.e. do not rate limit, selected IPs or peer 
 
 If a peer exceeds node's rate limits, the connection between them MAY be dropped.
 
-Each node SHOULD broadcast its rate limits to its peers using rate limits packet code (`0x14`). The rate limits is RLP-encoded information:
+Each node SHOULD broadcast its rate limits to its peers using `rate limits` in `status-options` via packet code `0x00` or `0x22`. The rate limits is RLP-encoded information:
 
 ```
 [ IP limits, PeerID limits, Topic limits ]
@@ -136,7 +140,7 @@ they must be available all the time and are stored in memory.
 
 Keys management for PFS is described in [5/SECURE-TRANSPORT](https://specs.status.im/spec/5).
 
-The Status protocols uses a few particular Whisper topics to achieve its goals.
+The Status protocols uses a few particular Waku topics to achieve its goals.
 
 ### Contact code topic
 
@@ -163,7 +167,7 @@ for i = 0; i < topicLen; i++ {
 
 ### Partitioned topic
 
-Whisper is broadcast-based protocol. In theory, everyone could communicate using a single topic but that would be extremely inefficient. Opposite would be using a unique topic for each conversation, however, this brings privacy concerns because it would be much easier to detect whether and when two parties have an active conversation.
+Waku is broadcast-based protocol. In theory, everyone could communicate using a single topic but that would be extremely inefficient. Opposite would be using a unique topic for each conversation, however, this brings privacy concerns because it would be much easier to detect whether and when two parties have an active conversation.
 
 Partitioned topics are used to broadcast private messages efficiently. By selecting a number of topic, it is possible to balance efficiency and privacy.
 
@@ -229,13 +233,6 @@ for i = 0; i < topicLen; i++ {
 
 Each Status Client SHOULD listen to this topic in order to receive ??? -->
 
-<!-- NOTE: commented out as it is no longer valid as of V1. - C.P. Oct 8, 2019
-### Generic discovery topic
-
-Generic discovery topic is a legacy topic used to handle all one-to-one chats. The newer implementation should rely on [Partitioned Topic](#partitioned-topic) and [Personal discovery topic](#personal-discovery-topic).
-
-Generic discovery topic MUST be created following [Public chats](#public-chats) topic algorithm using string `contact-discovery` as a name. -->
-
 ### Group chat topic
 
 Group chats does not have a dedicated topic. All group chat messages (including membership updates) are sent as one-to-one messages to multiple recipients.
@@ -282,9 +279,9 @@ To exchange messages with client B, a client A SHOULD:
 
 ## Message encryption
 
-Even though, the protocol specifies an encryption layer that encrypts messages before passing them to the transport layer, Whisper protocol requires each Whisper message to be encrypted anyway.
+Even though, the protocol specifies an encryption layer that encrypts messages before passing them to the transport layer, Waku protocol requires each Waku message to be encrypted anyway.
 
-Public and group messages are encrypted using symmetric encryption and the key is created from a channel name string. The implementation is available in [`shh_generateSymKeyFromPassword`](https://github.com/ethereum/go-ethereum/wiki/Whisper-v6-RPC-API#shh_generatesymkeyfrompassword) JSON-RPC method of go-ethereum Whisper implementation.
+Public and group messages are encrypted using symmetric encryption and the key is created from a channel name string. The implementation is available in [`waku_generateSymKeyFromPassword`](https://github.com/status-im/status-go/tree/develop/_examples) JSON-RPC method of go-ethereum Whisper implementation.
 
 One-to-one messages are encrypted using asymmetric encryption.
 
@@ -313,24 +310,11 @@ The drawback of sending message confirmations is that it increases the noise in 
 
 In the current Status network setup, only `Mailservers` support message confirmations. A client posting a message to the network and after receiving a confirmation can be sure that the message got processed by the `Mailserver`. If additionally, sending a message is limited to non-`Mailserver` peers, it also guarantees that the message got broadcast through the network and it reached the selected `Mailserver`.
 
-## Whisper / Waku bridging
-
-In order to maintain compatibility between Whisper and Waku nodes, a Status network that
-implements both Whisper and Waku messaging protocols MUST have at least one node that is
-capable of discovering peers and implements
-[Whisper v6](https://eips.ethereum.org/EIPS/eip-627),
-[Waku V0](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-0.md) and
-[Waku V1](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-1.md) specifications.
-
-Additionally, any Status network that implements both Whisper and Waku messaging protocols
-MUST implement bridging capabilities as detailed in
-[Waku V1#Bridging](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-1.md#waku-whisper-bridging).  
-
-## Whisper V6 extensions
+## Waku V1 extensions
 
 ### Request historic messages
 
-Sends a request for historic messages to a `Mailserver`. The `Mailserver` node MUST be a direct peer and MUST be marked as trusted (using `shh_markTrustedPeer`).
+Sends a request for historic messages to a `Mailserver`. The `Mailserver` node MUST be a direct peer and MUST be marked as trusted (using `waku_markTrustedPeer`).
 
 The request does not wait for the response. It merely sends a peer-to-peer message to the `Mailserver` and it's up to `Mailserver` to process it and start sending historic messages.
 
@@ -338,7 +322,7 @@ The drawback of this approach is that it is impossible to tell which historic me
 
 It's recommended to return messages from newest to oldest. To move further back in time, use `cursor` and `limit`.
 
-#### shhext_requestMessages
+#### wakuext_requestMessages
 
 **Parameters**:
 1. Object - The message request object:
@@ -348,7 +332,7 @@ It's recommended to return messages from newest to oldest. To move further back 
    * `limit` - `Number` (optional): Limit the number of messages sent back, default is no limit.
    * `cursor` - `String` (optional): Used for paginated requests.
    * `topics` - `Array`: hex-encoded message topics.
-   * `symKeyID` - `String`: an ID of a symmetric key used to authenticate with the `Mailserver`, derived from Mailserver password.
+   * `symKeyID` - `String`: an ID of a symmetric key used to authenticate with the `Mailserver`, derived from the `Mailserver` password.
 
 **Returns**:
 `Boolean` - returns `true` if the request was sent.
@@ -359,9 +343,21 @@ The above `topics` is then converted into a bloom filter and then and sent to th
 
 ## Changelog
 
-### Version 0.3
+### Version 0.1
 
 Released [May 22, 2020](https://github.com/status-im/specs/commit/664dd1c9df6ad409e4c007fefc8c8945b8d324e8)
 
-- Added Whisper / Waku Bridging section
-- Change to keep `Mailserver` term consistent 
+- Created document
+- Forked from [3-whisper-usage](3-whisper-usage.md)
+- Change to keep `Mailserver` term consistent
+- Replaced Whisper references with Waku
+- Added [Status options](#status) section
+- Updated [Waku packets](#waku-packets) section to match Waku
+- Added that `Batch Ack` is marked for deprecation 
+- Changed `shh_generateSymKeyFromPassword` to `waku_generateSymKeyFromPassword`
+  - [Exists here](https://github.com/status-im/status-go/blob/2d13ccf5ec3db7e48d7a96a7954be57edb96f12f/waku/api.go#L172-L175)
+  - [Exists here](https://github.com/status-im/status-go/blob/2d13ccf5ec3db7e48d7a96a7954be57edb96f12f/eth-node/bridge/geth/public_waku_api.go#L33-L36)
+- Changed `shh_markTrustedPeer` to `waku_markTrustedPeer`
+  - [Exists here](https://github.com/status-im/status-go/blob/2d13ccf5ec3db7e48d7a96a7954be57edb96f12f/waku/api.go#L100-L108)
+- Changed `shhext_requestMessages` to `wakuext_requestMessages`
+  - [Exists here](https://github.com/status-im/status-go/blob/2d13ccf5ec3db7e48d7a96a7954be57edb96f12f/services/wakuext/api.go#L76-L139)

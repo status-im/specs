@@ -6,7 +6,7 @@ title: 6/PAYLOADS
 
 # 6/PAYLOADS
 
-> Version: 0.2
+> Version: 0.3
 >
 > Status: Stable
 >
@@ -50,6 +50,8 @@ as various clients created using different technologies.
  - [Upgradability](#upgradability)
  - [Security Considerations](#security-considerations)
  - [Design rationale](#design-rationale)
+ - [Changelog](#changelog)
+   - [Version 0.3](#version-03)
 
 ## Introduction
 
@@ -69,7 +71,7 @@ message StatusProtocolMessage {
 
 `signature` is the bytes of the signed `SHA3-256` of the payload, signed with the key of the author of the message.
 The signature is needed to validate authorship of the message, so that the message can be relayed to third parties.
-If a signature is not present but an author is provided by a layer below, the message is not to be relayed to third parties and it is considered plausibly deniable.
+If a signature is not present, but an author is provided by a layer below, the message is not to be relayed to third parties and it is considered plausibly deniable.
 
 ## Encoding
 
@@ -89,7 +91,7 @@ The protobuf description is:
 message ChatMessage {
   // Lamport timestamp of the chat message
   uint64 clock = 1;
-  // Unix timestamps in milliseconds, currently not used as we use whisper as more reliable, but here
+  // Unix timestamps in milliseconds, currently not used as we use Whisper/Waku as more reliable, but here
   // so that we don't rely on it
   uint64 timestamp = 2;
   // Text of the message
@@ -174,9 +176,9 @@ message StickerMessage {
 
 #### Message types
 
-Message types are required to decide how a particular message is encrypted and what metadata needs to be attached when passing a message to the transport layer. For more on this, see [3/WHISPER-USAGE](https://specs.status.im/spec/3).
+Message types are required to decide how a particular message is encrypted and what metadata needs to be attached when passing a message to the transport layer. For more on this, see [3/WHISPER-USAGE](3-whisper-usage.md) and [9/WAKU-USAGE](9-waku-usage.md).
 
-<!-- TODO: This reference is a bit odd, considering the layer payloads should interact with is Secure Transport, and not Whisper. This requires more detail -->
+<!-- TODO: This reference is a bit odd, considering the layer payloads should interact with is Secure Transport, and not Whisper/Waku. This requires more detail -->
 
 
 The following messages types MUST be supported:
@@ -199,9 +201,9 @@ This will satisfy the Lamport requirement, namely: a -> b then T(a) < T(b)
 
 `clock` SHOULD be calculated using the algorithm of [Lamport timestamps](https://en.wikipedia.org/wiki/Lamport_timestamps). When there are messages available in a chat, `clock`'s value is calculated based on the last received message in a particular chat: `max(timeNowInMs, last-message-clock-value + 1)`. If there are no messages, `clock` is initialized with `timestamp`'s value.
 
-Messages with a `clock` greater than `120` seconds over the whisper timestamp SHOULD be discarded, in order to avoid malicious users to increase the `clock` of a chat arbitrarily.
+Messages with a `clock` greater than `120` seconds over the Whisper/Waku timestamp SHOULD be discarded, in order to avoid malicious users to increase the `clock` of a chat arbitrarily.
 
-Messages with a `clock` less than `120` seconds under the whisper timestamp might indicate an attempt to insert messages in the chat history which is not distinguishable from a `datasync` layer re-transit event. A client MAY mark this messages with a warning to the user, or discard them.
+Messages with a `clock` less than `120` seconds under the Whisper/Waku timestamp might indicate an attempt to insert messages in the chat history which is not distinguishable from a `datasync` layer re-transit event. A client MAY mark this messages with a warning to the user, or discard them.
 
 `clock` value is used for the message ordering. Due to the used algorithm and distributed nature of the system, we achieve casual ordering which might produce counter-intuitive results in some edge cases. For example, when one joins a public chat and sends a message before receiving the exist messages, their message `clock` value might be lower and the message will end up in the past when the historical messages are fetched.
 
@@ -318,7 +320,7 @@ message PairInstallation {
 ### MembershipUpdateMessage and MembershipUpdateEvent
 
 `MembershipUpdateEvent` is a message used to propagate information about group membership changes in a group chat.
-The details are in the  [Group chats specs](./../draft/7-group-chat.md)
+The details are in the [Group chats specs](./../draft/7-group-chat.md)
 
 ## Upgradability
 
@@ -332,3 +334,11 @@ There are two ways to upgrade the protocol without breaking compatibility:
 -
 
 ## Design rationale
+
+## Changelog
+
+### Version 0.3
+
+Released [May 22, 2020](https://github.com/status-im/specs/commit/664dd1c9df6ad409e4c007fefc8c8945b8d324e8)
+
+- Added language to include Waku in all relevant places

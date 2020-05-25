@@ -78,6 +78,7 @@ Gheorghe
 Gmbh
 golang
 Guilherme
+Hawksby
 HD
 HeaderByNumber
 hellman
@@ -194,6 +195,7 @@ topicLen
 TransactionByHash
 TransactionReceipt
 trilemma
+TTL
 TXT
 UI
 uint
@@ -208,6 +210,9 @@ UX
 Volodymyr
 Vp
 Waku
+Waku's
+waku
+wakuext
 wei
 Whitepaper
 wordlist

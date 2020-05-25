@@ -6,7 +6,7 @@ title: 5/SECURE-TRANSPORT
 
 # 5/SECURE-TRANSPORT
 
-> Version: 0.2
+> Version: 0.3
 >
 > Status: Stable
 >
@@ -49,6 +49,8 @@ It builds on the [X3DH](https://signal.org/docs/specifications/x3dh/) and [Doubl
     - [Sending messages to a paired group](#sending-messages-to-a-paired-group)
     - [Account recovery](#account-recovery)
     - [Partitioned devices](#partitioned-devices)
+- [Changelog](#changelog)
+  - [Version 0.3](#version-03)
 
 ## Introduction
 
@@ -75,7 +77,7 @@ Types used in this specification are defined using [Protobuf](https://developers
 
 ### Transport Layer
 
-[Whisper](./3-whisper-usage.md) serves as the transport layer for the Status chat protocol.
+[Whisper](3-whisper-usage.md) and [Waku](9-waku-usage.md) serves as the transport layers for the Status chat protocol.
 
 ### User flow for 1-to-1 communications
 
@@ -87,7 +89,7 @@ See [Account specification](./2-account.md)
 
 If Alice later recovers her account, the Double Ratchet state information will not be available, so she is no longer able to decrypt any messages received from existing contacts.
 
-If an incoming message (on the same Whisper topic) fails to decrypt, a message is replied with the current bundle, so that the other end is notified of the new device. Subsequent communications will use this new bundle.
+If an incoming message (on the same Whisper/Waku topic) fails to decrypt, a message is replied with the current bundle, so that the other end is notified of the new device. Subsequent communications will use this new bundle.
 
 ## Messaging
 
@@ -97,11 +99,11 @@ The rest of this document is purely about 1:1 and private group chat. Private gr
 
 ### End-to-end encryption
 
-End-to-end encryption (E2EE) takes place between two clients. The main cryptographic protocol is a [Status implementation](https://github.com/status-im/doubleratchet/) of the Double Ratchet protocol, which is in turn derived from the [Off-the-Record protocol](https://otr.cypherpunks.ca/Protocol-v3-4.1.1.html), using a different ratchet. The message payload is subsequently encrypted by the transport protocol - Whisper (see section [Transport Layer](#transport-layer)) -, using symmetric key encryption. 
+End-to-end encryption (E2EE) takes place between two clients. The main cryptographic protocol is a [Status implementation](https://github.com/status-im/doubleratchet/) of the Double Ratchet protocol, which is in turn derived from the [Off-the-Record protocol](https://otr.cypherpunks.ca/Protocol-v3-4.1.1.html), using a different ratchet. The message payload is subsequently encrypted by the transport protocol - Whisper/Waku (see section [Transport Layer](#transport-layer)) -, using symmetric key encryption. 
 Furthermore, Status uses the concept of prekeys (through the use of [X3DH](https://signal.org/docs/specifications/x3dh/)) to allow the protocol to operate in an asynchronous environment. It is not necessary for two parties to be online at the same time to initiate an encrypted conversation.
 
 Status uses the following cryptographic primitives:
-- Whisper
+- Whisper/Waku
     - AES-256-GCM
     - ECIES
     - ECDSA
@@ -143,11 +145,11 @@ In the X3DH specification, a shared server is typically used to store bundles an
 - QR codes;
 - ENS record;
 - Decentralized permanent storage (e.g. Swarm, IPFS).
-- Whisper
+- Whisper/Waku
 
 <!-- TODO: Comment, it isn't clear what we actually _do_. It seems as if this is exploring the problem space. From a protocol point of view, it might make sense to describe the interface, and then have a recommendation section later on that specifies what we do. See e.g. Signal's specs where they specify specifics later on.  -->
 
-Currently only public and one-to-one message exchanges and Whisper is used to exchange bundles.
+Currently only public and one-to-one message exchanges and Whisper/Waku is used to exchange bundles.
 
 Since bundles stored in QR codes or ENS records cannot be updated to delete already used keys, the approach taken is to rotate more frequently the bundle (once every 24 hours), which will be propagated by the app through the channel available.
 
@@ -252,7 +254,7 @@ message DirectMessageProtocol {
     - `key`: Alice's ephemeral key `EK_A`;
     - `id`: Identifier stating which of Bob's prekeys Alice used, in this case Bob's bundle signed prekey.
 
-    Alice's identity key `IK_A` is sent at the transport layer level (Whisper);
+    Alice's identity key `IK_A` is sent at the transport layer level (Whisper/Waku);
 
 - `DR_header`: Double ratchet header ([protobuf](https://github.com/status-im/status-go/blob/a904d9325e76f18f54d59efc099b63293d3dcad3/services/shhext/chat/encryption.proto#L31)). Used when Bob's public bundle is available:
     ``` protobuf
@@ -383,7 +385,7 @@ TODO: Verify if this can be done already by looking at Lamport clock difference
 > Given a conversation transcript and all cryptographic keys, there is no evidence that a given message was authored by any particular user
 
 - All messages are digitally signed by their sender.
-- The underlying transport, Whisper, does allow for unsigned messages, but we don't use it.
+- The underlying transport, Whisper/Waku, does allow for unsigned messages, but we don't use it.
 
 #### Participant Repudiation (NO)
 > Given a conversation transcript and all cryptographic key material for all but one accused (honest) participant, there is no evidence that the honest participant was in a conversation with any of the other participants.
@@ -445,7 +447,7 @@ TODO: create issues for identity leak of invited members as well as current memb
 - Due to asynchronous forward secrecy and no additional services, private keys might be rotated
 
 [Andrea: That's correct, in some cases if the message is delayed for too long, or really out-of-order, the specific message key might have been deleted, as we only keep the last 3000 message keys]
-[Igor: TTL of a whisper message can expire, so any node-in-transit will drop it. Also, I believe we ignore messages with skewed timestamps]
+[Igor: TTL of a Whisper message can expire, so any node-in-transit will drop it. Also, I believe we ignore messages with skewed timestamps]
 
 #### Dropped Message Resilient (PARTIAL)
 > Messages can be decrypted without receipt of all previous messages. This is desirable for asynchronous and unreliable network services
@@ -471,8 +473,8 @@ TODO: this requires more detail
 #### No Additional Service (NO)
 > The protocol does not require any infrastructure other than the protocol participants. Specifically, the protocol must not require additional servers for relaying messages or storing any kind of key material.
 
-- The protocol requires whisper relay servers and mailservers currently. 
-- The larger the number of whisper relay servers, the better the transport security but there might be potential scaling problems.
+- The protocol requires Whisper/Waku relay servers and mailservers currently. 
+- The larger the number of Whisper/Waku relay servers, the better the transport security but there might be potential scaling problems.
 - Mailservers act to provide asynchronicity so users can retrieve messages after coming back from an offline period. 
 
 -->
@@ -483,7 +485,7 @@ TODO: this requires more detail
 A peer is identified by two pieces of data:
 
 1) An `installation-id` which is generated upon creating a new account in the `Status` application
-2) Their identity whisper key
+2) Their identity Whisper/Waku key
 
 ### Initialization
 
@@ -499,7 +501,7 @@ On receiving a bundle from a given peer with a higher version, the old bundle SH
 
 ### Multi-device support
 
-Multi-device support is quite challenging as we don't have a central place where information on which and how many devices (identified by their respective `installation-id`) belongs to a whisper-identity.
+Multi-device support is quite challenging as we don't have a central place where information on which and how many devices (identified by their respective `installation-id`) belongs to a whisper-identity / waku-identity.
 
 Furthermore we always need to take account recovery in consideration, where the whole device is wiped clean and all the information about any previous sessions is lost.
 
@@ -536,3 +538,11 @@ Account recovery is no different from adding a new device, and it is handled in 
 
 In some cases (i.e. account recovery when no other pairing device is available, device not paired), it is possible that a device will receive a message that is not targeted to its own `installation-id`.
 In this case an empty message containing bundle information is sent back, which will notify the receiving end of including this device in any further communication.
+
+## Changelog
+
+### Version 0.3
+
+Released [May 22, 2020](https://github.com/status-im/specs/commit/664dd1c9df6ad409e4c007fefc8c8945b8d324e8)
+
+- Added language to include Waku in all relevant places
