@@ -74,7 +74,7 @@ Other aspects, such as how IPFS is used for stickers, how we interact with the E
 | Layer             | Purpose                        | Technology                   |
 | ----------------- | ------------------------------ | ---------------------------- |
 | Data and payloads | End user functionality         | 1:1, group chat, public chat |
-| Data sync         | Data consistency               | MVDS Ratchet                 |
+| Data sync         | Data consistency               | MVDS.                        |
 | Secure transport  | Confidentiality, PFS, etc      | Double Ratchet               |
 | Transport privacy | Routing, Metadata protection   | Waku / Whisper               |
 | P2P Overlay       | Overlay routing, NAT traversal | devp2p                       |
