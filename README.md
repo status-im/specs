@@ -42,7 +42,7 @@ npm run lint
 ### Language mode
 
 - Specifications SHOULD use formal technical language (*different from academic language*).
-- Were appropriate, language SHOULD NOT use personal pronouns.
+- Where appropriate, language SHOULD NOT use personal pronouns.
 - Avoid using the [passive voice](https://en.wikipedia.org/wiki/English_passive_voice) when being specific.
 - In places where the passive voice is appropriate but makes the subject ambiguous, prepend the passive voice with "by `subject`". Alternatively restructure the sentence to be in the active voice adding the sentence subject.
 
