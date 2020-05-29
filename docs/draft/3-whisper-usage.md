@@ -37,15 +37,13 @@ Status uses [Whisper](https://eips.ethereum.org/EIPS/eip-627) to provide
 privacy-preserving routing and messaging on top of devP2P. Whisper uses topics
 to partition its messages, and these are leveraged for all chat capabilities. In
 the case of public chats, the channel name maps directly to its Whisper topic.
-This allows allows anyone to listen on a single channel.
+This allows anyone to listen on a single channel.
 
 Additionally, since anyone can receive Whisper envelopes, it relies on the
-ability to decrypt messages to decide who is the correct recipient. We do
-however not rely on this property, but instead implement another secure
-transport layer on top of Whisper.
+ability to decrypt messages to decide who is the correct recipient. This property
+is not relied upon, and another secure transport layer is implemented on top of Whisper.
 
-Finally, we use an extension of Whisper to provide the ability to do offline
-messaging.
+Finally, using an extension of Whisper provides the ability to do offline messaging.
 
 ## Reason
 

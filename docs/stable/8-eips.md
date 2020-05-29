@@ -14,7 +14,7 @@ title: 8/EIPS
 
 ## Abstract
 
-In this specification, we describe how Status relates with EIPs.
+This specification describes how Status relates with EIPs.
 
 ## Table of Contents
  - [Abstract](#abstract)

@@ -43,9 +43,8 @@ the case of public chats, the channel name maps directly to its Waku topic.
 This allows anyone to listen on a single channel.
 
 Additionally, since anyone can receive Waku envelopes, it relies on the
-ability to decrypt messages to decide who is the correct recipient. We do
-however not rely on this property, but instead implement another secure
-transport layer on top of Waku.
+ability to decrypt messages to decide who is the correct recipient. This property
+is not relied upon, and another secure transport layer is implemented on top of Waku.
 
 ## Reason
 

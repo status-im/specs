@@ -31,7 +31,7 @@ title: 13/3RD-PARTY-USAGE
 
 ## Abstract
 
-In this specification, we discuss 3rd party APIs that Status relies on. These APIs provide various capabilities such as:
+This specification discusses 3rd party APIs that Status relies on. These APIs provide various capabilities such as:
 - communicate with the Ethereum network
 - allow users to see address and transaction details on external website
 - get fiat/crypto exchange rates
@@ -48,7 +48,7 @@ In this specification, we discuss 3rd party APIs that Status relies on. These AP
 
 
 ## Why 3rd party API can be a problem?
-Relying on 3rd party APIs interferes with `censorship resistance` Status principle. Since we aim to avoid suppression of information it is important to reduce amount of 3rd parties crucial for app functionality.
+Relying on 3rd party APIs interferes with `censorship resistance` Status principle. Since Status aims to avoid suppression of information it is important to reduce amount of 3rd parties crucial for app functionality.
 
 ## 3rd party APIs used by current Status app
 

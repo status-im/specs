@@ -22,8 +22,8 @@ title: 12/IPFS gateway for Sticker Pack
 
 ## Abstract
 
-In this specification, we describe how Status uses the IPFS gateway to store stickers.
-We will explore image format, how they are uploaded and how an end user can see them inside the Status app.
+This specification describes how Status uses the IPFS gateway to store stickers.
+The specification explores image format, how stickers are uploaded and how an end user can see them inside the Status app.
 
 ## Definition
 
@@ -81,20 +81,20 @@ All assets fields, are contenthash fields as per [EIP 1577](https://eips.ethereu
 
 #### Install a sticker pack
 
-To install a sticker pack, we need to fetch all sticker packs which are available in Sticker Market. The following steps are needed to fetch all sticker packs:
+To install a sticker pack, all sticker packs available in Sticker Market are fetched. The following steps are needed to fetch all sticker packs:
 
 #### 1. Get total number of sticker packs
 Call `packCount()` on the sticker market contract, will return number of sticker pack registered as `uint256`.
 
 #### 2. Get sticker pack by id
-ID's are represented as `uint256` and are incremental from `0` to total number of sticker packs in contract, which we received on previous step. To get a sticker pack we should call `getPackData(sticker-pack-id)`, the return type is  `["bytes4[]" "address" "bool" "uint256" "uint256" "bytes"]` which represents the following fields: `[category owner mintable timestamp price contenthash]`. Price is the SNT value in wei set by sticker pack owner. The contenthash is the IPFS address described in the [submit description](#submit-a-sticker) above. Other fields specification could be found in [Sticker Market spec](https://github.com/status-im/sticker-market/blob/651e88e5f38c690e57ecaad47f46b9641b8b1e27/docs/specification.md)
+ID's are represented as `uint256` and are incremental from `0` to total number of sticker packs in the contract, received in the previous step. To get a sticker pack call `getPackData(sticker-pack-id)`, the return type is  `["bytes4[]" "address" "bool" "uint256" "uint256" "bytes"]` which represents the following fields: `[category owner mintable timestamp price contenthash]`. Price is the SNT value in wei set by sticker pack owner. The contenthash is the IPFS address described in the [submit description](#submit-a-sticker) above. Other fields specification could be found in [Sticker Market spec](https://github.com/status-im/sticker-market/blob/651e88e5f38c690e57ecaad47f46b9641b8b1e27/docs/specification.md)
 
 ##### 3. Get owned sticker packs
 The current Status app fetches owned sticker packs during the open of any sticker view (a screen which shows a sticker pack or the list of sticker packs).
-To get owned packs, we should get all owned tokens for the current account address. To do that we should call `balanceOf(address)` where address is the address for current account. This method returns a `uint256` representing the count of available tokens. Using `tokenOfOwnerByIndex(address,uint256)` method, with the address of the user and ID in form of a `uint256` which is an incremented int from 0 to total number of tokens, we will get token id. To get sticker pack id from token we call`tokenPackId(uint256)` where `uint256` is the token id. This method will return an `uint256` which is the id of the owned sticker pack.
+To get owned packs, get all owned tokens for the current account address, by calling `balanceOf(address)` where address is the address for the current account. This method returns a `uint256` representing the count of available tokens. Using `tokenOfOwnerByIndex(address,uint256)` method, with the address of the user and ID in form of a `uint256` which is an incremented int from 0 to the total number of tokens, gives the token id. To get the sticker pack id from a token call`tokenPackId(uint256)` where `uint256` is the token id. This method will return an `uint256` which is the id of the owned sticker pack.
 
 ##### 4. Buy a sticker pack
-To buy a sticker pack we should call `approveAndCall(address,uint256,bytes)` where `address` is the address of buyer,`uint256` is the price and third parameters `bytes` is the callback  called if approved. In callback we call `buyToken(uint256,address,uint256)`, first parameter is sticker pack id, second buyers address, and the last is the price.
+To buy a sticker pack call `approveAndCall(address,uint256,bytes)` where `address` is the address of buyer,`uint256` is the price and third parameters `bytes` is the callback  called if approved. In the callback, call `buyToken(uint256,address,uint256)`, first parameter is sticker pack id, second buyers address, and the last is the price.
 
 ## Copyright
 

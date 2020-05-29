@@ -54,7 +54,7 @@ as various clients created using different technologies.
 
 ## Introduction
 
-In this document we describe the payload format and some special considerations.
+This document describes the payload format and some special considerations.
 
 ## Payload wrapper
 
@@ -204,7 +204,7 @@ Messages with a `clock` greater than `120` seconds over the Whisper/Waku timesta
 
 Messages with a `clock` less than `120` seconds under the Whisper/Waku timestamp might indicate an attempt to insert messages in the chat history which is not distinguishable from a `datasync` layer re-transit event. A client MAY mark this messages with a warning to the user, or discard them.
 
-`clock` value is used for the message ordering. Due to the used algorithm and distributed nature of the system, we achieve casual ordering which might produce counter-intuitive results in some edge cases. For example, when one joins a public chat and sends a message before receiving the exist messages, their message `clock` value might be lower and the message will end up in the past when the historical messages are fetched.
+`clock` value is used for the message ordering. The algorithm used and the distributed nature of the system produces casual ordering, which might produce counter-intuitive results in some edge cases. For example, when a user joins a public chat and sends a message before receiving the exist messages, their message `clock` value might be lower and the message will end up in the past when the historical messages are fetched.
 
 #### Chats
 
@@ -217,7 +217,7 @@ All incoming messages can be matched against a chat. The below table describes h
 |PUBLIC_GROUP|chat ID is equal to a public channel name; it should equal `chatId` from the message|Incoming/Outgoing||
 |ONE_TO_ONE|let `P` be a public key of the recipient; `hex-encode(P)` is a chat ID; use it as `chatId` value in the message|Outgoing||
 |user-message|let `P` be a public key of message's signature; `hex-encode(P)` is a chat ID; discard `chat-id` from message|Incoming|if there is no matched chat, it might be the first message from public key `P`; the node MAY discard the message or MAY create a new chat; Status official clients create a new chat|
-|PRIVATE_GROUP|use `chatId` from the message|Incoming/Outgoing|find an existing chat by `chatId`; if none is found, we are not a member of that chat or we haven't joined that chat, the message MUST be discarded |
+|PRIVATE_GROUP|use `chatId` from the message|Incoming/Outgoing|find an existing chat by `chatId`; if none is found, the user is not a member of that chat or the user hasn't joined that chat, the message MUST be discarded |
 
 ### Contact Update
 

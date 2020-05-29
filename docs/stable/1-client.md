@@ -14,10 +14,10 @@ title: 1/CLIENT
 
 ## Abstract
 
-In this specification, we describe how to write a Status client for
+This specification describes how to write a Status client for
 communicating with other Status clients.
 
-We present a reference implementation of the protocol <sup>1</sup> that is used
+This specification presents a reference implementation of the protocol <sup>1</sup> that is used
 in a command line client <sup>2</sup> and a mobile app <sup>3</sup>.
 
 This document consists of two parts. The first outlines the specifications that
@@ -69,7 +69,7 @@ have to be implemented in order to be a full Status client. The second gives a d
 
 Implementing a Status clients largely means implementing the following layers. Additionally, there are separate specifications for things like key management and account lifecycle.
 
-Other aspects, such as how IPFS is used for stickers, how we interact with the Ethereum blockchain or how the browser works, are currently underspecified. These specifications facilitate the implementation of a Status client for basic private communication.
+Other aspects, such as how IPFS is used for stickers or how the browser works, are currently underspecified. These specifications facilitate the implementation of a Status client for basic private communication.
 
 | Layer             | Purpose                        | Technology                   |
 | ----------------- | ------------------------------ | ---------------------------- |
@@ -81,7 +81,7 @@ Other aspects, such as how IPFS is used for stickers, how we interact with the E
 
 ### Protobuf
 
-We use [`protobuf`](https://developers.google.com/protocol-buffers/) in different layers, the version used is `proto3` unless stated otherwise.
+[`protobuf`](https://developers.google.com/protocol-buffers/) is used in different layers, version `proto3` used is unless stated otherwise.
 
 ## Components
 
@@ -97,7 +97,7 @@ To communicate between Status nodes, the [RLPx Transport
 Protocol, v5](https://github.com/ethereum/devp2p/blob/master/rlpx.md) is used, which
 allows for TCP-based communication between nodes.
 
-On top of this we run RLPx-based subprotocols, the client
+On top of this RLPx-based subprotocols are ran, the client
 SHOULD NOT use [Whisper V6](https://eips.ethereum.org/EIPS/eip-627), the client 
 SHOULD use [Waku V1](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-1.md)
 for privacy-preserving messaging and efficient usage of a node's bandwidth.
@@ -139,12 +139,12 @@ Status maintains a list of production fleet bootstrap nodes in the following loc
  - `enode://32ff6d88760b0947a3dee54ceff4d8d7f0b4c023c6dad34568615fcae89e26cc2753f28f12485a4116c977be937a72665116596265aa0736b53d46b27446296a@34.70.75.208:443`
  - `enode://5405c509df683c962e7c9470b251bb679dd6978f82d5b469f1f6c64d11d50fbd5dd9f7801c6ad51f3b20a5f6c7ffe248cc9ab223f8bcbaeaf14bb1c0ef295fd0@35.223.215.156:443`
 
-These bootstrap nodes MAY change and we can't guarantee that it will stay this way forever
-and at some point we might be forced to change them.
+These bootstrap nodes MAY change and are not guaranteed to stay this way forever
+and at some point circumstances might force them to change.
 
 #### Discovery
 
-A Status client MUST discover or have a list of peers to connect to. We use a
+A Status client MUST discover or have a list of peers to connect to. Status uses a
 light discovery mechanism based on a combination of [Discovery
 v5](https://github.com/ethereum/devp2p/blob/master/discv5/discv5.md) and
 [Rendezvous Protocol](https://github.com/libp2p/specs/tree/master/rendezvous),
@@ -211,7 +211,7 @@ For providing an offline inbox, see the complementary [4/WHISPER-MAILSERVER](htt
 ### Secure Transport
 
 In order to provide confidentiality, integrity, authentication and forward
-secrecy of messages we implement a secure transport on top of Whisper and Waku. This is
+secrecy of messages a secure transport is implemented on top of Whisper and Waku. This is
 used in 1:1 chats and group chats, but not for public chats. See [5/SECURE-TRANSPORT](https://specs.status.im/spec/5) for more.
 
 ### Data Sync
@@ -224,8 +224,8 @@ Whisper or Waku which also encrypts it.
 
 ### Payloads and clients
 
-On top of secure transport, we have various types of data sync clients and
-payload formats for things like 1:1 chat, group chat and public chat. These have
+On top of secure transport, various types of data sync clients and
+payload formats are used for things like 1:1 chat, group chat and public chat. These have
 various degrees of standardization. Please refer to [6/PAYLOADS](https://specs.status.im/spec/6) for more details.
 
 ### BIPs and EIPs Standards support
@@ -244,7 +244,7 @@ See [Appendix A](#appendix-a-security-considerations)
 #### Why devp2p? Why not use libp2p?
 
 At the time the main Status clients were being developed, devp2p was the most
-mature. However, it is likely we'll move over to libp2p in the future, as it'll
+mature. However, in the future libp2p is likely to be used, as it'll
 provide us with multiple transports, better protocol negotiation, NAT traversal,
 etc.
 
@@ -306,7 +306,7 @@ methods of spam protection are currently being researched.
 
 #### Why do you not use Discovery v5 for node discovery?
 
-At the time we implemented dynamic node discovery, Discovery v5 wasn't completed
+At the time of implementing dynamic node discovery, Discovery v5 wasn't completed
 yet. Additionally, running a DHT on a mobile leads to slow node discovery, bad
 battery and poor bandwidth usage. Instead, each client can choose to turn on
 Discovery v5 for a short period of time until their peer list is populated.

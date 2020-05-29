@@ -14,7 +14,7 @@ title: 2/ACCOUNT
 
 ## Abstract
 
-In this specification we explain what Status account is, and how trust is established.
+This specification explains what Status account is, and how trust is established.
 
 ## Table of Contents
 

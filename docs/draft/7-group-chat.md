@@ -35,7 +35,7 @@ This documents describes the group chat protocol used by the status application.
 
 ## Membership updates
 
-Membership updates messages are used to propagate group chat membership changes. The protobuf format is described in the [6/PAYLOADS](https://specs.status.im/spec/6). Here we will be describing each specific field.
+Membership updates messages are used to propagate group chat membership changes. The protobuf format is described in the [6/PAYLOADS](https://specs.status.im/spec/6). Each specific field is described below.
 
 The protobuf messages are:
 

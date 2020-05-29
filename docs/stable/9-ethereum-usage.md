@@ -14,13 +14,13 @@ title: 9/ETHEREUM-USAGE
 
 # Status interactions with the Ethereum blockchain
 
-In this document we document all the interactions that the Status client has
+This specification documents all the interactions that the Status client has
 with the [Ethereum](https://ethereum.org/developers/) blockchain.
 
 All the interactions are made through [JSON-RPC](https://github.com/ethereum/wiki/wiki/JSON-RPC).
 Currently [Infura](https://infura.io/) is used. The client assumes high-availability, otherwise 
 it will not be able to interact with the Ethereum blockchain.
-We rely on these nodes to validate the integrity of the transaction and report a 
+These nodes are relied on to validate the integrity of the transaction and report a 
 consistent history.
 
 Key handling is described [here](./2-account.md)
@@ -106,10 +106,10 @@ https://github.com/ethereum/go-ethereum/blob/26d271dfbba1367326dec38068f9df828d4
 
 ### Fetching balance
 
-We currently fetch the current and historical [ECR20] (https://eips.ethereum.org/EIPS/eip-20) and ETH balance for the user wallet address.
+A Status node fetches the current and historical [ECR20] (https://eips.ethereum.org/EIPS/eip-20) and ETH balance for the user wallet address.
 Collectibles following the [ECR-721](https://eips.ethereum.org/EIPS/eip-721) are also fetched if enabled.
 
-We support by default the following [tokens](https://github.com/status-im/status-react/blob/develop/src/status_im/ethereum/tokens.cljs). Custom tokens can be added by specifying the `address`, `symbol` and `decimals`.
+A Status node supports by default the following [tokens](https://github.com/status-im/status-react/blob/develop/src/status_im/ethereum/tokens.cljs). Custom tokens can be added by specifying the `address`, `symbol` and `decimals`.
 
 #### BlockByHash
 
@@ -140,7 +140,7 @@ https://github.com/ethereum/go-ethereum/blob/26d271dfbba1367326dec38068f9df828d4
 `FilterLogs` executes a filter query.
 
 Status uses this function to filter out logs, using the hash of the block
-and the address that we are interested in, both inbound and outbound.
+and the address of interest, both inbound and outbound.
 
 ```
 func (ec *Client) FilterLogs(ctx context.Context, q ethereum.FilterQuery) ([]types.Log, error) 
