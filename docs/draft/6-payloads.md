@@ -228,13 +228,13 @@ Messages with a `clock` less than `120` seconds under the whisper timestamp migh
 
 Chat is a structure that helps organize messages. It's usually desired to display messages only from a single recipient or a group of recipients at a time and chats help to achieve that.
 
-All incoming messages can be matched against a chat. Below you can find a table that describes how to calculate a chat ID for each message type.
+All incoming messages can be matched against a chat. The below table describes how to calculate a chat ID for each message type.
 
 |Message Type|Chat ID Calculation|Direction|Comment|
 |------------|-------------------|---------|-------|
 |PUBLIC_GROUP|chat ID is equal to a public channel name; it should equal `chatId` from the message|Incoming/Outgoing||
 |ONE_TO_ONE|let `P` be a public key of the recipient; `hex-encode(P)` is a chat ID; use it as `chatId` value in the message|Outgoing||
-|user-message|let `P` be a public key of message's signature; `hex-encode(P)` is a chat ID; discard `chat-id` from message|Incoming|if there is no matched chat, it might be the first message from public key `P`; you can discard it or create a new chat; Status official clients create a new chat|
+|user-message|let `P` be a public key of message's signature; `hex-encode(P)` is a chat ID; discard `chat-id` from message|Incoming|if there is no matched chat, it might be the first message from public key `P`; the node MAY discard the message or MAY create a new chat; Status official clients create a new chat|
 |PRIVATE_GROUP|use `chatId` from the message|Incoming/Outgoing|find an existing chat by `chatId`; if none is found, we are not a member of that chat or we haven't joined that chat, the message MUST be discarded |
 
 ### Contact Update

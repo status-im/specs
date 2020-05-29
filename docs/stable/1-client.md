@@ -69,7 +69,7 @@ have to be implemented in order to be a full Status client. The second gives a d
 
 Implementing a Status clients largely means implementing the following layers. Additionally, there are separate specifications for things like key management and account lifecycle.
 
-Other aspects, such as how IPFS is used for stickers, how we interact with the Ethereum blockchain or how the browser works, are currently underspecified. These sets of specifications should allow you to implement a a Status client for basic private communication.
+Other aspects, such as how IPFS is used for stickers, how we interact with the Ethereum blockchain or how the browser works, are currently underspecified. These specifications facilitate the implementation of a Status client for basic private communication.
 
 | Layer             | Purpose                        | Technology                   |
 | ----------------- | ------------------------------ | ---------------------------- |
@@ -116,8 +116,8 @@ client mode, otherwise the user experience is likely to be poor.
 
 #### Bootstrapping
 
-To connect to other Status nodes you need to connect to a bootstrap node. These
-nodes allow you to discover other nodes of the network.
+Bootstrap nodes allow Status nodes to discover and connect to other Status nodes
+in the network.
 
 Currently the main bootstrap nodes are provided by Status Gmbh, but anyone can
 run these provided they are connected to the rest of the Whisper/Waku network.
@@ -144,7 +144,7 @@ and at some point we might be forced to change them.
 
 #### Discovery
 
-To implement a Status client you MUST discover or have a list of peers to connect to. We use a
+A Status client MUST discover or have a list of peers to connect to. We use a
 light discovery mechanism based on a combination of [Discovery
 v5](https://github.com/ethereum/devp2p/blob/master/discv5/discv5.md) and
 [Rendezvous Protocol](https://github.com/libp2p/specs/tree/master/rendezvous),
@@ -366,7 +366,7 @@ The main privacy concern with light nodes is that directly connected peers will 
 
 **Bloom filter privacy:**
 
-By having a bloom filter where only the topics you are interested in are set, you reveal which messages you are interested in. This is a fundamental trade-off between bandwidth usage and privacy, though the trade-off space is likely suboptimal in terms of the [Anonymity](https://eprint.iacr.org/2017/954.pdf) [trilemma](https://petsymposium.org/2019/files/hotpets/slides/coordination-helps-anonymity-slides.pdf).
+A user reveals which messages they are interested in, by setting only the topics they are interested in on the bloom filter. This is a fundamental trade-off between bandwidth usage and privacy, though the trade-off space is likely suboptimal in terms of the [Anonymity](https://eprint.iacr.org/2017/954.pdf) [trilemma](https://petsymposium.org/2019/files/hotpets/slides/coordination-helps-anonymity-slides.pdf).
 
 **`Mailserver client` privacy:**
 
@@ -378,7 +378,7 @@ Privacy for Whisper or Waku hasn't been studied rigorously for various threat mo
 
 **Topic hygiene:**
 
-Similar to bloom filter privacy, if you use a very specific topic you reveal more information. See scalability model linked above.
+Similar to bloom filter privacy, using a very specific topic reveals more information. See scalability model linked above.
 
 ### Spam resistance
 

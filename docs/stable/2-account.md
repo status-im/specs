@@ -154,10 +154,10 @@ This can be done in the following ways:
 
 ### Contact Verification
 
-Once you have the information of a contact, the following can be used to verify that the key material is as it should be.
+To verify that contact key information is as it should be, use the following.
 
 #### Identicon
-A low-poly identicon is deterministically generated from the Whisper/Waku chat public key.  This can then be compared out of band to ensure the receiver's public key is the one you have locally.
+A low-poly identicon is deterministically generated from the Whisper/Waku chat public key.  This can be compared out of band to ensure the receiver's public key is the one stored locally.
 
 #### 3 word pseudonym / Whisper/Waku key fingerprint
 Status generates a deterministic 3-word random pseudonym from the Whisper/Waku chat public key.  This pseudonym acts as a human readable fingerprint to the Whisper/Waku chat public key.  This name also shows when viewing a contact's public profile and in the chat UI.

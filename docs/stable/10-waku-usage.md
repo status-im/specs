@@ -75,7 +75,7 @@ encryption properties to support asynchronous chat.
 
 ## Waku node configuration
 
-If you want to run a Waku node and receive messages from Status clients, it must be properly configured.
+A Waku node must be properly configured to receive messages from Status clients.
 
 Waku's Proof Of Work algorithm is used to deter denial of service and various spam/flood attacks against the Waku network. The sender of a message must perform some work which in this case means processing time. Because Status' main client is a mobile client, this easily leads to battery draining and poor performance of the app itself. Hence, all clients MUST use the following Waku node settings:
 * proof-of-work requirement not larger than `0.002` for payloads less than 50,000 bytes

@@ -81,7 +81,7 @@ encryption properties to support asynchronous chat.
 
 ## Whisper node configuration
 
-If you want to run a Whisper node and receive messages from Status clients, it must be properly configured.
+A Whisper node must be properly configured to receive messages from Status clients.
 
 Whisper's Proof Of Work algorithm is used to deter denial of service and various spam/flood attacks against the Whisper network. The sender of a message must perform some work which in this case means processing time. Because Status' main client is a mobile client, this easily leads to battery draining and poor performance of the app itself. Hence, all clients MUST use the following Whisper node settings:
 * proof-of-work requirement not larger than `0.002`
@@ -101,7 +101,7 @@ Handshake is a RLP-encoded packet sent to a newly connected peer. It MUST start 
 `confirmationsEnabled`: when true, the peer will send message confirmations
 `rateLimits`: is `[ RateLimitIP, RateLimitPeerID, RateLimitTopic ]` where each values is an integer with a number of accepted packets per second per IP, Peer ID, and Topic respectively
 
-`bloom, isLightNode, confirmationsEnabled, and rateLimits` are all optional arguments in the handshake. However, if you specify optional field you MUST also specify all optional fields preceding it, in order to be unambiguous.
+`bloom, isLightNode, confirmationsEnabled, and rateLimits` are all optional arguments in the handshake. However, if an optional field is specified, all optional fields preceding it MUST also be specified in order to be unambiguous.
 
 ## Rate limiting
 

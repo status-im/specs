@@ -58,7 +58,7 @@ In this document we describe how a secure channel is established, and how variou
 
 ### Definitions
 
-- **Perfect Forward Secrecy** is a feature of specific key-agreement protocols which provide assurances that your session keys will not be compromised even if the private keys of the participants are compromised. Specifically, past messages cannot be decrypted by a third-party who manages to get a hold of a private key.
+- **Perfect Forward Secrecy** is a feature of specific key-agreement protocols which provide assurances that session keys will not be compromised even if the private keys of the participants are compromised. Specifically, past messages cannot be decrypted by a third-party who manages to get a hold of a private key.
 
 - **Secret channel** describes a communication channel where Double Ratchet algorithm is in use.
 
@@ -516,7 +516,7 @@ The method is loosely based on https://signal.org/docs/specifications/sesame/ .
 
 When a user adds a new account in the `Status` application, a new `installation-id` will be generated. The device should be paired as soon as possible if other devices are present. Once paired the contacts will be notified of the new device and it will be included in further communications.
 
-Any time a bundle from your `IK` but different `installation-id` is received, the device will be shown to the user and will have to be manually approved, to a maximum of 3. Once that is done any message sent by one device will also be sent to any other enabled device.
+If a bundle received from the `IK` is different to the `installation-id`, the device will be shown to the user and will have to be manually approved, to a maximum of 3. Once that is done any message sent by one device will also be sent to any other enabled device.
 
 Once a new device is enabled, a new bundle will be generated which will include pairing information.
 
