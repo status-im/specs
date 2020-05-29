@@ -20,7 +20,7 @@ with the [Ethereum](https://ethereum.org/developers/) blockchain.
 All the interactions are made through [JSON-RPC](https://github.com/ethereum/wiki/wiki/JSON-RPC).
 Currently [Infura](https://infura.io/) is used. The client assumes high-availability, otherwise 
 it will not be able to interact with the Ethereum blockchain.
-These nodes are relied on to validate the integrity of the transaction and report a 
+Status nodes rely on These Infura nodes to validate the integrity of the transaction and report a 
 consistent history.
 
 Key handling is described [here](./2-account.md)
@@ -163,7 +163,7 @@ https://github.com/ethereum/go-ethereum/blob/26d271dfbba1367326dec38068f9df828d4
 #### TransactionByHash
 
 `TransactionByHash` returns the transaction with the given hash, used to inspect those 
-transaction made/received by the user.
+transactions made/received by the user.
 
 ```
 func (ec *Client) TransactionByHash(ctx context.Context, hash common.Hash) (tx *types.Transaction, isPending bool, err error)
@@ -204,7 +204,7 @@ For the `stateofus.eth` username, one can be registered through these [contracts
 
 - [Registering a username](https://github.com/status-im/ens-usernames/blob/77d9394d21a5b6213902473b7a16d62a41d9cd09/contracts/registry/UsernameRegistrar.sol#L113)
 - [Releasing a username](https://github.com/status-im/ens-usernames/blob/77d9394d21a5b6213902473b7a16d62a41d9cd09/contracts/registry/UsernameRegistrar.sol#L131)
-- [Updating a username] (https://github.com/status-im/ens-usernames/blob/77d9394d21a5b6213902473b7a16d62a41d9cd09/contracts/registry/UsernameRegistrar.sol#L174)
+- [Updating a username](https://github.com/status-im/ens-usernames/blob/77d9394d21a5b6213902473b7a16d62a41d9cd09/contracts/registry/UsernameRegistrar.sol#L174)
 
 ### Slashing
 
@@ -212,11 +212,11 @@ Usernames MUST be in a specific format, otherwise they MAY be slashed:
 
 - They MUST only contain alphanumeric characters
 - They MUST NOT  be in the form `0x[0-9a-f]{5}.*` and have more than 12 characters
-- They MUST NOT be in the [reserved list] (https://github.com/status-im/ens-usernames/blob/47c4c6c2058be0d80b7d678e611e166659414a3b/config/ens-usernames/reservedNames.js)
+- They MUST NOT be in the [reserved list](https://github.com/status-im/ens-usernames/blob/47c4c6c2058be0d80b7d678e611e166659414a3b/config/ens-usernames/reservedNames.js)
 - They MUST NOT be too short, this is dynamically set in the contract and can be checked against the [contract](https://github.com/status-im/ens-usernames/blob/master/contracts/registry/UsernameRegistrar.sol#L26)
 
 - [Slash a reserved username](https://github.com/status-im/ens-usernames/blob/77d9394d21a5b6213902473b7a16d62a41d9cd09/contracts/registry/UsernameRegistrar.sol#L237)
-- [Slash an invalid username] (https://github.com/status-im/ens-usernames/blob/77d9394d21a5b6213902473b7a16d62a41d9cd09/contracts/registry/UsernameRegistrar.sol#L261)
+- [Slash an invalid username](https://github.com/status-im/ens-usernames/blob/77d9394d21a5b6213902473b7a16d62a41d9cd09/contracts/registry/UsernameRegistrar.sol#L261)
 - [Slash a username too similar to an address](https://github.com/status-im/ens-usernames/blob/77d9394d21a5b6213902473b7a16d62a41d9cd09/contracts/registry/UsernameRegistrar.sol#L215)
 - [Slash a username that is too short](https://github.com/status-im/ens-usernames/blob/77d9394d21a5b6213902473b7a16d62a41d9cd09/contracts/registry/UsernameRegistrar.sol#L200)
 

@@ -24,7 +24,7 @@ This specification describes how Status relates with EIPs.
 
 ## Introduction
 
-Status should follow all standards as possible. Whenever a feature is needed, it should be first checked if there is a standard for that, if not, Status should propose a standard.
+Status should follow all standards as possible. Whenever the Status app needs a feature, it should be first checked if there is a standard for that, if not, Status should propose a standard.
 
 ### Support table
 

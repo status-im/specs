@@ -23,7 +23,7 @@ title: 12/IPFS gateway for Sticker Pack
 ## Abstract
 
 This specification describes how Status uses the IPFS gateway to store stickers.
-The specification explores image format, how stickers are uploaded and how an end user can see them inside the Status app.
+The specification explores image format, how a user uploads stickers and how an end user can see them inside the Status app.
 
 ## Definition
 
@@ -41,25 +41,25 @@ The minimum sticker image resolution is 512x512, and its background SHOULD be tr
 
 ### Distribution
 
-Sticker packs are implemented as [ERC721 token](https://eips.ethereum.org/EIPS/eip-721) and contain a set of stickers. These stickers
-are stored inside the sticker pack as a set of hyperlinks pointing to IPFS storage. These hyperlinks are publicly available and can be accessed by any user inside the status chat.
+The node implements sticker packs as [ERC721 token](https://eips.ethereum.org/EIPS/eip-721) and contain a set of stickers. The node stores these stickers
+inside the sticker pack as a set of hyperlinks pointing to IPFS storage. These hyperlinks are publicly available and can be accessed by any user inside the status chat.
 Stickers can be sent in chat only by accounts that own the sticker pack.
 
 ### IPFS gateway
 At the moment of writing, the current main Status app uses the [Infura](https://infura.io/) gateway. However, clients could choose a different gateway or to run own IPFS node.
 Infura gateway is an HTTPS gateway, which based on an HTTP GET request with the multihash block will return the stored content at that block address. 
 
-The use of gateway is required to enable easy access to the resources over HTTP.
-Each image of a sticker is stored inside IPFS using a unique address that is 
+The node requires the use of a gateway to enable easy access to the resources over HTTP.
+The node stores each image of a sticker inside IPFS using a unique address that is 
 derived from the hash of the file. This ensures that a file can't be overridden, and an end-user of the IPFS will receive the same file at a given address.
 
 ### Security
 The IPFS gateway acts as an end-user of the IPFS and allows users of the gateway to access IPFS without connection to the P2P network.
 Usage of a gateway introduces potential risk for the users of that gateway provider. In case of a compromise in the security of the provider, meta information such as IP address, User-Agent and other of its users can be leaked.
-If the provider servers are unavailable the access trough gateway to the IPFS network is lost.
+If the provider servers are unavailable the node loses access through the gateway to the IPFS network.
 
 ### Status sticker usage
-When a sticker is shown in the app, Status app makes an http GET request to IPFS gateway using the hyperlink. 
+When the app shows a sticker, Status app makes an http GET request to IPFS gateway using the hyperlink. 
 
 To send a sticker in chat, a user of Status should buy or install a sticker pack.
 
@@ -76,12 +76,12 @@ To submit a sticker pack, the author should upload all assets to IPFS. Then gene
        :stickers [{:hash "e301017012207737b75367b8068e5bdd027d7b71a25138c83e155d1f0c9bc5c48ff158724495"}
        {:hash "e301017012201a9cdea03f27cda1aede7315f79579e160c7b2b6a2eb51a66e47a96f47fe5284"}]}}
 ```
-All assets fields, are contenthash fields as per [EIP 1577](https://eips.ethereum.org/EIPS/eip-1577).
- This payload is uploaded also to IPFS, and the IPFS address is used in the content field of the Sticker Market contract. See [Sticker Market spec](https://github.com/status-im/sticker-market/blob/651e88e5f38c690e57ecaad47f46b9641b8b1e27/docs/specification.md) for a detailed description of the contract.
+All asset fields, are contenthash fields as per [EIP 1577](https://eips.ethereum.org/EIPS/eip-1577).
+The node also uploads this payload to IPFS, and the node uses the IPFS address in the content field of the Sticker Market contract. See [Sticker Market spec](https://github.com/status-im/sticker-market/blob/651e88e5f38c690e57ecaad47f46b9641b8b1e27/docs/specification.md) for a detailed description of the contract.
 
 #### Install a sticker pack
 
-To install a sticker pack, all sticker packs available in Sticker Market are fetched. The following steps are needed to fetch all sticker packs:
+To install a sticker pack, the node fetches all sticker packs available in Sticker Market. The node needs the following steps to fetch all sticker packs:
 
 #### 1. Get total number of sticker packs
 Call `packCount()` on the sticker market contract, will return number of sticker pack registered as `uint256`.
@@ -90,7 +90,7 @@ Call `packCount()` on the sticker market contract, will return number of sticker
 ID's are represented as `uint256` and are incremental from `0` to total number of sticker packs in the contract, received in the previous step. To get a sticker pack call `getPackData(sticker-pack-id)`, the return type is  `["bytes4[]" "address" "bool" "uint256" "uint256" "bytes"]` which represents the following fields: `[category owner mintable timestamp price contenthash]`. Price is the SNT value in wei set by sticker pack owner. The contenthash is the IPFS address described in the [submit description](#submit-a-sticker) above. Other fields specification could be found in [Sticker Market spec](https://github.com/status-im/sticker-market/blob/651e88e5f38c690e57ecaad47f46b9641b8b1e27/docs/specification.md)
 
 ##### 3. Get owned sticker packs
-The current Status app fetches owned sticker packs during the open of any sticker view (a screen which shows a sticker pack or the list of sticker packs).
+The current Status app fetches owned sticker packs during the open of any sticker view (a screen which shows a sticker pack, or the list of sticker packs).
 To get owned packs, get all owned tokens for the current account address, by calling `balanceOf(address)` where address is the address for the current account. This method returns a `uint256` representing the count of available tokens. Using `tokenOfOwnerByIndex(address,uint256)` method, with the address of the user and ID in form of a `uint256` which is an incremented int from 0 to the total number of tokens, gives the token id. To get the sticker pack id from a token call`tokenPackId(uint256)` where `uint256` is the token id. This method will return an `uint256` which is the id of the owned sticker pack.
 
 ##### 4. Buy a sticker pack

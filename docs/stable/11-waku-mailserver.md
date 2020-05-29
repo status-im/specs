@@ -70,7 +70,7 @@ The envelope MUST be encrypted with a symmetric key agreed between the requester
 
 Historic messages MUST be sent to a peer as a packet with a P2P Message code (`0x7f`) followed by an array of Waku envelopes.
 
-In order to receive historic messages from a `Mailserver`, a node MUST trust the selected `Mailserver`, that is allow to receive packets with the P2P Message code. By default, such packets are discarded.
+In order to receive historic messages from a `Mailserver`, a node MUST trust the selected `Mailserver`, that is allowed to receive packets with the P2P Message code. By default, the node discards such packets.
 
 Received envelopes MUST be passed through the Waku envelope pipelines so that they are picked up by registered filters and passed to subscribers.
 
@@ -90,7 +90,7 @@ If `Cursor` is not empty, it means that not all messages were sent due to the se
 
 ### Confidentiality
 
-All Waku envelopes are encrypted. A `Mailserver` node can not inspect their contents.
+The node encrypts all Waku envelopes. A `Mailserver` node can not inspect their contents.
 
 ### Altruistic and centralized operator risk
 
@@ -98,7 +98,7 @@ In order to be useful, a `Mailserver` SHOULD be online most of time. That means
 users either have to be a bit tech-savvy to run their own node, or rely on someone
 else to run it for them.
 
-Currently one of Status's legal entities provides `Mailservers` in an altruistic manner, but this is
+Currently, one of Status's legal entities provides `Mailservers` in an altruistic manner, but this is
 suboptimal from a decentralization, continuance and risk point of view. Coming
 up with a better system for this is ongoing research.
 

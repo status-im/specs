@@ -61,7 +61,7 @@ Infura hosts a collection of full nodes for the Ethereum network and provides an
 Status works on mobile devices and therefore can't rely on local node. So all communication to Ethereum network happens via Infura.
 
 ##### Concerns
-Making http request means that a user leaks metadata, which can be used in various attacks if the service is hacked.
+Making http request means that a user leaks metadata, which can be used in various attacks if an attacker hacks the service.
 Infura hosts on centralized providers. If these fail or the provider cuts off service, then Status features requiring Ethereum calls will.
 
 
@@ -84,7 +84,7 @@ CryptoCompare is a service that shows live streaming prices, charts and analysis
 Status regularly fetches crypto prices from CryptoCompare. Using that info Status calculates fiat value for transaction or wallet assets.
 
 ##### Concerns
-Making http request means that a user leaks metadata, which can be used in various attacks if the service is hacked.
+Making http request means that a user leaks metadata, which can be used in various attacks if an attacker hacks the service.
 If CryptoCompare fails Status won't be able to show fiat equivalent of crypto in wallet.
 
 ### Collectibles
@@ -97,7 +97,7 @@ There is a set of services that used for getting information about collectibles:
 
 
 ##### Concerns
-Making http request means that a user leaks metadata, which can be used in various attacks if the service is hacked.
+Making http request means that a user leaks metadata, which can be used in various attacks if an attacker hacks the service.
 
 ### Iubenda
 

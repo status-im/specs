@@ -42,8 +42,8 @@ the case of public chats, the channel name maps directly to its Whisper topic.
 This allows anyone to listen on a single channel.
 
 Additionally, since anyone can receive Whisper envelopes, it relies on the
-ability to decrypt messages to decide who is the correct recipient. This property
-is not relied upon, and another secure transport layer is implemented on top of Whisper.
+ability to decrypt messages to decide who is the correct recipient. Status nodes do not
+rely upon this property, and implement another secure transport layer on top of Whisper.
 
 Finally, using an extension of Whisper provides the ability to do offline messaging.
 
@@ -58,7 +58,7 @@ encryption properties to support asynchronous chat.
 * *Whisper network*: a group of Whisper nodes connected together through the internet connection and forming a graph
 * *Message*: decrypted Whisper message
 * *Offline message*: an archived envelope
-* *Envelope*: encrypted message with metadata like topic and Time-To-Live
+* *Envelope*: an encrypted message with metadata like topic and Time-To-Live
 
 ## Whisper packets
 
@@ -81,7 +81,7 @@ encryption properties to support asynchronous chat.
 
 A Whisper node must be properly configured to receive messages from Status clients.
 
-Whisper's Proof Of Work algorithm is used to deter denial of service and various spam/flood attacks against the Whisper network. The sender of a message must perform some work which in this case means processing time. Because Status' main client is a mobile client, this easily leads to battery draining and poor performance of the app itself. Hence, all clients MUST use the following Whisper node settings:
+Nodes use Whisper's Proof Of Work algorithm to deter denial of service and various spam/flood attacks against the Whisper network. The sender of a message must perform some work which in this case means processing time. Because Status' main client is a mobile client, this easily leads to battery draining and poor performance of the app itself. Hence, all clients MUST use the following Whisper node settings:
 * proof-of-work requirement not larger than `0.002`
 * time-to-live not lower than `10` (in seconds)
 
@@ -129,7 +129,7 @@ The protocol requires a key (symmetric or asymmetric) for the following actions:
 * signing & verifying messages (asymmetric key)
 * encrypting & decrypting messages (asymmetric or symmetric key).
 
-As asymmetric keys and symmetric keys are required to process incoming messages,
+As nodes require asymmetric keys and symmetric keys to process incoming messages,
 they must be available all the time and are stored in memory.
 
 Keys management for PFS is described in [5/SECURE-TRANSPORT](https://specs.status.im/spec/5).
@@ -138,7 +138,7 @@ The Status protocols uses a few particular Whisper topics to achieve its goals.
 
 ### Contact code topic
 
-Contact code topic is used to facilitate the discovery of X3DH bundles so that the first message can be PFS-encrypted.
+Nodes use the contact code topic to facilitate the discovery of X3DH bundles so that the first message can be PFS-encrypted.
 
 Each user publishes periodically to this topic. If user A wants to contact user B, she SHOULD look for their bundle on this contact code topic.
 
@@ -163,9 +163,9 @@ for i = 0; i < topicLen; i++ {
 
 Whisper is broadcast-based protocol. In theory, everyone could communicate using a single topic but that would be extremely inefficient. Opposite would be using a unique topic for each conversation, however, this brings privacy concerns because it would be much easier to detect whether and when two parties have an active conversation.
 
-Partitioned topics are used to broadcast private messages efficiently. By selecting a number of topic, it is possible to balance efficiency and privacy.
+Nodes use partitioned topics to broadcast private messages efficiently. By selecting a number of topic, it is possible to balance efficiency and privacy.
 
-Currently, the number of partitioned topics is set to `5000`. They MUST be generated following the algorithm below:
+Currently, nodes set the number of partitioned topics to `5000`. They MUST be generated following the algorithm below:
 ```golang
 var partitionsNum *big.Int = big.NewInt(5000)
 var partition *big.Int = big.NewInt(0).Mod(publicKey.X, partitionsNum)
@@ -276,15 +276,15 @@ To exchange messages with client B, a client A SHOULD:
 - Listen to client's B Contact Code Topic to retrieve their bundle information, including a list of active devices
 - Send a message on client's B partitioned topic
 - Listen to the Negotiated Topic between A & B
-- Once a message is received from B, the Negotiated Topic SHOULD be used
+- Once client A receives a message from B, the Negotiated Topic SHOULD be used
 
 ## Message encryption
 
 Even though, the protocol specifies an encryption layer that encrypts messages before passing them to the transport layer, Whisper protocol requires each Whisper message to be encrypted anyway.
 
-Public and group messages are encrypted using symmetric encryption and the key is created from a channel name string. The implementation is available in [`shh_generateSymKeyFromPassword`](https://github.com/ethereum/go-ethereum/wiki/Whisper-v6-RPC-API#shh_generatesymkeyfrompassword) JSON-RPC method of go-ethereum Whisper implementation.
+The node encrypts public and group messages using symmetric encryption, and creates the key from a channel name string. The implementation is available in [`shh_generateSymKeyFromPassword`](https://github.com/ethereum/go-ethereum/wiki/Whisper-v6-RPC-API#shh_generatesymkeyfrompassword) JSON-RPC method of go-ethereum Whisper implementation.
 
-One-to-one messages are encrypted using asymmetric encryption.
+The node encrypts one-to-one messages using asymmetric encryption.
 
 ## Message confirmations
 
@@ -292,7 +292,7 @@ Sending a message is a complex process where many things can go wrong. Message c
 
 A node MAY send a message confirmation for any batch of messages received in a packet Messages Code (`0x01`).
 
-A message confirmation is sent using Batch Acknowledge packet (`0x0b`) or Message Response packet (`0x0c`).
+A node sends a message confirmation using Batch Acknowledge packet (`0x0b`) or Message Response packet (`0x0c`).
 
 The Batch Acknowledge packet is followed by a keccak256 hash of the envelopes batch data (raw bytes).
 
@@ -307,7 +307,7 @@ The Message Response packet is more complex and is followed by a Versioned Messa
 The supported codes:
 `1`: means time sync error which happens when an envelope is too old or created in the future (the root cause is no time sync between nodes).
 
-The drawback of sending message confirmations is that it increases the noise in the network because for each sent message, a corresponding confirmation is broadcast by one or more peers. To limit that, both Batch Acknowledge packet (`0x0b`) and Message Response packet (`0x0c`) are not broadcast to peers of the peers, i.e. they do not follow epidemic spread.
+The drawback of sending message confirmations is that it increases the noise in the network because for each sent message, one or more peers broadcast a corresponding confirmation. To limit that, both Batch Acknowledge packet (`0x0b`) and Message Response packet (`0x0c`) are not broadcast to peers of the peers, i.e. they do not follow epidemic spread.
 
 In the current Status network setup, only `Mailservers` support message confirmations. A client posting a message to the network and after receiving a confirmation can be sure that the message got processed by the `Mailserver`. If additionally, sending a message is limited to non-`Mailserver` peers, it also guarantees that the message got broadcast through the network and it reached the selected `Mailserver`.
 

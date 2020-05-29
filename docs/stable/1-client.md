@@ -69,7 +69,7 @@ have to be implemented in order to be a full Status client. The second gives a d
 
 Implementing a Status clients largely means implementing the following layers. Additionally, there are separate specifications for things like key management and account lifecycle.
 
-Other aspects, such as how IPFS is used for stickers or how the browser works, are currently underspecified. These specifications facilitate the implementation of a Status client for basic private communication.
+Other aspects, such as how a node uses IPFS for stickers or how the browser works, are currently underspecified. These specifications facilitate the implementation of a Status client for basic private communication.
 
 | Layer             | Purpose                        | Technology                   |
 | ----------------- | ------------------------------ | ---------------------------- |
@@ -119,7 +119,7 @@ client mode, otherwise the user experience is likely to be poor.
 Bootstrap nodes allow Status nodes to discover and connect to other Status nodes
 in the network.
 
-Currently the main bootstrap nodes are provided by Status Gmbh, but anyone can
+Currently, Status Gmbh provides the main bootstrap nodes, but anyone can
 run these provided they are connected to the rest of the Whisper/Waku network.
 
 Status maintains a list of production fleet bootstrap nodes in the following locations:
@@ -183,7 +183,7 @@ when the client starts again. In such a case, there might be no need to even sta
 peers discovery protocols because cached peers will satisfy the optimal number of peers.
 
 Alternatively, a client MAY rely exclusively on a list of static peers. This is the most efficient
-way because there is no peers discovery algorithm overhead introduced. The disadvantage
+way because there are no peers discovery algorithm overhead introduced. The disadvantage
 is that these peers might be gone and without peers discovery mechanism, it won't be possible to find
 new ones.
 
@@ -211,7 +211,7 @@ For providing an offline inbox, see the complementary [4/WHISPER-MAILSERVER](htt
 ### Secure Transport
 
 In order to provide confidentiality, integrity, authentication and forward
-secrecy of messages a secure transport is implemented on top of Whisper and Waku. This is
+secrecy of messages the node implements a secure transport on top of Whisper and Waku. This is
 used in 1:1 chats and group chats, but not for public chats. See [5/SECURE-TRANSPORT](https://specs.status.im/spec/5) for more.
 
 ### Data Sync
@@ -219,13 +219,13 @@ used in 1:1 chats and group chats, but not for public chats. See [5/SECURE-TRANS
 [MVDS](https://specs.vac.dev/mvds.html) is used for 1:1 and group chats, however it is currently not in use for public chats.
 [Status payloads](#payloads-and-clients) are serialized and then wrapped inside an
 MVDS message which is added to an [MVDS payload](https://specs.vac.dev/mvds.html#payloads),
-this payload is then encrypted (if necessary for 1-to-1 / group-chats) and sent using
+the node encrypts this payload (if necessary for 1-to-1 / group-chats) and sends it using
 Whisper or Waku which also encrypts it.
 
 ### Payloads and clients
 
 On top of secure transport, various types of data sync clients and
-payload formats are used for things like 1:1 chat, group chat and public chat. These have
+the node uses payload formats for things like 1:1 chat, group chat and public chat. These have
 various degrees of standardization. Please refer to [6/PAYLOADS](https://specs.status.im/spec/6) for more details.
 
 ### BIPs and EIPs Standards support
@@ -243,7 +243,7 @@ See [Appendix A](#appendix-a-security-considerations)
 
 #### Why devp2p? Why not use libp2p?
 
-At the time the main Status clients were being developed, devp2p was the most
+At the time Status developed the main Status clients, devp2p was the most
 mature. However, in the future libp2p is likely to be used, as it'll
 provide us with multiple transports, better protocol negotiation, NAT traversal,
 etc.
@@ -309,7 +309,7 @@ methods of spam protection are currently being researched.
 At the time of implementing dynamic node discovery, Discovery v5 wasn't completed
 yet. Additionally, running a DHT on a mobile leads to slow node discovery, bad
 battery and poor bandwidth usage. Instead, each client can choose to turn on
-Discovery v5 for a short period of time until their peer list is populated.
+Discovery v5 for a short period until the node populates their peer list.
 
 For some further investigation, see
 [here](https://github.com/status-im/swarms/blob/master/ideas/092-disc-v5-research.md).
@@ -322,7 +322,7 @@ In order to use a `Mailserver`, a given node needs to connect to it directly, i.
 
 #### Why is MVDS not used for public chats?
 
-Currently public chats are broadcast-based, and there's no direct way of finding
+Currently, public chats are broadcast-based, and there's no direct way of finding
 out who is receiving messages. Hence there's no clear group sync state context
 whereby participants can sync. Additionally, MVDS is currently not optimized for
 large group contexts, which means bandwidth usage will be a lot higher than

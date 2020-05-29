@@ -54,7 +54,7 @@ It builds on the [X3DH](https://signal.org/docs/specifications/x3dh/) and [Doubl
 
 ## Introduction
 
-This document describes how a secure channel is established, and how various conversational security properties are achieved.
+This document describes how nodes establish a secure channel, and how various conversational security properties are achieved.
 
 ### Definitions
 
@@ -89,7 +89,7 @@ See [Account specification](./2-account.md)
 
 If Alice later recovers her account, the Double Ratchet state information will not be available, so she is no longer able to decrypt any messages received from existing contacts.
 
-If an incoming message (on the same Whisper/Waku topic) fails to decrypt, a message is replied with the current bundle, so that the other end is notified of the new device. Subsequent communications will use this new bundle.
+If an incoming message (on the same Whisper/Waku topic) fails to decrypt, the node replies a message with the current bundle, so that the node notifies the other end of the new device. Subsequent communications will use this new bundle.
 
 ## Messaging
 
@@ -99,7 +99,7 @@ The rest of this document is purely about 1:1 and private group chat. Private gr
 
 ### End-to-end encryption
 
-End-to-end encryption (E2EE) takes place between two clients. The main cryptographic protocol is a [Status implementation](https://github.com/status-im/doubleratchet/) of the Double Ratchet protocol, which is in turn derived from the [Off-the-Record protocol](https://otr.cypherpunks.ca/Protocol-v3-4.1.1.html), using a different ratchet. The message payload is subsequently encrypted by the transport protocol - Whisper/Waku (see section [Transport Layer](#transport-layer)) -, using symmetric key encryption. 
+End-to-end encryption (E2EE) takes place between two clients. The main cryptographic protocol is a [Status implementation](https://github.com/status-im/doubleratchet/) of the Double Ratchet protocol, which is in turn derived from the [Off-the-Record protocol](https://otr.cypherpunks.ca/Protocol-v3-4.1.1.html), using a different ratchet. The transport protocol subsequently encrypt the message payload - Whisper/Waku (see section [Transport Layer](#transport-layer)) -, using symmetric key encryption. 
 Furthermore, Status uses the concept of prekeys (through the use of [X3DH](https://signal.org/docs/specifications/x3dh/)) to allow the protocol to operate in an asynchronous environment. It is not necessary for two parties to be online at the same time to initiate an encrypted conversation.
 
 Status uses the following cryptographic primitives:
@@ -118,7 +118,7 @@ Status uses the following cryptographic primitives:
     - Elliptic curve Diffie-Hellman key exchange (Curve25519)
     - AES-256-CTR with HMAC-SHA-256 and IV derived alongside an encryption key
 
-    Key derivation is done using HKDF.
+    The node achieves key derivation using HKDF.
 
 ### Prekeys
 
@@ -139,7 +139,7 @@ TODO: See below on bundle retrieval, this seems like enhancement and parameter f
 
 X3DH works by having client apps create and make available a bundle of prekeys (the X3DH bundle) that can later be requested by other interlocutors when they wish to start a conversation with a given user.
 
-In the X3DH specification, a shared server is typically used to store bundles and allow other users to download them upon request. Given Status' goal of decentralization, Status chat clients cannot rely on the same type of infrastructure and must achieve the same result using other means. By growing order of convenience and security, the considered approaches are:
+In the X3DH specification, nodes typically use a shared server to store bundles and allow other users to download them upon request. Given Status' goal of decentralization, Status chat clients cannot rely on the same type of infrastructure and must achieve the same result using other means. By growing order of convenience and security, the considered approaches are:
 - contact codes;
 - public and one-to-one chats;
 - QR codes;
@@ -149,7 +149,7 @@ In the X3DH specification, a shared server is typically used to store bundles an
 
 <!-- TODO: Comment, it isn't clear what we actually _do_. It seems as if this is exploring the problem space. From a protocol point of view, it might make sense to describe the interface, and then have a recommendation section later on that specifies what we do. See e.g. Signal's specs where they specify specifics later on.  -->
 
-Currently only public and one-to-one message exchanges and Whisper/Waku is used to exchange bundles.
+Currently, only public and one-to-one message exchanges and Whisper/Waku is used to exchange bundles.
 
 Since bundles stored in QR codes or ENS records cannot be updated to delete already used keys, the approach taken is to rotate more frequently the bundle (once every 24 hours), which will be propagated by the app through the channel available.
 
@@ -163,12 +163,12 @@ For more information on account generation and trust establishment, see [2/ACCOU
 
 #### Initial key exchange flow (X3DH)
 
-The initial key exchange flow is described in [section 3 of the X3DH protocol](https://signal.org/docs/specifications/x3dh/#sending-the-initial-message), with some additional context:
+[Section 3 of the X3DH protocol](https://signal.org/docs/specifications/x3dh/#sending-the-initial-message) describes the initial key exchange flow, with some additional context:
 - The users' identity keys `IK_A` and `IK_B` correspond to their respective Status chat public keys;
 - Since it is not possible to guarantee that a prekey will be used only once in a decentralized world, the one-time prekey `OPK_B` is not used in this scenario;
-- Bundles are not sent to a centralized server, but instead served in a decentralized way as described in [bundle retrieval](#bundle-retrieval).
+- Nodes do not send Bundles to a centralized server, but instead served in a decentralized way as described in [bundle retrieval](#bundle-retrieval).
 
-Bob's prekey bundle is retrieved by Alice, however it is not specific to Alice. It contains:
+Alice retrieves Bob's prekey bundle, however it is not specific to Alice. It contains:
 
 ([protobuf](https://github.com/status-im/status-go/blob/a904d9325e76f18f54d59efc099b63293d3dcad3/services/shhext/chat/encryption.proto#L12))
 
@@ -482,18 +482,18 @@ TODO: this requires more detail
 ## Session management
 
 
-A peer is identified by two pieces of data:
+A node identifies a peer by two pieces of data:
 
 1) An `installation-id` which is generated upon creating a new account in the `Status` application
 2) Their identity Whisper/Waku key
 
 ### Initialization
 
-A new session is initialized once a successful X3DH exchange has taken place. Subsequent messages will use the established session until re-keying is necessary.
+A node initializes a new session once a successful X3DH exchange has taken place. Subsequent messages will use the established session until re-keying is necessary.
 
 ### Concurrent sessions
 
-If two sessions are created concurrently between two peers the one with the symmetric key first in byte order SHOULD be used, this marks that the other has expired.
+If a node creates two sessions concurrently between two peers, the one with the symmetric key first in byte order SHOULD be used, this marks that the other has expired.
 
 ### Re-keying
 
@@ -503,11 +503,11 @@ On receiving a bundle from a given peer with a higher version, the old bundle SH
 
 Multi-device support is quite challenging as there is not a central place where information on which and how many devices (identified by their respective `installation-id`) belongs to a whisper-identity / waku-identity.
 
-Furthermore, account recovery always needs to be taken into consideration, where the whole device is wiped clean and all the information about any previous sessions is lost.
+Furthermore, account recovery always needs to be taken into consideration, where a user wipes clean the whole device and the nodes loses all the information about any previous sessions.
 
-Taking these considerations into account, the way multi-device information is propagated through the network is through x3dh bundles, which will contain information about paired devices as well as information about the sending device.
+Taking these considerations into account, the way the network propagates multi-device information using x3dh bundles, which will contain information about paired devices as well as information about the sending device.
 
-This mean that every time a new device is paired, the bundle needs to be updated and propagated with the new information, and the burden is put on the user to make sure the pairing is successful.
+This means that every time a new device is paired, the bundle needs to be updated and propagated with the new information, the user has the responsibility to make sure the pairing is successful.
 
 The method is loosely based on https://signal.org/docs/specifications/sesame/ .
 
@@ -518,7 +518,7 @@ When a user adds a new account in the `Status` application, a new `installation-
 
 If a bundle received from the `IK` is different to the `installation-id`, the device will be shown to the user and will have to be manually approved, to a maximum of 3. Once that is done any message sent by one device will also be sent to any other enabled device.
 
-Once a new device is enabled, a new bundle will be generated which will include pairing information.
+Once a user enables a new device, a new bundle will be generated which will include pairing information.
 
 The bundle will be propagated to contacts through the usual channels.
 
@@ -527,8 +527,8 @@ Removal of paired devices is a manual step that needs to be applied on each devi
 ### Sending messages to a paired group
 
 When sending a message, the peer will send a message to other `installation-id` that they have seen. 
-The number of devices is capped to 3, ordered by last activity. 
-Messages are sent using pairwise encryption, including their own devices.
+The node caps the number of devices to 3, ordered by last activity. 
+The node sends messages using pairwise encryption, including their own devices.
 
 ### Account recovery
 

@@ -14,7 +14,7 @@ title: 2/ACCOUNT
 
 ## Abstract
 
-This specification explains what Status account is, and how trust is established.
+This specification explains what Status account is, and how a node establishes trust.
 
 ## Table of Contents
 
@@ -51,7 +51,7 @@ The core concept of an account in Status is a set of cryptographic keypairs. Nam
 1. a Whisper/Waku chat identity keypair
 1. a set of cryptocurrency wallet keypairs
 
-Everything else associated with the contact is either verified or derived from the above items, including:
+The node verifies or derives everything else associated with the contact from the above items, including:
 - Ethereum address (future verification, currently the same base keypair)
 - 3 word mnemonic name
 - identicon
@@ -149,8 +149,8 @@ This can be done in the following ways:
   ```
   - include BundleContainer
 - a new bundle SHOULD be created at least every 12 hours
-- a bundle is only generated when it is used
-- a bundle SHOULD be distributed on the contact code channel. This is the Whisper and Waku topic `{IK}-contact-code`, where `IK` is the hex encoded public key of the user, prefixed with `0x`. The channel is encrypted in the same way public chats are encrypted.
+- a node only generates a bundle when it is used
+- a bundle SHOULD be distributed on the contact code channel. This is the Whisper and Waku topic `{IK}-contact-code`, where `IK` is the hex encoded public key of the user, prefixed with `0x`. The node encrypts the channel in the same way it encrypted public chats.
 
 ### Contact Verification
 
@@ -164,7 +164,7 @@ Status generates a deterministic 3-word random pseudonym from the Whisper/Waku c
 - implementation: [gfycat](https://github.com/status-im/status-react/tree/develop/src/status_im/utils/gfycat)
 
 #### ENS name
-Status offers the ability to register a mapping of a human readable subdomain of `stateofus.eth` to their Whisper/Waku chat public key.  This registration is purchased (currently by staking 10 SNT) and stored on the Ethereum mainnet blockchain for public lookup.
+Status offers the ability to register a mapping of a human readable subdomain of `stateofus.eth` to their Whisper/Waku chat public key. The user purchases this registration (currently by staking 10 SNT) and the node stores it on the Ethereum mainnet blockchain for public lookup.
 
 <!-- TODO: Elaborate on security implications -->
 
