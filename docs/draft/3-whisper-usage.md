@@ -162,7 +162,7 @@ for i = 0; i < topicLen; i++ {
 
 Whisper is broadcast-based protocol. In theory, everyone could communicate using a single topic but that would be extremely inefficient. Opposite would be using a unique topic for each conversation, however, this brings privacy concerns because it would be much easier to detect whether and when two parties have an active conversation.
 
-Nodes use Partitioned topics to broadcast private messages efficiently. By selecting a number of topic, it is possible to balance efficiency and privacy.
+Nodes use partitioned topics to broadcast private messages efficiently. By selecting a number of topic, it is possible to balance efficiency and privacy.
 
 Currently, nodes set the number of partitioned topics to `5000`. Partitioned topics MUST be generated following the algorithm below:
 ```golang
