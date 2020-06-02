@@ -55,7 +55,7 @@ encryption properties to support asynchronous chat.
 
 * *Waku node*: an Ethereum node with Waku V1 enabled
 * *Waku network*: a group of Waku nodes connected together through the internet connection and forming a graph
-* *Message*: decrypted Waku message
+* *Message*: a decrypted Waku message
 * *Offline message*: an archived envelope
 * *Envelope*: an encrypted message with metadata like topic and Time-To-Live
 
@@ -269,12 +269,12 @@ A client SHOULD send to the negotiated topic only if it has received a message f
 
 ### Flow
 
-To exchange messages with client B, a client A SHOULD:
+To exchange messages with client `B`, a client `A` SHOULD:
 
-- Listen to client's B Contact Code Topic to retrieve their bundle information, including a list of active devices
-- Send a message on client's B partitioned topic
-- Listen to the Negotiated Topic between A & B
-- Once client A receives a message from B, the Negotiated Topic SHOULD be used
+- Listen to client's `B` Contact Code Topic to retrieve their bundle information, including a list of active devices
+- Send a message on client's `B` partitioned topic
+- Listen to the Negotiated Topic between `A` & `B`
+- Once client `A` receives a message from `B`, the Negotiated Topic SHOULD be used
 
 ## Message encryption
 

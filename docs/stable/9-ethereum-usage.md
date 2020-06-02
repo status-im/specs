@@ -20,7 +20,7 @@ with the [Ethereum](https://ethereum.org/developers/) blockchain.
 All the interactions are made through [JSON-RPC](https://github.com/ethereum/wiki/wiki/JSON-RPC).
 Currently [Infura](https://infura.io/) is used. The client assumes high-availability, otherwise 
 it will not be able to interact with the Ethereum blockchain.
-Status nodes rely on These Infura nodes to validate the integrity of the transaction and report a 
+Status nodes rely on these Infura nodes to validate the integrity of the transaction and report a 
 consistent history.
 
 Key handling is described [here](./2-account.md)

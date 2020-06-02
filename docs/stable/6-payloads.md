@@ -175,7 +175,7 @@ message StickerMessage {
 
 #### Message types
 
-A node requires message types to decide how to encrypt a particular message and what metadata needs to be attached when passing a message to the transport layer. For more on this, see [3/WHISPER-USAGE](https://specs.status.im/spec/3).
+A node requires message types to decide how to encrypt a particular message and what metadata needs to be attached when passing a message to the transport layer. For more on this, see [3/WHISPER-USAGE](3-whisper-usage.md) and [10/WAKU-USAGE](10-waku-usage.md).
 
 <!-- TODO: This reference is a bit odd, considering the layer payloads should interact with is Secure Transport, and not Whisper/Waku. This requires more detail -->
 
