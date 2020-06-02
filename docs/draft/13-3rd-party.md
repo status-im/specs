@@ -84,7 +84,7 @@ CryptoCompare is a service that shows live streaming prices, charts and analysis
 Status regularly fetches crypto prices from CryptoCompare. Using that info Status calculates fiat value for transaction or wallet assets.
 
 ##### Concerns
-Making http request means that a user leaks metadata, which can be used in various attacks if an attacker hacks the service.
+Making a HTTP request means that a user leaks metadata, which can be used in various attacks if an attacker hacks the service.
 If CryptoCompare fails Status won't be able to show fiat equivalent of crypto in wallet.
 
 ### Collectibles
