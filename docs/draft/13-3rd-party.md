@@ -97,7 +97,7 @@ There is a set of services that used for getting information about collectibles:
 
 
 ##### Concerns
-Making http request means that a user leaks metadata, which can be used in various attacks if an attacker hacks the service.
+Making a HTTP request means that a user leaks metadata, which can be used in various attacks if an attacker hacks the service.
 
 ### Iubenda
 
