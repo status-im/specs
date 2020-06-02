@@ -38,6 +38,8 @@ npm run lint
 - Avoid using the [passive voice](https://en.wikipedia.org/wiki/English_passive_voice) when being specific.
 - In places where the passive voice is appropriate but makes the subject ambiguous, append the passive voice with "by `subject`". Alternatively restructure the sentence to be in the active voice adding the sentence subject.
 
+For further reading on writing technical documents please read the Google Technical Writing article on [Active voice vs. passive voice](https://developers.google.com/tech-writing/one/active-voice).
+
 <details>
 <summary>Examples:</summary>
 
