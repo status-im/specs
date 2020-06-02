@@ -59,7 +59,7 @@ Usage of a gateway introduces potential risk for the users of that gateway provi
 If the provider servers are unavailable the node loses access through the gateway to the IPFS network.
 
 ### Status sticker usage
-When the app shows a sticker, Status app makes an http GET request to IPFS gateway using the hyperlink. 
+When the app shows a sticker, the Status app makes an HTTP GET request to IPFS gateway using the hyperlink. 
 
 To send a sticker in chat, a user of Status should buy or install a sticker pack.
 
