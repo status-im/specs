@@ -61,7 +61,7 @@ Infura hosts a collection of full nodes for the Ethereum network and provides an
 Status works on mobile devices and therefore can't rely on local node. So all communication to Ethereum network happens via Infura.
 
 ##### Concerns
-Making http request means that a user leaks metadata, which can be used in various attacks if an attacker hacks the service.
+Making a HTTP request means that a user leaks metadata, which can be used in various attacks if an attacker hacks the service.
 Infura hosts on centralized providers. If these fail or the provider cuts off service, then Status features requiring Ethereum calls will.
 
 
