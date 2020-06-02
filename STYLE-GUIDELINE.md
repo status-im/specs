@@ -7,8 +7,8 @@ title: STYLE-GUIDELINE
 # Style guidelines for Status client specifications
 
 - [Spellcheck](#spellcheck)
-- [Markdown Verfication](#markdown-verification)
-- [Lanaguage Mode](#language-mode)
+- [Markdown Verification](#markdown-verification)
+- [Language Mode](#language-mode)
 
 ## Spellcheck
 

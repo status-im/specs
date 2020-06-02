@@ -16,11 +16,11 @@ its various capabilities.
 1. Create an issue for a new Status Improvement Proposal (SIP) or some bug that you'd like to address
 2. Create a corresponding PR and ping some existing SIP editors for review
 
-If you need help, ask in #protocol at Status / Discord.
+If you need help, ask in #protocol at [Status / Discord](https://discord.gg/3Exux7Y).
 
 ### Specification style guidelines
 
-Familiarise yourself with the [specification style guidelines](STYLE-GUIDELINE.md) to understand how you should write or amend specifications.
+Become familiar with the [specification style guidelines](STYLE-GUIDELINE.md) to understand how you should write or amend specifications.
 
 ## Spec lifecycle
 
