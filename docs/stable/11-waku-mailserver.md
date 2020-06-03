@@ -70,7 +70,7 @@ The envelope MUST be encrypted with a symmetric key agreed between the requester
 
 Historic messages MUST be sent to a peer as a packet with a P2P Message code (`0x7f`) followed by an array of Waku envelopes.
 
-In order to receive historic messages from a `Mailserver`, a node MUST trust the selected `Mailserver`, that is allowed to receive packets with the P2P Message code. By default, the node discards such packets.
+In order to receive historic messages from a `Mailserver`, a node MUST trust the selected `Mailserver`, that is allowed to send packets with the P2P Message code. By default, the node discards such packets.
 
 Received envelopes MUST be passed through the Waku envelope pipelines so that they are picked up by registered filters and passed to subscribers.
 
