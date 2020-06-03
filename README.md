@@ -16,28 +16,11 @@ its various capabilities.
 1. Create an issue for a new Status Improvement Proposal (SIP) or some bug that you'd like to address
 2. Create a corresponding PR and ping some existing SIP editors for review
 
-If you need help, ask in #protocol at Status / Discord.
+If you need help, ask in #protocol at [Status / Discord](https://discord.gg/3Exux7Y).
 
-### Spellcheck
+### Specification style guidelines
 
-To run the spellchecker locally, you must install [pyspelling](https://facelessuser.github.io/pyspelling/).
-
-It can then be run with the following command:
-
-```console
-pyspelling -c spellcheck.yml
-```
-
-Words that should be ignored or are unrecognized must be added to the [wordlist](./wordlist.txt).
-
-### Markdown Verification
-
-We use [remark](https://remark.js.org/) to verify our markdown. You can easily run this tool simply by using our `npm` package:
-
-```console
-npm install
-npm run lint
-```
+Become familiar with the [specification style guidelines](STYLE-GUIDELINE.md) to understand how you should write or amend specifications.
 
 ## Spec lifecycle
 

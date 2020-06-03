@@ -14,7 +14,7 @@ title: 6/PAYLOADS
 
 ## Abstract
 
-This specifications describes how the payload of each message in Status looks
+This specification describes how the payload of each message in Status looks
 like. It is primarily centered around chat and chat-related use cases.
 
 The payloads aims to be flexible enough to support messaging but also cases
@@ -54,11 +54,11 @@ as various clients created using different technologies.
 
 ## Introduction
 
-In this document we describe the payload format and some special considerations.
+This document describes the payload format and some special considerations.
 
 ## Payload wrapper
 
-All payloads are wrapped in a [protobuf record](https://developers.google.com/protocol-buffers/)
+The node wraps all payloads in a [protobuf record](https://developers.google.com/protocol-buffers/)
 record:
 
 ```protobuf
@@ -69,12 +69,12 @@ message StatusProtocolMessage {
 ```
 
 `signature` is the bytes of the signed `SHA3-256` of the payload, signed with the key of the author of the message.
-The signature is needed to validate authorship of the message, so that the message can be relayed to third parties.
-If a signature is not present, but an author is provided by a layer below, the message is not to be relayed to third parties and it is considered plausibly deniable.
+The node needs the signature to validate authorship of the message, so that the message can be relayed to third parties.
+If a signature is not present, but an author is provided by a layer below, the message is not to be relayed to third parties, and it is considered plausibly deniable.
 
 ## Encoding
 
-The payload is encoded using [Protobuf](https://developers.google.com/protocol-buffers)
+The node encodes the payload using [Protobuf](https://developers.google.com/protocol-buffers)
 
 ## Types of messages
 
@@ -150,12 +150,12 @@ message ChatMessage {
 
 #### Content types
 
-Content types are required for a proper interpretation of incoming messages. Not each message is plain text but may carry a different information.
+A node requires content types for a proper interpretation of incoming messages. Not each message is plain text but may carry different information.
 
 The following content types MUST be supported:
 * `TEXT_PLAIN` identifies a message which content is a plaintext.
 
-There are also other content types that MAY be implemented by the client:
+There are other content types that MAY be implemented by the client:
 * `STICKER`
 * `STATUS`
 * `EMOJI`
@@ -175,7 +175,7 @@ message StickerMessage {
 
 #### Message types
 
-Message types are required to decide how a particular message is encrypted and what metadata needs to be attached when passing a message to the transport layer. For more on this, see [3/WHISPER-USAGE](3-whisper-usage.md) and [10/WAKU-USAGE](10-waku-usage.md).
+A node requires message types to decide how to encrypt a particular message and what metadata needs to be attached when passing a message to the transport layer. For more on this, see [3/WHISPER-USAGE](3-whisper-usage.md) and [10/WAKU-USAGE](10-waku-usage.md).
 
 <!-- TODO: This reference is a bit odd, considering the layer payloads should interact with is Secure Transport, and not Whisper/Waku. This requires more detail -->
 
@@ -196,28 +196,28 @@ Lamport timestamp format is: `clock = `max({timestamp}, chat_clock + 1)`
 
 This will satisfy the Lamport requirement, namely: a -> b then T(a) < T(b)
 
-`timestamp` MUST be Unix time calculated when the message is created in milliseconds. This field SHOULD not be relied upon for message ordering.
+`timestamp` MUST be Unix time calculated, when the node creates the message, in milliseconds. This field SHOULD not be relied upon for message ordering.
 
-`clock` SHOULD be calculated using the algorithm of [Lamport timestamps](https://en.wikipedia.org/wiki/Lamport_timestamps). When there are messages available in a chat, `clock`'s value is calculated based on the last received message in a particular chat: `max(timeNowInMs, last-message-clock-value + 1)`. If there are no messages, `clock` is initialized with `timestamp`'s value.
+`clock` SHOULD be calculated using the algorithm of [Lamport timestamps](https://en.wikipedia.org/wiki/Lamport_timestamps). When there are messages available in a chat, the node calculates `clock`'s value based on the last received message in a particular chat: `max(timeNowInMs, last-message-clock-value + 1)`. If there are no messages, `clock` is initialized with `timestamp`'s value.
 
 Messages with a `clock` greater than `120` seconds over the Whisper/Waku timestamp SHOULD be discarded, in order to avoid malicious users to increase the `clock` of a chat arbitrarily.
 
 Messages with a `clock` less than `120` seconds under the Whisper/Waku timestamp might indicate an attempt to insert messages in the chat history which is not distinguishable from a `datasync` layer re-transit event. A client MAY mark this messages with a warning to the user, or discard them.
 
-`clock` value is used for the message ordering. Due to the used algorithm and distributed nature of the system, we achieve casual ordering which might produce counter-intuitive results in some edge cases. For example, when one joins a public chat and sends a message before receiving the exist messages, their message `clock` value might be lower and the message will end up in the past when the historical messages are fetched.
+The node uses `clock` value for the message ordering. The algorithm used, and the distributed nature of the system produces casual ordering, which might produce counter-intuitive results in some edge cases. For example, when a user joins a public chat and sends a message before receiving the exist messages, their message `clock` value might be lower and the message will end up in the past when the historical messages are fetched.
 
 #### Chats
 
-Chat is a structure that helps organize messages. It's usually desired to display messages only from a single recipient or a group of recipients at a time and chats help to achieve that.
+Chat is a structure that helps organize messages. It's usually desired to display messages only from a single recipient, or a group of recipients at a time and chats help to achieve that.
 
-All incoming messages can be matched against a chat. Below you can find a table that describes how to calculate a chat ID for each message type.
+All incoming messages can be matched against a chat. The below table describes how to calculate a chat ID for each message type.
 
 |Message Type|Chat ID Calculation|Direction|Comment|
 |------------|-------------------|---------|-------|
 |PUBLIC_GROUP|chat ID is equal to a public channel name; it should equal `chatId` from the message|Incoming/Outgoing||
 |ONE_TO_ONE|let `P` be a public key of the recipient; `hex-encode(P)` is a chat ID; use it as `chatId` value in the message|Outgoing||
-|user-message|let `P` be a public key of message's signature; `hex-encode(P)` is a chat ID; discard `chat-id` from message|Incoming|if there is no matched chat, it might be the first message from public key `P`; you can discard it or create a new chat; Status official clients create a new chat|
-|PRIVATE_GROUP|use `chatId` from the message|Incoming/Outgoing|find an existing chat by `chatId`; if none is found, we are not a member of that chat or we haven't joined that chat, the message MUST be discarded |
+|user-message|let `P` be a public key of message's signature; `hex-encode(P)` is a chat ID; discard `chat-id` from message|Incoming|if there is no matched chat, it might be the first message from public key `P`; the node MAY discard the message or MAY create a new chat; Status official clients create a new chat|
+|PRIVATE_GROUP|use `chatId` from the message|Incoming/Outgoing|find an existing chat by `chatId`; if none is found, the user is not a member of that chat or the user hasn't joined that chat, the message MUST be discarded |
 
 ### Contact Update
 
@@ -246,13 +246,13 @@ message ContactUpdate {
 A client SHOULD send a `ContactUpdate` to all the contacts each time:
 
 - The ens_name has changed
-- The profile image is edited
+- A user edits the profile image
 
 A client SHOULD also periodically send a `ContactUpdate` to all the contacts, the interval is up to the client, the Status official client sends these updates every 48 hours.
 
 ### SyncInstallationContact
 
-`SyncInstallationContact` messages are used to synchronize in a best-effort the contacts to other devices.
+The node uses `SyncInstallationContact` messages to synchronize in a best-effort the contacts to other devices.
 
 ```protobuf
 message SyncInstallationContact {
@@ -278,7 +278,7 @@ message SyncInstallationContact {
 
 ### SyncInstallationPublicChat
 
-`SyncInstallationPublicChat` message is used to synchronize in a best-effort the public chats to other devices.
+The node uses `SyncInstallationPublicChat` message to synchronize in a best-effort the public chats to other devices.
 
 ```protobuf
 message SyncInstallationPublicChat {
@@ -296,7 +296,7 @@ message SyncInstallationPublicChat {
 
 ### PairInstallation
 
-`PairInstallation` messages are used to propagate information about a device to its paired devices.
+The node uses `PairInstallation` messages to propagate information about a device to its paired devices.
 
 ```protobuf
 message PairInstallation {
@@ -319,14 +319,14 @@ message PairInstallation {
 ### MembershipUpdateMessage and MembershipUpdateEvent
 
 `MembershipUpdateEvent` is a message used to propagate information about group membership changes in a group chat.
-The details are in the [Group chats specs](./../draft/7-group-chat.md)
+The details are in the [Group chats specs](./../draft/7-group-chat.md).
 
 ## Upgradability
 
 There are two ways to upgrade the protocol without breaking compatibility:
 
-- Accretion is always supported
-- Deletion of existing fields or messages is not supported and might break compatibility
+- A node always supports accretion
+- A node does not support deletion of existing fields or messages, which might break compatibility
 
 ## Security Considerations
 
