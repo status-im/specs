@@ -169,6 +169,7 @@ pubkey
 publicKey
 puk
 pyspelling
+RECOMMENDs
 relayers
 requestMessages
 RLP

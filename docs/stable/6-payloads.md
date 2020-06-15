@@ -161,6 +161,15 @@ There are other content types that MAY be implemented by the client:
 * `EMOJI`
 * `TRANSACTION_COMMAND`
 
+##### Mentions 
+
+A mention MUST be represented as a string with the `@0xpk` format, where `pk` is the public key of the [user account](https://specs.status.im/spec/2) to be mentioned, within the `text` field of a message with content_type `TEXT_PLAIN`.
+A message MAY contain more than one mention.
+This specification RECOMMENDs that the application does not require the user to enter the entire pk. 
+This specification RECOMMENDs that the application allows the user to create a mention by typing @ followed by the related ENS or 3-word pseudonym.
+This specification RECOMMENDs that the application provides the user auto-completion functionality to create a mention.
+For better user experience, the client SHOULD display a known [ens name or the 3-word pseudonym corresponding to the key](https://specs.status.im/spec/2#contact-verification) instead of the `pk`.
+
 ##### Sticker content type
 
 A `ChatMessage` with `STICKER` `Content/Type` MUST also specify the ID of the `Pack` and 
