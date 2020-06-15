@@ -69,6 +69,7 @@ ethereum
 Etherscan
 EventType
 FilterLogs
+fn
 FormatInt
 GCM
 GenerateShared
@@ -101,6 +102,8 @@ IPFS
 IPs
 Iubenda
 Jacek
+js
+JS
 JSON
 kademlia
 kb
@@ -220,6 +223,9 @@ Waku
 Waku's
 waku
 wakuext
+webview
+Webview
 wei
 Whitepaper
 wordlist
+
