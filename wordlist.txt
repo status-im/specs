@@ -147,6 +147,7 @@ oneof
 Oskar
 PairInstallation
 params
+parsable
 partitionsNum
 partitionTopic
 peerID
