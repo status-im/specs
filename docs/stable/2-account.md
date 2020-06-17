@@ -272,6 +272,8 @@ SHOULD be interpreted as
 
 `fe70102261c55675e55ff25edb50b345cfb3a3f35f60712d251cbaaab97bd50054c6ebc`
 
+This specification RECOMMENDs that for compression purposes the consuming service of the node uses a compact encoding type, such as base64 or base58 to allow for as short representations of the key as possible.
+
 ### Public Key Types
 
 The node MUST support the [multiformats/multicodec](https://github.com/multiformats/multicodec) key type identifiers for the following public key types.
