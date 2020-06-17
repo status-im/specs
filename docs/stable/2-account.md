@@ -40,6 +40,7 @@ This specification explains what Status account is, and how a node establishes t
         - [3 word pseudonym / Whisper/Waku key fingerprint](#3-word-pseudonym--whisperwaku-key-fingerprint)
         - [ENS name](#ens-name)
 - [Public Key Compression](#public-key-compression)
+  - [Basic Compression Example](#basic-compression-example)
   - [Key Encoding](#key-encoding)
   - [Public Key Types](#public-key-types)
   - [De/Compression Process Flow](#decompression-process-flow)
@@ -227,6 +228,26 @@ For maximum flexibility the node MUST support public keys encoded in a wide rang
 
 For future and backward compatibility with Ethereum networks the node MUST supports at least 3 elliptical curve public key formats, detailed below.
 
+### Basic Compression Example
+
+In the example of a typical hexadecimal encoded elliptical curve (EC) public key (such as a secp256k1 pk),
+
+```text
+0x04261c55675e55ff25edb50b345cfb3a3f35f60712d251cbaaab97bd50054c6ebc3cd4e22200c68daf7493e1f8da6a190a68a671e2d3977809612424c7c3888bc6
+```
+
+minor modification for compatibility and flexibility makes the key self-identifiable and easily parsable, 
+
+```text
+fe70104261c55675e55ff25edb50b345cfb3a3f35f60712d251cbaaab97bd50054c6ebc3cd4e22200c68daf7493e1f8da6a190a68a671e2d3977809612424c7c3888bc6
+```
+
+EC compression and compact encoding produces a much smaller string representation of the original key.
+
+```text
+zQ3shPyZJnxZK4Bwyx9QsaksNKDYTPmpwPvGSjMYVHoXHeEgB
+```
+
 ### Key Encoding
 
 The node MUST use the [multiformats/multibase](https://github.com/multiformats/multibase) encoding protocol to interpret incoming key data and to return key data in a desired encoding.
@@ -336,7 +357,7 @@ A hexadecimal encoded secp256k1 public chat key typically is represented as belo
 0x04261c55675e55ff25edb50b345cfb3a3f35f60712d251cbaaab97bd50054c6ebc3cd4e22200c68daf7493e1f8da6a190a68a671e2d3977809612424c7c3888bc6
 ``` 
 
-To be properly interpreted by the node for compression the public MUST be prepended with the `multicodec` `uvarint` code `0xea 0x01` and encoded with a valid `multibase` encoding, therefore giving the following:
+To be properly interpreted by the node for compression the public key MUST be prepended with the `multicodec` `uvarint` code `0xea 0x01` and encoded with a valid `multibase` encoding, therefore giving the following:
 
 ```text
 fea0104261c55675e55ff25edb50b345cfb3a3f35f60712d251cbaaab97bd50054c6ebc3cd4e22200c68daf7493e1f8da6a190a68a671e2d3977809612424c7c3888bc6
