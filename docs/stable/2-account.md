@@ -6,7 +6,7 @@ title: 2/ACCOUNT
 
 # 2/ACCOUNT
 
-> Version: 0.3
+> Version: 0.4
 > 
 > Status: Stable
 >
@@ -39,6 +39,12 @@ This specification explains what Status account is, and how a node establishes t
         - [Identicon](#identicon)
         - [3 word pseudonym / Whisper/Waku key fingerprint](#3-word-pseudonym--whisperwaku-key-fingerprint)
         - [ENS name](#ens-name)
+- [Public Key Compression](#public-key-compression)
+  - [Key Encoding](#key-encoding)
+  - [Public Key Types](#public-key-types)
+  - [De/Compression Process Flow](#decompression-process-flow)
+    - [Compression Example](#compression-example)
+    - [Decompression Example](#decompression-example)
 - [Security Considerations](#security-considerations)
 - [Changelog](#changelog)
   - [Version 0.3](#version-03)
@@ -213,11 +219,170 @@ All messages sent are encrypted with the public key of the destination and signe
 
 -->
 
+## Public Key Compression
+
+The node MUST provide functionality for the compression and decompression of public / chat keys.
+
+For maximum flexibility the node MUST support public keys encoded in a wide range of encoding formats, detailed below.
+
+For future and backward compatibility with Ethereum networks the node MUST supports at least 3 elliptical curve public key formats, detailed below.
+
+### Key Encoding
+
+The node MUST use the [multiformats/multibase](https://github.com/multiformats/multibase) encoding protocol to interpret incoming key data and to return key data in a desired encoding.
+
+The node MUST support the following `multibase` encoding formats.
+
+```csv
+encoding,          code, description,                                              status
+identity,          0x00, 8-bit binary (encoder and decoder keeps data unmodified), default
+base2,             0,    binary (01010101),                                        candidate
+base8,             7,    octal,                                                    draft
+base10,            9,    decimal,                                                  draft
+base16,            f,    hexadecimal,                                              default
+base16upper,       F,    hexadecimal,                                              default
+base32hex,         v,    rfc4648 case-insensitive - no padding - highest char,     candidate
+base32hexupper,    V,    rfc4648 case-insensitive - no padding - highest char,     candidate
+base32hexpad,      t,    rfc4648 case-insensitive - with padding,                  candidate
+base32hexpadupper, T,    rfc4648 case-insensitive - with padding,                  candidate
+base32,            b,    rfc4648 case-insensitive - no padding,                    default
+base32upper,       B,    rfc4648 case-insensitive - no padding,                    default
+base32pad,         c,    rfc4648 case-insensitive - with padding,                  candidate
+base32padupper,    C,    rfc4648 case-insensitive - with padding,                  candidate
+base32z,           h,    z-base-32 (used by Tahoe-LAFS),                           draft
+base36,            k,    base36 [0-9a-z] case-insensitive - no padding,            draft
+base36upper,       K,    base36 [0-9a-z] case-insensitive - no padding,            draft
+base58btc,         z,    base58 bitcoin,                                           default
+base58flickr,      Z,    base58 flicker,                                           candidate
+base64,            m,    rfc4648 no padding,                                       default
+base64pad,         M,    rfc4648 with padding - MIME encoding,                     candidate
+base64url,         u,    rfc4648 no padding,                                       default
+base64urlpad,      U,    rfc4648 with padding,                                     default
+```
+
+**Note** this specification RECOMMENDs that implementations extends the standard `multibase` protocol to parse strings prepended with `0x` as `f` hexadecimal encoded bytes.
+
+Implementing this recommendation will allow the node to correctly interpret traditionally identified hexadecimal strings (e.g. `0x1337c0de`).
+
+*Example:*
+
+`0xe70102261c55675e55ff25edb50b345cfb3a3f35f60712d251cbaaab97bd50054c6ebc`
+
+SHOULD be interpreted as 
+
+`fe70102261c55675e55ff25edb50b345cfb3a3f35f60712d251cbaaab97bd50054c6ebc`
+
+### Public Key Types
+
+The node MUST support the [multiformats/multicodec](https://github.com/multiformats/multicodec) key type identifiers for the following public key types.
+
+| Name               | Tag | Code   | Description                          |
+| ------------------ | --- | ------ | ------------------------------------ |
+| `secp256k1-pub`    | key | `0xe7` | Secp256k1 public key                 |
+| `bls12_381-g1-pub` | key | `0xea` | BLS12-381 public key in the G1 field |
+| `bls12_381-g2-pub` | key | `0xeb` | BLS12-381 public key in the G2 field |
+
+For a public key to be identifiable to the node the public key data MUST be prepended with the relevant [multiformats/unsigned-varint](https://github.com/multiformats/unsigned-varint) formatted code.
+
+*Example:*
+
+Below is a representation of an uncompressed secp256k1 public key.
+
+```go
+[]byte{
+    0x04,
+    0x26, 0x1c, 0x55, 0x67, 0x5e, 0x55, 0xff, 0x25,
+    0xed, 0xb5, 0x0b, 0x34, 0x5c, 0xfb, 0x3a, 0x3f,
+    0x35, 0xf6, 0x07, 0x12, 0xd2, 0x51, 0xcb, 0xaa,
+    0xab, 0x97, 0xbd, 0x50, 0x05, 0x4c, 0x6e, 0xbc,
+    0x3c, 0xd4, 0xe2, 0x22, 0x00, 0xc6, 0x8d, 0xaf,
+    0x74, 0x93, 0xe1, 0xf8, 0xda, 0x6a, 0x19, 0x0a,
+    0x68, 0xa6, 0x71, 0xe2, 0xd3, 0x97, 0x78, 0x09,
+    0x61, 0x24, 0x24, 0xc7, 0xc3, 0x88, 0x8b, 0xc6,
+}
+```
+
+The `multicodec` code for a secp256k1 public key is `0xe7`.
+
+After parsing the code `0xe7` as a `multiformats/uvarint`, the byte value is `0xe7 0x01`, prepending this to the public key results in the below representation.
+
+```go
+[]byte{
+    0xe7, 0x01, 0x04,
+    0x26, 0x1c, 0x55, 0x67, 0x5e, 0x55, 0xff, 0x25,
+    0xed, 0xb5, 0x0b, 0x34, 0x5c, 0xfb, 0x3a, 0x3f,
+    0x35, 0xf6, 0x07, 0x12, 0xd2, 0x51, 0xcb, 0xaa,
+    0xab, 0x97, 0xbd, 0x50, 0x05, 0x4c, 0x6e, 0xbc,
+    0x3c, 0xd4, 0xe2, 0x22, 0x00, 0xc6, 0x8d, 0xaf,
+    0x74, 0x93, 0xe1, 0xf8, 0xda, 0x6a, 0x19, 0x0a,
+    0x68, 0xa6, 0x71, 0xe2, 0xd3, 0x97, 0x78, 0x09,
+    0x61, 0x24, 0x24, 0xc7, 0xc3, 0x88, 0x8b, 0xc6,
+}
+```
+
+### De/Compression Process Flow
+
+The node MUST be passed a `multicodec` identified public key, of the above supported types, encoded with a valid `multibase` identifier.
+
+This specification RECOMMENDs that the node also accept an encoding type parameter to encode the output data. This provides for the case where the user requires the de/compressed key to be in a different encoding to the encoding of the given key. 
+
+#### Compression Example
+
+A hexadecimal encoded secp256k1 public chat key typically is represented as below:
+
+```text
+0x04261c55675e55ff25edb50b345cfb3a3f35f60712d251cbaaab97bd50054c6ebc3cd4e22200c68daf7493e1f8da6a190a68a671e2d3977809612424c7c3888bc6
+``` 
+
+To be properly interpreted by the node for compression the public MUST be prepended with the `multicodec` `uvarint` code `0xea 0x01` and encoded with a valid `multibase` encoding, therefore giving the following:
+
+```text
+fea0104261c55675e55ff25edb50b345cfb3a3f35f60712d251cbaaab97bd50054c6ebc3cd4e22200c68daf7493e1f8da6a190a68a671e2d3977809612424c7c3888bc6
+``` 
+
+If adhering to the specification recommendation to provide the user with an output encoding parameter, the above string would be passed to the node with the following `multibase` encoding identifier.
+
+In this example the output encoding is defined as `base58 bitcoin`.
+
+```text
+z
+``` 
+
+The return value in this case would be
+
+```text
+zQ3shPyZJnxZK4Bwyx9QsaksNKDYTPmpwPvGSjMYVHoXHeEgB
+```
+
+Which after `multibase` decoding can be represented in bytes as below:
+
+```go
+[]byte{
+    0xe7, 0x01, 0x02,
+    0x26, 0x1c, 0x55, 0x67, 0x5e, 0x55, 0xff, 0x25,
+    0xed, 0xb5, 0x0b, 0x34, 0x5c, 0xfb, 0x3a, 0x3f,
+    0x35, 0xf6, 0x07, 0x12, 0xd2, 0x51, 0xcb, 0xaa,
+    0xab, 0x97, 0xbd, 0x50, 0x05, 0x4c, 0x6e, 0xbc,
+}
+```
+
+#### Decompression Example
+
+For the user the decompression process is exactly the same as compression with the exception that the user MUST provide a compressed public key for decompression. Else the decompression algorithm will fail.
+
+For further guidance on the implementation of public key de/compression consult the [`status-go` implementation and tests](https://github.com/status-im/status-go/blob/c9772325f2dca76b3504191c53313663ca2efbe5/api/utils_test.go).  
+
 ## Security Considerations
 
 -
 
 ## Changelog
+
+### Version 0.4
+
+Released // TODO
+
+- Added details of public key compression and decompression
 
 ### Version 0.3
 
