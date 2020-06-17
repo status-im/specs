@@ -11,6 +11,7 @@ blockable
 BlockByHash
 BlockByNumber
 blockchain
+BLS
 BundleContainer
 chainId
 Changelog
@@ -34,6 +35,8 @@ DApp
 dapp
 dapps
 DDoS
+de
+De
 decrypt
 decrypted
 decrypting
@@ -131,6 +134,8 @@ MessageType
 mixnets
 multiaccount
 multicasting
+multicodec
+multiformats
 multihash
 MVDS
 myPrivateKey
@@ -160,6 +165,7 @@ pre
 prekey
 prekeys
 prepend
+prepended
 prepending
 privkey
 protobuf
@@ -217,6 +223,7 @@ URI
 URIs
 uuid
 UX
+varint
 Volodymyr
 Volosovskyi
 Vp
