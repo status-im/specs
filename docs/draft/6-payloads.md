@@ -6,7 +6,7 @@ title: 6/PAYLOADS
 
 # 6/PAYLOADS
 
-> Version: 0.3
+> Version: 0.4
 >
 > Status: Draft
 >
@@ -35,6 +35,7 @@ as various clients created using different technologies.
      - [Content types](#content-types)
        - [Sticker content type](#sticker-content-type)
        - [Image content type](#image-content-type)
+       - [Audio content type](#audio-content-type)
      - [Message types](#message-types)
      - [Clock vs Timestamp and message ordering](#clock-vs-timestamp-and-message-ordering)
      - [Chats](#chats)
@@ -50,6 +51,8 @@ as various clients created using different technologies.
    - [MembershipUpdateMessage and MembershipUpdateEvent](#membershipupdatemessage-and-membershipupdateevent)
  - [Upgradability](#upgradability)
  - [Security Considerations](#security-considerations)
+ - [Changelog](#changelog)
+ - [Copyright](#copyright)
 
 ## Introduction
 
@@ -57,7 +60,7 @@ This document describes the payload format and some special considerations.
 
 ## Payload wrapper
 
-All payloads are wrapped in a [protobuf record](https://developers.google.com/protocol-buffers/)
+The node wraps all payloads in a [protobuf record](https://developers.google.com/protocol-buffers/)
 record:
 
 ```protobuf
@@ -89,7 +92,7 @@ The protobuf description is:
 message ChatMessage {
   // Lamport timestamp of the chat message
   uint64 clock = 1;
-  // Unix timestamps in milliseconds, currently not used as we use whisper as more reliable, but here
+  // Unix timestamps in milliseconds, currently not used as we use Whisper/Waku as more reliable, but here
   // so that we don't rely on it
   uint64 timestamp = 2;
   // Text of the message
@@ -98,7 +101,9 @@ message ChatMessage {
   string response_to = 4;
   // Ens name of the sender
   string ens_name = 5;
-  // Chat id is the ID of the chat
+  // Chat id, this field is symmetric for public-chats and private group chats,
+  // but asymmetric in case of one-to-ones, as the sender will use the chat-id
+  // of the received, while the receiver will use the chat-id of the sender.
   string chat_id = 6;
 
   // The type of message (public/one-to-one/private-group-chat)
@@ -109,6 +114,7 @@ message ChatMessage {
   oneof payload {
     StickerMessage sticker = 9;
     ImageMessage image = 10;
+    AudioMessage audio = 11;
   }
 
   enum MessageType {
@@ -128,6 +134,7 @@ message ChatMessage {
     // Only local
     SYSTEM_MESSAGE_CONTENT_PRIVATE_GROUP = 6;
     IMAGE = 7;
+    AUDIO = 8;
   }
 }
 ```
@@ -144,7 +151,7 @@ message ChatMessage {
 | 6 | chat_id | `string` | The local ID of the chat the message is sent to |
 | 7 | message_type | `MessageType` | The type of message, different for one-to-one, public or group chats |
 | 8 | content_type | `ContentType` | The type of the content of the message | 
-| 9 | payload | `Sticker|Image|nil` | The payload of the message based on the content type |
+| 9 | payload | `Sticker|Image|Audio|nil` | The payload of the message based on the content type |
 
 #### Content types
 
@@ -159,6 +166,16 @@ There are other content types that MAY be implemented by the client:
 * `EMOJI`
 * `TRANSACTION_COMMAND`
 * `IMAGE`
+* `AUDIO`
+
+##### Mentions 
+
+A mention MUST be represented as a string with the `@0xpk` format, where `pk` is the public key of the [user account](https://specs.status.im/spec/2) to be mentioned, within the `text` field of a message with content_type `TEXT_PLAIN`.
+A message MAY contain more than one mention.
+This specification RECOMMENDs that the application does not require the user to enter the entire pk. 
+This specification RECOMMENDs that the application allows the user to create a mention by typing @ followed by the related ENS or 3-word pseudonym.
+This specification RECOMMENDs that the application provides the user auto-completion functionality to create a mention.
+For better user experience, the client SHOULD display a known [ens name or the 3-word pseudonym corresponding to the key](https://specs.status.im/spec/2#contact-verification) instead of the `pk`.
 
 ##### Sticker content type
 
@@ -175,7 +192,14 @@ message StickerMessage {
 ##### Image content type
 
 A `ChatMessage` with `IMAGE` `Content/Type` MUST also specify the `payload` of the image
-and the `type`
+and the `type`.
+
+Clients MUST sanitize the payload before accessing its content, in particular: 
+- Clients MUST choose a secure decoder
+- Clients SHOULD strip metadata if present without parsing/decoding it
+- Clients SHOULD NOT add metadata/exif when sending an image file for privacy and security reasons
+- Clients MUST make sure that the transport layer constraints the size of the payload to limit they are able to handle securely
+
 
 ```protobuf
 message ImageMessage {
@@ -191,11 +215,35 @@ message ImageMessage {
 }
 ```
 
+##### Audio content type
+
+A `ChatMessage` with `AUDIO` `Content/Type` MUST also specify the `payload` of the audio,
+the `type` and the duration in milliseconds (`duration_ms`).
+
+Clients MUST sanitize the payload before accessing its content, in particular: 
+- Clients MUST choose a secure decoder
+- Clients SHOULD strip metadata if present without parsing/decoding it
+- Clients SHOULD NOT add metadata/exif when sending an audio file for privacy and security reasons
+- Clients MUST make sure that the transport layer constraints the size of the payload to limit they are able to handle securely
+
+```protobuf
+message AudioMessage {
+  bytes payload = 1;
+  AudioType type = 2;
+  uint64 duration_ms = 3;
+  enum AudioType {
+    UNKNOWN_AUDIO_TYPE = 0;
+    AAC = 1;
+    AMR = 2;
+  }
+}
+```
+
 #### Message types
 
 A node requires message types to decide how to encrypt a particular message and what metadata needs to be attached when passing a message to the transport layer. For more on this, see [3/WHISPER-USAGE](./../stable/3-whisper-usage.md) and [10/WAKU-USAGE](./../stable/10-waku-usage.md).
 
-<!-- TODO: This reference is a bit odd, considering the layer payloads should interact with is Secure Transport, and not Whisper. This requires more detail -->
+<!-- TODO: This reference is a bit odd, considering the layer payloads should interact with is Secure Transport, and not Whisper/Waku. This requires more detail -->
 
 
 The following messages types MUST be supported:
@@ -218,9 +266,9 @@ This will satisfy the Lamport requirement, namely: a -> b then T(a) < T(b)
 
 `clock` SHOULD be calculated using the algorithm of [Lamport timestamps](https://en.wikipedia.org/wiki/Lamport_timestamps). When there are messages available in a chat, the node calculates `clock`'s value based on the last received message in a particular chat: `max(timeNowInMs, last-message-clock-value + 1)`. If there are no messages, `clock` is initialized with `timestamp`'s value.
 
-Messages with a `clock` greater than `120` seconds over the whisper timestamp SHOULD be discarded, in order to avoid malicious users to increase the `clock` of a chat arbitrarily.
+Messages with a `clock` greater than `120` seconds over the Whisper/Waku timestamp SHOULD be discarded, in order to avoid malicious users to increase the `clock` of a chat arbitrarily.
 
-Messages with a `clock` less than `120` seconds under the whisper timestamp might indicate an attempt to insert messages in the chat history which is not distinguishable from a `datasync` layer re-transit event. A client MAY mark this messages with a warning to the user, or discard them.
+Messages with a `clock` less than `120` seconds under the Whisper/Waku timestamp might indicate an attempt to insert messages in the chat history which is not distinguishable from a `datasync` layer re-transit event. A client MAY mark this messages with a warning to the user, or discard them.
 
 The node uses `clock` value for the message ordering. The algorithm used, and the distributed nature of the system produces casual ordering, which might produce counter-intuitive results in some edge cases. For example, when a user joins a public chat and sends a message before receiving the exist messages, their message `clock` value might be lower and the message will end up in the past when the historical messages are fetched.
 
@@ -349,6 +397,21 @@ There are two ways to upgrade the protocol without breaking compatibility:
 ## Security Considerations
 
 -
+
+## Changelog
+
+### Version 0.4
+
+Released []()
+
+- Added support for images
+- Added support for audio
+
+### Version 0.3
+
+Released [May 22, 2020](https://github.com/status-im/specs/commit/664dd1c9df6ad409e4c007fefc8c8945b8d324e8)
+
+- Added language to include Waku in all relevant places
 
 ## Copyright
 
