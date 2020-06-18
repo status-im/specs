@@ -222,11 +222,9 @@ All messages sent are encrypted with the public key of the destination and signe
 
 ## Public Key Compression
 
-The node MUST provide functionality for the compression and decompression of public / chat keys.
+The node SHOULD provide functionality for the compression and decompression of public / chat keys.
 
-For maximum flexibility the node MUST support public keys encoded in a wide range of encoding formats, detailed below.
-
-For future and backward compatibility with Ethereum networks the node MUST supports at least 3 elliptical curve public key formats, detailed below.
+For maximum flexibility, when implementing this functionality, the node MUST support public keys encoded in a range of encoding formats, detailed below.
 
 ### Basic Compression Example
 
@@ -250,9 +248,9 @@ zQ3shPyZJnxZK4Bwyx9QsaksNKDYTPmpwPvGSjMYVHoXHeEgB
 
 ### Key Encoding
 
-The node MUST use the [multiformats/multibase](https://github.com/multiformats/multibase) encoding protocol to interpret incoming key data and to return key data in a desired encoding.
+When implementing the pk de/compression functionality, the node MUST use the [multiformats/multibase](https://github.com/multiformats/multibase) encoding protocol to interpret incoming key data and to return key data in a desired encoding.
 
-The node MUST support the following `multibase` encoding formats.
+The node SHOULD support the following `multibase` encoding formats.
 
 ```csv
 encoding,          code, description,                                              status
@@ -281,7 +279,7 @@ base64url,         u,    rfc4648 no padding,                                    
 base64urlpad,      U,    rfc4648 with padding,                                     default
 ```
 
-**Note** this specification RECOMMENDs that implementations extends the standard `multibase` protocol to parse strings prepended with `0x` as `f` hexadecimal encoded bytes.
+**Note** this specification RECOMMENDs that implementations extend the standard `multibase` protocol to parse strings prepended with `0x` as `f` hexadecimal encoded bytes.
 
 Implementing this recommendation will allow the node to correctly interpret traditionally identified hexadecimal strings (e.g. `0x1337c0de`).
 
@@ -297,13 +295,11 @@ This specification RECOMMENDs that for compression purposes the consuming servic
 
 ### Public Key Types
 
-The node MUST support the [multiformats/multicodec](https://github.com/multiformats/multicodec) key type identifiers for the following public key types.
+When implementing the pk de/compression functionality, The node MUST support the [multiformats/multicodec](https://github.com/multiformats/multicodec) key type identifiers for the following public key type.
 
 | Name               | Tag | Code   | Description                          |
 | ------------------ | --- | ------ | ------------------------------------ |
 | `secp256k1-pub`    | key | `0xe7` | Secp256k1 public key                 |
-| `bls12_381-g1-pub` | key | `0xea` | BLS12-381 public key in the G1 field |
-| `bls12_381-g2-pub` | key | `0xeb` | BLS12-381 public key in the G2 field |
 
 For a public key to be identifiable to the node the public key data MUST be prepended with the relevant [multiformats/unsigned-varint](https://github.com/multiformats/unsigned-varint) formatted code.
 
@@ -341,7 +337,7 @@ ab | 97 | bd | 50 | 05 | 4c | 6e | bc
 
 ### De/Compression Process Flow
 
-The node MUST be passed a `multicodec` identified public key, of the above supported types, encoded with a valid `multibase` identifier.
+When implementing the pk de/compression functionality, the node MUST be passed a `multicodec` identified public key, of the above supported types, encoded with a valid `multibase` identifier.
 
 This specification RECOMMENDs that the node also accept an encoding type parameter to encode the output data. This provides for the case where the user requires the de/compressed key to be in a different encoding to the encoding of the given key. 
 
