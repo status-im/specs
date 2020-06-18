@@ -113,11 +113,13 @@ The node verifies or derives everything else associated with the contact from th
 
 ### Terms Glossary
 
-| term             | description |
-| ---------------- | ----------- |
-| privkey          | ECDSA secp256k1 private key |
-| pubkey           | ECDSA secp256k1 public key |
-| Whisper/Waku key | pubkey for chat with HD derivation path m/43'/60'/1581'/0'/0 |
+| term                      | description |
+| ------------------------- | ----------- |
+| privkey                   | ECDSA secp256k1 private key |
+| pubkey                    | ECDSA secp256k1 public key |
+| Public key compression    | An idiomatic term for elliptical curve public key serialisation |
+| Public key decompression  | An idiomatic term for elliptical curve public key deserialisation |
+| Whisper/Waku key          | pubkey for chat with HD derivation path m/43'/60'/1581'/0'/0 |
 
 
 ### Contact Discovery
