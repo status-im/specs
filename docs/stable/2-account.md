@@ -383,7 +383,7 @@ ab | 97 | bd | 50 | 05 | 4c | 6e | bc
 
 #### Decompression Example
 
-For the user the decompression process is exactly the same as compression with the exception that the user MUST provide a compressed public key for decompression. Else the decompression algorithm will fail.
+For the user, the decompression process is exactly the same as compression with the exception that the user MUST provide a compressed public key for decompression. Else the decompression algorithm will fail.
 
 For further guidance on the implementation of public key de/compression consult the [`status-go` implementation and tests](https://github.com/status-im/status-go/blob/c9772325f2dca76b3504191c53313663ca2efbe5/api/utils_test.go).  
 
