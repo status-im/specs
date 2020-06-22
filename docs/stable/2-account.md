@@ -41,6 +41,7 @@ This specification explains what Status account is, and how a node establishes t
         - [ENS name](#ens-name)
 - [Public Key Serialization](#public-key-serialization)
   - [Basic Serialization Example](#basic-serialization-example)
+  - [Public Key "Compression" Rationale](#public-key-compression-rationale)
   - [Key Encoding](#key-encoding)
   - [Public Key Types](#public-key-types)
   - [De/Serialization Process Flow](#deserialization-process-flow)
@@ -247,6 +248,33 @@ EC serialization and compact encoding produces a much smaller string representat
 ```text
 zQ3shPyZJnxZK4Bwyx9QsaksNKDYTPmpwPvGSjMYVHoXHeEgB
 ```
+
+### Public Key "Compression" Rationale
+
+Serialized and compactly encoded ("compressed") public keys have a number of UI / UX advantages over non-serialized less densely encoded public keys.
+
+Compressed public keys are smaller, and users may perceive them as less intimidating and less unnecessarily large. Compare the "compressed" and "uncompressed" version of the same public key from above example:
+
+- `0xe70104261c55675e55ff25edb50b345cfb3a3f35f60712d251cbaaab97bd50054c6ebc3cd4e22200c68daf7493e1f8da6a190a68a671e2d3977809612424c7c3888bc6`
+- `zQ3shPyZJnxZK4Bwyx9QsaksNKDYTPmpwPvGSjMYVHoXHeEgB`
+
+The user can transmit and share the same data, but at one third of the original size. 136 characters uncompressed vs 49 characters compressed, giving a significant character length reduction of 64%. 
+
+The user client app MAY use the compressed public keys throughout the user interface. For example in the `status-react` implementation of the user interface the following places could take advantage of a significantly smaller public key:  
+
+- `Onboarding` > `Choose a chat name`
+- `Profile` > `Header`
+- `Profile` > `Share icon` > `QR code popover`
+- `Invite friends` url from `Invite friends` button and `+ -button` > `Invite friends`
+- Other user `Profile details` 
+- `Profile details` > `Share icon` > `QR code popover`
+
+In the case of QR codes a compressed public key can reduce the complexity of the derived codes:
+
+| Uncompressed | Compressed |
+| --- | --- |
+|<img src="https://user-images.githubusercontent.com/5702426/80531063-e98fcc80-8991-11ea-8c02-c354b5828d35.png" width="400" />|<img src="https://user-images.githubusercontent.com/5702426/80501933-f4356c00-8967-11ea-87d8-eae18becece9.png" width="400"/>|
+
 
 ### Key Encoding
 
