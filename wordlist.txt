@@ -225,6 +225,7 @@ unix
 Upgradability
 URI
 URIs
+url
 uuid
 UX
 varint
