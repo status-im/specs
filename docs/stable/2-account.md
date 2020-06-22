@@ -383,7 +383,7 @@ ab | 97 | bd | 50 | 05 | 4c | 6e | bc
 
 #### Deserialization Example
 
-For the user the deserialization process is exactly the same as serialization with the exception that the user MUST provide a serialized public key for deserialization. Else the deserialization algorithm will fail.
+For the user, the deserialization process is exactly the same as serialization with the exception that the user MUST provide a serialized public key for deserialization. Else the deserialization algorithm will fail.
 
 For further guidance on the implementation of public key de/serialization consult the [`status-go` implementation and tests](https://github.com/status-im/status-go/blob/c9772325f2dca76b3504191c53313663ca2efbe5/api/utils_test.go).  
 
