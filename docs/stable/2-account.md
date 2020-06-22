@@ -39,13 +39,13 @@ This specification explains what Status account is, and how a node establishes t
         - [Identicon](#identicon)
         - [3 word pseudonym / Whisper/Waku key fingerprint](#3-word-pseudonym--whisperwaku-key-fingerprint)
         - [ENS name](#ens-name)
-- [Public Key Compression](#public-key-compression)
-  - [Basic Compression Example](#basic-compression-example)
+- [Public Key Serialization](#public-key-serialization)
+  - [Basic Serialization Example](#basic-serialization-example)
   - [Key Encoding](#key-encoding)
   - [Public Key Types](#public-key-types)
-  - [De/Compression Process Flow](#decompression-process-flow)
-    - [Compression Example](#compression-example)
-    - [Decompression Example](#decompression-example)
+  - [De/Serialization Process Flow](#deserialization-process-flow)
+    - [Serialization Example](#serialization-example)
+    - [Deserialization Example](#deserialization-example)
 - [Security Considerations](#security-considerations)
 - [Changelog](#changelog)
   - [Version 0.3](#version-03)
@@ -117,8 +117,6 @@ The node verifies or derives everything else associated with the contact from th
 | ------------------------- | ----------- |
 | privkey                   | ECDSA secp256k1 private key |
 | pubkey                    | ECDSA secp256k1 public key |
-| Public key compression    | An idiomatic term for elliptical curve public key serialisation |
-| Public key decompression  | An idiomatic term for elliptical curve public key deserialisation |
 | Whisper/Waku key          | pubkey for chat with HD derivation path m/43'/60'/1581'/0'/0 |
 
 
@@ -222,13 +220,15 @@ All messages sent are encrypted with the public key of the destination and signe
 
 -->
 
-## Public Key Compression
+## Public Key Serialization
 
-The node SHOULD provide functionality for the compression and decompression of public / chat keys.
+Idiomatically known as "public key compression" and "public key decompression".
+
+The node SHOULD provide functionality for the serialization and deserialization of public / chat keys.
 
 For maximum flexibility, when implementing this functionality, the node MUST support public keys encoded in a range of encoding formats, detailed below.
 
-### Basic Compression Example
+### Basic Serialization Example
 
 In the example of a typical hexadecimal encoded elliptical curve (EC) public key (such as a secp256k1 pk),
 
@@ -242,7 +242,7 @@ minor modification for compatibility and flexibility makes the key self-identifi
 fe70104261c55675e55ff25edb50b345cfb3a3f35f60712d251cbaaab97bd50054c6ebc3cd4e22200c68daf7493e1f8da6a190a68a671e2d3977809612424c7c3888bc6
 ```
 
-EC compression and compact encoding produces a much smaller string representation of the original key.
+EC serialization and compact encoding produces a much smaller string representation of the original key.
 
 ```text
 zQ3shPyZJnxZK4Bwyx9QsaksNKDYTPmpwPvGSjMYVHoXHeEgB
@@ -250,7 +250,7 @@ zQ3shPyZJnxZK4Bwyx9QsaksNKDYTPmpwPvGSjMYVHoXHeEgB
 
 ### Key Encoding
 
-When implementing the pk de/compression functionality, the node MUST use the [multiformats/multibase](https://github.com/multiformats/multibase) encoding protocol to interpret incoming key data and to return key data in a desired encoding.
+When implementing the pk de/serialization functionality, the node MUST use the [multiformats/multibase](https://github.com/multiformats/multibase) encoding protocol to interpret incoming key data and to return key data in a desired encoding.
 
 The node SHOULD support the following `multibase` encoding formats.
 
@@ -293,11 +293,11 @@ SHOULD be interpreted as
 
 `fe70102261c55675e55ff25edb50b345cfb3a3f35f60712d251cbaaab97bd50054c6ebc`
 
-This specification RECOMMENDs that for compression purposes the consuming service of the node uses a compact encoding type, such as base64 or base58 to allow for as short representations of the key as possible.
+This specification RECOMMENDs that for serialization purposes the consuming service of the node uses a compact encoding type, such as base64 or base58 to allow for as short representations of the key as possible.
 
 ### Public Key Types
 
-When implementing the pk de/compression functionality, The node MUST support the [multiformats/multicodec](https://github.com/multiformats/multicodec) key type identifiers for the following public key type.
+When implementing the pk de/serialization functionality, The node MUST support the [multiformats/multicodec](https://github.com/multiformats/multicodec) key type identifiers for the following public key type.
 
 | Name               | Tag | Code   | Description                          |
 | ------------------ | --- | ------ | ------------------------------------ |
@@ -307,7 +307,7 @@ For a public key to be identifiable to the node the public key data MUST be prep
 
 *Example:*
 
-Below is a representation of an uncompressed secp256k1 public key.
+Below is a representation of an deserialized secp256k1 public key.
 
 ```text
 04
@@ -337,13 +337,13 @@ ab | 97 | bd | 50 | 05 | 4c | 6e | bc
 61 | 24 | 24 | c7 | c3 | 88 | 8b | c6
 ```
 
-### De/Compression Process Flow
+### De/Serialization Process Flow
 
-When implementing the pk de/compression functionality, the node MUST be passed a `multicodec` identified public key, of the above supported types, encoded with a valid `multibase` identifier.
+When implementing the pk de/serialization functionality, the node MUST be passed a `multicodec` identified public key, of the above supported types, encoded with a valid `multibase` identifier.
 
-This specification RECOMMENDs that the node also accept an encoding type parameter to encode the output data. This provides for the case where the user requires the de/compressed key to be in a different encoding to the encoding of the given key. 
+This specification RECOMMENDs that the node also accept an encoding type parameter to encode the output data. This provides for the case where the user requires the de/serialization key to be in a different encoding to the encoding of the given key. 
 
-#### Compression Example
+#### Serialization Example
 
 A hexadecimal encoded secp256k1 public chat key typically is represented as below:
 
@@ -351,7 +351,7 @@ A hexadecimal encoded secp256k1 public chat key typically is represented as belo
 0x04261c55675e55ff25edb50b345cfb3a3f35f60712d251cbaaab97bd50054c6ebc3cd4e22200c68daf7493e1f8da6a190a68a671e2d3977809612424c7c3888bc6
 ``` 
 
-To be properly interpreted by the node for compression the public key MUST be prepended with the `multicodec` `uvarint` code `0xea 0x01` and encoded with a valid `multibase` encoding, therefore giving the following:
+To be properly interpreted by the node for serialization the public key MUST be prepended with the `multicodec` `uvarint` code `0xea 0x01` and encoded with a valid `multibase` encoding, therefore giving the following:
 
 ```text
 fea0104261c55675e55ff25edb50b345cfb3a3f35f60712d251cbaaab97bd50054c6ebc3cd4e22200c68daf7493e1f8da6a190a68a671e2d3977809612424c7c3888bc6
@@ -381,11 +381,11 @@ ed | b5 | 0b | 34 | 5c | fb | 3a | 3f
 ab | 97 | bd | 50 | 05 | 4c | 6e | bc
 ```
 
-#### Decompression Example
+#### Deserialization Example
 
-For the user the decompression process is exactly the same as compression with the exception that the user MUST provide a compressed public key for decompression. Else the decompression algorithm will fail.
+For the user the deserialization process is exactly the same as serialization with the exception that the user MUST provide a serialized public key for deserialization. Else the deserialization algorithm will fail.
 
-For further guidance on the implementation of public key de/compression consult the [`status-go` implementation and tests](https://github.com/status-im/status-go/blob/c9772325f2dca76b3504191c53313663ca2efbe5/api/utils_test.go).  
+For further guidance on the implementation of public key de/serialization consult the [`status-go` implementation and tests](https://github.com/status-im/status-go/blob/c9772325f2dca76b3504191c53313663ca2efbe5/api/utils_test.go).  
 
 ## Security Considerations
 
@@ -397,7 +397,7 @@ For further guidance on the implementation of public key de/compression consult 
 
 Released // TODO
 
-- Added details of public key compression and decompression
+- Added details of public key serialization and deserialization
 
 ### Version 0.3
 
