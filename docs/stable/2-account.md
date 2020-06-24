@@ -423,7 +423,7 @@ For further guidance on the implementation of public key de/serialization consul
 
 ### Version 0.4
 
-Released // TODO
+Released [June 24, 2020](https://github.com/status-im/specs/commit/e98a9b76b7d4e1ce93e0b692e1521c2d54f72c59)
 
 - Added details of public key serialization and deserialization
 
