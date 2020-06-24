@@ -11,6 +11,7 @@ blockable
 BlockByHash
 BlockByNumber
 blockchain
+BLS
 BundleContainer
 chainId
 Changelog
@@ -34,9 +35,13 @@ DApp
 dapp
 dapps
 DDoS
+de
+De
 decrypt
 decrypted
 decrypting
+Deserialization
+deserialization
 deserialized
 deterministically
 devp
@@ -130,7 +135,10 @@ merkle
 MessageType
 mixnets
 multiaccount
+multibase
 multicasting
+multicodec
+multiformats
 multihash
 MVDS
 myPrivateKey
@@ -141,6 +149,7 @@ oneof
 Oskar
 PairInstallation
 params
+parsable
 partitionsNum
 partitionTopic
 peerID
@@ -160,6 +169,7 @@ pre
 prekey
 prekeys
 prepend
+prepended
 prepending
 privkey
 protobuf
@@ -215,8 +225,10 @@ unix
 Upgradability
 URI
 URIs
+url
 uuid
 UX
+varint
 Volodymyr
 Volosovskyi
 Vp
