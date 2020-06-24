@@ -1,7 +1,7 @@
 ---
 title: Dapp browser API usage
 version: 0.1.0
-permalink: /spec/10
+permalink: /spec/14
 parent: Draft specs
 status: Draft
 authors: 
