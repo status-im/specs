@@ -10,7 +10,7 @@ title: 6/PAYLOADS
 >
 > Status: Draft
 >
-> Authors: Adam Babik <adam@status.im>, Andrea Maria Piana <andreap@status.im>, Oskar Thorén <oskar@status.im> (alphabetical order)
+> Authors: Adam Babik <adam@status.im>, Andrea Maria Piana <andreap@status.im>, Oskar Thorén <oskar@status.im>, Samuel Hawksby-Robinson <samuel@status.im> (alphabetical order)
 
 ## Abstract
 
@@ -42,6 +42,7 @@ as various clients created using different technologies.
    - [Contact Update](#contact-update)
      - [Payload](#payload-2)
      - [Contact update](#contact-update-1)
+   - [EmojiReaction](#emojireaction)
    - [SyncInstallationContact](#syncinstallationcontact)
      - [Payload](#payload-3)
    - [SyncInstallationPublicChat](#syncinstallationpublicchat)
@@ -235,9 +236,8 @@ message AudioMessage {
     UNKNOWN_AUDIO_TYPE = 0;
     AAC = 1;
     AMR = 2;
-  }
-}
-```
+
+
 
 #### Message types
 
@@ -315,6 +315,52 @@ A client SHOULD send a `ContactUpdate` to all the contacts each time:
 - A user edits the profile image
 
 A client SHOULD also periodically send a `ContactUpdate` to all the contacts, the interval is up to the client, the Status official client sends these updates every 48 hours.
+
+### EmojiReaction
+
+`EmojiReaction`s represents a user's "reaction" to a specific chat message. For more information about the concept of
+emoji reactions see [Facebook Reactions](https://en.wikipedia.org/wiki/Facebook_like_button#Use_on_Facebook).
+
+This specification RECOMMENDS that the UI/UX implementation of sending `EmojiReactions` requires only a single click
+operation, as users have an expectation that emoji reactions are effortless and simple to perform.  
+
+```protobuf
+message EmojiReaction {
+  // clock Lamport timestamp of the chat message
+  uint64 clock = 1;
+
+  // chat_id the ID of the chat the message belongs to, for query efficiency the chat_id is stored in the db even though the
+  // target message also stores the chat_id
+  string chat_id = 2;
+
+  // message_id the ID of the target message that the user wishes to react to
+  string message_id = 3;
+
+  // message_type is (somewhat confusingly) the ID of the type of chat the message belongs to
+  MessageType message_type = 4;
+
+  // type the ID of the emoji the user wishes to react with
+  Type type = 5;
+
+  enum Type {
+    UNKNOWN_EMOJI_REACTION_TYPE = 0;
+    LOVE = 1;
+    THUMBS_UP = 2;
+    THUMBS_DOWN = 3;
+    LAUGH = 4;
+    SAD = 5;
+    ANGRY = 6;
+  }
+
+ // whether this is a retraction of a previously sent emoji
+  bool retracted = 6;
+}
+```
+
+Clients MUST specify `clock`, `chat_id`, `message_id`, `type` and `message_type`.
+
+This specification RECOMMENDS that the UI/UX implementation of retracting an `EmojiReaction`s requires only a single
+click operation, as users have an expectation that emoji reaction removals are effortless and simple to perform.  
 
 ### SyncInstallationContact
 
