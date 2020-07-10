@@ -73,6 +73,8 @@ EE
 Eigenmann
 EIP
 EIPs
+EmojiReaction
+EmojiReactionRetraction
 EncodeToString
 enode
 enr
