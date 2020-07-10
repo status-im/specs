@@ -35,6 +35,8 @@ as various clients created using different technologies.
      - [Content types](#content-types)
        - [Sticker content type](#sticker-content-type)
        - [Image content type](#image-content-type)
+       - [EmojiReaction content type](#emojireaction-content-type)
+       - [EmojiReactionRetraction content type](#emojireactionretraction-content-type)
      - [Message types](#message-types)
      - [Clock vs Timestamp and message ordering](#clock-vs-timestamp-and-message-ordering)
      - [Chats](#chats)
@@ -109,6 +111,8 @@ message ChatMessage {
   oneof payload {
     StickerMessage sticker = 9;
     ImageMessage image = 10;
+    EmojiReaction emoji_reaction = 11;
+    EmojiReactionRetraction emoji_reaction_retraction = 12;
   }
 
   enum MessageType {
@@ -128,6 +132,8 @@ message ChatMessage {
     // Only local
     SYSTEM_MESSAGE_CONTENT_PRIVATE_GROUP = 6;
     IMAGE = 7;
+    EMOJI_REACTION = 8;
+    EMOJI_REACTION_RETRACTION = 9;
   }
 }
 ```
@@ -144,7 +150,7 @@ message ChatMessage {
 | 6 | chat_id | `string` | The local ID of the chat the message is sent to |
 | 7 | message_type | `MessageType` | The type of message, different for one-to-one, public or group chats |
 | 8 | content_type | `ContentType` | The type of the content of the message | 
-| 9 | payload | `Sticker|Image|nil` | The payload of the message based on the content type |
+| 9 | payload | `Sticker` I `Image` I `EmojiReaction` I `EmojiReactionRetraction` I `nil` | The payload of the message based on the content type |
 
 #### Content types
 
@@ -159,6 +165,8 @@ There are other content types that MAY be implemented by the client:
 * `EMOJI`
 * `TRANSACTION_COMMAND`
 * `IMAGE`
+* `EMOJI_REACTION`
+* `EMOJI_REACTION_RETRACTION`
 
 ##### Sticker content type
 
@@ -188,6 +196,49 @@ message ImageMessage {
     WEBP = 3;
     GIF = 4;
   }
+}
+```
+
+##### EmojiReaction content type
+
+`EmojiReaction`s represents a user's "reaction" to a specific chat message. For more information about the concept of
+emoji reactions see [Facebook Reactions](https://en.wikipedia.org/wiki/Facebook_like_button#Use_on_Facebook).
+
+This specification RECOMMENDS that the UI/UX implementation of sending `EmojiReactions` requires only a single click
+operation, as users have an expectation that emoji reactions are effortless and simple to perform.  
+
+A `ChatMessage` with `EMOJI_REACTION` `Content/Type` MUST also specify the `EmojiReaction` fields `message_id` and `type`
+
+```protobuf
+message EmojiReaction {
+  string message_id = 1;
+  Type type = 2;
+
+  enum Type {
+    UNKNOWN_EMOJI_REACTION_TYPE = 0;
+    LOVE = 1;
+    THUMBS_UP = 2;
+    THUMBS_DOWN = 3;
+    LAUGH = 4;
+    SAD = 5;
+    ANGRY = 6;
+  }
+}
+```
+
+#####  EmojiReactionRetraction content type
+
+`EmojiReactionRetraction`s represent a user removing a reaction, they previously performed, from a specific chat message.
+
+This specification RECOMMENDS that the UI/UX implementation of sending `EmojiReactionRetraction`s requires only a single
+click operation, as users have an expectation that emoji reaction removals are effortless and simple to perform.  
+
+A `ChatMessage` with `EMOJI_REACTION_RETRACTION` `Content/Type` MUST also specify the `EmojiReactionRetraction` field
+`emoji_reaction_id`
+
+```protobuf
+message EmojiReactionRetraction {
+  string emoji_reaction_id = 1;
 }
 ```
 
