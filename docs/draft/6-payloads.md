@@ -402,7 +402,7 @@ There are two ways to upgrade the protocol without breaking compatibility:
 
 ### Version 0.4
 
-Released []()
+Released [July 16, 2020](https://github.com/status-im/specs/commit/ad45cd5fed3c0f79dfa472253a404f670dd47396)
 
 - Added support for images
 - Added support for audio
