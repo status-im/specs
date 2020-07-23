@@ -62,15 +62,44 @@ The node wraps all payloads in a [protobuf record](https://developers.google.com
 record:
 
 ```protobuf
-message StatusProtocolMessage {
-  bytes signature = 4001;
-  bytes payload = 4002;
+message ApplicationMetadataMessage {
+  bytes signature = 1;
+  bytes payload = 2;
+
+  Type type = 3;
+
+  enum Type {
+    UNKNOWN = 0;
+    CHAT_MESSAGE = 1;
+    CONTACT_UPDATE = 2;
+    MEMBERSHIP_UPDATE_MESSAGE = 3;
+    PAIR_INSTALLATION = 4;
+    SYNC_INSTALLATION = 5;
+    REQUEST_ADDRESS_FOR_TRANSACTION = 6;
+    ACCEPT_REQUEST_ADDRESS_FOR_TRANSACTION = 7;
+    DECLINE_REQUEST_ADDRESS_FOR_TRANSACTION = 8;
+    REQUEST_TRANSACTION = 9;
+    SEND_TRANSACTION = 10;
+    DECLINE_REQUEST_TRANSACTION = 11;
+    SYNC_INSTALLATION_CONTACT = 12;
+    SYNC_INSTALLATION_ACCOUNT = 13;
+    SYNC_INSTALLATION_PUBLIC_CHAT = 14;
+    CONTACT_CODE_ADVERTISEMENT = 15;
+    PUSH_NOTIFICATION_REGISTRATION = 16;
+    PUSH_NOTIFICATION_REGISTRATION_RESPONSE = 17;
+    PUSH_NOTIFICATION_QUERY = 18;
+    PUSH_NOTIFICATION_QUERY_RESPONSE = 19;
+    PUSH_NOTIFICATION_REQUEST = 20;
+    PUSH_NOTIFICATION_RESPONSE = 21;
+  }
 }
 ```
 
 `signature` is the bytes of the signed `SHA3-256` of the payload, signed with the key of the author of the message.
 The node needs the signature to validate authorship of the message, so that the message can be relayed to third parties.
 If a signature is not present, but an author is provided by a layer below, the message is not to be relayed to third parties, and it is considered plausibly deniable.
+
+`payload` is the protobuf encoded content of the message, with the corresponding `type` set.
 
 ## Encoding
 
