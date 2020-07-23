@@ -29,20 +29,16 @@ title: 16/PUSH-NOTIFICATION-SERVER
     - [Sending a notification](#sending-a-notification)
     - [Receiving a push notification](#receiving-a-push-notification)
   - [Protobuf description](#protobuf-description)
-    - [PushNotificationRegister](#pushnotificationregister)
-    - [PushNotificationPreferences](#pushnotificationpreferences)
-    - [PushNotificationDeviceToken](#pushnotificationdevicetoken)
-    - [PushNotificationFilterSettings](#pushnotificationfiltersettings)
+    - [PushNotificationRegistration](#pushnotificationregistration)
     - [PushNotificationRegistrationResponse](#pushnotificationregistrationresponse)
     - [ContactCodeAdvertisement](#contactcodeadvertisement)
-    - [PushNotificationAdvertisementInfo](#pushnotificationadvertisementinfo)
     - [PushNotificationQuery](#pushnotificationquery)
     - [PushNotificationQueryInfo](#pushnotificationqueryinfo)
     - [PushNotificationQueryResponse](#pushnotificationqueryresponse)
     - [PushNotification](#pushnotification)
     - [PushNotificationRequest](#pushnotificationrequest)
-    - [PushNotificationAcknowledgement](#pushnotificationacknowledgement)
-  - [Partitioned topic](#partitioned-topic)
+    - [PushNotificationResponse](#pushnotificationacknowledgement)
+    - [PushNotificationReport](#pushnotificationreport)
   - [Anonymous mode of operations](#anonymous-mode-of-operations)
   - [Security considerations](#security-considerations)
   - [FAQ](#faq)
@@ -100,57 +96,52 @@ A Status client that wants to send push notifications
 
 A client MAY register with one or more Push Notification services of their choice.
 
-[//]: # (We can have a separate partitioned topic scheme, or individual based on PK)
-
-A `PNR message` (Push Notification Registration) MUST be sent to the [partitioned topic](#partitioned-topic) for the
+A `PNR message` (Push Notification Registration) MUST be sent to the [partitioned topic](../stable/10-waku-usage.md#partitioned-topic) for the
 public key of the node, encrypted with this key.
+
+The message MUST be wrapped in a [`ApplicationMetadataMessage`](../stable/6-payloads.6#payload-wrapper) with type set to `PUSH_NOTIFICATION_REGISTRATION`. 
+
+The marshaled protobuf payload MUST also be encrypted with AES-GCM using the Diffie–Hellman key
+generated from the client and server identity.
+
+This is done in order to ensure that the extracted key from the signature will be
+considered invalid if it can't decrypt the payload.
 
 The content of the message MUST contain the following [protobuf record](https://developers.google.com/protocol-buffers/):
 
 ```protobuf
-
-message PushNotificationFilterSettings {
-  boolean enabled = 1;
-  repeated string allowed_key_list = 2;
-  repeated string blocked_chat_list = 3;
-}
-
-message PushNotificationDeviceToken {
+message PushNotificationRegistration {
   enum TokenType {
     UNKNOWN_TOKEN_TYPE = 0;
     APN_TOKEN = 1;
     FIREBASE_TOKEN = 2;
   }
   TokenType token_type = 1;
-  string token = 2;
+  string device_token = 2;
   string installation_id = 3;
-  PushNotificationFilterSettings filter_settings = 4;
-}
-
-message PushNotificationPreferences {
-  repeated PushNotificationDeviceToken device_tokens = 1;
-  uint version = 2;
-  boolean unregister = 3;
   string access_token = 4;
-}
-
-message PushNotificationRegister {
-  bytes payload = 1;
-  bytes signature = 2;
+  bool enabled = 5;
+  uint64 version = 6;
+  repeated bytes allowed_key_list = 7;
+  repeated bytes blocked_chat_list = 8;
+  bool unregister = 9;
+  bytes grant = 10;
+  bool allow_from_contacts_only = 11;
 }
 ```
 
 A push notification server will handle the message according to the following rules:
 
-- it MUST verify that the `signature` matches the public key of the sender.
+- it MUST extract the public key of the sender from the signature and verify that 
+  the payload can be decrypted successfully.
 - it MUST verify that `token_type` is supported
-- it MUST verify that `token` is non empty
+- it MUST verify that `device_token` is non empty
 - it MUST verify that `installation_id` is non empty
-- it MUST verify that `version` is non-zero and greater than the currently stored version for the public key of the sender, if any
-- it MUST verify that `device_tokens` is non empty
+- it MUST verify that `version` is non-zero and greater than the currently stored version for the public key and installation id of the sender, if any
+- it MUST verify that `grant` is non empty and according to the [specs](#server-grant)
 - it MUST verify that `access_token` is a valid [`uuid`](https://tools.ietf.org/html/rfc4122)
 
-If `signature` does not match the public key of the sender, the message MUST be discarded.
+If the message can't be decrypted, the message MUST be discarded.
 
 If `token_type` is not supported, a response MUST be sent with `error` set to
 `UNSUPPORTED_TOKEN_TYPE`.
@@ -163,23 +154,22 @@ be sent with `error` set to `VERSION_MISMATCH`.
 
 If any other error occurs the `error` should be set to `INTERNAL_ERROR`.
 
-with `success` set to `true`.
-
-Otherwise a response MUST be sent with `success` set to `false`.
+If the response is successful `success` MUST be set to `true` otherwise a response MUST be sent with `success` set to `false`.
 
 
-`request_id` should be set to the `SHA3-256` of the signature sent by the client.
+`request_id` should be set to the `SHAKE-256` of the encrypted payload.
 
-The response MUST be sent on the [partitioned topic][./10-waku-usage.md#partitioned-topic] of the sender.
+The response MUST be sent on the [partitioned topic][./10-waku-usage.md#partitioned-topic] of the sender
+and MUST not be encrypted using the [secure transport](../docs/stable/5-secure-transport.md) to facilitate
+the usage of ephemeral keys.
 
 The payload of the response is:
 
 ```protobuf
 message PushNotificationRegistrationResponse {
-  boolean success = 1;
+  bool success = 1;
   ErrorType error = 2;
   bytes request_id = 3;
-  PushNotificationPreferences preferences = 4;
 
   enum ErrorType {
     UNKNOWN_ERROR_TYPE = 0;
@@ -191,9 +181,10 @@ message PushNotificationRegistrationResponse {
 }
 ```
 
-[//]: (We can ratched and use a partitioned topic here)
+The message MUST be wrapped in a [`ApplicationMetadataMessage`](../stable/6-payloads.6#payload-wrapper) with type set to `PUSH_NOTIFICATION_REGISTRATION_RESPONSE`. 
 
-A client SHOULD listen for a response sent on their [partitioned topic][./10-waku-usage.md#partitioned-topic].
+A client SHOULD listen for a response sent on the [partitioned topic][./10-waku-usage.md#partitioned-topic]
+that the key used to register.
 
 If `success` is `true` the client has registered successfully.
 
@@ -203,23 +194,45 @@ If `success` is `false`:
   that it is correctly formed.
 - If `INTERNAL_ERROR` is returned, the request MAY be retried, but the client MUST 
   backoff exponentially
-- If `VERSION_MISMATCH` is returned, the client SHOULD ensure that the version is incremented to beyond the remote version returned in preferences and then the request MAY be sent again
 
 A client MAY register with multiple Push Notification Servers in order to increase availability.
 
-A client SHOULD make sure that all the notification services they registered with have the same information about their devices and tokens.
+A client SHOULD make sure that all the notification services they registered with have the same information about their tokens.
 
 If no response is returned the request SHOULD be considered failed and MAY be retried with the same server or a different one, but clients MUST exponentially backoff after each trial.
 
-If the request is successful the token SHOULD be [advertised](#advertising-a-push-notification-server) as described below if no public key filtering is necessary.
+If the request is successful the token SHOULD be [advertised](#advertising-a-push-notification-server) as described below
+
+### Query topic
+
+On successful registration the server MUST be listening to the topic derived from:
+
+```
+   0XHexEncode(Shake256(CompressedClientPublicKey))
+```
+
+Using the topic derivation algorithm described [here](../stable/10-waku-usage.md#public-chats)
+and listen for client queries.
+
+### Server grant
+
+A push notification server needs to demonstrate to a client that it was authorized
+by the client to send them push notifications. This is done by building 
+a grant which is specific to a given client-server pair.
+The grant is built as follow:
+
+```
+   Signature(Keccak256(CompressedPublicKeyOfClient . CompressedPublicKeyOfServer . AccessToken), PrivateKeyOfClient)
+```
+
+When receiving a grant the server MUST be validate that the signature matches the registering client.
 
 ## Re-registering with the push notification server
 
 A client SHOULD re-register with the node if the APN or FIREBASE token changes.
 
 When re-registering a client SHOULD ensure that it has the most up-to-date
-`PushNotificationPreferences`, update the part relative to their `installation_id`
-if necessary, increment `version` and send a `PushNotificationRegister` as described above.
+`PushNotificationRegistration` and increment `version` if necessary.
 
 Once re-registered, a client SHOULD advertise the changes.
 
@@ -230,8 +243,8 @@ This is handled in exactly the same way as re-registering above.
 
 ## Unregistering from push notifications
 
-To unregister a client MUST send a `PushNotificationRegister` request as described
-above with `unregister` in `PushNotificationPreferences` set to `true`, or removing
+To unregister a client MUST send a `PushNotificationRegistration` request as described
+above with `unregister` set to `true`, or removing
 their device information.
 
 The server MUST remove all data about this user if `unregistering` is `true`,
@@ -247,16 +260,22 @@ Each user registered with one or more push notification servers SHOULD
 advertise periodically the push notification services that they have registered with for each device they own.
 
 ```protobuf
-message PushNotificationAdvertisementInfo {
-  bytes public_key = 1;
-  string access_token = 2;
-  string installation_id = 3;
+message PushNotificationQueryInfo {
+  string access_token = 1;
+  string installation_id = 2;
+  bytes public_key = 3;
+  repeated bytes allowed_user_list = 4;
+  bytes grant = 5;
+  uint64 version = 6;
+  bytes server_public_key = 7;
 }
 
 message ContactCodeAdvertisement {
-  repeated PushNotificationAdvertisementInfo push_notification_info = 1;
+  repeated PushNotificationQueryInfo push_notification_info = 1;
 }
 ```
+
+The message MUST be wrapped in a [`ApplicationMetadataMessage`](../stable/6-payloads.6#payload-wrapper) with type set to `PUSH_NOTIFICATION_QUERY_INFO`. 
 
 If no filtering is done based on public keys,
 the access token SHOULD be included in the advertisement.
@@ -271,9 +290,6 @@ contact-code SHOULD be re-advertised.
 Multiple servers MAY be advertised for the same `installation_id` for redundancy reasons.
 
 ## Discovering a push notification server
-
-[//]: We could query directly the nodes on a shared topic, but for simplicity and
-bandwidth usage this is the most convenient for now.
 
 To discover a push notification service for a given user, their [contact code topic](./10-waku-usage.md#contact-code-topic)
 SHOULD be listened to.
@@ -293,42 +309,57 @@ message PushNotificationQuery {
 }
 ```
 
-MUST be sent to the server.
+The message MUST be wrapped in a [`ApplicationMetadataMessage`](../stable/6-payloads.6#payload-wrapper) with type set to `PUSH_NOTIFICATION_QUERY`. 
 
-A response MUST be sent:
+MUST be sent to the server on the topic derived from the hashed public key of the
+key we are querying, as [described above](#query-topic).
+
+An ephemeral key SHOULD be used and SHOULD NOT be encrypted using the [secure transport](../docs/stable/5-secure-transport.md).
+
+If the server has information about the client a response MUST be sent:
 
 ```protobuf
 message PushNotificationQueryInfo {
   string access_token = 1;
   string installation_id = 2;
   bytes public_key = 3;
-  repeated encrypted_access_tokens = 4;
+  repeated bytes allowed_user_list = 4;
+  bytes grant = 5;
+  uint64 version = 6;
+  bytes server_public_key = 7;
 }
 
 message PushNotificationQueryResponse {
   repeated PushNotificationQueryInfo info = 1;
-
+  bytes message_id = 2;
+  bool success = 3;
 }
 ```
 
+A `PushNotificationQueryResponse` message MUST be wrapped in a [`ApplicationMetadataMessage`](../stable/6-payloads.6#payload-wrapper) with type set to `PUSH_NOTIFICATION_QUERY_RESPONSE`. 
+
 Otherwise a response MUST NOT be sent.
 
-If `allowed_key_list` is not set `access_token` MUST be set and `encrypted_access_tokens` MUST NOT
+If `allowed_key_list` is not set `access_token` MUST be set and `allowed_key_list` MUST NOT
 be set.
 
-If `allowed_key_list` is set `encrypted_access_tokens` MUST be set and `access_token` MUST NOT be set.
+If `allowed_key_list` is set `allowed_key_list` MUST be set and `access_token` MUST NOT be set.
 
 If `access_token` is returned, the `access_token` SHOULD be used to send push notifications.
 
-[//]: TODO: Add more details on the exact encryption method, AES-CTR etc
 
-If `encrypted_access_tokens` are returned, the client SHOULD decrypt each
-token by generating an `AES` symmetric key from the Diffie–Hellman between the
+If `allowed_key_list` are returned, the client SHOULD decrypt each
+token by generating an `AES-GCM` symmetric key from the Diffie–Hellman between the
 target client and itself
 If AES decryption succeeds it will return a valid [`uuid`](https://tools.ietf.org/html/rfc4122) which is what is used for access_token.
 The token SHOULD be used to send push notifications.
 
-When querying a notification server an ephemeral key-pair MAY be used.
+The response MUST be sent on the [partitioned topic][./10-waku-usage.md#partitioned-topic] of the sender
+and MUST not be encrypted using the [secure transport](../docs/stable/5-secure-transport.md) to facilitate
+the usage of ephemeral keys.
+
+On receiving a response a client MUST verify `grant` to ensure that the server
+has been authorized to send push notification to a given client.
 
 ## Sending a push notification
 
@@ -348,31 +379,31 @@ a push notification message SHOULD be sent to the corresponding push notificatio
 message PushNotification {
   string access_token = 1;
   string chat_id = 2;
+  bytes public_key = 3;
+  string installation_id = 4;
+  bytes message = 5;
 }
 
 message PushNotificationRequest {
   repeated PushNotification requests = 1;
-  bytes message = 2;
-  string message_id = 3;
-  string ack_key = 4;
+  bytes message_id = 2;
 }
 ```
 
+A `PushNotificationRequest` message MUST be wrapped in a [`ApplicationMetadataMessage`](../stable/6-payloads.6#payload-wrapper) with type set to `PUSH_NOTIFICATION_REQUEST`. 
+
 Where `message` is the encrypted payload of the message and `chat_id` is the
-`SHA3-256` of the `chat_id`.
-`message_id` is the id of the message (link)
+`SHAKE-256` of the `chat_id`.
+`message_id` is the id of the message
 
 If multiple server are available for a given push notification, only one notification
 MUST be sent.
-The sender SHOULD be listening on the topic derived from the first 4 bytes of `SHA3-256(ack_key)` and with
-a waku AES symmetric encryption key of `ack_key`.
 
 If no response is received
 a client SHOULD wait at least 3 seconds, after which the request MAY be retried against a different server
 
-[//]: Can someone replay this message? a uuid could be added to avoid this
 
-This message SHOULD be sent using an ephemeral key or unsigned.
+This message SHOULD be sent using an ephemeral key.
 
 On receiving the message, the push notification server MUST validate the access token.
 If the access token is valid, a notification MUST be sent to the gorush instance with the
@@ -401,20 +432,33 @@ documentation](https://github.com/appleboy/gorush)
 A server MUST return a response message:
 
 ```protobuf
-message PushNotificationAcknowledgement {
-  string id = 1;
-  bool success = 2;
-  ErrorType error = 3;
+message PushNotificationReport {
+  bool success = 1;
+  ErrorType error = 2;
   enum ErrorType {
     UNKNOWN_ERROR_TYPE = 0;
-    BAD_TOKEN = 1;
+    WRONG_TOKEN = 1;
     INTERNAL_ERROR = 2;
+    NOT_REGISTERED = 3;
   }
+  bytes public_key = 3;
+  string installation_id = 4;
+}
+
+message PushNotificationResponse {
+  bytes message_id = 1;
+  repeated PushNotificationReport reports = 2;
 }
 ```
 
-Where id is the `ack_key` sent by the client.
-The topic and encryption key used MUST be the same as described above.
+
+A `PushNotificationResponse` message MUST be wrapped in a [`ApplicationMetadataMessage`](../stable/6-payloads.6#payload-wrapper) with type set to `PUSH_NOTIFICATION_RESPONSE`. 
+
+Where `message_id` is the `message_id` sent by the client.
+
+The response MUST be sent on the [partitioned topic][./10-waku-usage.md#partitioned-topic] of the sender
+and MUST not be encrypted using the [secure transport](../docs/stable/5-secure-transport.md) to facilitate
+the usage of ephemeral keys.
 
 If the request is accepted `success` MUST be set to `true`.
 Otherwise `success` MUST be set to `false`.
@@ -438,7 +482,7 @@ If `error` is `INTERNAL_ERROR` the client MAY retry the request.
 
 - A client should prepare a message and extract the targeted installation-ids
 - It should retrieve the most up to date information for a given user, either by
-  querying a mailserver if not listening already to the given topic, or checking
+  querying a push notification server, a mailserver if not listening already to the given topic, or checking
   the database locally
 - It should then [send](#sending-a-push-notification) a push notification according
   to the rules described
@@ -453,67 +497,37 @@ If `error` is `INTERNAL_ERROR` the client MAY retry the request.
 
 ## Protobuf description
 
-### PushNotificationRegister
-
-A `PushNotificationRegister` is used to register with a Push Notification server.
-
-`payload`: the protobuf encoded `PushNotificationPreferences`.
-
-`signature`: the signature of the `payload` concatenated with the compressed `Secp256k` key of the Push Notification server. `Sig(PrivateKeyClient, payload + CompressedPublicKeyNode)`
-
-#### Data disclosed
-
-- Chat key of the author
-
-### PushNotificationPreferences
-
-A push notification preferences message describes the push notification options and tokens for all the devices associated with `PublicKeyClient`.
-
-`device_tokens`: a list of `PushNotificationDeviceToken`, one for each device owned by the user.
-`version`: a monotonically increasing number identifying the current `PushNotificationPreferences`. Any time anything is changed in the record it MUST be increased by the client, otherwise the request will not be accepted.
-`unregister`: whether the account should be unregistered
-`access_token`: the access token that will be given to clients to send push notifications
-
-#### Data disclosed
-
-- Number of devices with push notifications enabled for a given chat key
-- The times a push notification record has been modified by the user
-
-### PushNotificationDeviceToken
-
-`PushNotificationDeviceToken` represent the token and preferences for a given device.
+### PushNotificationRegistration
 
 `token_type`: the type of token. Currently supported is `APN_TOKEN` for Apple Push
-Notification service and `FIREBASE_TOKEN` for `Firebase`.
-`token`: the actual push notification token sent by `Firebase` or `APN`
+`device_token`: the actual push notification token sent by `Firebase` or `APN`
+and `FIREBASE_TOKEN` for firebase.
 `installation_id`: the [`installation_id`](./2-account.md) of the device
-`filter_setttings`: the push notification filters for this device.
-
-#### Data disclosed
-
-- Type of device owned by a given user
-- The `FIREBASE` or `APN` push notification token
-
-### PushNotificationFilterSettings
-
-[//]: (Any of these can be sha3 in order not to store it on the server)
-
+`access_token`: the access token that will be given to clients to send push notifications
 `enabled`: whether the device wants to be sent push notifications
+`version`: a monotonically increasing number identifying the current `PushNotificationRegistration`. Any time anything is changed in the record it MUST be increased by the client, otherwise the request will not be accepted.
 `allowed_key_list`: a list of `access_token` encrypted with the AES key generated
  by Diffie–Hellman between the publisher and the allowed
 contact.
 `blocked_chat_list`: a list of `SHA2-256` hashes of chat ids.
 Any chat id in this list will not trigger a notification.
+`unregister`: whether the account should be unregistered
+`grant`: the grant for this specific server
+`allow_from_contacts_only`: whether the client only wants push notifications from contacts
 
 #### Data disclosed
 
+- Type of device owned by a given user
+- The `FIREBASE` or `APN` push notification token
 - Hash of the chat_id a user is not interested in for notifications
+- The times a push notification record has been modified by the user
+- The number of contacts a client has, in case `allowed_key_list` is set
 
 ### PushNotificationRegistrationResponse
 
 `success`: whether the registration was successful
 `error`: the error type, if any
-`request_id`: the `SHA3-256` hash of the `signature` of the request
+`request_id`: the `SHAKE-256` hash of the `signature` of the request
 `preferences`: the server stored preferences in case of an error
 
 ### ContactCodeAdvertisement
@@ -524,87 +538,65 @@ Any chat id in this list will not trigger a notification.
 
 - The chat key of the sender
 
-### PushNotificationAdvertisementInfo
-
-`public_key`: the public key of the server where this device is registered
-`access_token`: the access token used by the server, only if the allow/block list is non-empty
-`installation_id`: the installation id of the device
-
-#### Data disclosed
-
-- The public key of the server the client has registered with
-- Whether the user has any restriction on the public keys that are allowed to
-  send notifications
-- The `installation_id` of the device
 
 ### PushNotificationQuery
 
-`public_keys`: the `SHA3-256` of the public keys the client is interested in
+`public_keys`: the `SHAKE-256` of the public keys the client is interested in
 
 #### Data disclosed
 
-- The hash of the public keys the user is interested in
+- The hash of the public keys the client is interested in
 
 ### PushNotificationQueryInfo
 
 `access_token`: the access token used to send a push notification
 `installation_id`: the `installation_id` of the device associated with the `access_token`
-`public_key`: the `SHA3-256` of the public key associated with this `access_token` and `installation_id`
-`encrypted_access_tokens`: a list of encrypted access tokens to be returned
+`public_key`: the `SHAKE-256` of the public key associated with this `access_token` and `installation_id`
+`allowed_key_list`: a list of encrypted access tokens to be returned
 to the client in case there's any filtering on public keys in place.
+`grant`: the grant used to register with this server.
+`version`: the version of the registration on the server.
+`server_public_key`: the compressed public key of the server.
 
 ### PushNotificationQueryResponse
 
-`info`:  a list of `PushNotificationQueryInfo`
+`info`:  a list of `PushNotificationQueryInfo`.
+`message_id`: the message id of the `PushNotificationQueryInfo` the server is replying to.
+`success`: whether the query was successful.
 
 ### PushNotification
 
-`access_token`: the access token used to send a push notification
-`chat_id`: the `SHA3-256` of the `chat_id`
+`access_token`: the access token used to send a push notification.
+`chat_id`: the `SHAKE-256` of the `chat_id`.
+`public_key`: the `SHAKE-256` of the compressed public key of the receiving client.
+`installation_id`: the installation id of the receiving client.
+`message`: the encrypted message that is being notified on.
 
 ### Data disclosed
 
-- The `SHA3-256` of the `chat_id` the notification is to be sent for
+- The `SHAKE-256` of the `chat_id` the notification is to be sent for
+- the cypher text of the message
 
 ### PushNotificationRequest
 
 `requests`: a list of `PushNotification`
-`message`: the encrypted message that we want to notify on
 `message_id`: the [status message id](./6-payloads.md)
-`ack_key`: a 32 bytes long AES key
 
 ### Data disclosed
 
 - The status message id for which the notification is for
-- the cypher text of the message
 
-### PushNotificationAcknowledgement
+### PushNotificationResponse
 
-`id`: the `ack_key` string passed by the client
+`message_id`: the `message_id` being notified on.
+`reports`: a list of `PushNotificationReport`
 
-## Partitioned topic
+### PushNotificationReport
 
-This is a modification of the [partitioned topic](./10-waku-usage.md#partitioned-topic) used by clients
-
-```golang
-var partitionsNum *big.Int = big.NewInt(5000)
-var partition *big.Int = big.NewInt(0).Mod(publicKey.X, partitionsNum)
-
-partitionTopic := "push-notifications-" + strconv.FormatInt(partition.Int64(), 10)
-
-var hash []byte = keccak256(partitionTopic)
-var topicLen int = 4
-
-if len(hash) < topicLen {
-    topicLen = len(hash)
-}
-
-var topic [4]byte
-for i = 0; i < topicLen; i++ {
-    topic[i] = hash[i]
-}
-```
-
+`success`: whether the push notification was successful.
+`error`: the type of the error in case of failure.
+`public_key`: the public key of the user being notified.
+`installation_id`: the installation id of the user being notified.
 
 ## Anonymous mode of operations
 
@@ -650,7 +642,7 @@ When querying a push notification server a client will disclose:
   but the querying client's chat key is not disclosed
 
 When sending a push notification a client discloses:
-- The `SHA3-256` of the chat id
+- The `SHAKE-256` of the chat id
 
 [//]: This section can be removed, for now leaving it here in order to help with the
 review process. Point can be integrated, suggestion welcome.
@@ -681,11 +673,6 @@ Correlation between the two can be trivial in some cases.
 This also allows a mode of use as we had before, where the server does not propagate
 info at all, and it's left to the user to propagate the token, through contact requests
 for example.
-
-### Why so many different protobuf messages?
-
-Many are just wrappers, I have not re-used any for now for clarity.
-
 
 ### Why advertise with the bundle?
 
