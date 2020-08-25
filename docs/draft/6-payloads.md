@@ -451,7 +451,7 @@ There are two ways to upgrade the protocol without breaking compatibility:
 
 ### Version 0.5
 
-Released [//TODO]()
+Released [August 25, 2020](https://github.com/status-im/specs/commit/968fafff23cdfc67589b34dd64015de29aaf41f0)
 
 - Added support for emoji reactions
 
