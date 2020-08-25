@@ -118,13 +118,6 @@ message ChatMessage {
     AudioMessage audio = 11;
   }
 
-  enum MessageType {
-    UNKNOWN_MESSAGE_TYPE = 0;
-    ONE_TO_ONE = 1;
-    PUBLIC_GROUP = 2;
-    PRIVATE_GROUP = 3;
-    // Only local
-    SYSTEM_MESSAGE_PRIVATE_GROUP = 4;}
   enum ContentType {
     UNKNOWN_CONTENT_TYPE = 0;
     TEXT_PLAIN = 1;
@@ -249,6 +242,17 @@ The following messages types MUST be supported:
 * `ONE_TO_ONE` is a message to the public group
 * `PUBLIC_GROUP` is a private message
 * `PRIVATE_GROUP` is a message to the private group.
+
+```protobuf
+  enum MessageType {
+    UNKNOWN_MESSAGE_TYPE = 0;
+    ONE_TO_ONE = 1;
+    PUBLIC_GROUP = 2;
+    PRIVATE_GROUP = 3;
+    // Only local
+    SYSTEM_MESSAGE_PRIVATE_GROUP = 4;
+}
+```
 
 #### Clock vs Timestamp and message ordering
 
