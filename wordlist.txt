@@ -1,12 +1,16 @@
 Ack
 activePublicKey
 ACL
+AAC
+AMR
+AudioType
 AES
 APIs
 APN
 accrete
 ack
 apis
+AudioMessage
 Babik
 backend
 backoff
@@ -14,6 +18,7 @@ BIP
 BIPs
 blockable
 boolean
+bool
 BlockByHash
 BlockByNumber
 blockchain
@@ -79,6 +84,7 @@ EncodeToString
 enode
 enr
 enum
+exif
 ERC
 ErrorType
 EstimateGas
@@ -215,6 +221,7 @@ requestMessages
 RLP
 RLPx
 RPC
+retraction
 scalability
 scalable
 secp
