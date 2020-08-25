@@ -10,6 +10,7 @@ APN
 accrete
 ack
 apis
+ApplicationMetadataMessage
 AudioMessage
 Babik
 backend
@@ -93,6 +94,7 @@ ethereum
 Etherscan
 EventType
 FilterLogs
+firebase
 fn
 FormatInt
 GCM
@@ -200,7 +202,7 @@ PSS
 pubkey
 publicKey
 puk
-PushNotificationRegister
+PushNotificationRegistration
 PushNotificationPreferences
 PushNotificationOptions
 PushNotificationFilterSettings
@@ -213,7 +215,8 @@ PushNotificationQueryInfo
 PushNotificationQueryResponse
 PushNotification
 PushNotificationRequest
-PushNotificationAcknowledgement
+PushNotificationResponse
+PushNotificationReport
 pyspelling
 RECOMMENDs
 relayers
