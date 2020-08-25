@@ -6,11 +6,11 @@ title: 6/PAYLOADS
 
 # 6/PAYLOADS
 
-> Version: 0.4
+> Version: 0.5
 >
 > Status: Draft
 >
-> Authors: Adam Babik <adam@status.im>, Andrea Maria Piana <andreap@status.im>, Oskar Thorén <oskar@status.im> (alphabetical order)
+> Authors: Adam Babik <adam@status.im>, Andrea Maria Piana <andreap@status.im>, Oskar Thorén <oskar@status.im>, Samuel Hawksby-Robinson <samuel@status.im> (alphabetical order)
 
 ## Abstract
 
@@ -42,6 +42,7 @@ as various clients created using different technologies.
    - [Contact Update](#contact-update)
      - [Payload](#payload-2)
      - [Contact update](#contact-update-1)
+   - [EmojiReaction](#emojireaction)
    - [SyncInstallationContact](#syncinstallationcontact)
      - [Payload](#payload-3)
    - [SyncInstallationPublicChat](#syncinstallationpublicchat)
@@ -117,13 +118,6 @@ message ChatMessage {
     AudioMessage audio = 11;
   }
 
-  enum MessageType {
-    UNKNOWN_MESSAGE_TYPE = 0;
-    ONE_TO_ONE = 1;
-    PUBLIC_GROUP = 2;
-    PRIVATE_GROUP = 3;
-    // Only local
-    SYSTEM_MESSAGE_PRIVATE_GROUP = 4;}
   enum ContentType {
     UNKNOWN_CONTENT_TYPE = 0;
     TEXT_PLAIN = 1;
@@ -151,7 +145,7 @@ message ChatMessage {
 | 6 | chat_id | `string` | The local ID of the chat the message is sent to |
 | 7 | message_type | `MessageType` | The type of message, different for one-to-one, public or group chats |
 | 8 | content_type | `ContentType` | The type of the content of the message | 
-| 9 | payload | `Sticker|Image|Audio|nil` | The payload of the message based on the content type |
+| 9 | payload | `Sticker` I `Image` I `Audio` I `nil` | The payload of the message based on the content type |
 
 #### Content types
 
@@ -235,8 +229,6 @@ message AudioMessage {
     UNKNOWN_AUDIO_TYPE = 0;
     AAC = 1;
     AMR = 2;
-  }
-}
 ```
 
 #### Message types
@@ -250,6 +242,17 @@ The following messages types MUST be supported:
 * `ONE_TO_ONE` is a message to the public group
 * `PUBLIC_GROUP` is a private message
 * `PRIVATE_GROUP` is a message to the private group.
+
+```protobuf
+  enum MessageType {
+    UNKNOWN_MESSAGE_TYPE = 0;
+    ONE_TO_ONE = 1;
+    PUBLIC_GROUP = 2;
+    PRIVATE_GROUP = 3;
+    // Only local
+    SYSTEM_MESSAGE_PRIVATE_GROUP = 4;
+}
+```
 
 #### Clock vs Timestamp and message ordering
 
@@ -315,6 +318,52 @@ A client SHOULD send a `ContactUpdate` to all the contacts each time:
 - A user edits the profile image
 
 A client SHOULD also periodically send a `ContactUpdate` to all the contacts, the interval is up to the client, the Status official client sends these updates every 48 hours.
+
+### EmojiReaction
+
+`EmojiReaction`s represents a user's "reaction" to a specific chat message. For more information about the concept of
+emoji reactions see [Facebook Reactions](https://en.wikipedia.org/wiki/Facebook_like_button#Use_on_Facebook).
+
+This specification RECOMMENDS that the UI/UX implementation of sending `EmojiReactions` requires only a single click
+operation, as users have an expectation that emoji reactions are effortless and simple to perform.  
+
+```protobuf
+message EmojiReaction {
+  // clock Lamport timestamp of the chat message
+  uint64 clock = 1;
+
+  // chat_id the ID of the chat the message belongs to, for query efficiency the chat_id is stored in the db even though the
+  // target message also stores the chat_id
+  string chat_id = 2;
+
+  // message_id the ID of the target message that the user wishes to react to
+  string message_id = 3;
+
+  // message_type is (somewhat confusingly) the ID of the type of chat the message belongs to
+  MessageType message_type = 4;
+
+  // type the ID of the emoji the user wishes to react with
+  Type type = 5;
+
+  enum Type {
+    UNKNOWN_EMOJI_REACTION_TYPE = 0;
+    LOVE = 1;
+    THUMBS_UP = 2;
+    THUMBS_DOWN = 3;
+    LAUGH = 4;
+    SAD = 5;
+    ANGRY = 6;
+  }
+
+ // whether this is a retraction of a previously sent emoji
+  bool retracted = 6;
+}
+```
+
+Clients MUST specify `clock`, `chat_id`, `message_id`, `type` and `message_type`.
+
+This specification RECOMMENDS that the UI/UX implementation of retracting an `EmojiReaction`s requires only a single
+click operation, as users have an expectation that emoji reaction removals are effortless and simple to perform.  
 
 ### SyncInstallationContact
 
@@ -399,6 +448,12 @@ There are two ways to upgrade the protocol without breaking compatibility:
 -
 
 ## Changelog
+
+### Version 0.5
+
+Released [//TODO]()
+
+- Added support for emoji reactions
 
 ### Version 0.4
 
