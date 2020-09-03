@@ -127,6 +127,9 @@ message PushNotificationRegistration {
   bool unregister = 9;
   bytes grant = 10;
   bool allow_from_contacts_only = 11;
+  string apn_topic = 12;
+  bool block_mentions = 13;
+  repeated bytes allowed_mentions_chat_list = 14;
 }
 ```
 
@@ -140,6 +143,7 @@ A push notification server will handle the message according to the following ru
 - it MUST verify that `version` is non-zero and greater than the currently stored version for the public key and installation id of the sender, if any
 - it MUST verify that `grant` is non empty and according to the [specs](#server-grant)
 - it MUST verify that `access_token` is a valid [`uuid`](https://tools.ietf.org/html/rfc4122)
+- it MUST verify that `apn_topic` is set if `token_type` is `APN_TOKEN`
 
 If the message can't be decrypted, the message MUST be discarded.
 
@@ -514,6 +518,9 @@ Any chat id in this list will not trigger a notification.
 `unregister`: whether the account should be unregistered
 `grant`: the grant for this specific server
 `allow_from_contacts_only`: whether the client only wants push notifications from contacts
+`apn_topic`: the APN topic for the push notification
+`block_mentions`: whether the client does not want to be notified on mentions
+`allowed_mentions_chat_list`:  a list of `SHA2-256` hashes of chat ids where we want to receive mentions
 
 #### Data disclosed
 
