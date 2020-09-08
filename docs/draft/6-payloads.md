@@ -261,7 +261,7 @@ message is supposed to be displayed last in a chat. This is where the basic algo
 as it's only meant to order causally related events.
 
 The status client therefore makes a "bid", speculating that it will beat the current chat-timestamp, s.t. the status client's
-Lamport timestamp format is: `clock = `max({timestamp}, chat_clock + 1)`
+Lamport timestamp format is: `clock = max({timestamp}, chat_clock + 1)`
 
 This will satisfy the Lamport requirement, namely: a -> b then T(a) < T(b)
 
