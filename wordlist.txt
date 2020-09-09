@@ -31,6 +31,7 @@ chatId
 chatID
 chatid
 ChatMessage
+ChatMessageIdentity
 contactCode
 contactcode
 ContactCodeAdvertisement
@@ -123,10 +124,12 @@ identicon
 IK
 im
 ImageMessage
+ImageType
 ImportECDSA
 ImportECDSAPublic
 infura
 IPFS
+IPNS
 IPs
 Iubenda
 Jacek
@@ -196,6 +199,8 @@ prepend
 prepended
 prepending
 privkey
+ProfileImage
+proto
 protobuf
 ProtocolMessage
 PSS
@@ -237,10 +242,12 @@ SIP
 SIPs
 SNT
 Sourcecode
+SourceType
 SPK
 StickerMessage
 stickerpack
 strconv
+struct
 suboptimal
 subprotocol
 subprotocols
