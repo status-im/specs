@@ -386,6 +386,13 @@ message PushNotification {
   bytes public_key = 3;
   string installation_id = 4;
   bytes message = 5;
+  PushNotificationType type = 6;
+  enum PushNotificationType {
+    UNKNOWN_PUSH_NOTIFICATION_TYPE = 0;
+    MESSAGE = 1;
+    MENTION = 2;
+  }
+  bytes author = 7;
 }
 
 message PushNotificationRequest {
@@ -399,6 +406,7 @@ A `PushNotificationRequest` message MUST be wrapped in a [`ApplicationMetadataMe
 Where `message` is the encrypted payload of the message and `chat_id` is the
 `SHAKE-256` of the `chat_id`.
 `message_id` is the id of the message
+`author` is the `SHAKE-256` of the public key of the sender.
 
 If multiple server are available for a given push notification, only one notification
 MUST be sent.
@@ -578,11 +586,15 @@ to the client in case there's any filtering on public keys in place.
 `public_key`: the `SHAKE-256` of the compressed public key of the receiving client.
 `installation_id`: the installation id of the receiving client.
 `message`: the encrypted message that is being notified on.
+`type`: the type of the push notification, either `MESSAGE` or `MENTION`
+`author`: the `SHAKE-256` of the public key of the sender
 
 ### Data disclosed
 
 - The `SHAKE-256` of the `chat_id` the notification is to be sent for
-- the cypher text of the message
+- The cypher text of the message
+- The `SHAKE-256` of the public key of the sender
+- The type of notification
 
 ### PushNotificationRequest
 

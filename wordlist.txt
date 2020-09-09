@@ -204,6 +204,7 @@ publicKey
 puk
 PushNotificationRegistration
 PushNotificationPreferences
+PushNotificationType
 PushNotificationOptions
 PushNotificationFilterSettings
 PushNotificationDeviceToken
