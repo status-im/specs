@@ -295,11 +295,11 @@ The `ChatMessageIdentity` allows a user to OPTIONALLY broadcast an identity to b
 
 The main components of the `ChatMessageIdentity` are:
 
-| Field name      | Description |
-| --------------- |---|
-| `ens_name`      | A valid registered ENS name for the user. Deprecates the `ens_name` field in `ChatMessage` |
-| `display_name`  | A user determined display name not requiring blockchain registry |
-| `profile_image` | A `ProfileImage` data struct used to transmit user profile image data |
+| Field | Name            | Type           | Description |
+| ----- | --------------- | -------------- | --- |
+| 2     | `ens_name`      | `string`       | A valid registered ENS name for the user. Deprecates the `ens_name` field in `ChatMessage` |
+| 3     | `display_name`  | `string`       | A user determined display name not requiring blockchain registry |
+| 4     | `profile_image` | `ProfileImage` | A data struct used to transmit user profile image data |
 
 #### Profile Image
 
@@ -307,11 +307,11 @@ The `ProfileImage` data struct describes the mechanisms by which the application
 
 The main components of the `ProfileImage` are:
 
-| Field name    | Description |
-| ------------- |---|
-| `payload`     | A context based payload for the profile image data. Context is determined by the `source_type` |
-| `source_type` | A `SourceType` enum, signals the image payload source |
-| `image_type`  | An `ImageType` enum, signals the image type and method of parsing the payload |
+| Field | Name          | Type         | Description |
+| ----- | ------------- | ------------ | --- |
+| 1     | `payload`     | `string`     | A context based payload for the profile image data. Context is determined by the `source_type` |
+| 2     | `source_type` | `SourceType` | Enum, signals the image payload source |
+| 3     | `image_type`  | `ImageType`  | Enum, signals the image type and method of parsing the payload |
 
 #### Payload
 
