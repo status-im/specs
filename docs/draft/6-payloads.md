@@ -411,6 +411,8 @@ This specification RECOMMENDS that the application only sends one `IdentityUpdat
 
 To preserve the privacy of the user, the `ProfileImage.payload` or ENS `get-text-data.avatar` field SHOULD NOT be or be parsed as a URL, an IPFS address or an IPNS address. Malicious actors could set their payload to an image URL and force all users that parse their `ProfileImage.payload` and log the IP address of users of selected topics.
 
+An additional step to maintaining user privacy is to adhere to the `IdentityUpdate` event triggering, `IdentityUpdate` MUST only be sent after a user sends a `ChatMessage` to a topic. This will ensure that users who wish to only read topic messages do not "leak" their identity data into topics they have not actively participated in. 
+
 ### Contact Update
 
 `ContactUpdate` is a message exchange to notify peers that either the
