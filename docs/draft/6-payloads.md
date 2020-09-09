@@ -383,6 +383,10 @@ message ProfileImage {
 
 #### Implementation Recommendations
 
+##### ChatMessage ens_name
+
+The application MUST handle `ChatMessage.ens_name` as well as `ChatMessageIdentity.ens_name` to maintain backwards compatibility. The `ChatMessage.ens_name` field has been marked as DEPRECATED in this version of the specification to highlight that this field should be removed as part of any upgrade to a major version. 
+
 ##### Identity Update
 
 An `IdentityUpdate` is a concept representing the event of the application sending a `ChatMessageIdentity` in response to either:
@@ -397,11 +401,11 @@ This specification RECOMMENDS that the application only sends one `IdentityUpdat
 
 ##### Private Group Chat
 
-This specification RECOMMENDS that the application only sends one `IdentityUpdate`, with not `ChatMessageIdentity TTL`, and once per new user joining the chat group.
+This specification RECOMMENDS that the application only sends one `IdentityUpdate`, with no `ChatMessageIdentity TTL`, and once per new user joining the chat group.
 
 ##### Public Chat
 
- This specification RECOMMENDS that the application only sends one `IdentityUpdate`, with a `ChatMessageIdentity TTL` of 24 hours. 
+This specification RECOMMENDS that the application only sends one `IdentityUpdate`, with a `ChatMessageIdentity TTL` of 24 hours. 
 
 ##### Security
 
