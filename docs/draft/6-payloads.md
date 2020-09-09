@@ -572,7 +572,8 @@ There are two ways to upgrade the protocol without breaking compatibility:
 
 Released //TODO
 
-- Added Chat Identity payload
+- Added `ChatMessageIdentity` payload
+- Marks `ChatMessage.ens_name` as DEPRECATED
 
 ### Version 0.5
 
