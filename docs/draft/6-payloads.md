@@ -307,11 +307,11 @@ The `ProfileImage` data struct describes the mechanisms by which the application
 
 The main components of the `ProfileImage` are:
 
-| Field name      | Description |
-| --------------- |---|
-| `payload` | A context based payload for the profile image data. Context is determined by the `source_type` |
+| Field name    | Description |
+| ------------- |---|
+| `payload`     | A context based payload for the profile image data. Context is determined by the `source_type` |
 | `source_type` | A `SourceType` enum, signals the image payload source |
-| `image_type` | An `ImageType` enum, signals the image type and method of parsing the payload |
+| `image_type`  | An `ImageType` enum, signals the image type and method of parsing the payload |
 
 #### Payload
 
