@@ -200,13 +200,6 @@ Clients MUST sanitize the payload before accessing its content, in particular:
 message ImageMessage {
   bytes payload = 1;
   ImageType type = 2;
-  enum ImageType {
-    UNKNOWN_IMAGE_TYPE = 0;
-    PNG = 1;
-    JPEG = 2;
-    WEBP = 3;
-    GIF = 4;
-  }
 }
 ```
 
@@ -230,6 +223,8 @@ message AudioMessage {
     UNKNOWN_AUDIO_TYPE = 0;
     AAC = 1;
     AMR = 2;
+  }
+}
 ```
 
 #### Message types
@@ -289,17 +284,17 @@ All incoming messages can be matched against a chat. The below table describes h
 |user-message|let `P` be a public key of message's signature; `hex-encode(P)` is a chat ID; discard `chat-id` from message|Incoming|if there is no matched chat, it might be the first message from public key `P`; the node MAY discard the message or MAY create a new chat; Status official clients create a new chat|
 |PRIVATE_GROUP|use `chatId` from the message|Incoming/Outgoing|find an existing chat by `chatId`; if none is found, the user is not a member of that chat or the user hasn't joined that chat, the message MUST be discarded |
 
-### Chat Message Identity
+### Chat Identity
 
-The `ChatMessageIdentity` allows a user to OPTIONALLY broadcast an identity to be associated with their messages.
+The `ChatIdentity` allows a user to OPTIONALLY broadcast an identity to be associated with their messages.
 
-The main components of the `ChatMessageIdentity` are:
+The main components of the `ChatIdentity` are:
 
-| Field | Name            | Type           | Description |
-| ----- | --------------- | -------------- | --- |
-| 2     | `ens_name`      | `string`       | A valid registered ENS name for the user. Deprecates the `ens_name` field in `ChatMessage` |
-| 3     | `display_name`  | `string`       | A user determined display name not requiring blockchain registry |
-| 4     | `profile_image` | `ProfileImage` | A data struct used to transmit user profile image data |
+| Field | Name            | Type                         | Description |
+| ----- | --------------- | ---------------------------- | --- |
+| 1     | `clock`         | `uint64`                     | A lamport timestamp of the message |
+| 2     | `ens_name`      | `string`                     | A valid registered ENS name for the user. Deprecates the `ens_name` field in `ChatMessage` |
+| 3     | `images`        | `map<string, IdentityImage>` | A string indexed mapping of images associated with an identity |
 
 #### Profile Image
 
@@ -307,78 +302,59 @@ The `ProfileImage` data struct describes the mechanisms by which the application
 
 The main components of the `ProfileImage` are:
 
-| Field | Name          | Type         | Description |
-| ----- | ------------- | ------------ | --- |
-| 1     | `payload`     | `string`     | A context based payload for the profile image data. Context is determined by the `source_type` |
-| 2     | `source_type` | `SourceType` | Enum, signals the image payload source |
-| 3     | `image_type`  | `ImageType`  | Enum, signals the image type and method of parsing the payload |
+| Field | Name          | Type               | Description |
+| ----- | ------------- | ------------------ | --- |
+| 1     | `payload`     | `bytes`            | A context based payload for the profile image data. Context is determined by the `source_type` |
+| 2     | `source_type` | `SourceType`       | Enum, signals the image payload source |
+| 3     | `image_type`  | `enums.ImageType`  | Enum, signals the image type and method of parsing the payload |
 
 #### Payload
 
 ```protobuf
-syntax="proto3";
+syntax = "proto3";
 
-// ChatMessageIdentity represents the user defined identity associated with their messages
-message ChatMessageIdentity {
-  // Lamport timestamp of the chat message
+package protobuf;
+
+// ChatIdentity represents the user defined identity associated with their public chat key
+message ChatIdentity {
+  // Lamport timestamp of the message
   uint64 clock = 1;
 
   // ens_name is the valid ENS name associated with the chat key
   string ens_name = 2;
-  
-  // display_name is the user's chosen display name
-  string display_name = 3;
-  
-  // profile_image is the data associated with the user's profile image
-  ProfileImage profile_image = 4;
+
+  // images is a string indexed mapping of images associated with an identity
+  map<string, IdentityImage> images = 3;
 }
 
 // ProfileImage represents data associated with a user's profile image
-message ProfileImage {
+message IdentityImage {
 
   // payload is a context based payload for the profile image data,
   // context is determined by the `source_type`
-  string payload = 1;
+  bytes payload = 1;
 
   // source_type signals the image payload source
   SourceType source_type = 2;
 
   // image_type signals the image type and method of parsing the payload
   ImageType image_type =3;
-  
+
   // SourceType are the predefined types of image source allowed
   enum SourceType {
     UNKNOWN_SOURCE_TYPE = 0;
 
-    // RAW_PAYLOAD uses base64 encoded image data
-    // `payload` must be set
-    // `payload` is base64 encoded image data
+    // RAW_PAYLOAD image byte data
     RAW_PAYLOAD = 1;
 
     // ENS_AVATAR uses the ENS record's resolver get-text-data.avatar data
     // The `payload` field will be ignored if ENS_AVATAR is selected
-    // The application will read and parse the ENS avatar data as image payload data
+    // The application will read and parse the ENS avatar data as image payload data, URLs will be ignored
     // The parent `ChatMessageIdentity` must have a valid `ens_name` set
     ENS_AVATAR = 2;
   }
-
-  // ImageType is the type of profile image data
-  enum ImageType {
-    UNKNOWN_IMAGE_TYPE = 0;
-
-    // RASTER_IMAGE_FILE is payload data that can be read as a raster image
-    // examples: jpg, png, gif, webp file types
-    RASTER_IMAGE_FILE = 1;
-
-    // VECTOR_IMAGE_FILE is payload data that can be interpreted as a vector image
-    // example: svg file type
-    VECTOR_IMAGE_FILE = 2;
-
-    // AVATAR is payload data that can be parsed as avatar compilation instructions
-    AVATAR = 3;
-  }
-
 }
+
 ```
 
 #### Implementation Recommendations
