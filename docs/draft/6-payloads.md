@@ -39,7 +39,7 @@ as various clients created using different technologies.
      - [Message types](#message-types)
      - [Clock vs Timestamp and message ordering](#clock-vs-timestamp-and-message-ordering)
      - [Chats](#chats)
-   - [Chat Message Identity](#chat-message-identity)
+   - [Chat Identity](#chat-identity)
    - [Contact Update](#contact-update)
      - [Payload](#payload-2)
      - [Contact update](#contact-update-1)
@@ -51,6 +51,8 @@ as various clients created using different technologies.
    - [PairInstallation](#pairinstallation)
      - [Payload](#payload-5)
    - [MembershipUpdateMessage and MembershipUpdateEvent](#membershipupdatemessage-and-membershipupdateevent)
+ - [Enums](#enums)
+   - [ImageType](#imagetype)
  - [Upgradability](#upgradability)
  - [Security Considerations](#security-considerations)
  - [Changelog](#changelog)
@@ -187,7 +189,7 @@ message StickerMessage {
 ##### Image content type
 
 A `ChatMessage` with `IMAGE` `Content/Type` MUST also specify the `payload` of the image
-and the `type`.
+and the `type`. Also see [ImageType](#imagetype)
 
 Clients MUST sanitize the payload before accessing its content, in particular: 
 - Clients MUST choose a secure decoder
@@ -306,7 +308,7 @@ The main components of the `ProfileImage` are:
 | ----- | ------------- | ------------------ | --- |
 | 1     | `payload`     | `bytes`            | A context based payload for the profile image data. Context is determined by the `source_type` |
 | 2     | `source_type` | `SourceType`       | Enum, signals the image payload source |
-| 3     | `image_type`  | `enums.ImageType`  | Enum, signals the image type and method of parsing the payload |
+| 3     | `image_type`  | `enums.ImageType`  | Enum, signals the image type and method of parsing the payload. See [ImageType](#imagetype) |
 
 #### Payload
 
@@ -536,6 +538,28 @@ message PairInstallation {
 
 `MembershipUpdateEvent` is a message used to propagate information about group membership changes in a group chat.
 The details are in the [Group chats specs](./7-group-chat.md).
+
+## Enums
+
+### ImageType
+
+```protobuf
+enum ImageType {
+  UNKNOWN_IMAGE_TYPE = 0;
+
+  // Raster image files is payload data that can be read as a raster image
+  PNG = 1;
+  JPEG = 2;
+  WEBP = 3;
+  GIF = 4;
+
+  // Vector image files is payload data that can be interpreted as a vector image
+  SVG = 101;
+
+  // AVATAR is payload data that can be parsed as avatar compilation instructions
+  AVATAR = 201;
+}
+```
 
 ## Upgradability
 
