@@ -30,6 +30,7 @@ Changelog
 chatId
 chatID
 chatid
+ChatIdentity
 ChatMessage
 ChatMessageIdentity
 contactCode
@@ -121,6 +122,7 @@ html
 http
 HTTPS
 identicon
+IdentityImage
 IK
 im
 ImageMessage
@@ -146,6 +148,7 @@ keypair
 keypairs
 Kozieiev
 Lamport
+lamport
 legislations
 len
 libp
