@@ -144,7 +144,7 @@ message ChatMessage {
 | 2 | timestamp | `uint64` | The sender timestamp at message creation |
 | 3 | text | `string` | The content of the message |
 | 4 | response_to | `string` | The ID of the message replied to |
-| 5 | ens_name | `string` | DEPRECATED - [See Chat Message Identity](#chat-message-identity). The ENS name of the user sending the message |
+| 5 | ens_name | `string` | DEPRECATED - [See Chat Identity](#chat-identity). The ENS name of the user sending the message |
 | 6 | chat_id | `string` | The local ID of the chat the message is sent to |
 | 7 | message_type | `MessageType` | The type of message, different for one-to-one, public or group chats |
 | 8 | content_type | `ContentType` | The type of the content of the message | 
