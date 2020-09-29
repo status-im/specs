@@ -32,7 +32,6 @@ chatID
 chatid
 ChatIdentity
 ChatMessage
-ChatMessageIdentity
 contactCode
 contactcode
 ContactCodeAdvertisement
@@ -87,6 +86,7 @@ EncodeToString
 enode
 enr
 enum
+Enums
 exif
 ERC
 ErrorType
@@ -193,6 +193,7 @@ pin
 Pinzaru
 plaintext
 Pluggable
+PNG
 Pombeiro
 PoW
 pre
@@ -255,6 +256,7 @@ suboptimal
 subprotocol
 subprotocols
 SuggestGasPrice
+SVG
 SyncInstallationContact
 SyncInstallationPublicChat
 TCP
@@ -291,6 +293,7 @@ Waku
 Waku's
 waku
 wakuext
+WEBP
 webview
 Webview
 wei
