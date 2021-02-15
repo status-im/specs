@@ -39,6 +39,7 @@ as various clients created using different technologies.
      - [Message types](#message-types)
      - [Clock vs Timestamp and message ordering](#clock-vs-timestamp-and-message-ordering)
      - [Chats](#chats)
+   - [Chat Identity](#chat-identity)
    - [Contact Update](#contact-update)
      - [Payload](#payload-2)
      - [Contact update](#contact-update-1)
@@ -50,6 +51,8 @@ as various clients created using different technologies.
    - [PairInstallation](#pairinstallation)
      - [Payload](#payload-5)
    - [MembershipUpdateMessage and MembershipUpdateEvent](#membershipupdatemessage-and-membershipupdateevent)
+ - [Enums](#enums)
+   - [ImageType](#imagetype)
  - [Upgradability](#upgradability)
  - [Security Considerations](#security-considerations)
  - [Changelog](#changelog)
@@ -100,7 +103,7 @@ message ChatMessage {
   string text = 3;
   // Id of the message that we are replying to
   string response_to = 4;
-  // Ens name of the sender
+  // DEPRECATED. Ens name of the sender
   string ens_name = 5;
   // Chat id, this field is symmetric for public-chats and private group chats,
   // but asymmetric in case of one-to-ones, as the sender will use the chat-id
@@ -141,7 +144,7 @@ message ChatMessage {
 | 2 | timestamp | `uint64` | The sender timestamp at message creation |
 | 3 | text | `string` | The content of the message |
 | 4 | response_to | `string` | The ID of the message replied to |
-| 5 | ens_name | `string` | The ENS name of the user sending the message |
+| 5 | ens_name | `string` | DEPRECATED - [See Chat Identity](#chat-identity). The ENS name of the user sending the message |
 | 6 | chat_id | `string` | The local ID of the chat the message is sent to |
 | 7 | message_type | `MessageType` | The type of message, different for one-to-one, public or group chats |
 | 8 | content_type | `ContentType` | The type of the content of the message | 
@@ -186,7 +189,7 @@ message StickerMessage {
 ##### Image content type
 
 A `ChatMessage` with `IMAGE` `Content/Type` MUST also specify the `payload` of the image
-and the `type`.
+and the `type`. Also see [ImageType](#imagetype)
 
 Clients MUST sanitize the payload before accessing its content, in particular: 
 - Clients MUST choose a secure decoder
@@ -199,13 +202,6 @@ Clients MUST sanitize the payload before accessing its content, in particular:
 message ImageMessage {
   bytes payload = 1;
   ImageType type = 2;
-  enum ImageType {
-    UNKNOWN_IMAGE_TYPE = 0;
-    PNG = 1;
-    JPEG = 2;
-    WEBP = 3;
-    GIF = 4;
-  }
 }
 ```
 
@@ -229,6 +225,8 @@ message AudioMessage {
     UNKNOWN_AUDIO_TYPE = 0;
     AAC = 1;
     AMR = 2;
+  }
+}
 ```
 
 #### Message types
@@ -261,7 +259,7 @@ message is supposed to be displayed last in a chat. This is where the basic algo
 as it's only meant to order causally related events.
 
 The status client therefore makes a "bid", speculating that it will beat the current chat-timestamp, s.t. the status client's
-Lamport timestamp format is: `clock = `max({timestamp}, chat_clock + 1)`
+Lamport timestamp format is: `clock = max({timestamp}, chat_clock + 1)`
 
 This will satisfy the Lamport requirement, namely: a -> b then T(a) < T(b)
 
@@ -287,6 +285,111 @@ All incoming messages can be matched against a chat. The below table describes h
 |ONE_TO_ONE|let `P` be a public key of the recipient; `hex-encode(P)` is a chat ID; use it as `chatId` value in the message|Outgoing||
 |user-message|let `P` be a public key of message's signature; `hex-encode(P)` is a chat ID; discard `chat-id` from message|Incoming|if there is no matched chat, it might be the first message from public key `P`; the node MAY discard the message or MAY create a new chat; Status official clients create a new chat|
 |PRIVATE_GROUP|use `chatId` from the message|Incoming/Outgoing|find an existing chat by `chatId`; if none is found, the user is not a member of that chat or the user hasn't joined that chat, the message MUST be discarded |
+
+### Chat Identity
+
+The `ChatIdentity` allows a user to OPTIONALLY broadcast an identity to be associated with their messages.
+
+The main components of the `ChatIdentity` are:
+
+| Field | Name            | Type                         | Description |
+| ----- | --------------- | ---------------------------- | --- |
+| 1     | `clock`         | `uint64`                     | A lamport timestamp of the message |
+| 2     | `ens_name`      | `string`                     | A valid registered ENS name for the user. Deprecates the `ens_name` field in `ChatMessage` |
+| 3     | `images`        | `map<string, IdentityImage>` | A string indexed mapping of images associated with an identity |
+
+#### Profile Image
+
+The `ProfileImage` data struct describes the mechanisms by which the application parses and presents the user's chosen visual representation.
+
+The main components of the `ProfileImage` are:
+
+| Field | Name          | Type               | Description |
+| ----- | ------------- | ------------------ | --- |
+| 1     | `payload`     | `bytes`            | A context based payload for the profile image data. Context is determined by the `source_type` |
+| 2     | `source_type` | `SourceType`       | Enum, signals the image payload source |
+| 3     | `image_type`  | `enums.ImageType`  | Enum, signals the image type and method of parsing the payload. See [ImageType](#imagetype) |
+
+#### Payload
+
+```protobuf
+syntax = "proto3";
+
+package protobuf;
+
+// ChatIdentity represents the user defined identity associated with their public chat key
+message ChatIdentity {
+  // Lamport timestamp of the message
+  uint64 clock = 1;
+
+  // ens_name is the valid ENS name associated with the chat key
+  string ens_name = 2;
+
+  // images is a string indexed mapping of images associated with an identity
+  map<string, IdentityImage> images = 3;
+}
+
+// ProfileImage represents data associated with a user's profile image
+message IdentityImage {
+
+  // payload is a context based payload for the profile image data,
+  // context is determined by the `source_type`
+  bytes payload = 1;
+
+  // source_type signals the image payload source
+  SourceType source_type = 2;
+
+  // image_type signals the image type and method of parsing the payload
+  ImageType image_type =3;
+
+  // SourceType are the predefined types of image source allowed
+  enum SourceType {
+    UNKNOWN_SOURCE_TYPE = 0;
+
+    // RAW_PAYLOAD image byte data
+    RAW_PAYLOAD = 1;
+
+    // ENS_AVATAR uses the ENS record's resolver get-text-data.avatar data
+    // The `payload` field will be ignored if ENS_AVATAR is selected
+    // The application will read and parse the ENS avatar data as image payload data, URLs will be ignored
+    // The parent `ChatMessageIdentity` must have a valid `ens_name` set
+    ENS_AVATAR = 2;
+  }
+}
+
+```
+
+#### Implementation Recommendations
+
+##### ChatMessage ens_name
+
+The application MUST handle `ChatMessage.ens_name` as well as `ChatMessageIdentity.ens_name` to maintain backwards compatibility. The `ChatMessage.ens_name` field has been marked as DEPRECATED in this version of the specification to highlight that this field should be removed as part of any upgrade to a major version. 
+
+##### Identity Update
+
+An `IdentityUpdate` is a concept representing the event of the application sending a `ChatMessageIdentity` in response to either:
+
+- sending the user's first message in a chat topic
+- sending a message to a chat topic after a change to the user identity
+- sending a message to a chat topic after the expiry of the chat type `ChatMessageIdentity TTL` period
+
+##### One-To-One Chat
+
+This specification RECOMMENDS that the application only sends one `IdentityUpdate`, with no `ChatMessageIdentity TTL`.
+
+##### Private Group Chat
+
+This specification RECOMMENDS that the application only sends one `IdentityUpdate`, with no `ChatMessageIdentity TTL`, and once per new user joining the chat group.
+
+##### Public Chat
+
+This specification RECOMMENDS that the application only sends one `IdentityUpdate`, with a `ChatMessageIdentity TTL` of 24 hours. 
+
+##### Security
+
+To preserve the privacy of the user, the `ProfileImage.payload` or ENS `get-text-data.avatar` field SHOULD NOT be or be parsed as a URL, an IPFS address or an IPNS address. Malicious actors could set their payload to an image URL and force all users that parse their `ProfileImage.payload` and log the IP address of users of selected topics.
+
+An additional step to maintaining user privacy is to adhere to the `IdentityUpdate` event triggering, `IdentityUpdate` MUST only be sent after a user sends a `ChatMessage` to a topic. This will ensure that users who wish to only read topic messages do not "leak" their identity data into topics they have not actively participated in. 
 
 ### Contact Update
 
@@ -436,6 +539,28 @@ message PairInstallation {
 `MembershipUpdateEvent` is a message used to propagate information about group membership changes in a group chat.
 The details are in the [Group chats specs](./7-group-chat.md).
 
+## Enums
+
+### ImageType
+
+```protobuf
+enum ImageType {
+  UNKNOWN_IMAGE_TYPE = 0;
+
+  // Raster image files is payload data that can be read as a raster image
+  PNG = 1;
+  JPEG = 2;
+  WEBP = 3;
+  GIF = 4;
+
+  // Vector image files is payload data that can be interpreted as a vector image
+  SVG = 101;
+
+  // AVATAR is payload data that can be parsed as avatar compilation instructions
+  AVATAR = 201;
+}
+```
+
 ## Upgradability
 
 There are two ways to upgrade the protocol without breaking compatibility:
@@ -448,6 +573,13 @@ There are two ways to upgrade the protocol without breaking compatibility:
 -
 
 ## Changelog
+
+### Version 0.7
+
+Released //TODO
+
+- Added `ChatMessageIdentity` payload
+- Marks `ChatMessage.ens_name` as DEPRECATED
 
 ### Version 0.5
 
