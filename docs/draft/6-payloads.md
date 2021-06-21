@@ -39,7 +39,7 @@ as various clients created using different technologies.
        - [Audio content type](#audio-content-type)
      - [Message types](#message-types)
      - [Clock vs Timestamp and message ordering](#clock-vs-timestamp-and-message-ordering)
-     - [Signatrue](#signature)
+     - [Signature](#signature)
      - [Chats](#chats)
    - [Contact Update](#contact-update)
      - [Payload](#payload-2)
@@ -348,7 +348,7 @@ A client SHOULD also periodically send a `ContactUpdate` to all the contacts, th
 `Contact` is a representation of other accounts encountered on the app. They are added through `ContactUpdate`s propagated.
 A `Contact` does not mean a "friend". Any account from which we receive a `ContactUpdate` is added to the table.
 
-Users are considered "Friends" when they are **mutual** contacts, meaning that both of them have the `added` boolean set as `true`. This is done through `ContactRequest`s.
+Users are considered "Friends" when they are **mutual** contacts, meaning that both of them have the `added` and `requestReceived` boolean set as `true`, which then triggers setting `mutualContact` to `true`. This is done through `ContactRequest`s.
 
 #### Payload
 
@@ -369,27 +369,28 @@ Users are considered "Friends" when they are **mutual** contacts, meaning that b
 | 13 | localNickname | `string` | Nickname set by the user for the contact |
 | 14 | images | `map[string]images.IdentityImage` | Contact's profile images (thumbnail and large) |
 | 15 | message | `Message` | Message sent with a contact request |
-| 15 | signature | `string` | User signature proving that he added that person |
+| 15 | signature | `string` | User signature proving that the other user added the current user as contact |
 
-`blocked` acts as a blacklist. If `blocked` is `true`, `added` and `requestReceived` are ignored.
+`blocked` acts as a blacklist. If `blocked` is `true`, `added`, `mutualContact` and `requestReceived` are ignored.
 
 `mutualContact` is set to `true` once `added` is `true` and `requestReceived` is also set to `true`. This is a utility property to simplify the clients' use.
 
 #### Contact Request
 
-Since a user can only chat with another in a one on one channel while being mutal contacts, they need to send contact requests.
+Users can only chat with another in one to one channels while being mutal contacts. To do so, they need to send contact requests.
 
-When adding another account as a contact, a `Contact` payload is sent to them containing the `requestReceived` flag set to `true`,  a `message` object and a `signature`.
+When adding another account as a contact, a `Contact` payload is sent to the other containing the `requestReceived` flag set to `true`,  a `message` object and a `signature`.
 
-That `signature` is kept in the database and is sent in one on one messages to prove that we were once added as a contact. See `Message``payload for more information.
+That `signature` is kept in the database and is sent in one to one messages to prove that we were once added as a contact. See `Message` payload for more information.
 
 When the other account accepts the contact request, the same `Contact` payload with `requestReceived` set to `true` is sent.
+When `requestReceived: true` is reeived and `added` was previously set to `true`, `mutualContact` is also set to `true`.
 
 ##### Backwards compatibility
 
 To assure backwards compatibility, the `message` contained in the contact request will be sent as a normal message.
 
-Old versions will not understand the contact request, but will still get the message, that shall be displayed normally or part of the activity center.
+Old versions will not understand the contact request, but will still get the message. It will be displayed normally or part of the activity center.
 
 Newer versions will ignore the message since it is not from a contact, but the contact request will be processed as above.
 
@@ -397,7 +398,7 @@ Newer versions will ignore the message since it is not from a contact, but the c
 
 Contacts are lost when an account is reset and re-imported. To remedy this situation, the contacts will be sent as a payload to the topic bearing the user's public key followed by `-contacts`. eg: `0x0401d01625bba5d6f0e576519ac6c1b4f343b15fdf2916815ab059d18c51ff826bf23fffff0aa33643140aa3762ab627c4718693a9a0dbf4e84f4429a454136856-contacts`.
 
-This payload is to be sent only once per day on login and only when the `contacts_dirty` field of `contacts_sync` is set to `true`. The last send date will be kept `contacts_sync` as `last_sent`.
+This payload is to be sent only once per day on login and only when the `contacts_dirty` field of `contacts_sync` is set to `true`. The last send date will be kept in `contacts_sync` as `last_sent`.
 
 The last payload is going to be fetched before sending. That payload is going to be compared to the current contacts using the `lastUpdated` field.
 
@@ -407,13 +408,13 @@ The payload is an array of the Contacts table items, but only containing contact
 
 ##### Contacts Sync
 
-The  `contacts_sync` table is used to keep the last timestamp of when the contacts payload was sent and fetched to the topic
+The  `contacts_sync` table is used to keep the last timestamps of when the contacts payload were sent and fetched to and from the topic.
 
-It has three columns, `last_sent` and `last_fetched` both containing a `uint64` and `contacts_dirty` as a `bool`.
+It has three columns, `last_sent` and `last_fetched`, both containing a `uint64`, and `contacts_dirty` as a `bool`.
 
-`last_sent` and `last_fetched` and the timestamps for the last time the payload was sent and fetched, and are used to only do those actions once per day.
+`last_sent` and `last_fetched` are the timestamps for the last time the payload was sent and fetched, and are used to make sure those actions are only done once per day.
 
-The `contacts_dirty` field is set to `true` when a contact is changed by the user. A change is anything that changes the `added`, `blocked` or `mutualContact` properties of a contact.
+The `contacts_dirty` field is set to `true` whenever a contact is changed by the user. A change is anything that changes the `added`, `blocked` or `mutualContact` properties of a contact.
 After sending the payload with the updated contacts, the `contacts_dirty` field is set back to `false`.
 
 ### EmojiReaction
