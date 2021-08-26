@@ -317,12 +317,12 @@ In order to maintain compatibility between Whisper and Waku nodes, a Status netw
 implements both Whisper and Waku messaging protocols MUST have at least one node that is
 capable of discovering peers and implements
 [Whisper v6](https://eips.ethereum.org/EIPS/eip-627),
-[Waku V0](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-0.md) and
-[Waku V1](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-1.md) specifications.
+[Waku V0](https://rfc.vac.dev/spec/5/) and
+[Waku V1](https://rfc.vac.dev/spec/6/) specifications.
 
 Additionally, any Status network that implements both Whisper and Waku messaging protocols
 MUST implement bridging capabilities as detailed in
-[Waku V1#Bridging](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-1.md#waku-whisper-bridging).  
+[Waku V1#Bridging](https://rfc.vac.dev/spec/6/#waku-whisper-bridging).  
 
 ## Whisper V6 extensions
 
