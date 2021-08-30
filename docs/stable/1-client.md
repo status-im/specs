@@ -99,7 +99,7 @@ allows for TCP-based communication between nodes.
 
 On top of this RLPx-based subprotocols are ran, the client
 SHOULD NOT use [Whisper V6](https://eips.ethereum.org/EIPS/eip-627), the client 
-SHOULD use [Waku V1](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-1.md)
+SHOULD use [Waku V1](https://rfc.vac.dev/spec/6/)
 for privacy-preserving messaging and efficient usage of a node's bandwidth.
 
 #### Node discovery and roles
@@ -276,7 +276,7 @@ computer.
 #### Why do you use Waku?
 
 Waku is a direct upgrade and replacement for Whisper, the main motivation for 
-developing and implementing Waku can be found in the [Waku specs](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-1.md#motivation).
+developing and implementing Waku can be found in the [Waku specs](https://rfc.vac.dev/spec/6/#motivation).
 
 >Waku was created to incrementally improve in areas that Whisper is lacking in, 
 >with special attention to resource restricted devices. We specify the standard for 

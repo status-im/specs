@@ -36,7 +36,7 @@ title: 10/WAKU-USAGE
 
 ## Abstract
 
-Status uses [Waku](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-1.md) to provide
+Status uses [Waku](https://rfc.vac.dev/spec/6/) to provide
 privacy-preserving routing and messaging on top of devP2P. Waku uses topics
 to partition its messages, and these are leveraged for all chat capabilities. In
 the case of public chats, the channel name maps directly to its Waku topic.
@@ -63,14 +63,14 @@ encryption properties to support asynchronous chat.
 
 | Packet Name          | Code | References |
 | -------------------- | ---: | --- |
-| Status               |    0 | [Status](#status), [WAKU-1](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-1.md#status) |
-| Messages             |    1 | [WAKU-1](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-1.md#messages) |
+| Status               |    0 | [Status](#status), [WAKU-1](https://rfc.vac.dev/spec/6/#status) |
+| Messages             |    1 | [WAKU-1](https://rfc.vac.dev/spec/6/#messages) |
 | Batch Ack            |   11 | Undocumented. Marked for Deprecation |
-| Message Response     |   12 | [WAKU-1](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-1.md#message-confirmations-update) |
-| Status Update        |   22 | [WAKU-1](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-1.md#status-update) |
+| Message Response     |   12 | [WAKU-1](https://rfc.vac.dev/spec/6/#batch-ack-and-message-response) |
+| Status Update        |   22 | [WAKU-1](https://rfc.vac.dev/spec/6/#status-update) |
 | P2P Request Complete |  125 | [4/WAKU-MAILSERVER](https://specs.status.im/spec/4) |
-| P2P Request          |  126 | [4/WAKU-MAILSERVER](https://specs.status.im/spec/4), [WAKU-1](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-1.md#p2p-request) |
-| P2P Messages         |  127 | [4/WAKU-MAILSERVER](https://specs.status.im/spec/4), [WAKU-1](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-1.md#p2p-message) |
+| P2P Request          |  126 | [4/WAKU-MAILSERVER](https://specs.status.im/spec/4), [WAKU-1](https://rfc.vac.dev/spec/6/#p2p-request) |
+| P2P Messages         |  127 | [4/WAKU-MAILSERVER](https://specs.status.im/spec/4), [WAKU-1](https://rfc.vac.dev/spec/6/#p2p-request-complete) |
 
 ## Waku node configuration
 
@@ -97,12 +97,12 @@ Handshake is a RLP-encoded packet sent to a newly connected peer. It MUST start 
 
 | Option Name             | Key    | Type     | Description | References |
 | ----------------------- | ------ | -------- | ----------- | --- |
-| `pow-requirement`       | `0x00` | `uint64` | minimum PoW accepted by the peer | [WAKU-1#pow-requirement](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-1.md#pow-requirement-field) |
-| `bloom-filter`          | `0x01` | `[]byte` | bloom filter of Waku topic accepted by the peer | [WAKU-1#bloom-filter](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-1.md#bloom-filter-field) |
-| `light-node`            | `0x02` | `bool`   | when true, the peer won't forward envelopes through the Messages packet. | `TODO` |
-| `confirmations-enabled` | `0x03` | `bool`   | when true, the peer will send message confirmations | `TODO` |
-| `rate-limits`           | `0x04` |          | See [Rate limiting](#rate-limiting) | [WAKU-1#rate-limits](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-1.md#rate-limits-field) |
-| `topic-interest`        | `0x05` | `[10000][4]byte` | Topic interest is used to share a node's interest in envelopes with specific topics. It does this in a more bandwidth considerate way, at the expense of some metadata protection. Peers MUST only send envelopes with specified topics. | [WAKU-1#topic-interest](https://github.com/vacp2p/specs/blob/master/specs/waku/waku-1.md#topic-interest-field), [the theoretical scaling model](https://github.com/vacp2p/research/tree/dcc71f4779be832d3b5ece9c4e11f1f7ec24aac2/whisper_scalability) |
+| `pow-requirement`       | `0x00` | `uint64` | minimum PoW accepted by the peer | [WAKU-1#pow-requirement](https://rfc.vac.dev/spec/6/#pow-requirement-field) |
+| `bloom-filter`          | `0x01` | `[]byte` | bloom filter of Waku topic accepted by the peer | [WAKU-1#bloom-filter](https://rfc.vac.dev/spec/6/#bloom-filter-field) |
+| `light-node`            | `0x02` | `bool`   | when true, the peer won't forward envelopes through the Messages packet. | [WAKU-1#light-node](https://rfc.vac.dev/spec/6/#light-node) |
+| `confirmations-enabled` | `0x03` | `bool`   | when true, the peer will send message confirmations | [WAKU-1#confirmations-enabled-field](https://rfc.vac.dev/spec/6/#confirmations-enabled-field) |
+| `rate-limits`           | `0x04` |          | See [Rate limiting](#rate-limiting) | [WAKU-1#rate-limits](https://rfc.vac.dev/spec/6/#rate-limits-field) |
+| `topic-interest`        | `0x05` | `[10000][4]byte` | Topic interest is used to share a node's interest in envelopes with specific topics. It does this in a more bandwidth considerate way, at the expense of some metadata protection. Peers MUST only send envelopes with specified topics. | [WAKU-1#topic-interest](https://rfc.vac.dev/spec/6/#topic-interest-field), [the theoretical scaling model](https://github.com/vacp2p/research/tree/dcc71f4779be832d3b5ece9c4e11f1f7ec24aac2/whisper_scalability) |
 
 <!-- TODO Add `light-node` and `confirmations-enabled` links when https://github.com/vacp2p/specs/pull/128 is merged -->
 
