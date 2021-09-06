@@ -146,7 +146,7 @@ Contact code topic MUST be created following the algorithm below:
 ```golang
 contactCode := "0x" + hexEncode(activePublicKey) + "-contact-code"
 
-var hash []byte = keccak256(name)
+var hash []byte = keccak256(contactCode)
 var topicLen int = 4
 
 if len(hash) < topicLen {
