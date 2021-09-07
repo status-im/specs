@@ -95,7 +95,7 @@ Permissions can be set at the organisation level or at the chat level.
 
 Permissions at the chat level cannot override permissions at the organisation level.
 (Here I will describe rules, but most of them should be simple, i.e you can't set a
-channel public in an private organisation, you can have a member of a chat who is not
+channel public in an private organisation, you can't have a member of a chat who is not
 a member of an organisation)
 
 `ens_only` means that only user who have an `ENS` can join the organisation
