@@ -1,0 +1,11 @@
+title: "Status Specification"
+theme: just-the-docs
+color_scheme: "light"
+search_enabled: true
+baseurl: ""
+url: ""
+
+exclude: ["node_modules/", "*.gemspec", "*.gem", "Gemfile", "Gemfile.lock", "package.json", "package-lock.json",  "script/", "LICENSE.txt", "lib/", "bin/", "Rakefile"]
+
+plugins_dir:
+  - jekyll-sitemap
