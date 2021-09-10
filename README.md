@@ -13,6 +13,8 @@ its various capabilities.
 
 ## How to contribute
 
+You can read about how to build this project [here](./DEVELOPMENT.md).
+
 1. Create an issue for a new Status Improvement Proposal (SIP) or some bug that you'd like to address
 2. Create a corresponding PR and ping some existing SIP editors for review
 
