@@ -17,8 +17,8 @@ title: 1/CLIENT
 This specification describes how to write a Status client for
 communicating with other Status clients.
 
-This specification presents a reference implementation of the protocol <sup>1</sup> that is used
-in a command line client <sup>2</sup> and a mobile app <sup>3</sup>.
+This specification presents a reference implementation of the protocol <sup>[1](#footnotes)</sup> that is used
+in a command line client <sup>[2](#footnotes)</sup> and a mobile app <sup>[3](#footnotes)</sup>.
 
 This document consists of two parts. The first outlines the specifications that
 have to be implemented in order to be a full Status client. The second gives a design rationale and answers some common questions.

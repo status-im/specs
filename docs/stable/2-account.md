@@ -72,8 +72,8 @@ The node verifies or derives everything else associated with the contact from th
     - Whisper/Waku Chat Key (`IK`): `m/43'/60'/1581'/0'/0`  (post Multiaccount integration)
         - following [EIP1581](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1581.md)
     <!-- WE CURRENTLY DO NOT IMPLEMENT ENCRYPTION KEY, FOR FUTURE - C.P. -->
-    <!-- - DB encryption Key (`DBK`): `m/43'/60'/1581'/1'/0` (post Multiaccount integration)
-        - following [EIP1581](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1581.md) -->
+    <!-- - DB encryption Key (`DBK`): `m/43'/60'/1581'/1'/0` (post Multiaccount integration) -->
+    <!-- - following [EIP1581](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1581.md) -->
     - Status Wallet paths: `m/44'/60'/0'/0/i` starting at `i=0`
         - following [BIP44](https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki)
         - NOTE: this (`i=0`) is also the current (and only) path for Whisper/Waku key before Multiaccount integration
