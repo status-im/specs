@@ -6,11 +6,11 @@ title: 6/PAYLOADS
 
 # 6/PAYLOADS
 
-> Version: 0.3
+> Version: 0.6
 >
 > Status: Stable
 >
-> Authors: Adam Babik <adam@status.im>, Andrea Maria Piana <andreap@status.im>, Oskar Thorén <oskar@status.im> (alphabetical order)
+> Authors: Adam Babik <adam@status.im>, Andrea Maria Piana <andreap@status.im>, Oskar Thorén <oskar@status.im>, Samuel Hawksby-Robinson <samuel@status.im> (alphabetical order)
 
 ## Abstract
 
@@ -34,12 +34,15 @@ as various clients created using different technologies.
      - [Payload](#payload-1)
      - [Content types](#content-types)
        - [Sticker content type](#sticker-content-type)
+       - [Image content type](#image-content-type)
+       - [Audio content type](#audio-content-type)
      - [Message types](#message-types)
      - [Clock vs Timestamp and message ordering](#clock-vs-timestamp-and-message-ordering)
      - [Chats](#chats)
    - [Contact Update](#contact-update)
      - [Payload](#payload-2)
      - [Contact update](#contact-update-1)
+   - [EmojiReaction](#emojireaction)
    - [SyncInstallationContact](#syncinstallationcontact)
      - [Payload](#payload-3)
    - [SyncInstallationPublicChat](#syncinstallationpublicchat)
@@ -50,7 +53,7 @@ as various clients created using different technologies.
  - [Upgradability](#upgradability)
  - [Security Considerations](#security-considerations)
  - [Changelog](#changelog)
-   - [Version 0.3](#version-03)
+ - [Copyright](#copyright)
 
 ## Introduction
 
@@ -62,44 +65,15 @@ The node wraps all payloads in a [protobuf record](https://developers.google.com
 record:
 
 ```protobuf
-message ApplicationMetadataMessage {
-  bytes signature = 1;
-  bytes payload = 2;
-
-  Type type = 3;
-
-  enum Type {
-    UNKNOWN = 0;
-    CHAT_MESSAGE = 1;
-    CONTACT_UPDATE = 2;
-    MEMBERSHIP_UPDATE_MESSAGE = 3;
-    PAIR_INSTALLATION = 4;
-    SYNC_INSTALLATION = 5;
-    REQUEST_ADDRESS_FOR_TRANSACTION = 6;
-    ACCEPT_REQUEST_ADDRESS_FOR_TRANSACTION = 7;
-    DECLINE_REQUEST_ADDRESS_FOR_TRANSACTION = 8;
-    REQUEST_TRANSACTION = 9;
-    SEND_TRANSACTION = 10;
-    DECLINE_REQUEST_TRANSACTION = 11;
-    SYNC_INSTALLATION_CONTACT = 12;
-    SYNC_INSTALLATION_ACCOUNT = 13;
-    SYNC_INSTALLATION_PUBLIC_CHAT = 14;
-    CONTACT_CODE_ADVERTISEMENT = 15;
-    PUSH_NOTIFICATION_REGISTRATION = 16;
-    PUSH_NOTIFICATION_REGISTRATION_RESPONSE = 17;
-    PUSH_NOTIFICATION_QUERY = 18;
-    PUSH_NOTIFICATION_QUERY_RESPONSE = 19;
-    PUSH_NOTIFICATION_REQUEST = 20;
-    PUSH_NOTIFICATION_RESPONSE = 21;
-  }
+message StatusProtocolMessage {
+  bytes signature = 4001;
+  bytes payload = 4002;
 }
 ```
 
 `signature` is the bytes of the signed `SHA3-256` of the payload, signed with the key of the author of the message.
 The node needs the signature to validate authorship of the message, so that the message can be relayed to third parties.
 If a signature is not present, but an author is provided by a layer below, the message is not to be relayed to third parties, and it is considered plausibly deniable.
-
-`payload` is the protobuf encoded content of the message, with the corresponding `type` set.
 
 ## Encoding
 
@@ -131,7 +105,6 @@ message ChatMessage {
   // Chat id, this field is symmetric for public-chats and private group chats,
   // but asymmetric in case of one-to-ones, as the sender will use the chat-id
   // of the received, while the receiver will use the chat-id of the sender.
-  // Probably should be the concatenation of sender-pk & receiver-pk in alphabetical order
   string chat_id = 6;
 
   // The type of message (public/one-to-one/private-group-chat)
@@ -141,15 +114,10 @@ message ChatMessage {
 
   oneof payload {
     StickerMessage sticker = 9;
+    ImageMessage image = 10;
+    AudioMessage audio = 11;
   }
 
-  enum MessageType {
-    UNKNOWN_MESSAGE_TYPE = 0;
-    ONE_TO_ONE = 1;
-    PUBLIC_GROUP = 2;
-    PRIVATE_GROUP = 3;
-    // Only local
-    SYSTEM_MESSAGE_PRIVATE_GROUP = 4;}
   enum ContentType {
     UNKNOWN_CONTENT_TYPE = 0;
     TEXT_PLAIN = 1;
@@ -159,6 +127,8 @@ message ChatMessage {
     TRANSACTION_COMMAND = 5;
     // Only local
     SYSTEM_MESSAGE_CONTENT_PRIVATE_GROUP = 6;
+    IMAGE = 7;
+    AUDIO = 8;
   }
 }
 ```
@@ -175,7 +145,7 @@ message ChatMessage {
 | 6 | chat_id | `string` | The local ID of the chat the message is sent to |
 | 7 | message_type | `MessageType` | The type of message, different for one-to-one, public or group chats |
 | 8 | content_type | `ContentType` | The type of the content of the message | 
-| 9 | payload | `Sticker|nil` | The payload of the message based on the content type |
+| 9 | payload | `Sticker` I `Image` I `Audio` I `nil` | The payload of the message based on the content type |
 
 #### Content types
 
@@ -189,6 +159,8 @@ There are other content types that MAY be implemented by the client:
 * `STATUS`
 * `EMOJI`
 * `TRANSACTION_COMMAND`
+* `IMAGE`
+* `AUDIO`
 
 ##### Mentions 
 
@@ -211,9 +183,59 @@ message StickerMessage {
 }
 ```
 
+##### Image content type
+
+A `ChatMessage` with `IMAGE` `Content/Type` MUST also specify the `payload` of the image
+and the `type`.
+
+Clients MUST sanitize the payload before accessing its content, in particular: 
+- Clients MUST choose a secure decoder
+- Clients SHOULD strip metadata if present without parsing/decoding it
+- Clients SHOULD NOT add metadata/exif when sending an image file for privacy and security reasons
+- Clients MUST make sure that the transport layer constraints the size of the payload to limit they are able to handle securely
+
+
+```protobuf
+message ImageMessage {
+  bytes payload = 1;
+  ImageType type = 2;
+  enum ImageType {
+    UNKNOWN_IMAGE_TYPE = 0;
+    PNG = 1;
+    JPEG = 2;
+    WEBP = 3;
+    GIF = 4;
+  }
+}
+```
+
+##### Audio content type
+
+A `ChatMessage` with `AUDIO` `Content/Type` MUST also specify the `payload` of the audio,
+the `type` and the duration in milliseconds (`duration_ms`).
+
+Clients MUST sanitize the payload before accessing its content, in particular: 
+- Clients MUST choose a secure decoder
+- Clients SHOULD strip metadata if present without parsing/decoding it
+- Clients SHOULD NOT add metadata/exif when sending an audio file for privacy and security reasons
+- Clients MUST make sure that the transport layer constraints the size of the payload to limit they are able to handle securely
+
+```protobuf
+message AudioMessage {
+  bytes payload = 1;
+  AudioType type = 2;
+  uint64 duration_ms = 3;
+  enum AudioType {
+    UNKNOWN_AUDIO_TYPE = 0;
+    AAC = 1;
+    AMR = 2;
+  }
+}
+```
+
 #### Message types
 
-A node requires message types to decide how to encrypt a particular message and what metadata needs to be attached when passing a message to the transport layer. For more on this, see [3/WHISPER-USAGE](3-whisper-usage.md) and [10/WAKU-USAGE](10-waku-usage.md).
+A node requires message types to decide how to encrypt a particular message and what metadata needs to be attached when passing a message to the transport layer. For more on this, see [3/WHISPER-USAGE](./3-whisper-usage.md) and [10/WAKU-USAGE](./10-waku-usage.md).
 
 <!-- TODO: This reference is a bit odd, considering the layer payloads should interact with is Secure Transport, and not Whisper/Waku. This requires more detail -->
 
@@ -222,6 +244,17 @@ The following messages types MUST be supported:
 * `ONE_TO_ONE` is a message to the public group
 * `PUBLIC_GROUP` is a private message
 * `PRIVATE_GROUP` is a message to the private group.
+
+```protobuf
+  enum MessageType {
+    UNKNOWN_MESSAGE_TYPE = 0;
+    ONE_TO_ONE = 1;
+    PUBLIC_GROUP = 2;
+    PRIVATE_GROUP = 3;
+    // Only local
+    SYSTEM_MESSAGE_PRIVATE_GROUP = 4;
+}
+```
 
 #### Clock vs Timestamp and message ordering
 
@@ -287,6 +320,52 @@ A client SHOULD send a `ContactUpdate` to all the contacts each time:
 - A user edits the profile image
 
 A client SHOULD also periodically send a `ContactUpdate` to all the contacts, the interval is up to the client, the Status official client sends these updates every 48 hours.
+
+### EmojiReaction
+
+`EmojiReaction`s represents a user's "reaction" to a specific chat message. For more information about the concept of
+emoji reactions see [Facebook Reactions](https://en.wikipedia.org/wiki/Facebook_like_button#Use_on_Facebook).
+
+This specification RECOMMENDS that the UI/UX implementation of sending `EmojiReactions` requires only a single click
+operation, as users have an expectation that emoji reactions are effortless and simple to perform.  
+
+```protobuf
+message EmojiReaction {
+  // clock Lamport timestamp of the chat message
+  uint64 clock = 1;
+
+  // chat_id the ID of the chat the message belongs to, for query efficiency the chat_id is stored in the db even though the
+  // target message also stores the chat_id
+  string chat_id = 2;
+
+  // message_id the ID of the target message that the user wishes to react to
+  string message_id = 3;
+
+  // message_type is (somewhat confusingly) the ID of the type of chat the message belongs to
+  MessageType message_type = 4;
+
+  // type the ID of the emoji the user wishes to react with
+  Type type = 5;
+
+  enum Type {
+    UNKNOWN_EMOJI_REACTION_TYPE = 0;
+    LOVE = 1;
+    THUMBS_UP = 2;
+    THUMBS_DOWN = 3;
+    LAUGH = 4;
+    SAD = 5;
+    ANGRY = 6;
+  }
+
+ // whether this is a retraction of a previously sent emoji
+  bool retracted = 6;
+}
+```
+
+Clients MUST specify `clock`, `chat_id`, `message_id`, `type` and `message_type`.
+
+This specification RECOMMENDS that the UI/UX implementation of retracting an `EmojiReaction`s requires only a single
+click operation, as users have an expectation that emoji reaction removals are effortless and simple to perform.  
 
 ### SyncInstallationContact
 
@@ -372,8 +451,31 @@ There are two ways to upgrade the protocol without breaking compatibility:
 
 ## Changelog
 
+### Version 0.6
+
+Release //TODO
+
+- Updated draft spec to stable status
+
+### Version 0.5
+
+Released [August 25, 2020](https://github.com/status-im/specs/commit/968fafff23cdfc67589b34dd64015de29aaf41f0)
+
+- Added support for emoji reactions
+
+### Version 0.4
+
+Released [July 16, 2020](https://github.com/status-im/specs/commit/ad45cd5fed3c0f79dfa472253a404f670dd47396)
+
+- Added support for images
+- Added support for audio
+
 ### Version 0.3
 
 Released [May 22, 2020](https://github.com/status-im/specs/commit/664dd1c9df6ad409e4c007fefc8c8945b8d324e8)
 
 - Added language to include Waku in all relevant places
+
+## Copyright
+
+Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
