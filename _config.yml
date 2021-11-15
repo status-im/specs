@@ -1,5 +1,5 @@
 title: "Status Specification"
-remote_theme: pmarsceill/just-the-docs
+theme: just-the-docs
 color_scheme: "light"
 search_enabled: true
 url: "https://specs.status.im"

@@ -1,5 +1,16 @@
 {
   "name": "specs",
+  "version": "0.0.0",
+  "scripts": {
+    "textlint": "textlint docs/",
+    "lint": "remark .",
+    "deploy": "node scripts/deploy.js"
+  },
+  "remarkConfig": {
+    "plugins": [
+      "remark-preset-lint-recommended"
+    ]
+  },
   "dependencies": {
     "remark-cli": "^6.0.1",
     "remark-lint": "^6.0.2",
@@ -9,13 +20,7 @@
     "textlint-rule-footnote-order": "^1.0.3",
     "textlint-rule-no-empty-section": "^1.1.0"
   },
-  "scripts": {
-     "textlint": "textlint docs/",
-     "lint": "remark ."
-  },
-  "remarkConfig": {
-    "plugins": [
-      "remark-preset-lint-recommended"
-    ]
+  "devDependencies": {
+    "gh-pages": "^3.2.3"
   }
 }
