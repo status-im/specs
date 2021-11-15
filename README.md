@@ -45,3 +45,7 @@ be useful outside of Status as well. To the extent that these protocols are used
 within Status clients, they will show up as SIPs in the future.
 
 To see more on this, please visit the current home: [vac protocol](https://specs.vac.dev).
+
+# Continuous Integration
+
+The site is built in [Our Jenkins CI](https://ci.status.im/job/website/job/specs.status.im/) based off of `master` branch.

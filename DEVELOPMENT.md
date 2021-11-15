@@ -27,7 +27,7 @@ bundle install
 
 To simply build the site use:
 ```
-bundle exec jekyll build --config _config_local.yml     
+bundle exec jekyll build --config _config_local.yml
 ```
 This will generate the site files and put them under `_site`.
 
