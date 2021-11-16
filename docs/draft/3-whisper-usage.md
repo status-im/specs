@@ -1,7 +1,8 @@
 ---
-permalink: /spec/3
-parent: Draft specs
+permalink: /draft/3
 title: 3/WHISPER-USAGE
+parent: Draft specs
+layout: default
 ---
 
 # 3/WHISPER-USAGE

@@ -1,3 +1,8 @@
+---
+permalink: /development
+title: DEVELOPMENT
+layout: default
+---
 # Description
 
 This file explains the process of local development for this repository.

@@ -1,7 +1,8 @@
 ---
 permalink: /spec/9
-parent: Stable specs
 title: 9/ETHEREUM-USAGE
+parent: Stable specs
+layout: default
 ---
 
 # 9/ETHEREUM-USAGE

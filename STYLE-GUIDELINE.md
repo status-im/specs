@@ -1,7 +1,7 @@
 ---
-layout: default
 permalink: /style-guideline
 title: STYLE-GUIDELINE
+layout: default
 ---
 
 # Style guidelines for Status client specifications

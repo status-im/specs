@@ -1,7 +1,8 @@
 ---
 permalink: /spec/1
-parent: Stable specs
 title: 1/CLIENT
+parent: Stable specs
+layout: default
 ---
 
 # 1/CLIENT

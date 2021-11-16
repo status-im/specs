@@ -1,7 +1,8 @@
 ---
-permalink: /spec/12
-parent: Draft specs
+permalink: /draft/12
 title: 12/IPFS gateway for Sticker Pack
+parent: Draft specs
+layout: default
 ---
 
 # 12/IPFS gateway for Sticker Pack
