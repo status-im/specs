@@ -1,10 +1,17 @@
 ---
-permalink: /spec/15
-parent: Stable specs
+permalink: /draft/15
 title: 15/NOTIFICATIONS
+parent: Stable specs
+layout: default
 ---
 
 # 15/NOTIFICATIONS
+
+> Version: 0.1
+>
+> Status: Draft
+>
+> Authors: Eric Dvorsak <eric@status.im>
 
 ## Local Notifications
 

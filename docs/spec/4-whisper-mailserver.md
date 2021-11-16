@@ -1,7 +1,8 @@
 ---
 permalink: /spec/4
-parent: Stable specs
 title: 4/WHISPER-MAILSERVER
+parent: Stable specs
+layout: default
 ---
 
 # 4/WHISPER-MAILSERVER

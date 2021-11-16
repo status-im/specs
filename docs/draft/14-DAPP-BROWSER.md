@@ -1,10 +1,10 @@
 ---
-title: Dapp browser API usage
+permalink: /draft/14
+title: 14/Dapp browser API usage
 version: 0.1.0
-permalink: /spec/14
 parent: Draft specs
-status: Draft
 authors: 
+layout: default
 ---
 
 # Dapp browser API usage

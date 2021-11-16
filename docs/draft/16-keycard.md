@@ -1,11 +1,12 @@
 ---
+permalink: /draft/16
 title: 16/Keycard Usage for Wallet and Chat Keys
 version: 0.1
-status: Draft
+parent: Draft specs
 authors: Roman Volosovskyi <roman@status.im>
-permalink: /specs/16
 redirect_from:
   - /keycard.html
+layout: default
 ---
 
 ## Table of Contents

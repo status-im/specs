@@ -1,7 +1,8 @@
 ---
 permalink: /spec/6
-parent: Stable specs
 title: 6/PAYLOADS
+parent: Stable specs
+layout: default
 ---
 
 # 6/PAYLOADS

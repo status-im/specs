@@ -1,7 +1,8 @@
 ---
 permalink: /spec/8
-parent: Stable specs
 title: 8/EIPS
+parent: Stable specs
+layout: default
 ---
 
 # 8/EIPS

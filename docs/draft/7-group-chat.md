@@ -1,7 +1,8 @@
 ---
-permalink: /spec/7
-parent: Draft specs
+permalink: /draft/7
 title: 7/GROUP-CHAT
+parent: Draft specs
+layout: default
 ---
 
 # 7/GROUP-CHAT

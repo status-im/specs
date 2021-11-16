@@ -1,7 +1,8 @@
 ---
 permalink: /spec/2
-parent: Stable specs
 title: 2/ACCOUNT
+parent: Stable specs
+layout: default
 ---
 
 # 2/ACCOUNT

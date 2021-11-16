@@ -1,7 +1,8 @@
 ---
 permalink: /spec/5
-parent: Stable specs
 title: 5/SECURE-TRANSPORT
+parent: Stable specs
+layout: default
 ---
 
 # 5/SECURE-TRANSPORT

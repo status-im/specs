@@ -1,7 +1,8 @@
 ---
 permalink: /spec/11
-parent: Stable specs
 title: 11/WAKU-MAILSERVER
+parent: Stable specs
+layout: default
 ---
 
 # 11/WAKU-MAILSERVER

@@ -1,7 +1,8 @@
 ---
-permalink: /spec/16
-parent: Stable specs
+permalink: /raw/16
 title: 16/PUSH-NOTIFICATION-SERVER
+parent: Raw specs
+layout: default
 ---
 
 # 16/PUSH-NOTIFICATION-SERVER

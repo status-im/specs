@@ -1,7 +1,8 @@
 ---
-permalink: /spec/13
-parent: Draft specs
+permalink: /draft/13
 title: 13/3RD-PARTY-USAGE
+parent: Draft specs
+layout: default
 ---
 
 # 13/3RD-PARTY

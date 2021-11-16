@@ -1,7 +1,8 @@
 ---
-permalink: /spec/6
-parent: Draft specs
+permalink: /draft/6
 title: 6/PAYLOADS
+parent: Draft specs
+layout: default
 ---
 
 # 6/PAYLOADS
