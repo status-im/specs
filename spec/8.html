@@ -1,0 +1,381 @@
+<h1 id="8eips">8/EIPS</h1>
+
+<blockquote>
+  <p>Version: 0.2</p>
+
+  <p>Status: Stable</p>
+
+  <p>Authors: Ricardo Guilherme Schmidt <a href="mailto:ricardo3@status.im">ricardo3@status.im</a></p>
+</blockquote>
+
+<h2 id="abstract">Abstract</h2>
+
+<p>This specification describes how Status relates with EIPs.</p>
+
+<h2 id="table-of-contents">Table of Contents</h2>
+<ul>
+  <li><a href="#abstract">Abstract</a></li>
+  <li><a href="#table-of-contents">Table of Contents</a></li>
+  <li><a href="#introduction">Introduction</a></li>
+  <li><a href="#components">Components</a></li>
+</ul>
+
+<h2 id="introduction">Introduction</h2>
+
+<p>Status should follow all standards as possible. Whenever the Status app needs a feature, it should be first checked if there is a standard for that, if not, Status should propose a standard.</p>
+
+<h3 id="support-table">Support table</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th> </th>
+      <th>Status v0</th>
+      <th>Status v1</th>
+      <th>Other</th>
+      <th>State</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>BIP32</td>
+      <td>N</td>
+      <td>Y</td>
+      <td>N</td>
+      <td><code class="language-plaintext highlighter-rouge">stable</code></td>
+    </tr>
+    <tr>
+      <td>BIP39</td>
+      <td>Y</td>
+      <td>Y</td>
+      <td>Y</td>
+      <td><code class="language-plaintext highlighter-rouge">stable</code></td>
+    </tr>
+    <tr>
+      <td>BIP43</td>
+      <td>N</td>
+      <td>Y</td>
+      <td>N</td>
+      <td><code class="language-plaintext highlighter-rouge">stable</code></td>
+    </tr>
+    <tr>
+      <td>BIP44</td>
+      <td>N</td>
+      <td>Y</td>
+      <td>N</td>
+      <td><code class="language-plaintext highlighter-rouge">stable</code></td>
+    </tr>
+    <tr>
+      <td>EIP20</td>
+      <td>Y</td>
+      <td>Y</td>
+      <td>Y</td>
+      <td><code class="language-plaintext highlighter-rouge">stable</code></td>
+    </tr>
+    <tr>
+      <td>EIP55</td>
+      <td>Y</td>
+      <td>Y</td>
+      <td>Y</td>
+      <td><code class="language-plaintext highlighter-rouge">stable</code></td>
+    </tr>
+    <tr>
+      <td>EIP67</td>
+      <td>P</td>
+      <td>P</td>
+      <td>N</td>
+      <td><code class="language-plaintext highlighter-rouge">stable</code></td>
+    </tr>
+    <tr>
+      <td>EIP137</td>
+      <td>P</td>
+      <td>P</td>
+      <td>N</td>
+      <td><code class="language-plaintext highlighter-rouge">stable</code></td>
+    </tr>
+    <tr>
+      <td>EIP155</td>
+      <td>Y</td>
+      <td>Y</td>
+      <td>Y</td>
+      <td><code class="language-plaintext highlighter-rouge">stable</code></td>
+    </tr>
+    <tr>
+      <td>EIP165</td>
+      <td>P</td>
+      <td>N</td>
+      <td>N</td>
+      <td><code class="language-plaintext highlighter-rouge">stable</code></td>
+    </tr>
+    <tr>
+      <td>EIP181</td>
+      <td>P</td>
+      <td>N</td>
+      <td>N</td>
+      <td><code class="language-plaintext highlighter-rouge">stable</code></td>
+    </tr>
+    <tr>
+      <td>EIP191</td>
+      <td>Y?</td>
+      <td>N</td>
+      <td>Y</td>
+      <td><code class="language-plaintext highlighter-rouge">stable</code></td>
+    </tr>
+    <tr>
+      <td>EIP627</td>
+      <td>Y</td>
+      <td>Y</td>
+      <td>N</td>
+      <td><code class="language-plaintext highlighter-rouge">stable</code></td>
+    </tr>
+    <tr>
+      <td>EIP681</td>
+      <td>Y</td>
+      <td>N</td>
+      <td>Y</td>
+      <td><code class="language-plaintext highlighter-rouge">stable</code></td>
+    </tr>
+    <tr>
+      <td>EIP712</td>
+      <td>P</td>
+      <td>P</td>
+      <td>Y</td>
+      <td><code class="language-plaintext highlighter-rouge">stable</code></td>
+    </tr>
+    <tr>
+      <td>EIP721</td>
+      <td>P</td>
+      <td>P</td>
+      <td>Y</td>
+      <td><code class="language-plaintext highlighter-rouge">stable</code></td>
+    </tr>
+    <tr>
+      <td>EIP831</td>
+      <td>N</td>
+      <td>Y</td>
+      <td>N</td>
+      <td><code class="language-plaintext highlighter-rouge">stable</code></td>
+    </tr>
+    <tr>
+      <td>EIP945</td>
+      <td>Y</td>
+      <td>Y</td>
+      <td>N</td>
+      <td><code class="language-plaintext highlighter-rouge">stable</code></td>
+    </tr>
+    <tr>
+      <td>EIP1102</td>
+      <td>Y</td>
+      <td>Y</td>
+      <td>Y</td>
+      <td><code class="language-plaintext highlighter-rouge">stable</code></td>
+    </tr>
+    <tr>
+      <td>EIP1193</td>
+      <td>Y</td>
+      <td>Y</td>
+      <td>Y</td>
+      <td><code class="language-plaintext highlighter-rouge">stable</code></td>
+    </tr>
+    <tr>
+      <td>EIP1577</td>
+      <td>Y</td>
+      <td>P</td>
+      <td>N</td>
+      <td><code class="language-plaintext highlighter-rouge">stable</code></td>
+    </tr>
+    <tr>
+      <td>EIP1581</td>
+      <td>N</td>
+      <td>Y</td>
+      <td>N</td>
+      <td><code class="language-plaintext highlighter-rouge">stable</code></td>
+    </tr>
+    <tr>
+      <td>EIP1459</td>
+      <td>N</td>
+      <td> </td>
+      <td>N</td>
+      <td><code class="language-plaintext highlighter-rouge">raw</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="components">Components</h2>
+
+<h3 id="bip32---hierarchical-deterministic-wallets">BIP32 - Hierarchical Deterministic Wallets</h3>
+
+<p>Support: Dependency.<br />
+Reference: https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki<br />
+Description: Enable wallets to derive multiple private keys from the same seed.<br />
+Used for: Dependency of BIP39 and BIP43.</p>
+
+<h3 id="bip39---mnemonic-code-for-generating-deterministic-keys">BIP39 - Mnemonic code for generating deterministic keys</h3>
+
+<p>Support: Dependency.<br />
+Reference: https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki<br />
+Description: Enable wallet to create private key based on a safe seed phrase.
+Used for: Security and user experience.</p>
+
+<h3 id="bip43---purpose-field-for-deterministic-wallets">BIP43 - Purpose Field for Deterministic Wallets</h3>
+
+<p>Support: Dependency.<br />
+Reference: https://github.com/bitcoin/bips/blob/master/bip-0043.mediawiki<br />
+Description: Enable wallet to create private keys branched for a specific purpose.<br />
+Used for: Dependency of BIP44, uses “ethereum” coin.</p>
+
+<h3 id="bip44---multi-account-hierarchy-for-deterministic-wallets">BIP44 - Multi-Account Hierarchy for Deterministic Wallets</h3>
+
+<p>Support: Dependency.<br />
+Reference: https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki<br />
+Description: Enable wallet to derive multiple accounts in top of BIP39.<br />
+Used for: Privacy.<br />
+Sourcecode: https://github.com/status-im/status-react/blob/develop/src/status_im/constants.cljs#L240 <br />
+Observation: BIP44 don’t solve privacy issues regarding the transparency of transactions, therefore directly connected addresses through a transactions can be identifiable by a “network reconnaissance attack” over transaction history, this attack together with leakage of information from centralized services, such as exchanges, would be fatal against the whole privacy of users, regardless of BIP44.</p>
+
+<h3 id="eip20---fungible-token">EIP20 - Fungible Token</h3>
+
+<p>Support: Full.<br />
+Reference: https://eips.ethereum.org/EIPS/eip-20<br />
+Description: Enable wallets to use tokens based on smart contracts compliant with this standard.<br />
+Used for: Wallet feature.<br />
+Sourcecode: https://github.com/status-im/status-react/blob/develop/src/status_im/ethereum/tokens.cljs</p>
+
+<h3 id="eip55---mixed-case-checksum-address-encoding">EIP55 - Mixed-case checksum address encoding</h3>
+
+<p>Support: Full.<br />
+Reference: https://eips.ethereum.org/EIPS/eip-55<br />
+Description: Checksum standard that uses lowercase and uppercase inside address hex value.<br />
+Used for: Sanity check of forms using ethereum address.<br />
+Related: https://github.com/status-im/status-react/issues/4959 https://github.com/status-im/status-react/issues/8707<br />
+Sourcecode: https://github.com/status-im/status-react/blob/develop/src/status_im/ethereum/eip55.cljs</p>
+
+<h3 id="eip67---standard-uri-scheme-with-metadata-value-and-byte-code">EIP67 - Standard URI scheme with metadata, value and byte code</h3>
+
+<p>Support: Partial.<br />
+Reference: https://github.com/ethereum/EIPs/issues/67<br />
+Description: A standard way of creating Ethereum URIs for various use-cases.<br />
+Used for: Legacy support.<br />
+https://github.com/status-im/status-react/issues/875</p>
+
+<h3 id="eip137---ethereum-domain-name-service---specification">EIP137 - Ethereum Domain Name Service - Specification</h3>
+
+<p>Support: Partial.<br />
+Reference: https://eips.ethereum.org/EIPS/eip-137<br />
+Description: Enable wallets to lookup ENS names.<br />
+Used for: User experience, as a wallet and identity feature, usernames.<br />
+Sourcecode: https://github.com/status-im/status-react/blob/develop/src/status_im/ethereum/ens.cljs#L86</p>
+
+<h3 id="eip155---simple-replay-attack-protection">EIP155 - Simple replay attack protection</h3>
+
+<p>Support: Full.<br />
+Reference: https://eips.ethereum.org/EIPS/eip-155<br />
+Description: Defined chainId parameter in the singed ethereum transaction payload.<br />
+Used for: Signing transactions, crucial to safety of users against replay attacks.<br />
+Sourcecode: https://github.com/status-im/status-react/blob/develop/src/status_im/ethereum/core.cljs</p>
+
+<h3 id="eip165---standard-interface-detection">EIP165 - Standard Interface Detection</h3>
+
+<p>Support: Dependency/Partial.<br />
+Reference: https://eips.ethereum.org/EIPS/eip-165<br />
+Description: Standard interface for contract to answer if it supports other interfaces.<br />
+Used for: Dependency of ENS and EIP721.<br />
+Sourcecode: https://github.com/status-im/status-react/blob/develop/src/status_im/ethereum/eip165.cljs</p>
+
+<h3 id="eip181---ens-support-for-reverse-resolution-of-ethereum-addresses">EIP181 - ENS support for reverse resolution of Ethereum addresses</h3>
+
+<p>Support: Partial.<br />
+Reference: https://eips.ethereum.org/EIPS/eip-181<br />
+Description: Enable wallets to render reverse resolution of Ethereum addresses.<br />
+Used for: Wallet feature.<br />
+Sourcecode: https://github.com/status-im/status-react/blob/develop/src/status_im/ethereum/ens.cljs#L86</p>
+
+<h3 id="eip191---signed-message">EIP191 - Signed Message</h3>
+
+<p>Support: Full.<br />
+Reference: https://eips.ethereum.org/EIPS/eip-191<br />
+Description: Contract signature standard, adds an obligatory padding to signed message to differentiate from Ethereum Transaction messages.<br />
+Used for: Dapp support, security, dependency of ERC712.</p>
+
+<h3 id="eip627---whisper-specification">EIP627 - Whisper Specification</h3>
+
+<p>Support: Full.<br />
+Reference: https://eips.ethereum.org/EIPS/eip-627<br />
+Description: format of Whisper messages within the ÐΞVp2p Wire Protocol.<br />
+Used for: Chat protocol.</p>
+
+<h3 id="eip681---url-format-for-transaction-requests">EIP681 - URL Format for Transaction Requests</h3>
+
+<p>Support: Partial.<br />
+Reference: https://eips.ethereum.org/EIPS/eip-681
+Description: A link that pop up a transaction in the wallet.<br />
+Used for: Useful as QR code data for transaction requests, chat transaction requests and for dapp links to transaction requests.<br />
+Sourcecode: https://github.com/status-im/status-react/blob/develop/src/status_im/ethereum/eip681.cljs<br />
+Related: <a href="https://github.com/status-im/status-react/issues/9183">Issue #9183: URL Format for Transaction Requests (EIP681) is poorly supported</a> https://github.com/status-im/status-react/pull/9240 https://github.com/status-im/status-react/issues/9238 https://github.com/status-im/status-react/issues/7214 https://github.com/status-im/status-react/issues/7325 https://github.com/status-im/status-react/issues/8150</p>
+
+<h3 id="eip712---typed-signed-message">EIP712 - Typed Signed Message</h3>
+
+<p>Support: Partial.<br />
+Reference: https://eips.ethereum.org/EIPS/eip-712<br />
+Description: Standardize types for contract signature, allowing users to easily inspect whats being signed.<br />
+Used for: User experience, security.<br />
+Related: https://github.com/status-im/status-react/issues/5461 https://github.com/status-im/status-react/commit/ba37f7b8d029d3358c7b284f6a2383b9ef9526c9</p>
+
+<h3 id="eip721---non-fungible-token">EIP721 - Non Fungible Token</h3>
+
+<p>Support: Partial.<br />
+Reference: https://eips.ethereum.org/EIPS/eip-721<br />
+Description: Enable wallets to use tokens based on smart contracts compliant with this standard.<br />
+Used for: Wallet feature.<br />
+Related: https://github.com/status-im/status-react/issues/8909<br />
+Sourcecode: https://github.com/status-im/status-react/blob/develop/src/status_im/ethereum/erc721.cljs https://github.com/status-im/status-react/blob/develop/src/status_im/ethereum/tokens.cljs</p>
+
+<h3 id="eip945---web-3-qr-code-scanning-api">EIP945 - Web 3 QR Code Scanning API</h3>
+
+<p>Support: Full.<br />
+Reference: https://github.com/ethereum/EIPs/issues/945<br />
+Used for: Sharing contactcode, reading transaction requests.<br />
+Related: https://github.com/status-im/status-react/issues/5870</p>
+
+<h3 id="eip1102---opt-in-account-exposure">EIP1102 - Opt-in account exposure</h3>
+
+<p>Support: Full.<br />
+Reference: https://eips.ethereum.org/EIPS/eip-1102<br />
+Description: Allow users to opt-in the exposure of their ethereum address to dapps they browse.<br />
+Used for: Privacy, DApp support.<br />
+Related: https://github.com/status-im/status-react/issues/7985</p>
+
+<h3 id="eip1193---ethereum-provider-javascript-api">EIP1193 - Ethereum Provider JavaScript API</h3>
+
+<p>Support: Full.<br />
+Reference: https://eips.ethereum.org/EIPS/eip-1193<br />
+Description: Allows dapps to recognize event changes on wallet.<br />
+Used for: DApp support.<br />
+Related: https://github.com/status-im/status-react/pull/7246</p>
+
+<h3 id="eip1577---contenthash-field-for-ens">EIP1577 - contenthash field for ENS</h3>
+
+<p>Support: Partial.<br />
+Reference: https://eips.ethereum.org/EIPS/eip-1577<br />
+Description: Allows users browse ENS domains using contenthash standard.<br />
+Used for: Browser, DApp support.<br />
+Related: https://github.com/status-im/status-react/issues/6688<br />
+Sourcecode: https://github.com/status-im/status-react/blob/develop/src/status_im/utils/contenthash.cljs https://github.com/status-im/status-react/blob/develop/test/cljs/status_im/test/utils/contenthash.cljs#L5</p>
+
+<h3 id="eip1581---non-wallet-usage-of-keys-derived-from-bip-32-trees">EIP1581 - Non-wallet usage of keys derived from BIP-32 trees</h3>
+
+<p>Support: Partial.<br />
+Reference: https://eips.ethereum.org/EIPS/eip-1581<br />
+Description: Allow wallet to derive keys that are less sensible (non wallet).<br />
+Used for: Security (don’t reuse wallet key) and user experience (don’t request keycard every login).<br />
+Related: https://github.com/status-im/status-react/issues/9088 https://github.com/status-im/status-react/pull/9096<br />
+Sourcecode: https://github.com/status-im/status-react/blob/develop/src/status_im/constants.cljs#L242</p>
+
+<h3 id="eip1459---node-discovery-via-dns">EIP1459 - Node Discovery via DNS</h3>
+
+<p>Support: -
+Reference: https://eips.ethereum.org/EIPS/eip-1459
+Description: Allows the storing and retrieving of nodes through merkle trees stored in TXT records of a domain.
+Used for: Finding Waku nodes.
+Related: -
+Sourcecode: -</p>

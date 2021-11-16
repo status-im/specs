@@ -1,0 +1,28 @@
+<h1 id="15notifications">15/NOTIFICATIONS</h1>
+
+<h2 id="local-notifications">Local Notifications</h2>
+
+<p>A client should implement local notifications to offer notifications for any event in the app without the privacy cost and dependency on third party services. This means that the client should run a background service to continuously or periodically check for updates.</p>
+
+<h3 id="android">Android</h3>
+
+<p>Android allows running services on the device. When the user enables notifications, the client may start a ``Foreground Service`, and display a permanent notification indicating that the service is running, as required by Android guidelines.
+The service will simply keep the app from being killed by the system when it is in the background.
+The client will then be able to run in the background and display local notifications on events such as receiving a message in a one to one chat.</p>
+
+<p>To facilitate the implementation of local notifications, a node implementation such as <code class="language-plaintext highlighter-rouge">status-go</code> may provide a specific <code class="language-plaintext highlighter-rouge">notification</code> signal.</p>
+
+<p>Notifications are a separate process in Android, and interaction with a notification generates an <code class="language-plaintext highlighter-rouge">Intent</code>. To handle intents, the <code class="language-plaintext highlighter-rouge">NewMessageSignalHandler</code> may use a <code class="language-plaintext highlighter-rouge">BroadcastReceiver</code>, in order to update the state of local notifications when the user dismisses or tap a notification. If the user taps on a notification, the <code class="language-plaintext highlighter-rouge">BroadcastReceiver</code> generates a new intent to open the app should use universal links to get the user to the right place.</p>
+
+<h3 id="ios">iOS</h3>
+
+<p>We are not able to offer local notifications on iOS because there is no concept of services in iOS. It offers background updates but they’re not consistently triggered, and cannot be relied upon. The system decides when the background updates are triggered and the heuristics aren’t known.</p>
+
+<h2 id="why-is-there-no-push-notifications">Why is there no Push Notifications?</h2>
+
+<p>Push Notifications, as offered by Apple and Google are a privacy concern, they require a centralized service that is aware of who the notification needs to be delivered to.</p>
+
+<h2 id="copyright">Copyright</h2>
+
+<p>Copyright and related rights waived via <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0</a>.</p>
+

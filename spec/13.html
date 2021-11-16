@@ -1,0 +1,151 @@
+<h1 id="133rd-party">13/3RD-PARTY</h1>
+
+<blockquote>
+  <p>Version: 0.1</p>
+
+  <p>Status: Draft</p>
+
+  <p>Authors: Volodymyr Kozieiev <a href="mailto:volodymyr@status.im">volodymyr@status.im</a></p>
+</blockquote>
+
+<h1 id="third-party-apis-used-for-core-functionality">Third party APIs used for core functionality</h1>
+
+<h2 id="table-of-contents">Table of Contents</h2>
+
+<ol>
+  <li><a href="#abstract">Abstract</a></li>
+  <li><a href="#definitions">Definitions</a></li>
+  <li><a href="#why-3rd-party-api-can-be-a-problem">Why 3rd party API can be a problem?</a></li>
+  <li><a href="#3rd-party-apis-used-by-current-status-app">3rd party APIs used by Status</a>
+    <ul>
+      <li><a href="#infura">Infura</a></li>
+      <li><a href="#etherscan">Etherscan</a></li>
+      <li><a href="#cryptocompare">CryptoCompare</a></li>
+      <li><a href="#collectibles">Collectibles</a></li>
+      <li><a href="#iubenda">Iubenda</a></li>
+    </ul>
+  </li>
+  <li><a href="#changelog">Changelog</a></li>
+  <li><a href="#copyright">Copyright</a></li>
+</ol>
+
+<h2 id="abstract">Abstract</h2>
+
+<p>This specification discusses 3rd party APIs that Status relies on. These APIs provide various capabilities such as:</p>
+<ul>
+  <li>communicate with the Ethereum network</li>
+  <li>allow users to see address and transaction details on external website</li>
+  <li>get fiat/crypto exchange rates</li>
+  <li>get information about collectibles</li>
+  <li>hosts privacy policy</li>
+</ul>
+
+<h2 id="definitions">Definitions</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Term</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Fiat money</td>
+      <td>Currency which established as money, often by government regulation, but that has no intrinsic value</td>
+    </tr>
+    <tr>
+      <td>Full node</td>
+      <td>Any computer, connected to the Ethereum network, which fully enforces all the consensus rules of Ethereum.</td>
+    </tr>
+    <tr>
+      <td>Crypto-collectible</td>
+      <td>A cryptographically unique, non-fungible digital asset . Unlike cryptocurrencies, which require all tokens to be identical, each crypto-collectible token is unique or limited in quantity.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="why-3rd-party-api-can-be-a-problem">Why 3rd party API can be a problem?</h2>
+<p>Relying on 3rd party APIs interferes with <code class="language-plaintext highlighter-rouge">censorship resistance</code> Status principle. Since Status aims to avoid suppression of information it is important to reduce amount of 3rd parties crucial for app functionality.</p>
+
+<h2 id="3rd-party-apis-used-by-current-status-app">3rd party APIs used by current Status app</h2>
+
+<h3 id="infura">Infura</h3>
+
+<h5 id="what-is-it">What is it?</h5>
+<p>Infura hosts a collection of full nodes for the Ethereum network and provides an API to access both the Ethereum and IPFS networks without having to run a full node.</p>
+
+<h5 id="how-status-use-it">How Status use it?</h5>
+<p>Status works on mobile devices and therefore can’t rely on local node. So all communication to Ethereum network happens via Infura.</p>
+
+<h5 id="concerns">Concerns</h5>
+<p>Making a HTTP request means that a user leaks metadata, which can be used in various attacks if an attacker hacks the service.
+Infura hosts on centralized providers. If these fail or the provider cuts off service, then Status features requiring Ethereum calls will.</p>
+
+<h3 id="etherscan">Etherscan</h3>
+<h5 id="what-is-it-1">What is it?</h5>
+<p>Etherscan is a service that allows user to explore and search the Ethereum blockchain for transactions, addresses, tokens, prices and other activities taking place on Ethereum.</p>
+
+<h5 id="how-status-use-it-1">How Status use it?</h5>
+<p>Status Wallet allows users to view details of addresses and transactions on Etherscan.</p>
+
+<h5 id="concerns-1">Concerns</h5>
+<p>If Etherscan fails user won’t be able to view address or transaction details with it. But inside the app this info will still be available.</p>
+
+<h3 id="cryptocompare">CryptoCompare</h3>
+
+<h5 id="what-is-it-2">What is it?</h5>
+<p>CryptoCompare is a service that shows live streaming prices, charts and analysis from top crypto exchanges.</p>
+
+<h5 id="how-status-use-it-2">How Status use it?</h5>
+<p>Status regularly fetches crypto prices from CryptoCompare. Using that info Status calculates fiat value for transaction or wallet assets.</p>
+
+<h5 id="concerns-2">Concerns</h5>
+<p>Making a HTTP request means that a user leaks metadata, which can be used in various attacks if an attacker hacks the service.
+If CryptoCompare fails Status won’t be able to show fiat equivalent of crypto in wallet.</p>
+
+<h3 id="collectibles">Collectibles</h3>
+
+<p>There is a set of services that used for getting information about collectibles:</p>
+<ul>
+  <li>https://api.pixura.io/graphql</li>
+  <li>https://www.etheremon.com/api</li>
+  <li>https://us-central1-cryptostrikers-prod.cloudfunctions.net/cards/</li>
+  <li>https://api.cryptokitties.co/</li>
+</ul>
+
+<h5 id="concerns-3">Concerns</h5>
+<p>Making a HTTP request means that a user leaks metadata, which can be used in various attacks if an attacker hacks the service.</p>
+
+<h3 id="iubenda">Iubenda</h3>
+
+<h5 id="what-is-it-3">What is it?</h5>
+
+<p>Service that helps in creating documents that make websites and apps compliant with the law across multiple countries and legislations.</p>
+
+<h5 id="how-status-use-it-3">How Status use it?</h5>
+<p>Privacy policy of Status hosted on Iubenda.</p>
+
+<h5 id="concerns-4">Concerns</h5>
+<p>If Iubenda fails Status users won’t be able to navigate to app’s privacy policy.</p>
+
+<h2 id="changelog">Changelog</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">Version</th>
+      <th>Comment</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center"><a href="https://github.com/status-im/specs/blob/master/docs/draft/9-3rd-party.md">0.1.0</a></td>
+      <td>Initial Release</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="copyright">Copyright</h2>
+
+<p>Copyright and related rights waived via <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0</a>.</p>

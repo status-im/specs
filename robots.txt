@@ -1,0 +1,1 @@
+Sitemap: https://specs.status.im/sitemap.xml

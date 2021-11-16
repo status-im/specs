@@ -1,0 +1,186 @@
+<h1 id="dapp-browser-api-usage">Dapp browser API usage</h1>
+
+<h2 id="table-of-contents">Table of Contents</h2>
+
+<ol>
+  <li><a href="#abstract">Abstract</a></li>
+  <li><a href="#definitions">Definitions</a></li>
+  <li><a href="#overview">Overview</a></li>
+  <li><a href="#usage">Usage</a>
+    <ul>
+      <li><a href="#properties">Properties</a>
+        <ul>
+          <li><a href="#isStatus"><code class="language-plaintext highlighter-rouge">isStatus</code></a></li>
+          <li><a href="#status"><code class="language-plaintext highlighter-rouge">status</code></a></li>
+        </ul>
+      </li>
+      <li><a href="#methods">Methods</a>
+        <ul>
+          <li><a href="#isConnected"><code class="language-plaintext highlighter-rouge">isConnected</code></a></li>
+          <li><a href="#request"><code class="language-plaintext highlighter-rouge">request</code></a></li>
+          <li><a href="#scanQRCode"><code class="language-plaintext highlighter-rouge">scanQRCode</code></a></li>
+        </ul>
+      </li>
+      <li><a href="#unused">Unused</a>
+        <ul>
+          <li><a href="#enable"><code class="language-plaintext highlighter-rouge">enable</code></a></li>
+          <li><a href="#send"><code class="language-plaintext highlighter-rouge">send</code></a></li>
+          <li><a href="#sendAsync"><code class="language-plaintext highlighter-rouge">sendAsync</code></a></li>
+          <li><a href="#sendSync"><code class="language-plaintext highlighter-rouge">sendSync</code></a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><a href="#implementation">Implementation</a></li>
+  <li><a href="#compatibility">Compatibility</a></li>
+  <li><a href="#changelog">Changelog</a></li>
+  <li><a href="#copyright">Copyright</a></li>
+</ol>
+
+<h2 id="abstract">Abstract</h2>
+<p>This document describes requirements that an application must fulfill in order to provide a proper environment for Dapps running inside a browser. A description of the Status Dapp API is provided, along with an overview of bidirectional communication underlying the API implementation. The document also includes a list of EIPs that this API implements.</p>
+
+<h2 id="definitions">Definitions</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Term</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Webview</strong></td>
+      <td>Platform-specific browser core implementation.</td>
+    </tr>
+    <tr>
+      <td><strong>Ethereum Provider</strong></td>
+      <td>A JS object (<code class="language-plaintext highlighter-rouge">window.ethereum</code>) injected into each web page opened in the browser providing web3 compatible provider.</td>
+    </tr>
+    <tr>
+      <td><strong>Bridge</strong></td>
+      <td>A set of facilities allow bidirectional communication between JS code and the application.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="overview">Overview</h2>
+<p>The application should expose an Ethereum Provider object (<code class="language-plaintext highlighter-rouge">window.ethereum</code>) to JS code running inside the browser. It is important to have the <code class="language-plaintext highlighter-rouge">window.ethereum</code> object available before the page loads, otherwise Dapps might not work correctly.</p>
+
+<p>Additionally, the browser component should also provide bidirectional communication between JS code and the application.</p>
+
+<h2 id="usage-in-dapps">Usage in Dapps</h2>
+
+<p>Dapps can use the below properties and methods of <code class="language-plaintext highlighter-rouge">window.ethereum</code> object.</p>
+
+<h3 id="properties">Properties</h3>
+
+<h4 id="isstatus"><code class="language-plaintext highlighter-rouge">isStatus</code></h4>
+<p>Returns true. Can be used by the Dapp to find out whether it’s running inside Status.</p>
+
+<h4 id="status"><code class="language-plaintext highlighter-rouge">status</code></h4>
+<p>Returns a <code class="language-plaintext highlighter-rouge">StatusAPI</code> object. For now it supports one method: <code class="language-plaintext highlighter-rouge">getContactCode</code> that sends a <code class="language-plaintext highlighter-rouge">contact-code</code> request to Status.</p>
+
+<h3 id="methods">Methods</h3>
+
+<h4 id="isconnected"><code class="language-plaintext highlighter-rouge">isConnected</code></h4>
+<p>Similarly to Ethereum JS API <a href="https://github.com/ethereum/wiki/wiki/JavaScript-API#web3isconnected">docs</a>, it should be called to check if connection to a node exists. On Status, this fn always returns true, as once Status is up and running, node is automatically started.</p>
+
+<h4 id="scanqrcode"><code class="language-plaintext highlighter-rouge">scanQRCode</code></h4>
+<p>Sends a <code class="language-plaintext highlighter-rouge">qr-code</code> Status API request.</p>
+
+<h4 id="request"><code class="language-plaintext highlighter-rouge">request</code></h4>
+<p><code class="language-plaintext highlighter-rouge">request</code> method as defined by EIP-1193.</p>
+
+<h3 id="unused">Unused</h3>
+<p>Below are some legacy methods that some Dapps might still use.</p>
+
+<h4 id="enable-deprecated"><code class="language-plaintext highlighter-rouge">enable</code> (DEPRECATED)</h4>
+<p>Sends a <code class="language-plaintext highlighter-rouge">web3</code> Status API request. It returns a first entry in the list of available accounts.</p>
+
+<p>Legacy <code class="language-plaintext highlighter-rouge">enable</code> method as defined by <a href="https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1102.md">EIP1102</a>.</p>
+
+<h4 id="send-deprecated"><code class="language-plaintext highlighter-rouge">send</code> (DEPRECATED)</h4>
+<p>Legacy <code class="language-plaintext highlighter-rouge">send</code> method as defined by <a href="https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1193.md">EIP1193</a>.</p>
+
+<h4 id="sendasync-deprecated"><code class="language-plaintext highlighter-rouge">sendAsync</code> (DEPRECATED)</h4>
+<p>Legacy <code class="language-plaintext highlighter-rouge">sendAsync</code> method as defined by <a href="https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1193.md">EIP1193</a>.</p>
+
+<h4 id="sendsync-deprecated"><code class="language-plaintext highlighter-rouge">sendSync</code> (DEPRECATED)</h4>
+<p>Legacy <code class="language-plaintext highlighter-rouge">send</code> method.</p>
+
+<h2 id="implementation">Implementation</h2>
+<p>Status uses a <a href="https://github.com/status-im/react-native-webview">forked version</a> of <a href="https://github.com/react-native-community/react-native-webview">react-native-webview</a>  to display web or dapps content. The fork provides an Android implementation of JS injection before page load. It is required in order to properly inject Ethereum Provider object.</p>
+
+<p>Status injects two JS scripts:</p>
+<ul>
+  <li><a href="https://github.com/status-im/status-react/blob/develop/resources/js/provider.js">provider.js</a>: <code class="language-plaintext highlighter-rouge">window.ethereum</code> object</li>
+  <li><a href="https://github.com/status-im/status-react/blob/develop/resources/js/webview.js">webview.js</a>: override for <code class="language-plaintext highlighter-rouge">history.pushState</code> used internally</li>
+</ul>
+
+<p>Dapps running inside a browser communicate with Status Ethereum node by means of a <em>bridge</em> provided by react-native-webview library. The bridge allows for bidirectional communication between browser and Status. In order to do so, it injects a special <code class="language-plaintext highlighter-rouge">ReactNativeWebview</code> object into each page it loads.</p>
+
+<p>On Status (React Native) end, <code class="language-plaintext highlighter-rouge">react-native-webview</code> library provides <code class="language-plaintext highlighter-rouge">WebView.injectJavascript</code> function on a webview component that allows to execute arbitrary code inside the webview. Thus it is possible to inject a function call passing Status node response back to the Dapp.</p>
+
+<p>Below is the table briefly describing what functions/properties are used. More details available in package <a href="https://github.com/react-native-community/react-native-webview/blob/master/docs/Guide.md#communicating-between-js-and-native">docs</a>.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Direction</th>
+      <th>Side</th>
+      <th>Method</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Browser-&gt;Status</td>
+      <td>JS</td>
+      <td><code class="language-plaintext highlighter-rouge">ReactNativeWebView.postMessage()</code></td>
+    </tr>
+    <tr>
+      <td>Browser-&gt;Status</td>
+      <td>RN</td>
+      <td><code class="language-plaintext highlighter-rouge">WebView.onMessage()</code></td>
+    </tr>
+    <tr>
+      <td>Status-&gt;Browser</td>
+      <td>JS</td>
+      <td><code class="language-plaintext highlighter-rouge">ReactNativeWebView.onMessage()</code></td>
+    </tr>
+    <tr>
+      <td>Status-&gt;Browser</td>
+      <td>RN</td>
+      <td><code class="language-plaintext highlighter-rouge">WebView.injectJavascript()</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="compatibility">Compatibility</h2>
+<p>Status browser supports the following EIPs:</p>
+<ul>
+  <li><a href="https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1102.md">EIP1102</a>: <code class="language-plaintext highlighter-rouge">eth_requestAccounts</code> support</li>
+  <li><a href="https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1193.md">EIP1193</a>: <code class="language-plaintext highlighter-rouge">connect</code>, <code class="language-plaintext highlighter-rouge">disconnect</code>, <code class="language-plaintext highlighter-rouge">chainChanged</code>, and <code class="language-plaintext highlighter-rouge">accountsChanged</code> event support is not implemented</li>
+</ul>
+
+<h2 id="changelog">Changelog</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">Version</th>
+      <th>Comment</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center"><a href="https://github.com/specs/...">0.1.0</a></td>
+      <td>Initial Release</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="copyright">Copyright</h2>
+
+<p>Copyright and related rights waived via <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0</a>.</p>

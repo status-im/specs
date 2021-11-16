@@ -1,0 +1,222 @@
+<h1 id="9ethereum-usage">9/ETHEREUM-USAGE</h1>
+
+<blockquote>
+  <p>Version: 0.1</p>
+
+  <p>Status: Stable</p>
+
+  <p>Authors: Andrea Maria Piana <a href="mailto:andreap@status.im">andreap@status.im</a></p>
+</blockquote>
+
+<h1 id="status-interactions-with-the-ethereum-blockchain">Status interactions with the Ethereum blockchain</h1>
+
+<p>This specification documents all the interactions that the Status client has
+with the <a href="https://ethereum.org/developers/">Ethereum</a> blockchain.</p>
+
+<p>All the interactions are made through <a href="https://github.com/ethereum/wiki/wiki/JSON-RPC">JSON-RPC</a>.
+Currently <a href="https://infura.io/">Infura</a> is used. The client assumes high-availability, otherwise 
+it will not be able to interact with the Ethereum blockchain.
+Status nodes rely on these Infura nodes to validate the integrity of the transaction and report a 
+consistent history.</p>
+
+<p>Key handling is described <a href="./2-account.md">here</a></p>
+
+<ol>
+  <li><a href="#Wallet">Wallet</a></li>
+  <li><a href="#ENS">ENS</a></li>
+</ol>
+
+<h2 id="wallet">Wallet</h2>
+
+<p>The wallet in Status has two main components:</p>
+
+<p>1) Sending transactions
+2) Fetching balance</p>
+
+<p>In the section below are described the <code class="language-plaintext highlighter-rouge">RPC</code> calls made the nodes, with a brief
+description of their functionality and how it is used by Status.</p>
+
+<ol>
+  <li><a href="#Sending-transactions">Sending transactions</a>
+    <ul>
+      <li><a href="#EstimateGas">EstimateGas</a></li>
+      <li><a href="#PendingNonceAt">PendingNonceAt</a></li>
+      <li><a href="#SuggestGasPrice">SuggestGasPrice</a></li>
+      <li><a href="#SendTransaction">SendTransaction</a></li>
+    </ul>
+  </li>
+  <li><a href="#Fetching-balance">Fetching balance</a>
+    <ul>
+      <li><a href="#BlockByHash">BlockByHash</a></li>
+      <li><a href="#BlockByNumber">BlockByNumber</a></li>
+      <li><a href="#FilterLogs">FilterLogs</a></li>
+      <li><a href="#HeaderByNumber">HeaderByNumber</a></li>
+      <li><a href="#NonceAt">NonceAt</a></li>
+      <li><a href="#TransactionByHash">TransactionByHash</a></li>
+      <li><a href="#TransactionReceipt">TransactionReceipt</a></li>
+    </ul>
+  </li>
+</ol>
+
+<h3 id="sending-transactions">Sending transactions</h3>
+
+<h4 id="estimategas">EstimateGas</h4>
+
+<p>EstimateGas tries to estimate the gas needed to execute a specific transaction based on
+the current pending state of the backend blockchain. There is no guarantee that this is
+the true gas limit requirement as other transactions may be added or removed by miners,
+but it should provide a basis for setting a reasonable default.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>func (ec *Client) EstimateGas(ctx context.Context, msg ethereum.CallMsg) (uint64, error)
+</code></pre></div></div>
+
+<p>https://github.com/ethereum/go-ethereum/blob/26d271dfbba1367326dec38068f9df828d462c61/ethclient/ethclient.go#L499</p>
+
+<h4 id="pendingnonceat">PendingNonceAt</h4>
+<p><code class="language-plaintext highlighter-rouge">PendingNonceAt</code> returns the account nonce of the given account in the pending state.
+ This is the nonce that should be used for the next transaction.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>func (ec *Client) PendingNonceAt(ctx context.Context, account common.Address) (uint64, error)
+</code></pre></div></div>
+
+<p>https://github.com/ethereum/go-ethereum/blob/26d271dfbba1367326dec38068f9df828d462c61/ethclient/ethclient.go#L440</p>
+
+<h4 id="suggestgasprice">SuggestGasPrice</h4>
+
+<p><code class="language-plaintext highlighter-rouge">SuggestGasPrice</code> retrieves the currently suggested gas price to allow a timely
+execution of a transaction.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>func (ec *Client) SuggestGasPrice(ctx context.Context) (*big.Int, error)
+</code></pre></div></div>
+
+<p>https://github.com/ethereum/go-ethereum/blob/26d271dfbba1367326dec38068f9df828d462c61/ethclient/ethclient.go#L487</p>
+
+<h4 id="sendtransaction">SendTransaction</h4>
+
+<p><code class="language-plaintext highlighter-rouge">SendTransaction</code> injects a signed transaction into the pending pool for execution.</p>
+
+<p>If the transaction was a contract creation use the TransactionReceipt method to get the
+contract address after the transaction has been mined.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>func (ec *Client) SendTransaction(ctx context.Context, tx *types.Transaction) error 
+</code></pre></div></div>
+
+<p>https://github.com/ethereum/go-ethereum/blob/26d271dfbba1367326dec38068f9df828d462c61/ethclient/ethclient.go#L512</p>
+
+<h3 id="fetching-balance">Fetching balance</h3>
+
+<p>A Status node fetches the current and historical [ECR20] (https://eips.ethereum.org/EIPS/eip-20) and ETH balance for the user wallet address.
+Collectibles following the <a href="https://eips.ethereum.org/EIPS/eip-721">ECR-721</a> are also fetched if enabled.</p>
+
+<p>A Status node supports by default the following <a href="https://github.com/status-im/status-react/blob/develop/src/status_im/ethereum/tokens.cljs">tokens</a>. Custom tokens can be added by specifying the <code class="language-plaintext highlighter-rouge">address</code>, <code class="language-plaintext highlighter-rouge">symbol</code> and <code class="language-plaintext highlighter-rouge">decimals</code>.</p>
+
+<h4 id="blockbyhash">BlockByHash</h4>
+
+<p><code class="language-plaintext highlighter-rouge">BlockByHash</code> returns the given full block.</p>
+
+<p>It is used by status to fetch a given block which will then be inspected for 
+transfers to the user address, both tokens and ETH.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>func (ec *Client) BlockByHash(ctx context.Context, hash common.Hash) (*types.Block, error)
+</code></pre></div></div>
+
+<p>https://github.com/ethereum/go-ethereum/blob/26d271dfbba1367326dec38068f9df828d462c61/ethclient/ethclient.go#L78</p>
+
+<h4 id="blockbynumber">BlockByNumber</h4>
+
+<p><code class="language-plaintext highlighter-rouge">BlockByNumber</code> returns a block from the current canonical chain. If number is nil, the
+latest known block is returned.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>func (ec *Client) BlockByNumber(ctx context.Context, number *big.Int) (*types.Block, error)
+</code></pre></div></div>
+
+<p>https://github.com/ethereum/go-ethereum/blob/26d271dfbba1367326dec38068f9df828d462c61/ethclient/ethclient.go#L82</p>
+
+<h4 id="filterlogs">FilterLogs</h4>
+
+<p><code class="language-plaintext highlighter-rouge">FilterLogs</code> executes a filter query.</p>
+
+<p>Status uses this function to filter out logs, using the hash of the block
+and the address of interest, both inbound and outbound.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>func (ec *Client) FilterLogs(ctx context.Context, q ethereum.FilterQuery) ([]types.Log, error) 
+</code></pre></div></div>
+
+<p>https://github.com/ethereum/go-ethereum/blob/26d271dfbba1367326dec38068f9df828d462c61/ethclient/ethclient.go#L377</p>
+
+<h4 id="nonceat">NonceAt</h4>
+
+<p><code class="language-plaintext highlighter-rouge">NonceAt</code> returns the account nonce of the given account.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>func (ec *Client) NonceAt(ctx context.Context, account common.Address, blockNumber *big.Int) (uint64, error)
+</code></pre></div></div>
+
+<p>https://github.com/ethereum/go-ethereum/blob/26d271dfbba1367326dec38068f9df828d462c61/ethclient/ethclient.go#L366</p>
+
+<h4 id="transactionbyhash">TransactionByHash</h4>
+
+<p><code class="language-plaintext highlighter-rouge">TransactionByHash</code> returns the transaction with the given hash, used to inspect those 
+transactions made/received by the user.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>func (ec *Client) TransactionByHash(ctx context.Context, hash common.Hash) (tx *types.Transaction, isPending bool, err error)
+</code></pre></div></div>
+
+<p>https://github.com/ethereum/go-ethereum/blob/26d271dfbba1367326dec38068f9df828d462c61/ethclient/ethclient.go#L202</p>
+
+<h4 id="headerbynumber">HeaderByNumber</h4>
+
+<p><code class="language-plaintext highlighter-rouge">HeaderByNumber</code> returns a block header from the current canonical chain.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>func (ec *Client) HeaderByNumber(ctx context.Context, number *big.Int) (*types.Header, error) 
+</code></pre></div></div>
+
+<p>https://github.com/ethereum/go-ethereum/blob/26d271dfbba1367326dec38068f9df828d462c61/ethclient/ethclient.go#L172</p>
+
+<h4 id="transactionreceipt">TransactionReceipt</h4>
+
+<p><code class="language-plaintext highlighter-rouge">TransactionReceipt</code> returns the receipt of a transaction by transaction hash.
+It is used in status to check if a token transfer was made to the user address.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>func (ec *Client) TransactionReceipt(ctx context.Context, txHash common.Hash) (*types.Receipt, error)
+</code></pre></div></div>
+
+<p>https://github.com/ethereum/go-ethereum/blob/26d271dfbba1367326dec38068f9df828d462c61/ethclient/ethclient.go#L270</p>
+
+<h2 id="ens">ENS</h2>
+
+<p>All the interactions with <code class="language-plaintext highlighter-rouge">ENS</code> are made through the <a href="https://github.com/ensdomains/ens">ENS contract</a></p>
+
+<p>For the <code class="language-plaintext highlighter-rouge">stateofus.eth</code> username, one can be registered through these <a href="https://github.com/status-im/ens-usernames">contracts</a></p>
+
+<h3 id="registering-releasing-and-updating">Registering, releasing and updating</h3>
+
+<ul>
+  <li><a href="https://github.com/status-im/ens-usernames/blob/77d9394d21a5b6213902473b7a16d62a41d9cd09/contracts/registry/UsernameRegistrar.sol#L113">Registering a username</a></li>
+  <li><a href="https://github.com/status-im/ens-usernames/blob/77d9394d21a5b6213902473b7a16d62a41d9cd09/contracts/registry/UsernameRegistrar.sol#L131">Releasing a username</a></li>
+  <li><a href="https://github.com/status-im/ens-usernames/blob/77d9394d21a5b6213902473b7a16d62a41d9cd09/contracts/registry/UsernameRegistrar.sol#L174">Updating a username</a></li>
+</ul>
+
+<h3 id="slashing">Slashing</h3>
+
+<p>Usernames MUST be in a specific format, otherwise they MAY be slashed:</p>
+
+<ul>
+  <li>They MUST only contain alphanumeric characters</li>
+  <li>They MUST NOT  be in the form <code class="language-plaintext highlighter-rouge">0x[0-9a-f]{5}.*</code> and have more than 12 characters</li>
+  <li>They MUST NOT be in the <a href="https://github.com/status-im/ens-usernames/blob/47c4c6c2058be0d80b7d678e611e166659414a3b/config/ens-usernames/reservedNames.js">reserved list</a></li>
+  <li>
+    <p>They MUST NOT be too short, this is dynamically set in the contract and can be checked against the <a href="https://github.com/status-im/ens-usernames/blob/master/contracts/registry/UsernameRegistrar.sol#L26">contract</a></p>
+  </li>
+  <li><a href="https://github.com/status-im/ens-usernames/blob/77d9394d21a5b6213902473b7a16d62a41d9cd09/contracts/registry/UsernameRegistrar.sol#L237">Slash a reserved username</a></li>
+  <li><a href="https://github.com/status-im/ens-usernames/blob/77d9394d21a5b6213902473b7a16d62a41d9cd09/contracts/registry/UsernameRegistrar.sol#L261">Slash an invalid username</a></li>
+  <li><a href="https://github.com/status-im/ens-usernames/blob/77d9394d21a5b6213902473b7a16d62a41d9cd09/contracts/registry/UsernameRegistrar.sol#L215">Slash a username too similar to an address</a></li>
+  <li><a href="https://github.com/status-im/ens-usernames/blob/77d9394d21a5b6213902473b7a16d62a41d9cd09/contracts/registry/UsernameRegistrar.sol#L200">Slash a username that is too short</a></li>
+</ul>
+
+<p>ENS names are propagated through <code class="language-plaintext highlighter-rouge">ChatMessage</code> and <code class="language-plaintext highlighter-rouge">ContactUpdate</code> <a href="./6-payloads.md">payload</a>.
+A client SHOULD verify ens names against the public key of the sender on receiving the message against the <a href="https://github.com/ensdomains/ens">ENS contract</a></p>
+
+<h2 id="copyright">Copyright</h2>
+
+<p>Copyright and related rights waived via <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0</a>.</p>
+
