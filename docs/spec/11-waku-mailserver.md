@@ -128,3 +128,7 @@ Released [May 22, 2020](https://github.com/status-im/specs/commit/664dd1c9df6ad4
 - Forked from [4-whisper-mailserver](4-whisper-mailserver.md)
 - Change to keep `Mailserver` term consistent
 - Replaced Whisper references with Waku
+
+## Copyright
+
+Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
