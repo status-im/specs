@@ -227,4 +227,3 @@ A client SHOULD verify ens names against the public key of the sender on receivi
 ## Copyright
 
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
-

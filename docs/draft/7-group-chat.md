@@ -156,3 +156,7 @@ If the event is valid a client MUST remove the member from the list of `members`
 Upon receiving this event a client MUST validate the `chatId` provided with the updates, MUST ensure that the author of the event is also the target of the event.
 
 If the event is valid a client MUST remove the member from the list of `admins` of the chat.
+
+## Copyright
+
+Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).

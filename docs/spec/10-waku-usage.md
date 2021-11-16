@@ -361,3 +361,7 @@ Released [May 22, 2020](https://github.com/status-im/specs/commit/664dd1c9df6ad4
   - [Exists here](https://github.com/status-im/status-go/blob/2d13ccf5ec3db7e48d7a96a7954be57edb96f12f/waku/api.go#L100-L108)
 - Changed `shhext_requestMessages` to `wakuext_requestMessages`
   - [Exists here](https://github.com/status-im/status-go/blob/2d13ccf5ec3db7e48d7a96a7954be57edb96f12f/services/wakuext/api.go#L76-L139)
+
+## Copyright
+
+Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).

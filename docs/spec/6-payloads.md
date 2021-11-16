@@ -378,3 +378,7 @@ There are two ways to upgrade the protocol without breaking compatibility:
 Released [May 22, 2020](https://github.com/status-im/specs/commit/664dd1c9df6ad409e4c007fefc8c8945b8d324e8)
 
 - Added language to include Waku in all relevant places
+
+## Copyright
+
+Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).

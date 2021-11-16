@@ -233,3 +233,7 @@ Description: Allows the storing and retrieving of nodes through merkle trees sto
 Used for: Finding Waku nodes.
 Related: -
 Sourcecode: - 
+
+## Copyright
+
+Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
