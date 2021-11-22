@@ -70,6 +70,7 @@ Diffie
 discoverable
 DNS
 DoS
+Dvorsak
 ECDSA
 ecies
 ECIES
