@@ -39,17 +39,24 @@ as various clients created using different technologies.
        - [Audio content type](#audio-content-type)
      - [Message types](#message-types)
      - [Clock vs Timestamp and message ordering](#clock-vs-timestamp-and-message-ordering)
+     - [Signatrue](#signature)
      - [Chats](#chats)
    - [Contact Update](#contact-update)
      - [Payload](#payload-2)
      - [Contact update](#contact-update-1)
+   - [Contact](#contact)
+     - [Payload](#payload-3)
+     - [Contact Request](#contact-request)
+       - [Backwards compatibility](#backwards-compatibility)
+     - [Contacts persistence](#contacts-persistence)
+       - [Contacts Sync](#contacts-sync)
    - [EmojiReaction](#emojireaction)
    - [SyncInstallationContact](#syncinstallationcontact)
-     - [Payload](#payload-3)
-   - [SyncInstallationPublicChat](#syncinstallationpublicchat)
      - [Payload](#payload-4)
-   - [PairInstallation](#pairinstallation)
+   - [SyncInstallationPublicChat](#syncinstallationpublicchat)
      - [Payload](#payload-5)
+   - [PairInstallation](#pairinstallation)
+     - [Payload](#payload-6)
    - [MembershipUpdateMessage and MembershipUpdateEvent](#membershipupdatemessage-and-membershipupdateevent)
  - [Upgradability](#upgradability)
  - [Security Considerations](#security-considerations)
@@ -119,6 +126,11 @@ message ChatMessage {
     AudioMessage audio = 11;
   }
 
+  // Signature of the receiving user. Only sent in one on one messages.
+  // That signature is received when teh other user sends a contact request.
+  // It is used to prove that we were once contacts
+  string signature = 12;
+
   enum ContentType {
     UNKNOWN_CONTENT_TYPE = 0;
     TEXT_PLAIN = 1;
@@ -147,6 +159,7 @@ message ChatMessage {
 | 7 | message_type | `MessageType` | The type of message, different for one-to-one, public or group chats |
 | 8 | content_type | `ContentType` | The type of the content of the message | 
 | 9 | payload | `Sticker` I `Image` I `Audio` I `nil` | The payload of the message based on the content type |
+| 10 | signature | `string` | Signature of the receiving user |
 
 #### Content types
 
@@ -276,6 +289,16 @@ Messages with a `clock` less than `120` seconds under the Whisper/Waku timestamp
 
 The node uses `clock` value for the message ordering. The algorithm used, and the distributed nature of the system produces casual ordering, which might produce counter-intuitive results in some edge cases. For example, when a user joins a public chat and sends a message before receiving the exist messages, their message `clock` value might be lower and the message will end up in the past when the historical messages are fetched.
 
+#### Signature
+
+The `signature` in a message is only present in  `ONE_TO_ONE` message type. 
+
+It is used to prove that the sender was once a contact with the receiver. The reason for its presence is because, when an account is reset and re-imported, Contacts are lost.
+
+To make sure the message is not ignored, the sender sends this `signature` as proof, so the receiver can know that it once had the sender as a contact.
+
+If the receiver puts the sender as blocked, teh `signature` is then ignored, as well as the message.
+
 #### Chats
 
 Chat is a structure that helps organize messages. It's usually desired to display messages only from a single recipient, or a group of recipients at a time and chats help to achieve that.
@@ -319,6 +342,79 @@ A client SHOULD send a `ContactUpdate` to all the contacts each time:
 - A user edits the profile image
 
 A client SHOULD also periodically send a `ContactUpdate` to all the contacts, the interval is up to the client, the Status official client sends these updates every 48 hours.
+
+### Contact
+
+`Contact` is a representation of other accounts encountered on the app. They are added through `ContactUpdate`s propagated.
+A `Contact` does not mean a "friend". Any account from which we receive a `ContactUpdate` is added to the table.
+
+Users are considered "Friends" when they are **mutual** contacts, meaning that both of them have the `added` boolean set as `true`. This is done through `ContactRequest`s.
+
+#### Payload
+
+| Field | Name | Type | Description |
+| ----- | ---- | ---- | ---- |
+| 1 | id | `string` |  ID of the contact. Hex-encoded public key (prefixed with 0x). |
+| 2 | address | `string` | Ethereum address of the contact |
+| 3 | name | `string` | Contact's ENS name |
+| 4 | ensVerified | `bool` | Whether the name of the contact is verified |
+| 5 | alias | `string` | Contact's generated username |
+| 6 | identicon | `string` | Identicon generated from public key |
+| 7 | lastUpdated | `uint64` | Last time an update was received from the contact |
+| 8 | blocked | `bool` | Whether the contact is blocked |
+| 9 | added | `bool` | Whether the contact is added |
+| 10 | requestReceived | `bool` | Whether the contact requested us to add them |
+| 11 | mutualContact | `bool` | Whether the contact is mutual |
+| 12 | deviceInfo | `[]ContactDeviceInfo` |  |
+| 13 | localNickname | `string` | Nickname set by the user for the contact |
+| 14 | images | `map[string]images.IdentityImage` | Contact's profile images (thumbnail and large) |
+| 15 | message | `Message` | Message sent with a contact request |
+| 15 | signature | `string` | User signature proving that he added that person |
+
+`blocked` acts as a blacklist. If `blocked` is `true`, `added` and `requestReceived` are ignored.
+
+`mutualContact` is set to `true` once `added` is `true` and `requestReceived` is also set to `true`. This is a utility property to simplify the clients' use.
+
+#### Contact Request
+
+Since a user can only chat with another in a one on one channel while being mutal contacts, they need to send contact requests.
+
+When adding another account as a contact, a `Contact` payload is sent to them containing the `requestReceived` flag set to `true`,  a `message` object and a `signature`.
+
+That `signature` is kept in the database and is sent in one on one messages to prove that we were once added as a contact. See `Message``payload for more information.
+
+When the other account accepts the contact request, the same `Contact` payload with `requestReceived` set to `true` is sent.
+
+##### Backwards compatibility
+
+To assure backwards compatibility, the `message` contained in the contact request will be sent as a normal message.
+
+Old versions will not understand the contact request, but will still get the message, that shall be displayed normally or part of the activity center.
+
+Newer versions will ignore the message since it is not from a contact, but the contact request will be processed as above.
+
+#### Contacts persistence
+
+Contacts are lost when an account is reset and re-imported. To remedy this situation, the contacts will be sent as a payload to the topic bearing the user's public key followed by `-contacts`. eg: `0x0401d01625bba5d6f0e576519ac6c1b4f343b15fdf2916815ab059d18c51ff826bf23fffff0aa33643140aa3762ab627c4718693a9a0dbf4e84f4429a454136856-contacts`.
+
+This payload is to be sent only once per day on login and only when the `contacts_dirty` field of `contacts_sync` is set to `true`. The last send date will be kept `contacts_sync` as `last_sent`.
+
+The last payload is going to be fetched before sending. That payload is going to be compared to the current contacts using the `lastUpdated` field.
+
+Again, the fetching of the payload is done once per day using `last_fetched` in `contacts_sync`.
+
+The payload is an array of the Contacts table items, but only containing contacts that have `added` or `blocked` set as `true`.
+
+##### Contacts Sync
+
+The  `contacts_sync` table is used to keep the last timestamp of when the contacts payload was sent and fetched to the topic
+
+It has three columns, `last_sent` and `last_fetched` both containing a `uint64` and `contacts_dirty` as a `bool`.
+
+`last_sent` and `last_fetched` and the timestamps for the last time the payload was sent and fetched, and are used to only do those actions once per day.
+
+The `contacts_dirty` field is set to `true` when a contact is changed by the user. A change is anything that changes the `added`, `blocked` or `mutualContact` properties of a contact.
+After sending the payload with the updated contacts, the `contacts_dirty` field is set back to `false`.
 
 ### EmojiReaction
 
