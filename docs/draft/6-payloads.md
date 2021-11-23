@@ -360,7 +360,7 @@ A client SHOULD send a `ContactUpdate` to all the contacts each time:
 
 A client SHOULD also periodically send a `ContactUpdate` to all the contacts, the interval is up to the client, the Status official client sends these updates every 48 hours.
 
-`ContactRequestSignature` is MUST be signed by the sending user, the format is described  in [ContactRequestSignature](#contact-request-signature)
+`ContactRequestSignature` MUST be signed by the sending user, the format is described  in [ContactRequestSignature](#contact-request-signature)
 
 ### Contact
 
