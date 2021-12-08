@@ -19,7 +19,7 @@ gem install jekyll bundler
 It might be necessary to specify installation destination for your Gems:
 ```
 export GEM_HOME="$HOME/.gems"
-export PATH="$HOME/gems/bin:$PATH"
+export PATH="$GEM_HOME/bin:$PATH"
 ```
 For instructions on other systems use [these docs](https://jekyllrb.com/docs/installation/).
 
