@@ -92,6 +92,7 @@ message ApplicationMetadataMessage {
     PUSH_NOTIFICATION_QUERY_RESPONSE = 19;
     PUSH_NOTIFICATION_REQUEST = 20;
     PUSH_NOTIFICATION_RESPONSE = 21;
+    COMMUNITY_MESSAGE_ARCHIVE_INDEX = 22;
   }
 }
 ```
@@ -359,6 +360,25 @@ message PairInstallation {
 
 `MembershipUpdateEvent` is a message used to propagate information about group membership changes in a group chat.
 The details are in the [Group chats specs](./../draft/7-group-chat.md).
+
+### CommunityMessageArchiveIndex
+
+The node uses `CommunityMessageArchiveIndex` messages to distribute message history archive indices to other nodes.
+
+```protobuf
+message CommunityMessageArchiveIndex {
+  uint64 clock = 1;
+  string magnet_uri = 2;
+}
+```
+
+
+#### Payload
+
+| Field | Name | Type | Description |
+| ----- | ---- | ---- | ---- |
+| 1 | clock | `uint64` | clock value of the chat | 
+| 2| magnet_uri | `string` | A magnet link that resolves to message archive indices containing magnet links to message archives |
 
 ## Upgradability
 
