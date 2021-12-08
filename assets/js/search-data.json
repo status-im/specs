@@ -1033,7 +1033,7 @@
   },"172": {
     "doc": "DEVELOPMENT",
     "title": "Dependencies",
-    "content": "This repository is built using Jekyll along with some plugins and a theme. To install the necessary dependencies on Ubuntu use: . sudo apt-get install ruby-full build-essential zlib1g-dev gem install jekyll bundler . It might be necessary to specify installation destination for your Gems: . export GEM_HOME=\"$HOME/.gems\" export PATH=\"$HOME/gems/bin:$PATH\" . For instructions on other systems use these docs. Then you can install other Gems like the just-the-docs theme: . bundle install . ",
+    "content": "This repository is built using Jekyll along with some plugins and a theme. To install the necessary dependencies on Ubuntu use: . sudo apt-get install ruby-full build-essential zlib1g-dev gem install jekyll bundler . It might be necessary to specify installation destination for your Gems: . export GEM_HOME=\"$HOME/.gems\" export PATH=\"$GEM_HOME/bin:$PATH\" . For instructions on other systems use these docs. Then you can install other Gems like the just-the-docs theme: . bundle install . ",
     "url": "https://specs.status.im/development#dependencies",
     "relUrl": "/development#dependencies"
   },"173": {
