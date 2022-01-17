@@ -361,12 +361,12 @@ message PairInstallation {
 `MembershipUpdateEvent` is a message used to propagate information about group membership changes in a group chat.
 The details are in the [Group chats specs](./../draft/7-group-chat.md).
 
-### CommunityMessageArchiveIndex
+### CommunityMessageArchive
 
-The node uses `CommunityMessageArchiveIndex` messages to distribute message history archive indices to other nodes.
+The node uses `CommunityMessageArchive` messages to distribute message history archives and the latest message history archive index to other nodes.
 
 ```protobuf
-message CommunityMessageArchiveIndex {
+message CommunityMessageArchive {
   uint64 clock = 1;
   string magnet_uri = 2;
 }
