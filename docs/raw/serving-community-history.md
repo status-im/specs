@@ -34,9 +34,14 @@ This specification describes how community owners archive historical message dat
 - [Exporting messages for bundling](#exporting-messages-for-bundling)
 - [Message history archives](#message-history-archives)
   - [WakuMessageHistoryArchive](#wakumessagehistoryarchive)
+- [Message history archive index](#message-history-archive-index)
+  - [WakuMessaegArchiveIndex](#wakumessagearchiveindex)
+- [Creating message archive torrents](#creating-message-archive-torrents)
+  - [Ensuring reproducible data pieces](#ensuring-reproducible-data-pieces)
+    - [Example: without padding](#example-without-padding)
+    - [Example: with padding](#example-with-padding)
+- [Seeding message history archives](#seeding-message-history-archives)
 - [Creating magnet links](#creating-magnet-links)
-- [Bundling history archives into archive indices](#bundling-history-archives-into-archive-indices)
-  - [WakuMessageArchiveMetadata](#wakumessagearchivemetadata)
 - [Message archive distribution](#message-archive-distribution)
 - [Canonical message histories](#canonical-message-histories)
 - [Fetching messsage archives](#fetching-message-archives)
@@ -70,7 +75,8 @@ The following terminology is used throughout this specification:
 
 ## Supported platforms
 
-Creating, distributing, downloading and unpacking community history archives SHOULD only be supported in Status desktop clients. Status mobile clients SHOULD NOT implement this functionality due to bandwidth and storage limitations.
+Creating, distributing, downloading and unpacking community history archives SHOULD only be supported in Status desktop clients. Status mobile are out of scope for the MVP of this service. However we may consider bringing this service to Status Mobile in the future.
+
 
 ## Requirements / Assumptions
 
@@ -100,8 +106,8 @@ The following is a high-level overview of the user flow and features this specif
 Community owner nodes go through the following (high level) process to provide community members with message histories (assumes community owner node is available 24/7):
 
 1. Community owner creates a Status community (previously known as [org channels](https://github.com/status-im/specs/pull/151))
-2. Community owner enables community history archive support (possibly on by default but can be turned off as well - see [UI feature spec](https://github.com/status-im/feature-specs/pull/36))
-3. A special type of channel to exchange metadata about the archival data is created
+2. Community owner doesn't disable community history archive support (on by default but can be turned off as well - see [UI feature spec](https://github.com/status-im/feature-specs/pull/36))
+3. A special type of channel to exchange metadata about the archival data is created, this channel should not be visible in the user interface
 4. Community owner invites members and creates additional channels
 5. Community owner node receives messages and stores them into local database
 6. After 7 days, the community owner node exports and compresses last 7 days worth of messages from database and bundles it together with a [message archive index](#waku-message-archive-index) into a torrent, from which it then creates a magnet link ([Magnet URI scheme](https://en.wikipedia.org/wiki/Magnet_URI_scheme), [Extensions for Peers to Send Metadata Files](https://www.bittorrent.org/beps/bep_0009.html)) 
@@ -224,8 +230,6 @@ A torrent's source folder MUST contain the following two files:
 - `index` - Contains the protobuf encoded message history archive index
 
 Community owner nodes SHOULD store these files in a dedicated folder that is identifiable via the community id.
-
-Community owner nodes MAY remove older torrent files that were generated for previous message history archives, after a new torrent was created.
 
 ### Ensuring reproducible data pieces
 
