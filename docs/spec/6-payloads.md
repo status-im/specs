@@ -237,7 +237,7 @@ This will satisfy the Lamport requirement, namely: a -> b then T(a) < T(b)
 
 `timestamp` MUST be Unix time calculated, when the node creates the message, in milliseconds. This field SHOULD not be relied upon for message ordering.
 
-`clock` SHOULD be calculated using the algorithm of [Lamport timestamps](https://en.wikipedia.org/wiki/Lamport_timestamps). When there are messages available in a chat, the node calculates `clock`'s value based on the last received message in a particular chat: `max(timeNowInMs, last-message-clock-value + 1)`. If there are no messages, `clock` is initialized with `timestamp`'s value.
+`clock` SHOULD be calculated using the algorithm of [Lamport timestamps](https://en.wikipedia.org/wiki/Lamport_timestamps). When there are messages available in a chat, the node calculates `clock`'s value based on the last received message in a particular chat: `max(timeNowInMs, last-message-clock-value) + 1`. If there are no messages, `clock` is initialized with `timestamp`'s value.
 
 Messages with a `clock` greater than `120` seconds over the Whisper/Waku timestamp SHOULD be discarded, in order to avoid malicious users to increase the `clock` of a chat arbitrarily.
 
