@@ -48,6 +48,10 @@ This specification explains what Status account is, and how a node establishes t
   - [De/Serialization Process Flow](#deserialization-process-flow)
     - [Serialization Example](#serialization-example)
     - [Deserialization Example](#deserialization-example)
+- [Identity Visual Representation](#identity-visual-representation)
+  - [Chars Cutoff](#chars-cutoff)
+  - [Emoji Hash](#emoji-hash)
+  - [Identicon Ring](#identicon-ring)
 - [Security Considerations](#security-considerations)
 - [Changelog](#changelog)
   - [Version 0.3](#version-03)
@@ -415,6 +419,84 @@ ab | 97 | bd | 50 | 05 | 4c | 6e | bc
 For the user, the deserialization process is exactly the same as serialization with the exception that the user MUST provide a serialized public key for deserialization. Else the deserialization algorithm will fail.
 
 For further guidance on the implementation of public key de/serialization consult the [`status-go` implementation and tests](https://github.com/status-im/status-go/blob/c9772325f2dca76b3504191c53313663ca2efbe5/api/utils_test.go).  
+
+## Identity Visual Representation
+Identity Visual Representation is a mechanism to minimize the risk of impersonation attacks. It is composed of three elements (Chars Cutoff, Emoji Hash and Color Hash) that together deterministically reflect the [User's Chat Public Key](#publicprivate-keypairs). The client app MAY use it as an enhancement to profile/identity representation in the user interface.
+
+Each of the three components MUST encode corresponding parts of the Compressed Chat Public Key.
+
+Compressed secp256k1 pk:
+|prefix       |x coordinate|
+|-------------|------------|
+|0x02 or 0x03 | 32 bytes   |
+
+```text
+0x03 (prefix)
+086138b210f21d41c757ae8a5d2a4cb29c1350f7389517608378ebd9efcf4a55 (x coordinate)
+```
+
+Identity Visual Representation mapping:
+|Chars Cutoff |Emoji Hash |Color Hash | Chars Cutoff |
+|-------------|-----------|-----------|--------------|
+| 1.5 bytes   | 20 bytes  | 10 bytes  | 1.5 bytes    |
+
+```text
+030 (Chars Cutoff)
+86138b210f21d41c757ae8a5d2a4cb29c1350f73 (Emoji Hash)
+89517608378ebd9efcf4 (Color Hash)
+a55 (Chars Cutoff)
+```
+
+### Chars Cutoff
+Chars Cutoff is a sequence of first and last 3 characters of Compressed Chat Public Key.
+- Chars Cutoff MUST encode at least 3 bytes of data from the Compressed Chat Public Key, it implies at least `base16` representation of pk
+
+Example:
+```
+0x030...a55
+```
+
+### Emoji Hash
+Emoji Hash is a deterministic sequence of emojis that (in conjunction with Chars Cutoff and Color Hash) uniquely identifies a profile. It encodes 20 bytes of data from the Compressed Chat Public Key.
+
+- Emoji Hash MUST be a sequence of `len` emojis
+- Emoji Hash MUST be one of `n` distinctive emojis
+- emojis set of length `n` used for Emoji Hash MUST be immutable
+
+Emoji Hash to be collision resistant MUST fulfill given equation: <img src="https://render.githubusercontent.com/render/math?math=n^{len} \geq 2^{(20 \times 8)}">
+
+Recommended values:
+|len|n        |
+|---|---------|
+|14 | 2757    |
+
+Example:
+```
+🧠⭕😀🤔🥵🥳😮🙈🙊💯💦🤌🧠🏊
+```
+Reference implementation: https://github.com/status-im/status-go/tree/develop/protocol/identity/emojihash
+
+### Color Hash
+Color Hash is a deterministic sequence of colors that (in conjunction with Chars Cutoff and Emoji Hash) uniquely identifies a profile. It encodes 10 bytes of data from the Compressed Chat Public Key.
+
+- Color Hash MUST be at max `s` segments long
+- Color Hash segment must be one of `c` distinctive colors
+- `c` distinctive colors set used for Color Hash MUST be immutable
+- Color Hash segment MAY be of different lengths and MUST be composed of 1 to `u` units (unit represents physical entity with color assigned, e.g. pixel)
+- Color Hash MAY contain non-consecutive same color segments
+
+Color Hash to be collision resistant MUST fulfill given equation: <img src="https://render.githubusercontent.com/render/math?math=(u \times c)^{s} \geq 2^{(10 \times 8)}">
+
+Recommended values:
+|c   |u   |s      |
+|----|----|-------|
+|32  | 5  |  11   |
+
+Example:
+```
+🟥🟥🟥🟥🟨🟨🟨🟨🟨🟥🟩🟩⬛⬛⬛⬛🟪🟪🟫🟫🟫🟫🟧🟥🟥🟥🟥🟩🟩🟪
+```
+Reference implementation: https://github.com/status-im/status-go/tree/develop/protocol/identity/colorhash
 
 ## Security Considerations
 
