@@ -17,17 +17,13 @@ layout: default
 ## Table of Contents
 
 - [Abstract](#abstract)
-- [Membership updates](#membership-updates)
-  - [Chat ID](#chat-id)
-  - [Signature](#signature)
-  - [Group membership event](#group-membership-event)
-    - [chat-created](#chat_created)
-    - [name-changed](#name_changed)
-    - [members-added](#members_added)
-    - [members-joined](#member_joined)
-    - [admins-added](#admins_added)
-    - [members-removed](#member_removed)
-    - [admin-removed](#admin_removed)
+- [Modifications to Message Format](#Modifications-to-Message-Format)
+- [Advertising Capabilities](#Advertising-Capabilities)
+- [Requesting Chat history](#Requesting-Chat-history)
+- [Requesting 1 on 1 chat history](#Requesting-1-on-1-chat-history)
+- [Requesting a group chat history](#Requesting-a-group-chat-history)
+- [Requesting a public chat history](#Requesting-a-public-chat-history)
+- [Requesting a community chat history](#Requesting-a-community-chat-history)
 
 ## Abstract
 
