@@ -141,7 +141,7 @@ This can be done in the following ways:
 1. discovery through the Status app
 1. asynchronous X3DH key exchange
 1. public key via public channel listening
-    - `status-react/src/status_im/contact_code/core.cljs`
+    - `status-mobile/src/status_im/contact_code/core.cljs`
 1. contact codes
 1. decentralized storage (not implemented)
 1. Whisper/Waku
@@ -170,7 +170,7 @@ A low-poly identicon is deterministically generated from the Whisper/Waku chat p
 
 #### 3 word pseudonym / Whisper/Waku key fingerprint
 Status generates a deterministic 3-word random pseudonym from the Whisper/Waku chat public key.  This pseudonym acts as a human readable fingerprint to the Whisper/Waku chat public key.  This name also shows when viewing a contact's public profile and in the chat UI.
-- implementation: [gfycat](https://github.com/status-im/status-react/tree/develop/src/status_im/utils/gfycat)
+- implementation: [gfycat](https://github.com/status-im/status-mobile/tree/develop/src/status_im/utils/gfycat)
 
 #### ENS name
 Status offers the ability to register a mapping of a human readable subdomain of `stateofus.eth` to their Whisper/Waku chat public key. The user purchases this registration (currently by staking 10 SNT) and the node stores it on the Ethereum mainnet blockchain for public lookup.
@@ -261,7 +261,7 @@ Compressed public keys are smaller, and users may perceive them as less intimida
 
 The user can transmit and share the same data, but at one third of the original size. 136 characters uncompressed vs 49 characters compressed, giving a significant character length reduction of 64%. 
 
-The user client app MAY use the compressed public keys throughout the user interface. For example in the `status-react` implementation of the user interface the following places could take advantage of a significantly smaller public key:  
+The user client app MAY use the compressed public keys throughout the user interface. For example in the `status-mobile` implementation of the user interface the following places could take advantage of a significantly smaller public key:  
 
 - `Onboarding` > `Choose a chat name`
 - `Profile` > `Header`

@@ -110,7 +110,7 @@ https://github.com/ethereum/go-ethereum/blob/26d271dfbba1367326dec38068f9df828d4
 A Status node fetches the current and historical [ECR20] (https://eips.ethereum.org/EIPS/eip-20) and ETH balance for the user wallet address.
 Collectibles following the [ECR-721](https://eips.ethereum.org/EIPS/eip-721) are also fetched if enabled.
 
-A Status node supports by default the following [tokens](https://github.com/status-im/status-react/blob/develop/src/status_im/ethereum/tokens.cljs). Custom tokens can be added by specifying the `address`, `symbol` and `decimals`.
+A Status node supports by default the following [tokens](https://github.com/status-im/status-mobile/blob/develop/src/status_im/ethereum/tokens.cljs). Custom tokens can be added by specifying the `address`, `symbol` and `decimals`.
 
 #### BlockByHash
 

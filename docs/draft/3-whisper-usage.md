@@ -83,7 +83,7 @@ A Whisper node must be properly configured to receive messages from Status clien
 Whisper's Proof Of Work algorithm is used to deter denial of service and various spam/flood attacks against the Whisper network. The sender of a message must perform some work which in this case means processing time. Because Status' main client is a mobile client, this easily leads to battery draining and poor performance of the app itself. Hence, all clients MUST use the following Whisper node settings:
 * proof-of-work requirement not larger than `0.00001`
 * time-to-live not lower than `10` (in seconds)
-* any payload below `50000` bytes MUST be sent with a PoW Target of at least `0.002`, in order to maintain backward compatibility with version `0.2` and [Status app version `1.3`](https://github.com/status-im/status-react/releases/tag/untagged-079a6d98babfeaa3f8c0) and below
+* any payload below `50000` bytes MUST be sent with a PoW Target of at least `0.002`, in order to maintain backward compatibility with version `0.2` and [Status app version `1.3`](https://github.com/status-im/status-mobile/releases/tag/untagged-079a6d98babfeaa3f8c0) and below
 
 ## Handshake
 
