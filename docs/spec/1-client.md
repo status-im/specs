@@ -335,7 +335,7 @@ area of research.
 
 1.  <https://github.com/status-im/status-protocol-go/>
 2.  <https://github.com/status-im/status-console-client/>
-3.  <https://github.com/status-im/status-react/>
+3.  <https://github.com/status-im/status-mobile/>
 
 ## Appendix A: Security considerations
 
@@ -397,7 +397,7 @@ A `Mailserver` has a direct TCP connection, which means they are trusted to send
 
 By default Devp2p runs on port `30303`, which is not commonly used for any other service. This means it is easy to censor, e.g. airport WiFi. This can be mitigated somewhat by running on e.g. port `80` or `443`, but there are still outstanding issues. See libp2p and Tor's Pluggable Transport for how this can be improved.
 
-See <https://github.com/status-im/status-react/issues/6351> for some discussion.
+See <https://github.com/status-im/status-mobile/issues/6351> for some discussion.
 
 ## Acknowledgments
 

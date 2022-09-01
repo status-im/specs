@@ -99,8 +99,8 @@ Legacy `send` method.
 Status uses a [forked version](https://github.com/status-im/react-native-webview) of [react-native-webview](https://github.com/react-native-community/react-native-webview)  to display web or dapps content. The fork provides an Android implementation of JS injection before page load. It is required in order to properly inject Ethereum Provider object.
 
 Status injects two JS scripts: 
-  - [provider.js](https://github.com/status-im/status-react/blob/develop/resources/js/provider.js): `window.ethereum` object
-  - [webview.js](https://github.com/status-im/status-react/blob/develop/resources/js/webview.js): override for `history.pushState` used internally
+  - [provider.js](https://github.com/status-im/status-mobile/blob/develop/resources/js/provider.js): `window.ethereum` object
+  - [webview.js](https://github.com/status-im/status-mobile/blob/develop/resources/js/webview.js): override for `history.pushState` used internally
 
 Dapps running inside a browser communicate with Status Ethereum node by means of a *bridge* provided by react-native-webview library. The bridge allows for bidirectional communication between browser and Status. In order to do so, it injects a special `ReactNativeWebview` object into each page it loads. 
 
