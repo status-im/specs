@@ -10,7 +10,7 @@ title: 17/URL SCHEME
 >
 > Status: Draft
 >
-> Authors: Aleksandar Djenic <aleksandardjenic@status.im>
+> Authors: Aleksandar Djenic <aleksandardjenic@status.im> Michal Iskierko <michal@status.im>
 >
 
 
@@ -21,21 +21,20 @@ title: 17/URL SCHEME
 
 ## Url scheme
 
-- internal: "status-im://"
-- external: "https://join.status.im"
+- internal: "status-app://"
+- external: "https://status.app"
 
 ## Defined url
 
-| Name | Short Url | Long Url | Description |
-| ----- | ---- | ---- | ---- |
-| Browse | `/b/[url]` | `/browser/[url]`  | Open `url` in the app's browser |
-| User profile | `/u/[user_pk or ens_name]` | `/user/[user_pk or ens_name]` | Display user profile popup for user with `user_pk` or `ens_name` |
-| Private chat (1:1) | `/pm/[user_pk or ens_name]` | `/private-message/[user_pk or ens_name]` | Create or just switch to 1:1 chat with user with `user_pk` or `ens_name` |
-| Public chat	| `/p/[chat_key]` | `/public/[chat_key]` | Join or switch to public chat with `chat_key` |
-| Group chat | `/g/[group_name]/u/[user_pk_1 or ens_name_1]/…/u/[user_pk_19 or ens_name_19]` | `/group/[group_name]/u/[user_pk_1 or ens_name_1]/…/u/[user_pk_19 or ens_name_19]` | Open a group chat with named `group_name`, adding up to 19 participants with their `user_pk` or `ens_name`. Group chat may have up to 20 participants including the admin of a group |
-| Community requests | `/cr/[community_key]` | `/community-requests/[community_key]` | Send a join community request to a community with `community_key` |
-| Community |	`/c/[community_key]` | `/community/[community_key]` | Open community with `community_key` |
-| Community channel | `/cc/[channel_key]` | `/community-channel/[channel_key]` | Open community which has a channel with `channel_key` and makes that channel active |
+| Name | Url | Description |
+| ----- | ---- | ---- |
+| User profile | `/u/[compressed_user_key or ens_name]` | Display user profile popup for user with `compressed_user_key` or `ens_name` |
+| Community |	`/c/[compressed_community_key]` | Open community with `compressed_community_key` |
+| Community channel | `/cc/[compressed_channel_key]`| Open community which has a channel with `compressed_channel_key` and makes that channel active |
+| Browse | `/b/[url]` |  Open `url` in the app's browser |
+| Post in channel | `/cc/[channel_key]/[message_key]` | Go to a message `message_key` in the channel `channel_key`
+| Post in group | `/g/[group_key]/[message_key]` | Go to a message `message_key` in the group chat `group_key`
+
 
 ## Copyright
 
