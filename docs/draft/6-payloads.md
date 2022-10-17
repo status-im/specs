@@ -39,17 +39,22 @@ as various clients created using different technologies.
        - [Audio content type](#audio-content-type)
      - [Message types](#message-types)
      - [Clock vs Timestamp and message ordering](#clock-vs-timestamp-and-message-ordering)
+     - [ContactRequestSignature](#contact-request-signature)
      - [Chats](#chats)
    - [Contact Update](#contact-update)
      - [Payload](#payload-2)
      - [Contact update](#contact-update-1)
+   - [Contact](#contact)
+     - [Payload](#payload-3)
+     - [Contact Request](#contact-request)
+       - [Backwards compatibility](#backwards-compatibility)
    - [EmojiReaction](#emojireaction)
    - [SyncInstallationContact](#syncinstallationcontact)
-     - [Payload](#payload-3)
-   - [SyncInstallationPublicChat](#syncinstallationpublicchat)
      - [Payload](#payload-4)
-   - [PairInstallation](#pairinstallation)
+   - [SyncInstallationPublicChat](#syncinstallationpublicchat)
      - [Payload](#payload-5)
+   - [PairInstallation](#pairinstallation)
+     - [Payload](#payload-6)
    - [MembershipUpdateMessage and MembershipUpdateEvent](#membershipupdatemessage-and-membershipupdateevent)
  - [Upgradability](#upgradability)
  - [Security Considerations](#security-considerations)
@@ -119,6 +124,10 @@ message ChatMessage {
     AudioMessage audio = 11;
   }
 
+  // ContactRequestSignature is a signature that proves that the receiving user
+  // has added us in the contacts
+  ContactRequestSignature contact_request_signature = 12;
+
   enum ContentType {
     UNKNOWN_CONTENT_TYPE = 0;
     TEXT_PLAIN = 1;
@@ -147,6 +156,7 @@ message ChatMessage {
 | 7 | message_type | `MessageType` | The type of message, different for one-to-one, public or group chats |
 | 8 | content_type | `ContentType` | The type of the content of the message | 
 | 9 | payload | `Sticker` I `Image` I `Audio` I `nil` | The payload of the message based on the content type |
+| 10 | contact_request_signature | `ContactRequestSignature` | Signature of the receiving user |
 
 #### Content types
 
@@ -276,6 +286,34 @@ Messages with a `clock` less than `120` seconds under the Whisper/Waku timestamp
 
 The node uses `clock` value for the message ordering. The algorithm used, and the distributed nature of the system produces casual ordering, which might produce counter-intuitive results in some edge cases. For example, when a user joins a public chat and sends a message before receiving the exist messages, their message `clock` value might be lower and the message will end up in the past when the historical messages are fetched.
 
+#### ContactRequestSignature
+
+The `contact_request_signature` in a message is only present in  `ONE_TO_ONE` message type. 
+
+It is used to prove that the sender was once a contact with the receiver. The reason for its presence is because, when an account is reset and re-imported, Contacts are lost.
+
+To make sure the message is not ignored, the sender sends this `contact_request_signature` as proof, so the receiver can know that it once had the sender as a contact.
+
+```
+message ContactRequestSignature {
+  bytes signature = 1;
+  uint64 timestamp = 2;
+}
+```
+
+`signature` is constructed as follow:
+
+```
+   Keccak256(contactSignaturePrefix+PublicKey1+PublicKey2+Timestamp)
+```
+
+Where `PublicKey1` and `PublicKey2` are the public keys of the two users, ordered by `X` first and `Y` in order to break ties, in ascending order.
+`Timestamp` is the `uint64` representation in bytes of the unix timestamp in seconds when the signature was generated, in Little Endian order.
+
+The signature should be periodically refreshed and sent over to contacts, as old signatures MIGHT be discarded by peers and considered invalid after an arbitrary amount of time.
+
+`contactSignaturePrefix` is the bytes `[]byte{0x12,0x13}`, and it's used to avoid clashes in signatures schemes.
+
 #### Chats
 
 Chat is a structure that helps organize messages. It's usually desired to display messages only from a single recipient, or a group of recipients at a time and chats help to achieve that.
@@ -300,6 +338,7 @@ message ContactUpdate {
   uint64 clock = 1;
   string ens_name = 2;
   string profile_image = 3;
+  ContactRequestSignature contact_request_signature = 4;
 }
 ```
 
@@ -310,6 +349,7 @@ message ContactUpdate {
 | 1 | clock | `uint64` | The clock of the chat with the user |
 | 2 | ens_name | `string` | The ENS name if set |
 | 3 | profile_image | `string` | The base64 encoded profile picture of the user |
+| 4 | contact_request_signature | `ContactRequestSignature` | Signature of the sending user |
 
 #### Contact update
 
@@ -319,6 +359,26 @@ A client SHOULD send a `ContactUpdate` to all the contacts each time:
 - A user edits the profile image
 
 A client SHOULD also periodically send a `ContactUpdate` to all the contacts, the interval is up to the client, the Status official client sends these updates every 48 hours.
+
+`ContactRequestSignature` MUST be signed by the sending user, the format is described  in [ContactRequestSignature](#contact-request-signature)
+
+### Contact
+
+#### Contact Request
+
+Users can only chat with another in one to one channels while being mutual contacts. To do so, they need to send contact requests.
+
+When adding another account as a contact, a `ContactRequestSignature` payload is sent to the other, either on a `ContactRequest` or a `Message` object.
+
+That `ContactRequestSignature` is kept in the database and is sent in one to one messages to prove that we were once added as a contact. See `Message` payload for more information.
+
+##### Backwards compatibility
+
+To assure backwards compatibility, the `message` contained in the contact request will be sent as a normal message.
+
+Old versions will not understand the contact request, but will still get the message. It will be displayed normally or part of the activity center.
+
+Newer versions will ignore the message since it is not from a contact, but the contact request will be processed as above.
 
 ### EmojiReaction
 
