@@ -41,8 +41,8 @@ This document describes serialization, compression and encoding of data within U
 
 ### Product
 
-- Encode data in URL until Waku response is instant and considered reliable enough for this use case, or until a product roadmap for alternative decentralized storage is finalized
-- Verify state while loading website until encoded data is matched against Waku response to mitigate identity attacks
+- Encode data within URL until Waku response is instant and considered reliable enough for link previewing and visiting of the onboarding website. Or until a product roadmap for alternative decentralized storage is finalized.
+- A verify state while loading onboarding website until encoded data is matched against Waku response to mitigate identity attacks
 - Accept only `[A-Za-z0-9_-.\u0020]` character class for textual fields
 - Shortest result possible
 
