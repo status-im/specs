@@ -15,7 +15,7 @@ layout: default
 
 ## Abstract
 
-This document describes serialization, compression and encoding of data within URLs, so the app links could carry enough information to help users with instant previewing and verifying of their contents even prior clicking or taking and action on the content.
+This document describes serialization, compression and encoding of data within URLs, so the app links could carry enough information to help users with instant previewing and verifying of their contents even prior clicking or taking an action on the content.
 
 ## Related scope
 
@@ -48,9 +48,9 @@ This document describes serialization, compression and encoding of data within U
 
 ## Implementation
 
-## Example
+### Example
 
-- See <https://github.com/felicio/status-web/blob/34535355d46593179c997ec5ef0eda32547890aa/packages/status-js/src/utils/encode-url-data.test.ts>
+- See <https://github.com/status-im/status-web/pull/345/files>
 
 ### Data
 
@@ -59,25 +59,25 @@ This document describes serialization, compression and encoding of data within U
 ```protobuf
 syntax = "proto3";
 
-message CommunityPreview {
- string display_name = 3;
- string description = 4;
- uint32 members_count = 5;
- string color = 8;
+message Community {
+ string display_name = 1;
+ string description = 2;
+ uint32 members_count = 3;
+ string color = 4;
 }
 
-message ChannelPreview {
- string display_name = 2;
- string description = 3;
- string emoji = 5;
- string color = 6;
- CommunityPreview community = 7;
+message Channel {
+ string display_name = 1;
+ string description = 2;
+ string emoji = 3;
+ string color = 4;
+ Community community = 5;
 }
 
-message UserPreview {
- string display_name = 2;
- string description = 3;
- string color = 7;
+message User {
+ string display_name = 1;
+ string description = 2;
+ string color = 3;
 }
 
 message URLData {
@@ -86,7 +86,6 @@ message URLData {
  // content and public key concatanated and sha256 hashed twice, returning first 4 bytes
  bytes checksum = 2;
 }
-
 ```
 
 ### Encoding
@@ -109,6 +108,10 @@ message URLData {
 ## Discussions
 
 - See <https://github.com/status-im/status-web/issues/327>
+
+## Proof of concept
+
+- See <https://github.com/felicio/status-web/blob/825262c4f07a68501478116c7382862607a5544e/packages/status-js/src/utils/encode-url-data.compare.test.ts#L4>
 
 ## Footnotes
 
