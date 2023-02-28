@@ -83,8 +83,6 @@ message User {
 message URLData {
  // Community, Channel, or User
  bytes content = 1;
- // content and public key concatanated and sha256 hashed twice, returning first 4 bytes
- bytes checksum = 2;
 }
 ```
 
