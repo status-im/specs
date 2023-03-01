@@ -15,13 +15,13 @@ layout: default
 
 ## Abstract
 
-This document describes serialization, compression and encoding of data within URLs, so the app links could carry enough information to help users with instant previewing and verifying of their contents even prior clicking or taking an action on the content.
+This document describes serialization, compression and encoding of data within URLs, so the app links could carry enough information to help users with instant previewing and verifying even prior clicking or taking an action on the content.
 
 ## Related scope
 
 ### Specs
 
-- URL scheme
+- See <https://github.com/status-im/specs/pull/159> for URL scheme
 
 ### Features
 
@@ -83,6 +83,13 @@ message User {
 message URLData {
  // Community, Channel, or User
  bytes content = 1;
+}
+
+// Field on CommunityDescription, CommunityChat and ContactCodeAdvertisement
+message URLProps {
+ string encoded_url_data = 1;
+ // Signature of encoded URL data
+ string encoded_signature = 2;
 }
 ```
 
