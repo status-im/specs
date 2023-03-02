@@ -72,6 +72,7 @@ message Channel {
  string emoji = 3;
  string color = 4;
  Community community = 5;
+ string uuid = 6;
 }
 
 message User {
