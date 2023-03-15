@@ -88,7 +88,7 @@ message URLData {
 }
 
 // Field on CommunityDescription, CommunityChat and ContactCodeAdvertisement
-message URLProps {
+message URLParams {
  string encoded_url_data = 1;
  // Signature of encoded URL data
  string encoded_signature = 2;
