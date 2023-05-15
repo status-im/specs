@@ -36,8 +36,6 @@ title: 17/URL SCHEME
 | Community channel | `/cc/[compressed_channel_key]`| Open community which has a channel with `compressed_channel_key` and makes that channel active |
 | Browse | `/b/[url]` |  Open `url` in the app's browser |
 | Post in channel | `/cc/[channel_key]/[message_key]` | Go to a message `message_key` in the channel `channel_key`
-| Post in group | `/g/[group_key]/[message_key]` | Go to a message `message_key` in the group chat `group_key`
-
 
 ## Copyright
 
