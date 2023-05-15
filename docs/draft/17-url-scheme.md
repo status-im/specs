@@ -28,7 +28,9 @@ title: 17/URL SCHEME
 
 | Name | Url | Description |
 | ----- | ---- | ---- |
-| User profile | `/u/[compressed_user_key or ens_name]` | Display user profile popup for user with `compressed_user_key` or `ens_name` |
+| User profile | `/u/<data>#<signature>` | Display user |
+| | `/u#<compressed_user_public_key>` | |
+| | `/u#<ens_name>` | |
 | Community |	`/c/[compressed_community_key]` | Open community with `compressed_community_key` |
 | Community channel | `/cc/[compressed_channel_key]`| Open community which has a channel with `compressed_channel_key` and makes that channel active |
 | Browse | `/b/[url]` |  Open `url` in the app's browser |
