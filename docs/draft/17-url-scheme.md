@@ -6,7 +6,7 @@ title: 17/URL SCHEME
 
 # 17/Defined Url Scheme
 
-> Version: 0.1.0
+> Version: 0.2.0
 >
 > Status: Draft
 >
